@@ -1,5 +1,5 @@
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 
 from apps.api import views
 
@@ -12,5 +12,5 @@ urlpatterns = [
     path("", include("apps.accounts.urls")),
     path("", include("apps.orgs.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
+    path("docs/", SpectacularSwaggerSplitView.as_view(url_name="schema"), name="docs"),
 ]

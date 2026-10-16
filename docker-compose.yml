@@ -29,5 +29,18 @@ services:
       db: {condition: service_healthy}
       redis: {condition: service_started}
 
+  frontend:
+    image: node:24-alpine
+    working_dir: /app
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+    command: ["sh", "-c", "npm ci && npx vite --host 0.0.0.0"]
+    ports: ["127.0.0.1:5173:5173"]
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+    depends_on: [backend]
+
 volumes:
   mysql-data:
+  frontend-node-modules:
