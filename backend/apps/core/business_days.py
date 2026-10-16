@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from typing import Literal
 
 from holidays import HolidayBase
 
-from apps.core.errors import YearNotCovered
+from apps.core.errors import CoreError, YearNotCovered
 from apps.core.merge import CustomKind, MergedCalendar
 
 Calendar = HolidayBase | MergedCalendar
@@ -41,7 +41,7 @@ def _holidays(cal: Calendar) -> HolidayBase:
 def _require_years(cal: Calendar, first: date, last: date) -> None:
     missing = set(range(first.year, last.year + 1)) - cal.years
     if missing:
-        raise YearNotCovered(f"Calendar does not cover year {min(missing)}.")
+        raise YearNotCovered(f"Calendar does not cover year {min(missing)}.", year=min(missing))
 
 
 def _is_weekend(cal: HolidayBase, day: date) -> bool:
@@ -79,3 +79,10 @@ def add_business_days(cal: Calendar, start: date, n: int) -> date:
 def business_days_between(cal: Calendar, start: date, end: date) -> int:
     _require_years(cal, min(start, end), max(start, end))
     return _holidays(cal).get_working_days_count(start, end)
+
+
+def describe_days(cal: Calendar, start: date, end: date) -> list[BusinessDayResult]:
+    if end < start:
+        raise CoreError("End must not be before start.")
+    _require_years(cal, start, end)
+    return [is_business_day(cal, start + timedelta(days=n)) for n in range((end - start).days + 1)]

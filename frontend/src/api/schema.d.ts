@@ -132,6 +132,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/business-days/range/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["business_days_range_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/countries/": {
         parameters: {
             query?: never;
@@ -420,6 +436,8 @@ export interface components {
             date: string;
             name: string;
             kind: components["schemas"]["HolidayKindEnum"];
+            /** @description Source countries (with subdivision) that contribute this holiday. */
+            sources: string[];
         };
         /**
          * @description * `holiday` - holiday
@@ -780,6 +798,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CheckResult"];
+                };
+            };
+        };
+    };
+    business_days_range_list: {
+        parameters: {
+            query: {
+                /** @description A company calendar id, instead of country. */
+                calendar?: string;
+                /** @description Comma-separated. Default: public. */
+                categories?: string;
+                /** @description ISO 3166-1 alpha-2 code, e.g. PK. */
+                country?: string;
+                end: string;
+                /** @description Defaults to the country's language. */
+                language?: string;
+                start: string;
+                subdiv?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckResult"][];
                 };
             };
         };

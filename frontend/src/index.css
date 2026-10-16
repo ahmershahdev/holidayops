@@ -1,1 +1,69 @@
 @import "tailwindcss";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/noto-nastaliq-urdu/400.css";
+@import "@fontsource/noto-nastaliq-urdu/600.css";
+
+@theme {
+  --color-paper: #fbf8f3;
+  --color-surface: #ffffff;
+  --color-ink: #1c1917;
+  --color-muted: #6b635a;
+  --color-line: #e7e1d8;
+  --color-accent: #0f5e5a;
+  --color-accent-soft: #e3efed;
+  --color-holiday: #b4432b;
+  --color-holiday-soft: #f8e6e1;
+  --color-closure: #7a2e4d;
+  --color-closure-soft: #f3e3ea;
+  --color-halfday: #9a6412;
+  --color-halfday-soft: #f7ecd9;
+  --color-weekend: #f1ebe1;
+  --color-weekend-strong: #d8cdbb;
+  --color-workday: #2f6b3f;
+  --color-workday-soft: #e2efe5;
+
+  --font-display: "Fraunces Variable", "IBM Plex Sans Arabic", Georgia, serif;
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "IBM Plex Sans Arabic", serif;
+
+  --radius-card: 10px;
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html[lang="ar"] {
+    --font-display: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  }
+
+  /* Nastaliq is tall and slanted: it needs its own face and extra line height everywhere. */
+  html[lang="ur"] {
+    --font-display: var(--font-urdu);
+    --font-sans: var(--font-urdu);
+    line-height: 2.2;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}

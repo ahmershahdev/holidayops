@@ -1,18 +1,22 @@
 from datetime import date
 from typing import Any, get_args
 
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 from apps.core import MAX_YEAR, MIN_YEAR, Reason
 
 MAX_ADD_DAYS = 1000
 MAX_BETWEEN_SPAN_DAYS = 3660
+MAX_RANGE_DAYS = 366
 REASONS = list(get_args(Reason))
 
 
 def validate_supported_year(value: date) -> None:
     if not MIN_YEAR <= value.year <= MAX_YEAR:
-        raise serializers.ValidationError(f"Year must be between {MIN_YEAR} and {MAX_YEAR}.")
+        raise serializers.ValidationError(
+            _("Year must be between %(min)s and %(max)s.") % {"min": MIN_YEAR, "max": MAX_YEAR}
+        )
 
 
 class CalendarQuerySerializer(serializers.Serializer[Any]):
@@ -49,13 +53,13 @@ class CalendarQuerySerializer(serializers.Serializer[Any]):
         attrs = super().validate(attrs)
         if ("country" in attrs) == ("calendar" in attrs):
             raise serializers.ValidationError(
-                {"country": ["Give exactly one of country or calendar."]}
+                {"country": [_("Give exactly one of country or calendar.")]}
             )
         if "calendar" in attrs:
             given = [f for f in ("subdiv", "language", "categories") if attrs.get(f)]
             if given:
                 raise serializers.ValidationError(
-                    {given[0]: ["Not allowed with calendar; the calendar defines it."]}
+                    {given[0]: [_("Not allowed with calendar; the calendar defines it.")]}
                 )
         return attrs
 
@@ -90,10 +94,33 @@ class BetweenQuerySerializer(CalendarQuerySerializer):
         attrs = super().validate(attrs)
         span = (attrs["end"] - attrs["start"]).days
         if span < 0:
-            raise serializers.ValidationError({"end": ["End must not be before start."]})
+            raise serializers.ValidationError({"end": [_("End must not be before start.")]})
         if span > MAX_BETWEEN_SPAN_DAYS:
             raise serializers.ValidationError(
-                {"end": [f"Range must not exceed {MAX_BETWEEN_SPAN_DAYS} days."]}
+                {
+                    "end": [
+                        _("Range must not exceed %(days)s days.") % {"days": MAX_BETWEEN_SPAN_DAYS}
+                    ]
+                }
+            )
+        return attrs
+
+
+class RangeQuerySerializer(CalendarQuerySerializer):
+    start = serializers.DateField(validators=[validate_supported_year])
+    end = serializers.DateField(validators=[validate_supported_year])
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        attrs = super().validate(attrs)
+        span = (attrs["end"] - attrs["start"]).days
+        if not 0 <= span < MAX_RANGE_DAYS:
+            raise serializers.ValidationError(
+                {
+                    "end": [
+                        _("End must be on or after start and within %(days)s days.")
+                        % {"days": MAX_RANGE_DAYS}
+                    ]
+                }
             )
         return attrs
 
@@ -114,6 +141,10 @@ class HolidaySerializer(serializers.Serializer[Any]):
     date = serializers.DateField()
     name = serializers.CharField()
     kind = serializers.ChoiceField(choices=["holiday", "closure", "half_day"])
+    sources = serializers.ListField(
+        child=serializers.CharField(),
+        help_text="Source countries (with subdivision) that contribute this holiday.",
+    )
 
 
 class HolidayListSerializer(serializers.Serializer[Any]):

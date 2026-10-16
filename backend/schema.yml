@@ -267,6 +267,66 @@ paths:
               schema:
                 $ref: '#/components/schemas/CheckResult'
           description: ''
+  /api/v1/business-days/range/:
+    get:
+      operationId: business_days_range_list
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckResult'
+          description: ''
   /api/v1/countries/:
     get:
       operationId: countries_list
@@ -1199,10 +1259,16 @@ components:
           type: string
         kind:
           $ref: '#/components/schemas/HolidayKindEnum'
+        sources:
+          type: array
+          items:
+            type: string
+          description: Source countries (with subdivision) that contribute this holiday.
       required:
       - date
       - kind
       - name
+      - sources
     HolidayKindEnum:
       enum:
       - holiday

@@ -10,12 +10,14 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 
 | Task touches | Read |
 |---|---|
+| Starting a session: what's done, what's next | [docs/status.md](docs/status.md) |
 | Endpoints, domain functions, data model, caching | [docs/architecture.md](docs/architecture.md) |
 | Auth, API keys, tenancy, webhooks, headers | [docs/security.md](docs/security.md) |
 | Public server-rendered pages, sitemaps | [docs/seo.md](docs/seo.md) |
 | What to build next, milestone scope | [docs/roadmap.md](docs/roadmap.md) |
 | Milestone 1 API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
 | Auth, orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
+| UI, design system, i18n/RTL, calendar views | [docs/design/m3-ui.md](docs/design/m3-ui.md) |
 
 ## Stack
 
@@ -76,4 +78,14 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy .
 uv run python manage.py spectacular --file schema.yml --validate   # commit schema.yml
 cd ../frontend && npm run gen:api            # regenerate src/api/schema.d.ts
 npm run lint && npm run typecheck && npm test
+npm run seed                                 # (root) demo user, org and calendar; needs DEMO_PASSWORD
+npm run messages                             # (root) refresh + compile backend ur/ar translations
 ```
+
+## i18n rules
+
+- Every user-facing string: `t("key")` in the frontend (en, ur, ar JSON must have the same keys;
+  a test enforces it), `gettext` in Django. `apps/core` errors stay English and carry `params`;
+  `apps/api/errors.py` translates them.
+- Layout uses logical properties only (`ms-`, `ps-`, `text-start`, `rtl:` variants).
+- Commit both `.po` and `.mo`; CI fails on untranslated or stale catalogs.

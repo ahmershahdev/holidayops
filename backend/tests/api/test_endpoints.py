@@ -26,7 +26,12 @@ def test_holidays_list(client: APIClient) -> None:
     assert body["country"] == "PK"
     assert body["subdiv"] is None
     assert body["categories"] == ["public"]
-    assert {"date": "2027-03-23", "name": "Pakistan Day", "kind": "holiday"} in body["holidays"]
+    assert {
+        "date": "2027-03-23",
+        "name": "Pakistan Day",
+        "kind": "holiday",
+        "sources": ["PK"],
+    } in body["holidays"]
     dates = [h["date"] for h in body["holidays"]]
     assert dates == sorted(dates)
     assert dates.count("2027-08-14") == 2
@@ -162,3 +167,55 @@ def test_holidays_default_to_country_language_not_server_locale(client: APIClien
     body = get(client, "holidays/", country="SA", year=2027).json()
     assert body["language"] == "ar"
     assert all(not h["name"].isascii() for h in body["holidays"])
+
+
+def test_range_returns_each_day(client: APIClient) -> None:
+    response = get(
+        client, "business-days/range/", country="SA", start="2027-04-01", end="2027-04-04"
+    )
+    assert response.status_code == 200
+    days = response.json()
+    assert [d["date"] for d in days] == ["2027-04-01", "2027-04-02", "2027-04-03", "2027-04-04"]
+    assert [d["reason"] for d in days] == ["working_day", "weekend", "weekend", "working_day"]
+
+
+@pytest.mark.parametrize(
+    ("start", "end"),
+    [("2027-04-02", "2027-04-01"), ("2027-01-01", "2028-01-02")],
+)
+def test_range_limits(client: APIClient, start: str, end: str) -> None:
+    response = get(client, "business-days/range/", country="PK", start=start, end=end)
+    assert response.status_code == 400
+    assert "end" in response.json()
+
+
+def test_country_holidays_name_their_source(client: APIClient) -> None:
+    body = get(client, "holidays/", country="US", subdiv="CA", year=2027).json()
+    assert {h["sources"][0] for h in body["holidays"]} == {"US-CA"}
+
+
+def test_range_allows_a_full_leap_year(client: APIClient) -> None:
+    days = get(client, "business-days/range/", country="PK", start="2028-01-01", end="2028-12-31")
+    assert len(days.json()) == 366
+
+
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("ur", "ملک ZZ دستیاب نہیں ہے۔"),
+        ("ar", "الدولة ZZ غير مدعومة."),
+        ("en", "Country ZZ is not supported."),
+    ],
+)
+def test_errors_follow_accept_language(client: APIClient, language: str, expected: str) -> None:
+    response = client.get(
+        "/api/v1/holidays/", {"country": "ZZ", "year": "2027"}, HTTP_ACCEPT_LANGUAGE=language
+    )
+    assert response.json() == {"country": [expected]}
+
+
+def test_serializer_messages_are_translated(client: APIClient) -> None:
+    response = client.get(
+        "/api/v1/business-days/check/", {"date": "2027-01-04"}, HTTP_ACCEPT_LANGUAGE="ar"
+    )
+    assert response.json() == {"country": ["حدّد إما الدولة أو التقويم، وليس كليهما."]}

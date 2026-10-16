@@ -42,6 +42,22 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy .
+      - name: Translations are complete and compiled
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq gettext
+          for lang in ur ar; do
+            dir=locale/$lang/LC_MESSAGES
+            msgfmt --check -o "$RUNNER_TEMP/$lang.mo" "$dir/django.po"
+            diff <(msgunfmt "$dir/django.mo") <(msgunfmt "$RUNNER_TEMP/$lang.mo") || { echo "$dir/django.mo is stale: run compilemessages"; exit 1; }
+          done
+          uv run python manage.py makemessages -l ur -l ar --ignore=.venv --ignore=tests --no-obsolete --no-location
+          git diff --exit-code -I'POT-Creation-Date' -- 'locale/*.po' || { echo "Source strings changed: run makemessages and translate"; exit 1; }
+          for lang in ur ar; do
+            missing=$(msgattrib --untranslated --no-wrap locale/$lang/LC_MESSAGES/django.po | grep -c '^msgid "[^"]' || true)
+            test "$missing" -eq 0 || { echo "$lang has $missing untranslated messages"; exit 1; }
+          done
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
       - name: OpenAPI schema is committed and up to date
         run: |
           uv run python manage.py spectacular --file /tmp/schema.yml --validate --fail-on-warn

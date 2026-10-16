@@ -3,6 +3,7 @@ from typing import Any
 from django.db.models import Model, QuerySet
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.request import Request
@@ -51,4 +52,4 @@ class OrgScopedMixin:
         else:
             needed = self.write_role
         if not self.membership.has_role(needed):
-            raise PermissionDenied("Your role does not allow this action.")
+            raise PermissionDenied(_("Your role does not allow this action."))

@@ -126,6 +126,16 @@ def test_business_days_with_company_calendar(client_for: ClientFor, client: APIC
     assert ("2027-04-05", "closure") in kinds
     assert ("2027-03-23", "half_day") in kinds
     assert ("2027-03-23", "holiday") not in kinds
+    sources = {(h["date"], h["kind"]): h["sources"] for h in listed["holidays"]}
+    assert sources[("2027-03-23", "half_day")] == []
+    assert sources[("2027-04-05", "closure")] == []
+    assert sources[("2027-02-05", "holiday")] == ["PK"]
+
+    week = member.get(
+        "/api/v1/business-days/range/",
+        {"calendar": cal, "start": "2027-04-04", "end": "2027-04-06"},
+    ).json()
+    assert [d["reason"] for d in week] == ["weekend", "closure", "working_day"]
 
     assert (
         client.get(

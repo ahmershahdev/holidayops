@@ -47,6 +47,8 @@ extend-exclude = ["*/migrations/*"]
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "S", "DJ", "SIM", "RUF", "PT", "C4"]
 ignore = ["S101", "RUF012"]
+# The Urdu full stop is real punctuation in translated messages, not a lookalike.
+allowed-confusables = ["۔"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S"]

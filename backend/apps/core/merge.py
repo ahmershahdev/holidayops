@@ -22,6 +22,7 @@ class CustomDay:
 class MergedCalendar:
     holidays: HolidayBase
     custom: Mapping[date, CustomDay] = field(default_factory=dict)
+    sources: tuple[HolidayBase, ...] = ()
 
     @property
     def years(self) -> set[int]:
@@ -53,4 +54,14 @@ def merge_calendars(
             if item.day in merged:
                 merged.pop(item.day)
             merged.weekend_workdays.add(item.day)
-    return MergedCalendar(holidays=merged, custom=by_day)
+    return MergedCalendar(holidays=merged, custom=by_day, sources=tuple(sources))
+
+
+def source_label(cal: HolidayBase) -> str:
+    return f"{cal.country}-{cal.subdiv}" if cal.subdiv else str(cal.country)
+
+
+def holiday_sources(cal: HolidayBase | MergedCalendar, day: date, name: str) -> tuple[str, ...]:
+    if not isinstance(cal, MergedCalendar):
+        return (source_label(cal),)
+    return tuple(source_label(src) for src in cal.sources if name in src.get_list(day))

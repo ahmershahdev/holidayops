@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.contrib.auth import password_validation
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 from apps.accounts.models import User
@@ -20,7 +21,7 @@ class SignupSerializer(serializers.Serializer[Any]):
     def validate_email(self, value: str) -> str:
         email = User.objects.normalize_email(value).lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise serializers.ValidationError("An account with this email already exists.")
+            raise serializers.ValidationError(_("An account with this email already exists."))
         return email
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:

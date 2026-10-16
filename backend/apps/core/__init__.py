@@ -4,6 +4,7 @@ from apps.core.business_days import (
     Reason,
     add_business_days,
     business_days_between,
+    describe_days,
     is_business_day,
 )
 from apps.core.calendars import (
@@ -24,7 +25,14 @@ from apps.core.errors import (
     YearNotCovered,
     YearOutOfRange,
 )
-from apps.core.merge import CustomDay, CustomKind, MergedCalendar, merge_calendars
+from apps.core.merge import (
+    CustomDay,
+    CustomKind,
+    MergedCalendar,
+    holiday_sources,
+    merge_calendars,
+    source_label,
+)
 
 __all__ = [
     "MAX_YEAR",
@@ -46,9 +54,12 @@ __all__ = [
     "add_business_days",
     "business_days_between",
     "check_calendar_args",
+    "describe_days",
     "get_calendar",
     "get_country",
+    "holiday_sources",
     "is_business_day",
     "list_countries",
     "merge_calendars",
+    "source_label",
 ]

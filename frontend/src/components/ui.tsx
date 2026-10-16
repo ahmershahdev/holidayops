@@ -7,24 +7,53 @@ import type {
 
 export function Card({ title, children }: { title?: ReactNode; children: ReactNode }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      {title && <h2 className="mb-4 text-lg font-semibold text-slate-900">{title}</h2>}
+    <section className="rounded-[var(--radius-card)] border border-line bg-surface p-5">
+      {title && <h2 className="mb-4 font-display text-xl text-ink">{title}</h2>}
       {children}
     </section>
   );
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+}: {
+  title: ReactNode;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
+}) {
   return (
-    <label className="flex flex-col gap-1 text-sm text-slate-700">
-      <span className="font-medium">{label}</span>
+    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
+      <div>
+        <h1 className="font-display text-3xl text-ink sm:text-4xl">{title}</h1>
+        {subtitle && <p className="mt-2 max-w-2xl text-muted">{subtitle}</p>}
+      </div>
+      {actions && <div className="flex gap-2">{actions}</div>}
+    </header>
+  );
+}
+
+export function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="flex flex-col gap-1.5 text-sm">
+      <span className="font-medium text-ink">{label}</span>
       {children}
+      {hint && <span className="text-xs text-muted">{hint}</span>}
     </label>
   );
 }
 
 const control =
-  "rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20";
+  "rounded-lg border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-60";
 
 export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${control} ${props.className ?? ""}`} />;
@@ -39,14 +68,15 @@ export function Button({
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "danger" }) {
   const styles = {
-    primary: "bg-teal-700 text-white hover:bg-teal-800 disabled:bg-slate-400",
-    ghost: "border border-slate-300 text-slate-700 hover:bg-slate-100",
-    danger: "text-red-700 hover:bg-red-50",
+    primary: "bg-accent text-white hover:bg-accent/90 disabled:bg-muted",
+    ghost: "border border-line bg-surface text-ink hover:border-accent",
+    danger: "text-holiday hover:bg-holiday-soft",
   }[variant];
   return (
     <button
+      type="button"
       {...props}
-      className={`rounded-lg px-4 py-2 text-sm font-medium transition ${styles} ${props.className ?? ""}`}
+      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed ${styles} ${props.className ?? ""}`}
     />
   );
 }
@@ -55,26 +85,25 @@ export function ErrorText({ error }: { error: unknown }) {
   if (!error) return null;
   const message = error instanceof Error ? error.message : String(error);
   return (
-    <p role="alert" className="text-sm text-red-700">
+    <p role="alert" className="text-sm text-holiday">
       {message}
     </p>
   );
 }
 
-export function Badge({
-  tone,
-  children,
-}: {
-  tone: "green" | "red" | "amber" | "slate";
-  children: ReactNode;
-}) {
-  const styles = {
-    green: "bg-emerald-100 text-emerald-800",
-    red: "bg-rose-100 text-rose-800",
-    amber: "bg-amber-100 text-amber-800",
-    slate: "bg-slate-100 text-slate-700",
-  }[tone];
+type Tone = "workday" | "holiday" | "closure" | "halfday" | "neutral";
+
+export function Badge({ tone, children }: { tone: Tone; children: ReactNode }) {
+  const styles: Record<Tone, string> = {
+    workday: "bg-workday-soft text-workday",
+    holiday: "bg-holiday-soft text-holiday",
+    closure: "bg-closure-soft text-closure",
+    halfday: "bg-halfday-soft text-halfday",
+    neutral: "bg-paper text-muted border border-line",
+  };
   return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${styles}`}>{children}</span>
+    <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[tone]}`}>
+      {children}
+    </span>
   );
 }

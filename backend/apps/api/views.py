@@ -16,7 +16,9 @@ from apps.core import (
     MergedCalendar,
     add_business_days,
     business_days_between,
+    describe_days,
     get_calendar,
+    holiday_sources,
     is_business_day,
     list_countries,
 )
@@ -48,10 +50,11 @@ def _holiday_entries(cal: Calendar) -> list[dict[str, Any]]:
         for name in base.get_list(day):
             is_closure = closure is not None and closure.kind == "closure" and closure.name == name
             kind = "closure" if is_closure else "holiday"
-            entries.append({"date": day, "name": name, "kind": kind})
+            sources = [] if is_closure else list(holiday_sources(cal, day, name))
+            entries.append({"date": day, "name": name, "kind": kind, "sources": sources})
     for day, item in custom.items():
         if item.kind == "half_day":
-            entries.append({"date": day, "name": item.name, "kind": "half_day"})
+            entries.append({"date": day, "name": item.name, "kind": "half_day", "sources": []})
     return sorted(entries, key=lambda e: (e["date"], e["name"]))
 
 
@@ -120,3 +123,15 @@ class BetweenView(PublicView):
         count = business_days_between(cal, start, end)
         payload = {"start": start, "end": end, "business_days": count}
         return Response(s.BetweenResultSerializer(payload).data)
+
+
+class RangeView(PublicView):
+    @extend_schema(
+        parameters=[s.RangeQuerySerializer], responses=s.CheckResultSerializer(many=True)
+    )
+    def get(self, request: Request) -> Response:
+        query = _parse(s.RangeQuerySerializer, request)
+        start = query.validated_data["start"]
+        end = query.validated_data["end"]
+        cal = _calendar(request, query, range(start.year, end.year + 1))
+        return Response(s.CheckResultSerializer(describe_days(cal, start, end), many=True).data)
