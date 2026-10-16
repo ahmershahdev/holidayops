@@ -30,7 +30,7 @@ package = false
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
 testpaths = ["tests"]
-addopts = "--strict-markers"
+addopts = "--strict-markers --ds=config.settings.test"
 
 [tool.coverage.run]
 omit = ["*/migrations/*"]
