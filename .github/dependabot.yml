@@ -8,6 +8,10 @@ updates:
     directory: /backend
     schedule:
       interval: weekly
+    ignore:
+      # Stay on the Django LTS line; move to the next LTS in a planned PR.
+      - dependency-name: django
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: npm
     directory: /frontend
     schedule:
