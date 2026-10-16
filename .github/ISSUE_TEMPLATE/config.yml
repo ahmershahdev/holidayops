@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Wrong or missing holiday date
+    url: https://github.com/vacanza/holidays/issues
+    about: Holiday data comes from the holidays library. Please report date issues there.
+  - name: Security vulnerability
+    url: https://github.com/ahmershahdev/holidayops/security/advisories/new
+    about: Report security problems privately.
