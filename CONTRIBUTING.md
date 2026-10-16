@@ -21,13 +21,22 @@ the code lands.
 
 ## Local setup
 
-Requirements: Python 3.12+, Node.js 22+, MySQL 8 and Redis (or Docker Compose).
+Requirements: [uv](https://docs.astral.sh/uv/), Python 3.12+, Docker (for MySQL and Redis).
+Node.js 22+ is needed once the frontend lands.
 
-Backend and frontend setup instructions will be added here with the first code.
+```bash
+cp .env.example .env
+docker compose up -d db redis
+cd backend
+uv sync
+uv run pytest
+```
+
+Conventions for code and agents are in [AGENTS.md](AGENTS.md).
 
 ## Code style
 
-- Python: formatted and linted with Ruff, tested with pytest.
+- Python: formatted and linted with Ruff, type-checked with mypy, tested with pytest.
 - TypeScript: ESLint and `tsc --noEmit`.
 - Commit messages: short and in the imperative, e.g. `Add business_days_between endpoint`.
 

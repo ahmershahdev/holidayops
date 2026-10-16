@@ -1,0 +1,61 @@
+[project]
+name = "holidayops"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django==5.2.18",
+    "django-redis==7.0.0",
+    "djangorestframework==3.18.3",
+    "drf-spectacular==0.30.0",
+    "holidays==0.106",
+    "mysqlclient==2.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs==6.1.2",
+    "djangorestframework-stubs==3.18.1",
+    "mypy==2.4.0",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "pytest-django==4.14.0",
+    "ruff==0.17.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+omit = ["*/migrations/*"]
+
+[tool.coverage.report]
+skip_covered = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "DJ", "SIM", "RUF", "PT", "C4"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+exclude = ['^.venv/']
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
