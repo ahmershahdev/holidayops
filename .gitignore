@@ -31,3 +31,8 @@ npm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local agent files
+CLAUDE.md
+CLAUDE.local.md
+.claude/
