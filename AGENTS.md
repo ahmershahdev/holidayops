@@ -63,12 +63,16 @@ docs/                    architecture, security, seo, roadmap, design notes
 
 ```
 cp .env.example .env                         # once; fill in secrets
-docker compose up -d db redis                # MySQL + Redis
+npm install && npm run setup                 # once
+npm run dev                                  # Docker db+redis, Django :8000, Vite :5173
+docker compose up -d db redis                # MySQL + Redis only
 cd backend
 uv sync                                      # install pinned deps into .venv
 uv run --env-file ../.env python manage.py migrate
 uv run --env-file ../.env pytest             # all tests (needs MySQL)
 uv run pytest tests/core --cov=apps/core --cov-branch --cov-fail-under=100
 uv run ruff check . && uv run ruff format --check . && uv run mypy .
-uv run python manage.py spectacular --file schema.yml --validate
+uv run python manage.py spectacular --file schema.yml --validate   # commit schema.yml
+cd ../frontend && npm run gen:api            # regenerate src/api/schema.d.ts
+npm run lint && npm run typecheck && npm test
 ```

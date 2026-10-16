@@ -23,6 +23,7 @@ from apps.orgs.serializers import (
 class OrgViewSet(viewsets.GenericViewSet[Organization]):
     permission_classes = [IsAuthenticated]
     serializer_class = OrgSerializer
+    pagination_class = None
     lookup_field = "slug"
     lookup_url_kwarg = "org_slug"
 
@@ -78,6 +79,7 @@ class OrgViewSet(viewsets.GenericViewSet[Organization]):
 
 class MemberViewSet(OrgScopedMixin, viewsets.GenericViewSet[Membership]):
     serializer_class = MemberSerializer
+    pagination_class = None
     write_role = Role.ADMIN
 
     def get_queryset(self) -> QuerySet[Membership]:
