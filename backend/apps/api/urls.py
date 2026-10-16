@@ -9,6 +9,7 @@ urlpatterns = [
     path("business-days/check/", views.CheckView.as_view(), name="business-days-check"),
     path("business-days/add/", views.AddView.as_view(), name="business-days-add"),
     path("business-days/between/", views.BetweenView.as_view(), name="business-days-between"),
+    path("business-days/range/", views.RangeView.as_view(), name="business-days-range"),
     path("", include("apps.accounts.urls")),
     path("", include("apps.orgs.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

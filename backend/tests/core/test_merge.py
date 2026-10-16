@@ -8,6 +8,7 @@ from apps.core import (
     add_business_days,
     business_days_between,
     get_calendar,
+    holiday_sources,
     is_business_day,
     merge_calendars,
 )
@@ -94,3 +95,13 @@ def test_maths_on_merged_calendar() -> None:
     )
     assert add_business_days(merged, date(2027, 3, 24), 2) == date(2027, 3, 27)
     assert business_days_between(merged, date(2027, 3, 22), date(2027, 3, 28)) == 4
+
+
+def test_holiday_sources_attributes_each_name() -> None:
+    pk, sa = cal("PK"), cal("SA")
+    us_ca = get_calendar("US", "CA", [2027], "en_US", ())
+    merged = merge_calendars([pk, sa, us_ca], [])
+    assert holiday_sources(merged, date(2027, 3, 23), "Pakistan Day") == ("PK",)
+    assert holiday_sources(merged, date(2027, 2, 22), "Founding Day Holiday") == ("SA",)
+    assert holiday_sources(merged, date(2027, 1, 1), "New Year's Day") == ("US-CA",)
+    assert holiday_sources(pk, date(2027, 3, 23), "Pakistan Day") == ("PK",)

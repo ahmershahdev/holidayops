@@ -3,9 +3,11 @@ from datetime import date
 import pytest
 
 from apps.core import (
+    CoreError,
     YearNotCovered,
     add_business_days,
     business_days_between,
+    describe_days,
     get_calendar,
     is_business_day,
 )
@@ -98,3 +100,23 @@ def test_between_accepts_reversed_range() -> None:
 def test_between_rejects_uncovered_years() -> None:
     with pytest.raises(YearNotCovered):
         business_days_between(pk(), date(2027, 12, 1), date(2028, 1, 31))
+
+
+def test_describe_days_returns_one_result_per_day() -> None:
+    days = describe_days(pk(), date(2027, 3, 20), date(2027, 3, 24))
+    assert [d.day.day for d in days] == [20, 21, 22, 23, 24]
+    assert [d.reason for d in days] == [
+        "weekend",
+        "weekend",
+        "working_day",
+        "holiday",
+        "working_day",
+    ]
+    assert describe_days(pk(), date(2027, 3, 24), date(2027, 3, 24))[0].is_business_day
+
+
+def test_describe_days_validates_range() -> None:
+    with pytest.raises(CoreError):
+        describe_days(pk(), date(2027, 3, 24), date(2027, 3, 20))
+    with pytest.raises(YearNotCovered):
+        describe_days(pk(), date(2027, 12, 31), date(2028, 1, 1))

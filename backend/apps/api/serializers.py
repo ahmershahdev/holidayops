@@ -7,6 +7,7 @@ from apps.core import MAX_YEAR, MIN_YEAR, Reason
 
 MAX_ADD_DAYS = 1000
 MAX_BETWEEN_SPAN_DAYS = 3660
+MAX_RANGE_DAYS = 366
 REASONS = list(get_args(Reason))
 
 
@@ -98,6 +99,20 @@ class BetweenQuerySerializer(CalendarQuerySerializer):
         return attrs
 
 
+class RangeQuerySerializer(CalendarQuerySerializer):
+    start = serializers.DateField(validators=[validate_supported_year])
+    end = serializers.DateField(validators=[validate_supported_year])
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        attrs = super().validate(attrs)
+        span = (attrs["end"] - attrs["start"]).days
+        if not 0 <= span < MAX_RANGE_DAYS:
+            raise serializers.ValidationError(
+                {"end": [f"End must be on or after start and within {MAX_RANGE_DAYS} days."]}
+            )
+        return attrs
+
+
 class CountrySerializer(serializers.Serializer[Any]):
     code = serializers.CharField()
     name = serializers.CharField()
@@ -114,6 +129,10 @@ class HolidaySerializer(serializers.Serializer[Any]):
     date = serializers.DateField()
     name = serializers.CharField()
     kind = serializers.ChoiceField(choices=["holiday", "closure", "half_day"])
+    sources = serializers.ListField(
+        child=serializers.CharField(),
+        help_text="Source countries (with subdivision) that contribute this holiday.",
+    )
 
 
 class HolidayListSerializer(serializers.Serializer[Any]):
