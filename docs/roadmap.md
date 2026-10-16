@@ -31,15 +31,20 @@ wait for Milestone 4 (email sending).
 | 2.4 Calendar API | CRUD endpoints, `calendar=<id>` on the business-day endpoints, role permissions |
 | 2.5 Isolation suite | Cross-org access test on every endpoint, expecting `404` |
 
-## Milestone 3 — React UI
+## Milestone 3 — React UI ← current
+
+Design: [design/m3-ui.md](design/m3-ui.md).
 
 | Part | Scope |
 |---|---|
 | 3.1 Frontend scaffold ✅ | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client; playground, auth, orgs, calendar and custom-day pages |
-| 3.2 i18n + RTL | i18next en/ur/ar, `dir` switching, logical Tailwind properties, Django `.po` files |
-| 3.3 Calendar views | Month, year and list views, per-source filters |
-| 3.4 Custom days | Add/edit closures, half-days, extra working days |
-| 3.5 Org settings | Members, roles, API keys, usage chart |
+| 3.2 Design system | "Calm editorial" tokens, self-hosted fonts, shared components |
+| 3.3 i18n + RTL | i18next en/ur/ar, `dir` switching, logical properties, Django `.po` files |
+| 3.4 Calendar views | Day-range endpoint, month/year/list views, per-source filter, keyboard grid |
+| 3.5 Custom days | Add, edit and remove closures, half-days and extra working days from the calendar |
+| 3.6 Settings | Calendar settings (sources, weekend, language, public, delete); org settings and members |
+
+API keys and the usage chart move to Milestone 5, where keys are created.
 
 ## Milestone 4 — Subscriptions
 
@@ -58,3 +63,17 @@ wait for Milestone 4 (email sending).
 | 5.2 Public SEO pages | See [seo.md](seo.md) |
 | 5.3 Deployment | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs | README setup, API examples, screenshots |
+
+## Milestone 6 — Showcase website
+
+Award-level public site built on Milestone 5's server-rendered pages and the Milestone 3 design
+system. Art-directed landing page, illustrated country and year pages, motion through CSS scroll-driven
+animations and View Transitions. Must keep Lighthouse ≥ 90, readable without JavaScript, respect
+`prefers-reduced-motion`, and work in RTL.
+
+| Part | Scope |
+|---|---|
+| 6.1 Art direction | Moodboard, illustration system, motion principles |
+| 6.2 Landing page | Hero, product story, live API demo, pricing |
+| 6.3 Country pages | Illustrated holiday pages per country and year |
+| 6.4 Performance and a11y pass | Lighthouse, axe, reduced-motion and RTL checks |

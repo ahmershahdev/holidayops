@@ -16,6 +16,7 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 | What to build next, milestone scope | [docs/roadmap.md](docs/roadmap.md) |
 | Milestone 1 API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
 | Auth, orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
+| UI, design system, i18n/RTL, calendar views | [docs/design/m3-ui.md](docs/design/m3-ui.md) |
 
 ## Stack
 
