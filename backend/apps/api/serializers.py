@@ -1,13 +1,13 @@
 from datetime import date
-from typing import Any
+from typing import Any, get_args
 
 from rest_framework import serializers
 
-from apps.core import MAX_YEAR, MIN_YEAR
+from apps.core import MAX_YEAR, MIN_YEAR, Reason
 
 MAX_ADD_DAYS = 1000
 MAX_BETWEEN_SPAN_DAYS = 3660
-REASONS = ["working_day", "weekend", "holiday", "weekend_workday"]
+REASONS = list(get_args(Reason))
 
 
 def validate_supported_year(value: date) -> None:
@@ -16,7 +16,12 @@ def validate_supported_year(value: date) -> None:
 
 
 class CalendarQuerySerializer(serializers.Serializer[Any]):
-    country = serializers.CharField(max_length=3, help_text="ISO 3166-1 alpha-2 code, e.g. PK.")
+    country = serializers.CharField(
+        required=False, max_length=3, help_text="ISO 3166-1 alpha-2 code, e.g. PK."
+    )
+    calendar = serializers.UUIDField(
+        required=False, help_text="A company calendar id, instead of country."
+    )
     subdiv = serializers.CharField(required=False, allow_blank=True, max_length=10)
     language = serializers.CharField(
         required=False,
@@ -39,6 +44,20 @@ class CalendarQuerySerializer(serializers.Serializer[Any]):
 
     def validate_categories(self, value: str) -> tuple[str, ...]:
         return tuple(item.strip() for item in value.split(",") if item.strip())
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        attrs = super().validate(attrs)
+        if ("country" in attrs) == ("calendar" in attrs):
+            raise serializers.ValidationError(
+                {"country": ["Give exactly one of country or calendar."]}
+            )
+        if "calendar" in attrs:
+            given = [f for f in ("subdiv", "language", "categories") if attrs.get(f)]
+            if given:
+                raise serializers.ValidationError(
+                    {given[0]: ["Not allowed with calendar; the calendar defines it."]}
+                )
+        return attrs
 
     def calendar_args(self) -> dict[str, Any]:
         data = self.validated_data
@@ -68,6 +87,7 @@ class BetweenQuerySerializer(CalendarQuerySerializer):
     end = serializers.DateField(validators=[validate_supported_year])
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        attrs = super().validate(attrs)
         span = (attrs["end"] - attrs["start"]).days
         if span < 0:
             raise serializers.ValidationError({"end": ["End must not be before start."]})
@@ -93,10 +113,12 @@ class CountrySerializer(serializers.Serializer[Any]):
 class HolidaySerializer(serializers.Serializer[Any]):
     date = serializers.DateField()
     name = serializers.CharField()
+    kind = serializers.ChoiceField(choices=["holiday", "closure", "half_day"])
 
 
 class HolidayListSerializer(serializers.Serializer[Any]):
-    country = serializers.CharField()
+    country = serializers.CharField(allow_null=True)
+    calendar = serializers.UUIDField(allow_null=True)
     subdiv = serializers.CharField(allow_null=True)
     year = serializers.IntegerField()
     language = serializers.CharField(allow_null=True)
@@ -109,6 +131,7 @@ class CheckResultSerializer(serializers.Serializer[Any]):
     is_business_day = serializers.BooleanField()
     reason = serializers.ChoiceField(choices=REASONS)
     holidays = serializers.ListField(child=serializers.CharField())
+    half_day = serializers.BooleanField()
 
 
 class AddResultSerializer(serializers.Serializer[Any]):

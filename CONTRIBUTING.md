@@ -29,7 +29,8 @@ cp .env.example .env
 docker compose up -d db redis
 cd backend
 uv sync
-uv run pytest
+uv run --env-file ../.env python manage.py migrate
+uv run --env-file ../.env pytest
 ```
 
 Conventions for code and agents are in [AGENTS.md](AGENTS.md).

@@ -3,19 +3,8 @@ from typing import Any
 
 import holidays
 import pytest
-from django.core.cache import cache
 from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle
-
-
-@pytest.fixture(autouse=True)
-def _clear_throttle_cache() -> None:
-    cache.clear()
-
-
-@pytest.fixture
-def client() -> APIClient:
-    return APIClient()
 
 
 def get(client: APIClient, url: str, **params: Any) -> Any:
@@ -37,7 +26,7 @@ def test_holidays_list(client: APIClient) -> None:
     assert body["country"] == "PK"
     assert body["subdiv"] is None
     assert body["categories"] == ["public"]
-    assert {"date": "2027-03-23", "name": "Pakistan Day"} in body["holidays"]
+    assert {"date": "2027-03-23", "name": "Pakistan Day", "kind": "holiday"} in body["holidays"]
     dates = [h["date"] for h in body["holidays"]]
     assert dates == sorted(dates)
     assert dates.count("2027-08-14") == 2
@@ -65,6 +54,7 @@ def test_check(client: APIClient) -> None:
         "is_business_day": False,
         "reason": "weekend",
         "holidays": [],
+        "half_day": False,
     }
 
 
