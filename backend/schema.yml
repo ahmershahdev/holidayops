@@ -1,0 +1,1570 @@
+openapi: 3.0.3
+info:
+  title: HolidayOps API
+  version: 1.0.0
+  description: Holidays and business-day maths for every country supported by `holidays`.
+paths:
+  /api/v1/auth/csrf/:
+    get:
+      operationId: auth_csrf_retrieve
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Csrf'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/signup/:
+    post:
+      operationId: auth_signup_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/business-days/add/:
+    get:
+      operationId: business_days_add_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: days
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: -1000
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddResult'
+          description: ''
+  /api/v1/business-days/between/:
+    get:
+      operationId: business_days_between_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetweenResult'
+          description: ''
+  /api/v1/business-days/check/:
+    get:
+      operationId: business_days_check_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResult'
+          description: ''
+  /api/v1/countries/:
+    get:
+      operationId: countries_list
+      tags:
+      - countries
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+          description: ''
+  /api/v1/holidays/:
+    get:
+      operationId: holidays_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      - in: query
+        name: year
+        schema:
+          type: integer
+          maximum: 2100
+          minimum: 1970
+        required: true
+      tags:
+      - holidays
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayList'
+          description: ''
+  /api/v1/orgs/:
+    get:
+      operationId: orgs_list
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Org'
+          description: ''
+    post:
+      operationId: orgs_create
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrgRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrgRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+          description: ''
+  /api/v1/orgs/{org_slug}/:
+    get:
+      operationId: orgs_retrieve
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+          description: ''
+    patch:
+      operationId: orgs_partial_update
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrgRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrgRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrgRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+          description: ''
+    delete:
+      operationId: orgs_destroy
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/audit-log/:
+    get:
+      operationId: orgs_audit_log_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogList'
+          description: ''
+  /api/v1/orgs/{org_slug}/calendars/:
+    get:
+      operationId: orgs_calendars_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCalendarList'
+          description: ''
+    post:
+      operationId: orgs_calendars_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CalendarRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CalendarRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+          description: ''
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/custom-days/:
+    get:
+      operationId: orgs_calendars_custom_days_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: year
+        schema:
+          type: integer
+        description: Only this year.
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCustomDayList'
+          description: ''
+    post:
+      operationId: orgs_calendars_custom_days_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomDayRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomDayRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomDayRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomDay'
+          description: ''
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/custom-days/{id}/:
+    get:
+      operationId: orgs_calendars_custom_days_retrieve
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom day.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomDay'
+          description: ''
+    patch:
+      operationId: orgs_calendars_custom_days_partial_update
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom day.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomDayRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomDayRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomDayRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomDay'
+          description: ''
+    delete:
+      operationId: orgs_calendars_custom_days_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom day.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/calendars/{id}/:
+    get:
+      operationId: orgs_calendars_retrieve
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this calendar.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+          description: ''
+    patch:
+      operationId: orgs_calendars_partial_update
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this calendar.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCalendarRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCalendarRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCalendarRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+          description: ''
+    delete:
+      operationId: orgs_calendars_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this calendar.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/members/:
+    get:
+      operationId: orgs_members_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+          description: ''
+    post:
+      operationId: orgs_members_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/orgs/{org_slug}/members/{id}/:
+    patch:
+      operationId: orgs_members_partial_update
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this membership.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+    delete:
+      operationId: orgs_members_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this membership.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AddResult:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        days:
+          type: integer
+        result:
+          type: string
+          format: date
+      required:
+      - days
+      - result
+      - start
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        action:
+          type: string
+          maxLength: 50
+        target:
+          type: string
+          maxLength: 200
+        actor:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - actor
+      - created_at
+      - id
+      - target
+    BetweenResult:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+        business_days:
+          type: integer
+          description: Inclusive of both start and end.
+      required:
+      - business_days
+      - end
+      - start
+    Calendar:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        is_public:
+          type: boolean
+        language:
+          type: string
+          maxLength: 10
+        weekend:
+          type: array
+          items:
+            type: integer
+            maximum: 6
+            minimum: 0
+          nullable: true
+          description: Weekday numbers (Monday = 0). Null uses the first source's
+            weekend.
+          maxItems: 6
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - sources
+      - updated_at
+    CalendarRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        is_public:
+          type: boolean
+        language:
+          type: string
+          maxLength: 10
+        weekend:
+          type: array
+          items:
+            type: integer
+            maximum: 6
+            minimum: 0
+          nullable: true
+          description: Weekday numbers (Monday = 0). Null uses the first source's
+            weekend.
+          maxItems: 6
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceRequest'
+      required:
+      - name
+      - sources
+    CheckResult:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        is_business_day:
+          type: boolean
+        reason:
+          $ref: '#/components/schemas/ReasonEnum'
+        holidays:
+          type: array
+          items:
+            type: string
+        half_day:
+          type: boolean
+      required:
+      - date
+      - half_day
+      - holidays
+      - is_business_day
+      - reason
+    Country:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        subdivisions:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        default_language:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+        weekend:
+          type: array
+          items:
+            type: integer
+          description: Weekday numbers, Monday = 0.
+      required:
+      - categories
+      - code
+      - default_language
+      - languages
+      - name
+      - subdivisions
+      - weekend
+    Csrf:
+      type: object
+      properties:
+        csrf_token:
+          type: string
+      required:
+      - csrf_token
+    CustomDay:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+          maxLength: 120
+        kind:
+          $ref: '#/components/schemas/CustomDayKindEnum'
+      required:
+      - date
+      - id
+      - kind
+      - name
+    CustomDayKindEnum:
+      enum:
+      - closure
+      - half_day
+      - working_day
+      type: string
+      description: |-
+        * `closure` - Closure
+        * `half_day` - Half Day
+        * `working_day` - Working Day
+    CustomDayRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        kind:
+          $ref: '#/components/schemas/CustomDayKindEnum'
+      required:
+      - date
+      - kind
+      - name
+    Holiday:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+        kind:
+          $ref: '#/components/schemas/HolidayKindEnum'
+      required:
+      - date
+      - kind
+      - name
+    HolidayKindEnum:
+      enum:
+      - holiday
+      - closure
+      - half_day
+      type: string
+      description: |-
+        * `holiday` - holiday
+        * `closure` - closure
+        * `half_day` - half_day
+    HolidayList:
+      type: object
+      properties:
+        country:
+          type: string
+          nullable: true
+        calendar:
+          type: string
+          format: uuid
+          nullable: true
+        subdiv:
+          type: string
+          nullable: true
+        year:
+          type: integer
+        language:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+        holidays:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holiday'
+      required:
+      - calendar
+      - categories
+      - country
+      - holidays
+      - language
+      - subdiv
+      - year
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+      required:
+      - email
+      - password
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - role
+      - user
+    MemberCreateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - email
+      - role
+    Org:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        role:
+          type: string
+          nullable: true
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - role
+      - slug
+    OrgRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+      required:
+      - name
+    PaginatedAuditLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+    PaginatedCalendarList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Calendar'
+    PaginatedCustomDayList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomDay'
+    PatchedCalendarRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        is_public:
+          type: boolean
+        language:
+          type: string
+          maxLength: 10
+        weekend:
+          type: array
+          items:
+            type: integer
+            maximum: 6
+            minimum: 0
+          nullable: true
+          description: Weekday numbers (Monday = 0). Null uses the first source's
+            weekend.
+          maxItems: 6
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceRequest'
+    PatchedCustomDayRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        kind:
+          $ref: '#/components/schemas/CustomDayKindEnum'
+    PatchedMemberRequest:
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+    PatchedOrgRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+    ReasonEnum:
+      enum:
+      - working_day
+      - weekend
+      - holiday
+      - weekend_workday
+      - closure
+      - half_day
+      - custom_working_day
+      type: string
+      description: |-
+        * `working_day` - working_day
+        * `weekend` - weekend
+        * `holiday` - holiday
+        * `weekend_workday` - weekend_workday
+        * `closure` - closure
+        * `half_day` - half_day
+        * `custom_working_day` - custom_working_day
+    RoleEnum:
+      enum:
+      - owner
+      - admin
+      - member
+      - viewer
+      type: string
+      description: |-
+        * `owner` - Owner
+        * `admin` - Admin
+        * `member` - Member
+        * `viewer` - Viewer
+    SignupRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+      - password
+    Source:
+      type: object
+      properties:
+        country:
+          type: string
+          maxLength: 3
+        subdiv:
+          type: string
+          maxLength: 10
+        categories:
+          type: array
+          items:
+            type: string
+            maxLength: 30
+          maxItems: 10
+      required:
+      - country
+    SourceRequest:
+      type: object
+      properties:
+        country:
+          type: string
+          minLength: 1
+          maxLength: 3
+        subdiv:
+          type: string
+          maxLength: 10
+        categories:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 30
+          maxItems: 10
+      required:
+      - country
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+      - id
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

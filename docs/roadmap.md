@@ -32,7 +32,7 @@ wait for Milestone 4 (email sending).
 
 | Part | Scope |
 |---|---|
-| 3.1 Frontend scaffold | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client |
+| 3.1 Frontend scaffold ✅ | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client; playground, auth, orgs, calendar and custom-day pages |
 | 3.2 i18n + RTL | i18next en/ur/ar, `dir` switching, logical Tailwind properties, Django `.po` files |
 | 3.3 Calendar views | Month, year and list views, per-source filters |
 | 3.4 Custom days | Add/edit closures, half-days, extra working days |

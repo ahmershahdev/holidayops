@@ -133,6 +133,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Holidays and business-day maths for every country supported by `holidays`.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
