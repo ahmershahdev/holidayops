@@ -10,6 +10,7 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 
 | Task touches | Read |
 |---|---|
+| Starting a session: what's done, what's next | [docs/status.md](docs/status.md) |
 | Endpoints, domain functions, data model, caching | [docs/architecture.md](docs/architecture.md) |
 | Auth, API keys, tenancy, webhooks, headers | [docs/security.md](docs/security.md) |
 | Public server-rendered pages, sitemaps | [docs/seo.md](docs/seo.md) |
