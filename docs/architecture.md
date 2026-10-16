@@ -36,7 +36,9 @@ def get_calendar(country: str, subdiv: str | None, years: Iterable[int],
 def is_business_day(cal: HolidayBase, day: date) -> BusinessDayResult: ...
 def add_business_days(cal: HolidayBase, start: date, n: int) -> date: ...
 def business_days_between(cal: HolidayBase, start: date, end: date) -> int: ...
-def merge_calendars(sources: Sequence[HolidayBase], custom: Sequence[CustomDay]) -> MergedCalendar: ...
+def check_calendar_args(country, subdiv, language, categories) -> CountryInfo: ...
+def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
+                    weekend: Iterable[int] | None = None) -> MergedCalendar: ...
 ```
 
 - Use the library's own weekend rules (e.g. Fri–Sat for SA), `weekend_workdays` (moved working
@@ -45,21 +47,25 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Sequence[CustomDay])
 - Calendars are built with `expand=False` for an explicit set of years, so a cached calendar never
   mutates. Callers ask for every year a computation can touch; the domain raises if it would step
   outside them.
-- Half-days count as working days in the maths and are flagged in the result (Milestone 2).
-- Merging follows the library's `HolidaySum` behaviour; custom days win over sources.
+- `is_business_day`, `add_business_days` and `business_days_between` accept a plain calendar or a
+  `MergedCalendar`.
+- Half-days count as working days in the maths and are flagged in the result.
+- Merging uses the library's `HolidaySum`; custom days win over sources. Merge rules:
+  [design/m2-orgs.md](design/m2-orgs.md).
+- With no `language`, the country's default language is used, never the server locale.
 
 ## Caching
 
 1. In-process LRU on `get_calendar` keyed by `(country, subdiv, years, language, categories)`.
 2. Redis for serialized holiday lists (Milestone 1 ships the LRU; Redis lists come with load).
 
-## Data model (Milestone 2+)
+## Data model
 
 - `Organization`, `Membership(user, org, role)` with roles `owner`, `admin`, `member`, `viewer`
-- `Calendar(org, name, slug, is_public)`
-- `CalendarSource(calendar, country, subdiv, categories)`
+- `Calendar(id: uuid, org, name, slug, is_public, language, weekend)`
+- `CalendarSource(calendar, country, subdiv, categories, position)`
 - `CustomDay(calendar, date, name, kind: closure|half_day|working_day)`
-- `ApiKey(org, name, prefix, hashed_key, created_by, last_used_at, revoked_at)`
+- Milestone 5: `ApiKey(org, name, prefix, hashed_key, created_by, last_used_at, revoked_at)`
 - `FeedToken(calendar, hashed_token, revoked_at)`
 - `Webhook(org, url, secret, events)`
 - `UsageEvent(api_key, endpoint, status, created_at)`

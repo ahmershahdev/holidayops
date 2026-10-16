@@ -5,17 +5,23 @@ when its tests pass in CI and the docs it touches are updated.
 
 "Done" for the project: live demo URL, README with setup, tests in CI, seed data, screenshots.
 
-## Milestone 1 — API over `holidays` with business-day maths ← current
+## Milestone 1 — API over `holidays` with business-day maths ✅
 
 | Part | Scope | Done when |
 |---|---|---|
 | 1.1 Scaffold | `backend/` with uv, pinned deps, settings split, Ruff, mypy, pytest config, Docker Compose (MySQL, Redis, backend), `.env.example` | `pytest` runs; `ruff` and `mypy` are clean |
 | 1.2 Core domain | `apps/core`: `get_calendar` (LRU), `is_business_day`, `add_business_days`, `business_days_between`, country metadata, validation errors | 100% branch coverage, no Django imports |
 | 1.3 API | DRF views + serializers for countries, holidays, check, add, between; input limits; OpenAPI + Swagger | API tests cover happy paths, limits and bad input |
-| 1.4 Hardening | Anonymous per-IP throttle (Redis in prod), security headers, health endpoint | Throttle and header tests pass |
+| 1.4 Hardening | Anonymous per-IP throttle (Redis in prod), security headers incl. CSP | Throttle and header tests pass |
 | 1.5 CI | GitHub Actions: Ruff, mypy, pytest with MySQL service, pip-audit, CodeQL | Workflow green on a PR |
 
-## Milestone 2 — Organizations, company calendars, auth
+Deferred on purpose: the Redis cache for serialized holiday lists. The in-process LRU already serves
+a country-year in well under a millisecond; Redis is added in 5.3 when there are several workers.
+
+## Milestone 2 — Organizations, company calendars, auth ✅
+
+Design: [design/m2-orgs.md](design/m2-orgs.md). Parts 2.1–2.5 are implemented; invites by email
+wait for Milestone 4 (email sending).
 
 | Part | Scope |
 |---|---|
@@ -29,7 +35,7 @@ when its tests pass in CI and the docs it touches are updated.
 
 | Part | Scope |
 |---|---|
-| 3.1 Frontend scaffold | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client |
+| 3.1 Frontend scaffold ✅ | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client; playground, auth, orgs, calendar and custom-day pages |
 | 3.2 i18n + RTL | i18next en/ur/ar, `dir` switching, logical Tailwind properties, Django `.po` files |
 | 3.3 Calendar views | Month, year and list views, per-source filters |
 | 3.4 Custom days | Add/edit closures, half-days, extra working days |
@@ -50,5 +56,5 @@ when its tests pass in CI and the docs it touches are updated.
 |---|---|
 | 5.1 API keys | `hops_<prefix>_<secret>`, hashed, per-key throttles, quotas, `UsageEvent` |
 | 5.2 Public SEO pages | See [seo.md](seo.md) |
-| 5.3 Deployment | Production settings, HTTPS, headers, demo URL, seed data |
+| 5.3 Deployment | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs | README setup, API examples, screenshots |

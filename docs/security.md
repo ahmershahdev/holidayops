@@ -44,6 +44,10 @@ after DNS resolution), timeouts, retries with backoff.
 HTTPS only, HSTS, CSP, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, secure + HttpOnly
 cookies, `SameSite=Lax`.
 
+CSP (`backend/config/csp.py`): API responses get `default-src 'none'`. The Swagger page allows only
+`'self'` and the jsDelivr CDN, uses the split view so it has no inline script, and loads an exact
+`swagger-ui-dist` version (never `@latest`).
+
 ## Secrets
 
 Only from environment variables (`.env` locally, never committed; `.env.example` lists them).
@@ -54,4 +58,6 @@ Key creation and revocation, member and role changes, calendar deletion.
 
 ## Supply chain
 
-Exact-pinned dependencies with a lock file, Dependabot, pip-audit, npm audit, CodeQL in CI.
+Exact-pinned dependencies with lock files, Dependabot (Actions, uv, npm), pip-audit, npm audit,
+CodeQL (Python, TypeScript, Actions) in CI. The `main` ruleset requires the `backend`, `frontend`
+and `codeql` checks to pass before a merge.

@@ -3,19 +3,8 @@ from typing import Any
 
 import holidays
 import pytest
-from django.core.cache import cache
 from rest_framework.test import APIClient
 from rest_framework.throttling import AnonRateThrottle
-
-
-@pytest.fixture(autouse=True)
-def _clear_throttle_cache() -> None:
-    cache.clear()
-
-
-@pytest.fixture
-def client() -> APIClient:
-    return APIClient()
 
 
 def get(client: APIClient, url: str, **params: Any) -> Any:
@@ -37,7 +26,7 @@ def test_holidays_list(client: APIClient) -> None:
     assert body["country"] == "PK"
     assert body["subdiv"] is None
     assert body["categories"] == ["public"]
-    assert {"date": "2027-03-23", "name": "Pakistan Day"} in body["holidays"]
+    assert {"date": "2027-03-23", "name": "Pakistan Day", "kind": "holiday"} in body["holidays"]
     dates = [h["date"] for h in body["holidays"]]
     assert dates == sorted(dates)
     assert dates.count("2027-08-14") == 2
@@ -65,6 +54,7 @@ def test_check(client: APIClient) -> None:
         "is_business_day": False,
         "reason": "weekend",
         "holidays": [],
+        "half_day": False,
     }
 
 
@@ -136,6 +126,18 @@ def test_security_headers(client: APIClient) -> None:
     assert response["X-Content-Type-Options"] == "nosniff"
     assert response["X-Frame-Options"] == "DENY"
     assert response["Referrer-Policy"] == "same-origin"
+    assert response["Content-Security-Policy"].startswith("default-src 'none'")
+
+
+def test_docs_csp_allows_only_the_pinned_swagger_cdn(client: APIClient) -> None:
+    page = client.get("/api/v1/docs/")
+    policy = page["Content-Security-Policy"]
+    assert "script-src 'self' https://cdn.jsdelivr.net;" in policy
+    assert "unsafe-eval" not in policy
+    assert "swagger-ui-dist@5.33.1" in page.content.decode()
+    assert "<script>" not in page.content.decode()
+    script = client.get("/api/v1/docs/", {"script": ""})
+    assert script["Content-Type"].startswith("application/javascript")
 
 
 def test_anonymous_requests_are_throttled(

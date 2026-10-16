@@ -8,7 +8,8 @@ closures on top.
 
 Built for payroll, HR, logistics and finance teams.
 
-> **Status:** Milestone 1 (public API) in progress. See the [roadmap](docs/roadmap.md).
+> **Status:** Milestone 1 (public API) done, Milestone 2 (accounts, organizations, company
+> calendars) in review. See the [roadmap](docs/roadmap.md).
 
 ## Features
 
@@ -40,29 +41,33 @@ Full contracts and limits: [docs/design/m1-api.md](docs/design/m1-api.md).
 
 ## Quick start
 
-Requirements: [uv](https://docs.astral.sh/uv/), Python 3.12+, and Docker (for MySQL and Redis).
+Requirements: [uv](https://docs.astral.sh/uv/), Node.js 22.22+, and Docker Desktop (running).
 
 ```bash
 git clone https://github.com/ahmershahdev/holidayops.git
 cd holidayops
-cp .env.example .env
-docker compose up -d db redis
-
-cd backend
-uv sync
-uv run python manage.py migrate
-uv run python manage.py runserver
+cp .env.example .env        # then set DJANGO_SECRET_KEY and the MySQL passwords
+npm install                 # root tools (concurrently)
+npm run setup               # frontend packages + Python packages
+npm run dev                 # MySQL + Redis in Docker, Django on :8000, Vite on :5173
 ```
 
-Open <http://localhost:8000/api/v1/docs/>. Or run everything in containers: `docker compose up -d`.
+Open <http://localhost:5173>: the playground answers business-day questions live; sign up to create
+an organization and a company calendar. API docs: <http://localhost:5173/api/v1/docs/>.
 
 ## Development
 
 ```bash
-cd backend
-uv run pytest                     # tests (the domain tests need no database)
-uv run ruff check . && uv run ruff format --check .
-uv run mypy .
+npm test                          # backend (pytest, needs MySQL) + frontend (Vitest)
+cd backend && uv run ruff check . && uv run ruff format --check . && uv run mypy .
+cd frontend && npm run lint && npm run typecheck
+```
+
+After changing the API, regenerate the schema and the typed client:
+
+```bash
+cd backend && uv run python manage.py spectacular --file schema.yml --validate
+cd ../frontend && npm run gen:api
 ```
 
 ## Stack
@@ -78,6 +83,7 @@ uv run mypy .
 ## Project docs
 
 - [Architecture](docs/architecture.md): domain layer, endpoints, data model
+- [Accounts, orgs and company calendars](docs/design/m2-orgs.md)
 - [Security design](docs/security.md)
 - [Roadmap](docs/roadmap.md)
 - [AGENTS.md](AGENTS.md): conventions for contributors and coding agents
