@@ -18,8 +18,8 @@ Versioned under `/api/v1/`. OpenAPI at `/api/v1/schema/`, Swagger UI at `/api/v1
 | Endpoint | Purpose |
 |---|---|
 | `GET /countries/` | Supported countries with subdivisions, languages, categories, weekend |
-| `GET /holidays/?country=PK&subdiv=&year=2027&language=ur&categories=public` | Holiday list |
-| `GET /business-days/check/?country=SA&date=2027-03-12` | Working day or not, and why |
+| `GET /holidays/?country=PK&subdiv=&year=2027&language=ur_PK&categories=public` | Holiday list |
+| `GET /business-days/check/?country=SA&date=2027-04-02` | Working day or not, and why |
 | `GET /business-days/add/?country=PK&date=2027-03-20&days=5` | Add or subtract N working days |
 | `GET /business-days/between/?country=AE&start=…&end=…` | Working days, inclusive of both ends |
 

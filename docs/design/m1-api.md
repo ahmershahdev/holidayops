@@ -45,10 +45,10 @@ Views hold no date logic. `apps/core` raises its own errors; the API layer maps 
 
 Two holidays on the same date produce two entries. Sorted by date, then name.
 
-### `GET /api/v1/business-days/check/?country=SA&date=2027-03-12`
+### `GET /api/v1/business-days/check/?country=SA&date=2027-04-02`
 
 ```json
-{"date": "2027-03-12", "is_business_day": false, "reason": "weekend", "holidays": []}
+{"date": "2027-04-02", "is_business_day": false, "reason": "weekend", "holidays": []}
 ```
 
 `reason` is one of:
@@ -70,7 +70,7 @@ if it is a working day, otherwise the next working day (the library's `get_nth_w
 ### `GET /api/v1/business-days/between/?country=AE&start=2027-01-01&end=2027-01-31`
 
 ```json
-{"start": "2027-01-01", "end": "2027-01-31", "business_days": 21}
+{"start": "2027-01-01", "end": "2027-01-31", "business_days": 20}
 ```
 
 Inclusive of both ends. `start` must not be after `end`.

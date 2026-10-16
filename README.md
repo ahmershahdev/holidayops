@@ -26,13 +26,13 @@ Built for payroll, HR, logistics and finance teams.
 ```http
 GET /api/v1/countries/
 GET /api/v1/holidays/?country=PK&year=2027&language=ur_PK
-GET /api/v1/business-days/check/?country=SA&date=2027-03-12
+GET /api/v1/business-days/check/?country=SA&date=2027-04-02
 GET /api/v1/business-days/add/?country=PK&date=2027-03-20&days=5
 GET /api/v1/business-days/between/?country=AE&start=2027-01-01&end=2027-01-31
 ```
 
 ```json
-{"date": "2027-03-12", "is_business_day": false, "reason": "weekend", "holidays": []}
+{"date": "2027-04-02", "is_business_day": false, "reason": "weekend", "holidays": []}
 ```
 
 Interactive docs are served at `/api/v1/docs/`; the OpenAPI schema at `/api/v1/schema/`.
