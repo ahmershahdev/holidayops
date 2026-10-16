@@ -42,7 +42,7 @@ class HolidayListView(APIView):
             "country": cal.country,
             "subdiv": cal.subdiv,
             "year": year,
-            "language": query.validated_data.get("language"),
+            "language": cal.language,
             "categories": sorted(cal.categories),
             "holidays": [{"date": day, "name": name} for day, name in items],
         }

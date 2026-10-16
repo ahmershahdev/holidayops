@@ -81,6 +81,8 @@ def get_calendar(
     if not year_tuple or year_tuple[0] < MIN_YEAR or year_tuple[-1] > MAX_YEAR:
         raise YearOutOfRange(f"Years must be between {MIN_YEAR} and {MAX_YEAR}.")
     category_tuple = tuple(sorted(set(categories))) or (PUBLIC,)
+    # language=None makes the library guess from the server locale, so names would vary by host.
+    language = language or info.default_language
     return _build_calendar(info.code, subdiv, year_tuple, language, category_tuple)
 
 

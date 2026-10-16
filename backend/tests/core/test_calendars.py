@@ -83,3 +83,7 @@ def test_get_calendar_validates_inputs(kwargs: dict[str, object], error: type[Ex
     args.update(kwargs)
     with pytest.raises(error):
         get_calendar(**args)  # type: ignore[arg-type]
+
+
+def test_get_calendar_defaults_to_country_language() -> None:
+    assert get_calendar("PK", None, [2027], None, ()).language == "en_PK"

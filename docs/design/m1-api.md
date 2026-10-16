@@ -14,7 +14,7 @@ Views hold no date logic. `apps/core` raises its own errors; the API layer maps 
 |---|---|
 | `country` | Required. ISO 3166-1 alpha-2 code supported by `holidays` (case-insensitive) |
 | `subdiv` | Optional. Must be in the country's subdivision list |
-| `language` | Optional. Must be in the country's `supported_languages`; default is the country's default |
+| `language` | Optional. Must be in the country's `supported_languages`; default is the country's default language, never the server locale |
 | `categories` | Optional, comma-separated. Each must be in `supported_categories`; default `public` |
 
 ## Limits
