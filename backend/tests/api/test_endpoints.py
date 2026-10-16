@@ -154,3 +154,9 @@ def test_between_uses_country_weekend(client: APIClient) -> None:
         client, "business-days/between/", country="AE", start="2027-01-01", end="2027-01-31"
     ).json()
     assert body["business_days"] == 20
+
+
+def test_holidays_default_to_country_language_not_server_locale(client: APIClient) -> None:
+    body = get(client, "holidays/", country="SA", year=2027).json()
+    assert body["language"] == "ar"
+    assert all(not h["name"].isascii() for h in body["holidays"])

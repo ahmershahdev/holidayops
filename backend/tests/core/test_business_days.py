@@ -24,7 +24,7 @@ def pk(*years: int):  # type: ignore[no-untyped-def]
         ("SA", date(2027, 4, 2), False, "weekend", ()),
         ("SA", date(2027, 4, 4), True, "working_day", ()),
         ("RU", date(2025, 11, 1), True, "weekend_workday", ()),
-        ("PK", date(2026, 5, 28), False, "holiday", ("Eid al-Adha (estimated)", "Youm-e-Takbeer")),
+        ("PK", date(2026, 5, 28), False, "holiday", ("Eid-ul-Adha (estimated)", "Youm-e-Takbeer")),
     ],
 )
 def test_is_business_day(
