@@ -1,0 +1,144 @@
+{
+  "nav": {
+    "main": "مرکزی",
+    "skip": "مواد پر جائیں",
+    "playground": "تجربہ گاہ",
+    "calendars": "میرے کیلنڈر",
+    "apiDocs": "API دستاویزات",
+    "language": "زبان"
+  },
+  "common": {
+    "add": "شامل کریں",
+    "and": " اور ",
+    "back": "واپس",
+    "create": "بنائیں",
+    "remove": "ہٹائیں",
+    "save": "محفوظ کریں",
+    "saved": "محفوظ ہو گیا"
+  },
+  "auth": {
+    "login": "لاگ اِن",
+    "logout": "لاگ آؤٹ",
+    "signup": "سائن اپ",
+    "loginTitle": "خوش آمدید",
+    "signupTitle": "اپنا اکاؤنٹ بنائیں",
+    "name": "نام",
+    "email": "ای میل",
+    "password": "پاس ورڈ",
+    "passwordHint": "کم از کم 10 حروف۔",
+    "newHere": "نئے ہیں؟",
+    "createAccount": "اکاؤنٹ بنائیں",
+    "haveAccount": "پہلے سے اکاؤنٹ ہے؟"
+  },
+  "status": {
+    "businessDay": "کام کا دن",
+    "dayOff": "چھٹی کا دن"
+  },
+  "reason": {
+    "working_day": "عام کام کا دن",
+    "weekend": "ہفتہ وار چھٹی",
+    "holiday": "سرکاری تعطیل",
+    "weekend_workday": "ہفتہ وار چھٹی کو کام کا دن بنایا گیا",
+    "closure": "کمپنی کی چھٹی",
+    "half_day": "آدھا دن",
+    "custom_working_day": "اضافی کام کا دن"
+  },
+  "kind": {
+    "holiday": "تعطیل",
+    "closure": "کمپنی کی چھٹی",
+    "half_day": "آدھا دن"
+  },
+  "legend": {
+    "holiday": "سرکاری تعطیل",
+    "closure": "کمپنی کی چھٹی",
+    "halfDay": "آدھا دن",
+    "weekend": "ہفتہ وار چھٹی",
+    "extraWorkingDay": "اضافی کام کا دن"
+  },
+  "calendar": {
+    "previous": "پچھلا",
+    "next": "اگلا",
+    "today": "آج",
+    "view": "منظر",
+    "views": { "month": "مہینہ", "year": "سال", "list": "فہرست" },
+    "showHolidaysFrom": "ان ممالک کی تعطیلات دکھائیں",
+    "noHolidays": "اس سال کوئی تعطیل نہیں۔",
+    "daysOff_one": "{{count}} چھٹی",
+    "daysOff_other": "{{count}} چھٹیاں"
+  },
+  "custom": {
+    "add": "کمپنی کا دن شامل کریں",
+    "edit": "کمپنی کے دن میں ترمیم",
+    "kind": "قسم",
+    "name": "نام",
+    "kinds": {
+      "closure": "چھٹی (بندش)",
+      "half_day": "آدھا دن",
+      "working_day": "اضافی کام کا دن"
+    }
+  },
+  "playground": {
+    "title": "کیا آج کام کا دن ہے؟",
+    "subtitle": "{{country}} کے لیے فوری جواب، اس کی اپنی ہفتہ وار چھٹی ({{weekend}}) کے ساتھ۔ وجہ جاننے کے لیے کوئی بھی دن منتخب کریں۔",
+    "country": "ملک",
+    "addTitle": "کام کے دن جمع کریں",
+    "from": "تاریخ سے",
+    "days": "کام کے دن",
+    "daysHint": "منفی عدد پیچھے کی طرف گنتا ہے۔",
+    "addResult_one": "{{count}} کام کے دن بعد کی تاریخ",
+    "addResult_other": "{{count}} کام کے دن بعد کی تاریخ"
+  },
+  "orgs": {
+    "title": "آپ کی تنظیمیں",
+    "subtitle": "ہر تنظیم میں کمپنی کے کیلنڈر اور انہیں سنبھالنے والے لوگ ہوتے ہیں۔",
+    "yours": "تنظیمیں",
+    "empty": "آپ ابھی کسی تنظیم میں نہیں ہیں۔ شروع کرنے کے لیے ایک بنائیں۔",
+    "new": "نئی تنظیم"
+  },
+  "org": {
+    "settings": "تنظیم کی ترتیبات",
+    "settingsTitle": "{{name}} کی ترتیبات",
+    "calendars": "کیلنڈر",
+    "noCalendars": "ابھی کوئی کیلنڈر نہیں۔",
+    "newCalendar": "نیا کیلنڈر",
+    "calendarName": "کیلنڈر کا نام",
+    "createCalendar": "کیلنڈر بنائیں",
+    "rename": "نام",
+    "members": "اراکین",
+    "role": "کردار",
+    "roleFor": "{{name}} کا کردار",
+    "addByEmail": "ای میل سے شامل کریں",
+    "addHint": "ان کا پہلے HolidayOps اکاؤنٹ ہونا ضروری ہے۔",
+    "delete": "تنظیم حذف کریں",
+    "deleteHint": "اس سے {{name}}، اس کے کیلنڈر اور اراکین ہمیشہ کے لیے ہٹ جائیں گے۔ تصدیق کے لیے نام لکھیں۔"
+  },
+  "roles": {
+    "owner": "مالک",
+    "admin": "منتظم",
+    "member": "رکن",
+    "viewer": "ناظر"
+  },
+  "sources": {
+    "title": "ممالک (ان کی تعطیلات ملا دی جاتی ہیں)",
+    "country": "ملک",
+    "subdivision": "علاقہ",
+    "wholeCountry": "پورا ملک",
+    "categories": "تعطیلات کی اقسام",
+    "add": "ملک شامل کریں"
+  },
+  "settings": {
+    "title": "ترتیبات",
+    "calendarTitle": "{{name}} کی ترتیبات",
+    "name": "نام",
+    "language": "تعطیلات کے نام اس زبان میں",
+    "languageHint": "ہر اس ملک کے لیے جو یہ زبان رکھتا ہو۔",
+    "countryDefault": "ہر ملک کی اپنی زبان",
+    "public": "عوامی: لنک رکھنے والا کوئی بھی شخص API میں یہ کیلنڈر استعمال کر سکتا ہے",
+    "weekend": "ہفتہ وار چھٹی",
+    "weekendFromSource": "پہلے ملک کی ہفتہ وار چھٹی استعمال کریں",
+    "dangerZone": "خطرناک اقدامات",
+    "deleteHint": "{{name}} حذف کرنے سے اس کے کمپنی کے دن ہمیشہ کے لیے ہٹ جائیں گے۔ تصدیق کے لیے نام لکھیں۔",
+    "confirmName": "تصدیق کے لیے نام لکھیں",
+    "deleteCalendar": "کیلنڈر حذف کریں"
+  }
+}

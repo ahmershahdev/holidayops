@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "main": "الرئيسية",
+    "skip": "انتقل إلى المحتوى",
+    "playground": "ساحة التجربة",
+    "calendars": "تقويماتي",
+    "apiDocs": "توثيق API",
+    "language": "اللغة"
+  },
+  "common": {
+    "add": "إضافة",
+    "and": " و",
+    "back": "رجوع",
+    "create": "إنشاء",
+    "remove": "إزالة",
+    "save": "حفظ",
+    "saved": "تم الحفظ"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "signup": "إنشاء حساب",
+    "loginTitle": "مرحبًا بعودتك",
+    "signupTitle": "أنشئ حسابك",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "passwordHint": "10 أحرف على الأقل.",
+    "newHere": "جديد هنا؟",
+    "createAccount": "أنشئ حسابًا",
+    "haveAccount": "لديك حساب؟"
+  },
+  "status": {
+    "businessDay": "يوم عمل",
+    "dayOff": "يوم عطلة"
+  },
+  "reason": {
+    "working_day": "يوم عمل عادي",
+    "weekend": "عطلة نهاية الأسبوع",
+    "holiday": "عطلة رسمية",
+    "weekend_workday": "يوم عطلة أسبوعية تحوّل إلى يوم عمل",
+    "closure": "إغلاق الشركة",
+    "half_day": "نصف يوم",
+    "custom_working_day": "يوم عمل إضافي"
+  },
+  "kind": {
+    "holiday": "عطلة",
+    "closure": "إغلاق",
+    "half_day": "نصف يوم"
+  },
+  "legend": {
+    "holiday": "عطلة رسمية",
+    "closure": "إغلاق الشركة",
+    "halfDay": "نصف يوم",
+    "weekend": "عطلة نهاية الأسبوع",
+    "extraWorkingDay": "يوم عمل إضافي"
+  },
+  "calendar": {
+    "previous": "السابق",
+    "next": "التالي",
+    "today": "اليوم",
+    "view": "العرض",
+    "views": { "month": "شهر", "year": "سنة", "list": "قائمة" },
+    "showHolidaysFrom": "اعرض عطلات",
+    "noHolidays": "لا توجد عطلات في هذه السنة.",
+    "daysOff_zero": "لا أيام عطلة",
+    "daysOff_one": "يوم عطلة واحد",
+    "daysOff_two": "يوما عطلة",
+    "daysOff_few": "{{count}} أيام عطلة",
+    "daysOff_many": "{{count}} يوم عطلة",
+    "daysOff_other": "{{count}} يوم عطلة"
+  },
+  "custom": {
+    "add": "إضافة يوم خاص بالشركة",
+    "edit": "تعديل يوم الشركة",
+    "kind": "النوع",
+    "name": "الاسم",
+    "kinds": {
+      "closure": "إغلاق (يوم عطلة)",
+      "half_day": "نصف يوم",
+      "working_day": "يوم عمل إضافي"
+    }
+  },
+  "playground": {
+    "title": "هل هو يوم عمل؟",
+    "subtitle": "إجابات فورية لـ{{country}} وفق عطلته الأسبوعية ({{weekend}}). اختر أي يوم لمعرفة السبب.",
+    "country": "الدولة",
+    "addTitle": "إضافة أيام عمل",
+    "from": "من",
+    "days": "أيام العمل",
+    "daysHint": "الأرقام السالبة تعدّ إلى الوراء.",
+    "addResult_zero": "بعد 0 يوم عمل يكون",
+    "addResult_one": "بعد يوم عمل واحد يكون",
+    "addResult_two": "بعد يومي عمل يكون",
+    "addResult_few": "بعد {{count}} أيام عمل يكون",
+    "addResult_many": "بعد {{count}} يوم عمل يكون",
+    "addResult_other": "بعد {{count}} يوم عمل يكون"
+  },
+  "orgs": {
+    "title": "مؤسساتك",
+    "subtitle": "تضم كل مؤسسة تقويمات الشركة والأشخاص الذين يديرونها.",
+    "yours": "المؤسسات",
+    "empty": "لست عضوًا في أي مؤسسة بعد. أنشئ واحدة للبدء.",
+    "new": "مؤسسة جديدة"
+  },
+  "org": {
+    "settings": "إعدادات المؤسسة",
+    "settingsTitle": "إعدادات {{name}}",
+    "calendars": "التقويمات",
+    "noCalendars": "لا توجد تقويمات بعد.",
+    "newCalendar": "تقويم جديد",
+    "calendarName": "اسم التقويم",
+    "createCalendar": "إنشاء التقويم",
+    "rename": "الاسم",
+    "members": "الأعضاء",
+    "role": "الدور",
+    "roleFor": "دور {{name}}",
+    "addByEmail": "إضافة عبر البريد الإلكتروني",
+    "addHint": "يجب أن يكون لديه حساب في HolidayOps أولًا.",
+    "delete": "حذف المؤسسة",
+    "deleteHint": "سيؤدي هذا إلى حذف {{name}} وتقويماتها وأعضائها نهائيًا. اكتب الاسم للتأكيد."
+  },
+  "roles": {
+    "owner": "مالك",
+    "admin": "مسؤول",
+    "member": "عضو",
+    "viewer": "مُشاهد"
+  },
+  "sources": {
+    "title": "الدول (تُدمج عطلاتها)",
+    "country": "الدولة",
+    "subdivision": "المنطقة",
+    "wholeCountry": "الدولة كلها",
+    "categories": "فئات العطلات",
+    "add": "إضافة دولة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "calendarTitle": "إعدادات {{name}}",
+    "name": "الاسم",
+    "language": "أسماء العطلات بلغة",
+    "languageHint": "تُستخدم لكل دولة تدعمها.",
+    "countryDefault": "اللغة الافتراضية لكل دولة",
+    "public": "عام: يمكن لأي شخص لديه الرابط استخدام هذا التقويم في API",
+    "weekend": "عطلة نهاية الأسبوع",
+    "weekendFromSource": "استخدم عطلة الدولة الأولى",
+    "dangerZone": "منطقة الخطر",
+    "deleteHint": "سيؤدي حذف {{name}} إلى إزالة أيام الشركة نهائيًا. اكتب الاسم للتأكيد.",
+    "confirmName": "اكتب الاسم للتأكيد",
+    "deleteCalendar": "حذف التقويم"
+  }
+}

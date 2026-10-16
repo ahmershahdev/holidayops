@@ -1,0 +1,144 @@
+{
+  "nav": {
+    "main": "Main",
+    "skip": "Skip to content",
+    "playground": "Playground",
+    "calendars": "My calendars",
+    "apiDocs": "API docs",
+    "language": "Language"
+  },
+  "common": {
+    "add": "Add",
+    "and": " and ",
+    "back": "Back",
+    "create": "Create",
+    "remove": "Remove",
+    "save": "Save",
+    "saved": "Saved"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "signup": "Sign up",
+    "loginTitle": "Welcome back",
+    "signupTitle": "Create your account",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 10 characters.",
+    "newHere": "New here?",
+    "createAccount": "Create an account",
+    "haveAccount": "Have an account?"
+  },
+  "status": {
+    "businessDay": "Business day",
+    "dayOff": "Day off"
+  },
+  "reason": {
+    "working_day": "Working day",
+    "weekend": "Weekend",
+    "holiday": "Public holiday",
+    "weekend_workday": "Weekend moved to a working day",
+    "closure": "Company closure",
+    "half_day": "Half day",
+    "custom_working_day": "Extra working day"
+  },
+  "kind": {
+    "holiday": "Holiday",
+    "closure": "Closure",
+    "half_day": "Half day"
+  },
+  "legend": {
+    "holiday": "Public holiday",
+    "closure": "Company closure",
+    "halfDay": "Half day",
+    "weekend": "Weekend",
+    "extraWorkingDay": "Extra working day"
+  },
+  "calendar": {
+    "previous": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "view": "View",
+    "views": { "month": "Month", "year": "Year", "list": "List" },
+    "showHolidaysFrom": "Show holidays from",
+    "noHolidays": "No holidays in this year.",
+    "daysOff_one": "{{count}} day off",
+    "daysOff_other": "{{count}} days off"
+  },
+  "custom": {
+    "add": "Add a company day",
+    "edit": "Edit company day",
+    "kind": "Type",
+    "name": "Name",
+    "kinds": {
+      "closure": "Closure (day off)",
+      "half_day": "Half day",
+      "working_day": "Extra working day"
+    }
+  },
+  "playground": {
+    "title": "Is it a working day?",
+    "subtitle": "Live answers for {{country}}, using its own weekend ({{weekend}}). Pick any day to see why.",
+    "country": "Country",
+    "addTitle": "Add working days",
+    "from": "From",
+    "days": "Working days",
+    "daysHint": "Negative numbers count backwards.",
+    "addResult_one": "{{count}} working day later is",
+    "addResult_other": "{{count}} working days later is"
+  },
+  "orgs": {
+    "title": "Your organizations",
+    "subtitle": "Each organization holds company calendars and the people who manage them.",
+    "yours": "Organizations",
+    "empty": "You're not in any organization yet. Create one to get started.",
+    "new": "New organization"
+  },
+  "org": {
+    "settings": "Organization settings",
+    "settingsTitle": "{{name}} settings",
+    "calendars": "Calendars",
+    "noCalendars": "No calendars yet.",
+    "newCalendar": "New calendar",
+    "calendarName": "Calendar name",
+    "createCalendar": "Create calendar",
+    "rename": "Name",
+    "members": "Members",
+    "role": "Role",
+    "roleFor": "Role for {{name}}",
+    "addByEmail": "Add by email",
+    "addHint": "They need a HolidayOps account first.",
+    "delete": "Delete organization",
+    "deleteHint": "This removes {{name}}, its calendars and its members for good. Type the name to confirm."
+  },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member",
+    "viewer": "Viewer"
+  },
+  "sources": {
+    "title": "Countries (their holidays are merged)",
+    "country": "Country",
+    "subdivision": "Region",
+    "wholeCountry": "Whole country",
+    "categories": "Holiday categories",
+    "add": "Add a country"
+  },
+  "settings": {
+    "title": "Settings",
+    "calendarTitle": "{{name}} settings",
+    "name": "Name",
+    "language": "Holiday names in",
+    "languageHint": "Used for every country that supports it.",
+    "countryDefault": "Each country's default",
+    "public": "Public: anyone with the link can use this calendar in the API",
+    "weekend": "Weekend",
+    "weekendFromSource": "Use the first country's weekend",
+    "dangerZone": "Danger zone",
+    "deleteHint": "Deleting {{name}} removes its company days for good. Type the name to confirm.",
+    "confirmName": "Type the name to confirm",
+    "deleteCalendar": "Delete calendar"
+  }
+}

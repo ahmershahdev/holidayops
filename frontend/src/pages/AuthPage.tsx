@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { api, unwrap } from "../api/client";
 import { Button, Card, ErrorText, Field, Input } from "../components/ui";
 
 export function AuthPage({ mode }: { mode: "login" | "signup" }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -30,27 +32,32 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   }
 
   return (
-    <div className="mx-auto max-w-md">
-      <Card title={mode === "login" ? "Log in" : "Create your account"}>
+    <div className="mx-auto w-full max-w-md">
+      <Card title={mode === "login" ? t("auth.loginTitle") : t("auth.signupTitle")}>
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           {mode === "signup" && (
-            <Field label="Name">
+            <Field label={t("auth.name")}>
               <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
             </Field>
           )}
-          <Field label="Email">
+          <Field label={t("auth.email")}>
             <Input
               type="email"
               required
+              dir="ltr"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
             />
           </Field>
-          <Field label="Password">
+          <Field
+            label={t("auth.password")}
+            hint={mode === "signup" ? t("auth.passwordHint") : undefined}
+          >
             <Input
               type="password"
               required
+              dir="ltr"
               minLength={mode === "signup" ? 10 : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -59,24 +66,13 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
           </Field>
           <ErrorText error={submit.error} />
           <Button type="submit" disabled={submit.isPending}>
-            {mode === "login" ? "Log in" : "Sign up"}
+            {mode === "login" ? t("auth.login") : t("auth.signup")}
           </Button>
-          <p className="text-center text-sm text-slate-600">
-            {mode === "login" ? (
-              <>
-                New here?{" "}
-                <Link className="text-teal-700 underline" to="/signup">
-                  Create an account
-                </Link>
-              </>
-            ) : (
-              <>
-                Have an account?{" "}
-                <Link className="text-teal-700 underline" to="/login">
-                  Log in
-                </Link>
-              </>
-            )}
+          <p className="text-center text-sm text-muted">
+            {mode === "login" ? t("auth.newHere") : t("auth.haveAccount")}{" "}
+            <Link className="text-accent underline" to={mode === "login" ? "/signup" : "/login"}>
+              {mode === "login" ? t("auth.createAccount") : t("auth.login")}
+            </Link>
           </p>
         </form>
       </Card>

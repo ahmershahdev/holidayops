@@ -23,8 +23,15 @@ export const csrfMiddleware: Middleware = {
   },
 };
 
+export const languageMiddleware: Middleware = {
+  onRequest({ request }) {
+    request.headers.set("Accept-Language", document.documentElement.lang || "en");
+    return request;
+  },
+};
+
 export const api = createClient<paths>({ baseUrl: "/", credentials: "same-origin" });
-api.use(csrfMiddleware);
+api.use(csrfMiddleware, languageMiddleware);
 
 export class ApiError extends Error {
   readonly status: number;

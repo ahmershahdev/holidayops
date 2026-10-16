@@ -1,59 +1,86 @@
+import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
+import { changeLanguage, currentLanguage, type Language, LANGUAGES } from "../i18n";
 import { useEnsureCsrf, useLogout, useMe } from "../lib/auth";
-import { Button } from "./ui";
+import { Button, Select } from "./ui";
 
 const navLink = ({ isActive }: { isActive: boolean }) =>
-  `rounded-lg px-3 py-2 text-sm font-medium ${isActive ? "bg-teal-50 text-teal-800" : "text-slate-600 hover:text-slate-900"}`;
+  `rounded-lg px-3 py-2 text-sm font-medium ${isActive ? "bg-accent-soft text-accent" : "text-muted hover:text-ink"}`;
 
 export function Layout() {
   useEnsureCsrf();
+  const { t } = useTranslation();
   const { data: me } = useMe();
   const logout = useLogout();
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center gap-4 px-4 py-3">
-          <Link to="/" className="text-lg font-bold text-teal-800">
+    <div className="min-h-screen">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
+      >
+        {t("nav.skip")}
+      </a>
+      <header className="border-b border-line bg-paper/90 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+          <Link to="/" className="font-display text-xl font-semibold text-accent">
             HolidayOps
           </Link>
-          <nav className="flex gap-1">
+          <nav
+            aria-label={t("nav.main")}
+            className="order-3 flex w-full gap-1 sm:order-none sm:w-auto"
+          >
             <NavLink to="/" end className={navLink}>
-              Playground
+              {t("nav.playground")}
             </NavLink>
             <NavLink to="/app" className={navLink}>
-              My calendars
+              {t("nav.calendars")}
             </NavLink>
             <a className={navLink({ isActive: false })} href="/api/v1/docs/">
-              API docs
+              {t("nav.apiDocs")}
             </a>
           </nav>
-          <div className="ms-auto flex items-center gap-3 text-sm">
+          <div className="ms-auto flex items-center gap-2 text-sm">
+            <Select
+              aria-label={t("nav.language")}
+              value={currentLanguage()}
+              onChange={(e) => void changeLanguage(e.target.value as Language)}
+              className="py-1.5"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code} lang={l.code}>
+                  {l.label}
+                </option>
+              ))}
+            </Select>
             {me ? (
               <>
-                <span className="text-slate-600">{me.email}</span>
+                <span className="hidden text-muted md:inline">{me.email}</span>
                 <Button
                   variant="ghost"
                   onClick={() => logout.mutate(undefined, { onSuccess: () => navigate("/") })}
                 >
-                  Log out
+                  {t("auth.logout")}
                 </Button>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-slate-700 hover:underline">
-                  Log in
+                <Link to="/login" className="px-2 text-ink hover:underline">
+                  {t("auth.login")}
                 </Link>
-                <Link to="/signup">
-                  <Button>Sign up</Button>
+                <Link
+                  to="/signup"
+                  className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent/90"
+                >
+                  {t("auth.signup")}
                 </Link>
               </>
             )}
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-8">
+      <main id="main" className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8">
         <Outlet />
       </main>
     </div>
