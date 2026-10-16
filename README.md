@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/holidayops-logo.png" alt="HolidayOps" width="320"></p>
+
 # HolidayOps
 
 **Is this date a working day here, and in our other offices?**
