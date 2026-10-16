@@ -3,7 +3,7 @@ name = "holidayops"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "django==5.2.18",
+    "django==6.1.2",
     "django-redis==7.0.0",
     "djangorestframework==3.18.3",
     "drf-spectacular==0.30.0",
