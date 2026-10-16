@@ -1,0 +1,96 @@
+# HolidayOps Urdu translations.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HolidayOps\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 17:28+0000\n"
+"PO-Revision-Date: 2026-10-16 22:30+0500\n"
+"Last-Translator: HolidayOps maintainers\n"
+"Language-Team: Urdu\n"
+"Language: ur\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "An account with this email already exists."
+msgstr "اس ای میل سے پہلے ہی ایک اکاؤنٹ موجود ہے۔"
+
+msgid "Invalid email or password."
+msgstr "ای میل یا پاس ورڈ درست نہیں۔"
+
+#, python-format
+msgid "Country %(value)s is not supported."
+msgstr "ملک %(value)s دستیاب نہیں ہے۔"
+
+#, python-format
+msgid "Subdivision %(value)s is not supported for %(country)s."
+msgstr "علاقہ %(value)s، %(country)s کے لیے دستیاب نہیں ہے۔"
+
+#, python-format
+msgid "Language %(value)s is not supported for %(country)s."
+msgstr "زبان %(value)s، %(country)s کے لیے دستیاب نہیں ہے۔"
+
+#, python-format
+msgid "Categories not supported for %(country)s: %(value)s."
+msgstr "%(country)s کے لیے یہ اقسام دستیاب نہیں: %(value)s۔"
+
+#, python-format
+msgid "Years must be between %(min)s and %(max)s."
+msgstr "سال %(min)s اور %(max)s کے درمیان ہونے چاہییں۔"
+
+msgid "Result falls outside the supported year range."
+msgstr "نتیجہ معاون سالوں کی حد سے باہر ہے۔"
+
+#, python-format
+msgid "Year must be between %(min)s and %(max)s."
+msgstr "سال %(min)s اور %(max)s کے درمیان ہونا چاہیے۔"
+
+msgid "Give exactly one of country or calendar."
+msgstr "ملک یا کیلنڈر میں سے صرف ایک دیں۔"
+
+msgid "Not allowed with calendar; the calendar defines it."
+msgstr "کیلنڈر کے ساتھ اس کی اجازت نہیں؛ یہ کیلنڈر خود طے کرتا ہے۔"
+
+msgid "End must not be before start."
+msgstr "اختتام آغاز سے پہلے نہیں ہو سکتا۔"
+
+#, python-format
+msgid "Range must not exceed %(days)s days."
+msgstr "مدت %(days)s دن سے زیادہ نہیں ہو سکتی۔"
+
+#, python-format
+msgid "End must be on or after start and within %(days)s days."
+msgstr "اختتام آغاز کے دن یا اس کے بعد اور %(days)s دن کے اندر ہونا چاہیے۔"
+
+#, python-format
+msgid "Give between 1 and %(max)s sources."
+msgstr "1 سے %(max)s تک ممالک دیں۔"
+
+msgid "Weekdays must not repeat."
+msgstr "ہفتے کے دن دہرائے نہیں جا سکتے۔"
+
+msgid "No source country supports this language."
+msgstr "کوئی بھی شامل ملک یہ زبان استعمال نہیں کرتا۔"
+
+msgid "This calendar already has a custom day on this date."
+msgstr "اس تاریخ کو اس کیلنڈر میں پہلے سے ایک کمپنی کا دن موجود ہے۔"
+
+msgid "Your role does not allow this action."
+msgstr "آپ کا کردار اس عمل کی اجازت نہیں دیتا۔"
+
+msgid "Only owners can grant or remove the owner role."
+msgstr "صرف مالکان ہی مالک کا کردار دے یا ہٹا سکتے ہیں۔"
+
+msgid "An organization needs at least one owner."
+msgstr "تنظیم کا کم از کم ایک مالک ہونا ضروری ہے۔"
+
+msgid "Only owners can grant the owner role."
+msgstr "صرف مالکان ہی مالک کا کردار دے سکتے ہیں۔"
+
+msgid "No account uses this email yet."
+msgstr "اس ای میل سے ابھی کوئی اکاؤنٹ نہیں ہے۔"
+
+msgid "This person is already a member."
+msgstr "یہ شخص پہلے سے رکن ہے۔"

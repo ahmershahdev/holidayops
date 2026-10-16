@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -35,7 +36,7 @@ class OrgViewSet(viewsets.GenericViewSet[Organization]):
     def _require(self, org_slug: str, role: Role) -> Membership:
         membership = get_membership(self.request.user, org_slug)
         if not membership.has_role(role):
-            raise PermissionDenied("Your role does not allow this action.")
+            raise PermissionDenied(_("Your role does not allow this action."))
         return membership
 
     def list(self, request: Request) -> Response:
@@ -90,14 +91,14 @@ class MemberViewSet(OrgScopedMixin, viewsets.GenericViewSet[Membership]):
     def _guard_owner_change(self, target: Membership, new_role: str | None) -> None:
         touches_owner = Role.OWNER in (target.role, new_role)
         if touches_owner and not self.membership.has_role(Role.OWNER):
-            raise PermissionDenied("Only owners can grant or remove the owner role.")
+            raise PermissionDenied(_("Only owners can grant or remove the owner role."))
         is_last_owner = (
             target.role == Role.OWNER
             and new_role != Role.OWNER
             and not self.org.memberships.filter(role=Role.OWNER).exclude(pk=target.pk).exists()
         )
         if is_last_owner:
-            raise ValidationError({"role": ["An organization needs at least one owner."]})
+            raise ValidationError({"role": [_("An organization needs at least one owner.")]})
 
     def list(self, request: Request, org_slug: str) -> Response:
         return Response(MemberSerializer(self.get_queryset(), many=True).data)
@@ -108,12 +109,12 @@ class MemberViewSet(OrgScopedMixin, viewsets.GenericViewSet[Membership]):
         serializer.is_valid(raise_exception=True)
         role = serializer.validated_data["role"]
         if role == Role.OWNER and not self.membership.has_role(Role.OWNER):
-            raise PermissionDenied("Only owners can grant the owner role.")
+            raise PermissionDenied(_("Only owners can grant the owner role."))
         user = User.objects.filter(email__iexact=serializer.validated_data["email"]).first()
         if user is None:
-            raise ValidationError({"email": ["No account uses this email yet."]})
+            raise ValidationError({"email": [_("No account uses this email yet.")]})
         if self.org.memberships.filter(user=user).exists():
-            raise ValidationError({"email": ["This person is already a member."]})
+            raise ValidationError({"email": [_("This person is already a member.")]})
         member = Membership.objects.create(user=user, org=self.org, role=role)
         audit(self.membership, "member.add", f"{user.email} as {role}")
         return Response(MemberSerializer(member).data, status=status.HTTP_201_CREATED)

@@ -77,4 +77,14 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy .
 uv run python manage.py spectacular --file schema.yml --validate   # commit schema.yml
 cd ../frontend && npm run gen:api            # regenerate src/api/schema.d.ts
 npm run lint && npm run typecheck && npm test
+npm run seed                                 # (root) demo user, org and calendar; needs DEMO_PASSWORD
+npm run messages                             # (root) refresh + compile backend ur/ar translations
 ```
+
+## i18n rules
+
+- Every user-facing string: `t("key")` in the frontend (en, ur, ar JSON must have the same keys;
+  a test enforces it), `gettext` in Django. `apps/core` errors stay English and carry `params`;
+  `apps/api/errors.py` translates them.
+- Layout uses logical properties only (`ms-`, `ps-`, `text-start`, `rtl:` variants).
+- Commit both `.po` and `.mo`; CI fails on untranslated or stale catalogs.

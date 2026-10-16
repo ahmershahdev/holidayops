@@ -57,7 +57,7 @@ def get_country(code: str) -> CountryInfo:
     try:
         return list_countries()[code.upper()]
     except KeyError:
-        raise UnsupportedCountry(f"Country {code!r} is not supported.") from None
+        raise UnsupportedCountry(f"Country {code!r} is not supported.", value=code) from None
 
 
 def check_calendar_args(
@@ -65,13 +65,23 @@ def check_calendar_args(
 ) -> CountryInfo:
     info = get_country(country)
     if subdiv is not None and subdiv not in info.subdivisions:
-        raise UnsupportedSubdivision(f"Subdivision {subdiv!r} is not supported for {info.code}.")
+        raise UnsupportedSubdivision(
+            f"Subdivision {subdiv!r} is not supported for {info.code}.",
+            value=subdiv,
+            country=info.code,
+        )
     if language is not None and language not in info.languages:
-        raise UnsupportedLanguage(f"Language {language!r} is not supported for {info.code}.")
+        raise UnsupportedLanguage(
+            f"Language {language!r} is not supported for {info.code}.",
+            value=language,
+            country=info.code,
+        )
     unknown = sorted(set(categories) - set(info.categories))
     if unknown:
         raise UnsupportedCategory(
-            f"Categories not supported for {info.code}: {', '.join(unknown)}."
+            f"Categories not supported for {info.code}: {', '.join(unknown)}.",
+            value=", ".join(unknown),
+            country=info.code,
         )
     return info
 
@@ -86,7 +96,9 @@ def get_calendar(
     info = check_calendar_args(country, subdiv, language, categories)
     year_tuple = tuple(sorted(set(years)))
     if not year_tuple or year_tuple[0] < MIN_YEAR or year_tuple[-1] > MAX_YEAR:
-        raise YearOutOfRange(f"Years must be between {MIN_YEAR} and {MAX_YEAR}.")
+        raise YearOutOfRange(
+            f"Years must be between {MIN_YEAR} and {MAX_YEAR}.", min=MIN_YEAR, max=MAX_YEAR
+        )
     category_tuple = tuple(sorted(set(categories))) or (PUBLIC,)
     # language=None makes the library guess from the server locale, so names would vary by host.
     language = language or info.default_language

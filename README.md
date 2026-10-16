@@ -8,8 +8,8 @@ closures on top.
 
 Built for payroll, HR, logistics and finance teams.
 
-> **Status:** Milestone 1 (public API) done, Milestone 2 (accounts, organizations, company
-> calendars) in review. See the [roadmap](docs/roadmap.md).
+> **Status:** Milestones 1–3 done: public API, organizations and company calendars, and the web app
+> in English, Urdu and Arabic. Next: iCal feeds and digests. See the [roadmap](docs/roadmap.md).
 
 ## Features
 
@@ -18,9 +18,10 @@ Built for payroll, HR, logistics and finance teams.
 | 🌍 | REST API: holidays by country, subdivision, year, language and category | 1 |
 | 📅 | Business-day maths: check a date, add/subtract N working days, count working days | 1 |
 | 🏢 | Company calendars: merge countries, add closures, half-days and extra working days | 2 |
-| 🖥️ | Web UI in English, Urdu and Arabic (RTL), mobile friendly | 3 |
+| 🖥️ | Web app: month/year/list views, company days, English, Urdu and Arabic (RTL), mobile | 3 |
 | 🔔 | iCal feeds, monthly email digests, signed webhooks | 4 |
 | 🔑 | API keys, per-plan rate limits, usage charts | 5 |
+| ✨ | Award-level public website: landing and illustrated country pages | 6 |
 
 ## API at a glance
 
@@ -50,6 +51,7 @@ cp .env.example .env        # then set DJANGO_SECRET_KEY and the MySQL passwords
 npm install                 # root tools (concurrently)
 npm run setup               # frontend packages + Python packages
 npm run dev                 # MySQL + Redis in Docker, Django on :8000, Vite on :5173
+npm run seed                # optional: demo@holidayops.test with DEMO_PASSWORD from .env
 ```
 
 Open <http://localhost:5173>: the playground answers business-day questions live; sign up to create

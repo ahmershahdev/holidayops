@@ -1,8 +1,10 @@
 from typing import Any
 
 from django.db import transaction
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 
+from apps.api.errors import core_error_message
 from apps.api.serializers import validate_supported_year
 from apps.calendars.models import Calendar, CalendarSource, CustomDay
 from apps.core import CoreError, check_calendar_args, get_country
@@ -27,7 +29,7 @@ class SourceSerializer(serializers.ModelSerializer[CalendarSource]):
                 attrs["country"], attrs.get("subdiv") or None, None, attrs["categories"]
             )
         except CoreError as exc:
-            raise serializers.ValidationError({exc.field: [str(exc)]}) from exc
+            raise serializers.ValidationError({exc.field: [core_error_message(exc)]}) from exc
         return attrs
 
 
@@ -58,12 +60,14 @@ class CalendarSerializer(serializers.ModelSerializer[Calendar]):
 
     def validate_sources(self, value: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not 1 <= len(value) <= MAX_SOURCES:
-            raise serializers.ValidationError(f"Give between 1 and {MAX_SOURCES} sources.")
+            raise serializers.ValidationError(
+                _("Give between 1 and %(max)s sources.") % {"max": MAX_SOURCES}
+            )
         return value
 
     def validate_weekend(self, value: list[int] | None) -> list[int] | None:
         if value is not None and len(set(value)) != len(value):
-            raise serializers.ValidationError("Weekdays must not repeat.")
+            raise serializers.ValidationError(_("Weekdays must not repeat."))
         return sorted(value) if value is not None else None
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
@@ -76,7 +80,7 @@ class CalendarSerializer(serializers.ModelSerializer[Calendar]):
             countries = []
         if language and not any(language in get_country(c).languages for c in countries):
             raise serializers.ValidationError(
-                {"language": ["No source country supports this language."]}
+                {"language": [_("No source country supports this language.")]}
             )
         return attrs
 
@@ -117,6 +121,6 @@ class CustomDaySerializer(serializers.ModelSerializer[CustomDay]):
             taken = taken.exclude(pk=self.instance.pk)
         if taken.exists():
             raise serializers.ValidationError(
-                "This calendar already has a custom day on this date."
+                _("This calendar already has a custom day on this date.")
             )
         return value

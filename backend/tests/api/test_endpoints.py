@@ -197,3 +197,25 @@ def test_country_holidays_name_their_source(client: APIClient) -> None:
 def test_range_allows_a_full_leap_year(client: APIClient) -> None:
     days = get(client, "business-days/range/", country="PK", start="2028-01-01", end="2028-12-31")
     assert len(days.json()) == 366
+
+
+@pytest.mark.parametrize(
+    ("language", "expected"),
+    [
+        ("ur", "ملک ZZ دستیاب نہیں ہے۔"),
+        ("ar", "الدولة ZZ غير مدعومة."),
+        ("en", "Country ZZ is not supported."),
+    ],
+)
+def test_errors_follow_accept_language(client: APIClient, language: str, expected: str) -> None:
+    response = client.get(
+        "/api/v1/holidays/", {"country": "ZZ", "year": "2027"}, HTTP_ACCEPT_LANGUAGE=language
+    )
+    assert response.json() == {"country": [expected]}
+
+
+def test_serializer_messages_are_translated(client: APIClient) -> None:
+    response = client.get(
+        "/api/v1/business-days/check/", {"date": "2027-01-04"}, HTTP_ACCEPT_LANGUAGE="ar"
+    )
+    assert response.json() == {"country": ["حدّد إما الدولة أو التقويم، وليس كليهما."]}

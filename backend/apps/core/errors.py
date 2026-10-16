@@ -1,6 +1,10 @@
 class CoreError(ValueError):
     field = "non_field_errors"
 
+    def __init__(self, message: str, **params: object) -> None:
+        super().__init__(message)
+        self.params = params
+
 
 class UnsupportedCountry(CoreError):
     field = "country"

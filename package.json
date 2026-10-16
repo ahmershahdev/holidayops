@@ -8,7 +8,8 @@
     "dev:api": "cd backend && uv run --env-file ../.env python manage.py migrate && uv run --env-file ../.env python manage.py runserver 127.0.0.1:8000",
     "dev:web": "npm --prefix frontend run dev",
     "test": "cd backend && uv run --env-file ../.env pytest && cd ../frontend && npm test",
-    "seed": "cd backend && uv run --env-file ../.env python manage.py seed_demo"
+    "seed": "cd backend && uv run --env-file ../.env python manage.py seed_demo",
+    "messages": "docker compose run --rm --no-deps -u root backend sh -c \"apt-get update -qq && apt-get install -y -qq gettext && python manage.py makemessages -l ur -l ar --ignore=.venv --ignore=tests --no-obsolete --no-location && python manage.py compilemessages --ignore=.venv\""
   },
   "devDependencies": {
     "concurrently": "10.0.6"

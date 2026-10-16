@@ -31,22 +31,22 @@ wait for Milestone 4 (email sending).
 | 2.4 Calendar API | CRUD endpoints, `calendar=<id>` on the business-day endpoints, role permissions |
 | 2.5 Isolation suite | Cross-org access test on every endpoint, expecting `404` |
 
-## Milestone 3 — React UI ← current
+## Milestone 3 — React UI ✅
 
 Design: [design/m3-ui.md](design/m3-ui.md).
 
 | Part | Scope |
 |---|---|
 | 3.1 Frontend scaffold ✅ | Vite, React, TS strict, Tailwind, ESLint/Prettier, Vitest, generated API client; playground, auth, orgs, calendar and custom-day pages |
-| 3.2 Design system | "Calm editorial" tokens, self-hosted fonts, shared components |
-| 3.3 i18n + RTL | i18next en/ur/ar, `dir` switching, logical properties, Django `.po` files |
-| 3.4 Calendar views | Day-range endpoint, month/year/list views, per-source filter, keyboard grid |
-| 3.5 Custom days | Add, edit and remove closures, half-days and extra working days from the calendar |
-| 3.6 Settings | Calendar settings (sources, weekend, language, public, delete); org settings and members |
+| 3.2 Design system ✅ | "Calm editorial" tokens, self-hosted fonts, shared components |
+| 3.3 i18n + RTL ✅ | i18next en/ur/ar, `dir` switching, logical properties, Django `.po` files |
+| 3.4 Calendar views ✅ | Day-range endpoint, month/year/list views, per-source filter, keyboard grid |
+| 3.5 Custom days ✅ | Add, edit and remove closures, half-days and extra working days from the calendar |
+| 3.6 Settings ✅ | Calendar settings (sources, weekend, language, public, delete); org settings and members |
 
 API keys and the usage chart move to Milestone 5, where keys are created.
 
-## Milestone 4 — Subscriptions
+## Milestone 4 — Subscriptions ← next
 
 | Part | Scope |
 |---|---|

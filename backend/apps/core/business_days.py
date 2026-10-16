@@ -41,7 +41,7 @@ def _holidays(cal: Calendar) -> HolidayBase:
 def _require_years(cal: Calendar, first: date, last: date) -> None:
     missing = set(range(first.year, last.year + 1)) - cal.years
     if missing:
-        raise YearNotCovered(f"Calendar does not cover year {min(missing)}.")
+        raise YearNotCovered(f"Calendar does not cover year {min(missing)}.", year=min(missing))
 
 
 def _is_weekend(cal: HolidayBase, day: date) -> bool:
