@@ -64,7 +64,7 @@ docker compose up -d                         # MySQL, Redis, backend
 cd backend
 uv sync                                      # install pinned deps into .venv
 uv run pytest                                # all tests (DB tests need MySQL)
-uv run pytest tests/core                     # domain tests, no DB needed
+uv run pytest tests/core --cov=apps/core --cov-branch --cov-fail-under=100
 uv run ruff check . && uv run ruff format --check . && uv run mypy .
 uv run python manage.py spectacular --file schema.yml --validate
 ```
