@@ -33,7 +33,7 @@ jobs:
       MYSQL_PASSWORD: root
       MYSQL_HOST: 127.0.0.1
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.12"
@@ -58,7 +58,7 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v5
         with:
           node-version: 24
@@ -76,7 +76,7 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: github/codeql-action/init@v4
         with:
           languages: python, javascript-typescript, actions
