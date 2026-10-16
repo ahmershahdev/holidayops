@@ -1,13 +1,17 @@
+from typing import Any
+
 import pytest
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
+from config.settings import base as base_settings
 from tests.factories import PASSWORD, UserFactory
 
 pytestmark = pytest.mark.django_db
 
 
-def test_signup_logs_in_and_hashes_with_argon2(client: APIClient) -> None:
+def test_signup_logs_in_and_hashes_with_argon2(client: APIClient, settings: Any) -> None:
+    settings.PASSWORD_HASHERS = base_settings.PASSWORD_HASHERS
     response = client.post(
         "/api/v1/auth/signup/",
         {"email": "Ayesha@Example.com", "password": PASSWORD, "name": "Ayesha"},
