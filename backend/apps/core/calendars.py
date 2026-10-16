@@ -60,13 +60,9 @@ def get_country(code: str) -> CountryInfo:
         raise UnsupportedCountry(f"Country {code!r} is not supported.") from None
 
 
-def get_calendar(
-    country: str,
-    subdiv: str | None,
-    years: Iterable[int],
-    language: str | None,
-    categories: tuple[str, ...],
-) -> HolidayBase:
+def check_calendar_args(
+    country: str, subdiv: str | None, language: str | None, categories: Iterable[str]
+) -> CountryInfo:
     info = get_country(country)
     if subdiv is not None and subdiv not in info.subdivisions:
         raise UnsupportedSubdivision(f"Subdivision {subdiv!r} is not supported for {info.code}.")
@@ -77,6 +73,17 @@ def get_calendar(
         raise UnsupportedCategory(
             f"Categories not supported for {info.code}: {', '.join(unknown)}."
         )
+    return info
+
+
+def get_calendar(
+    country: str,
+    subdiv: str | None,
+    years: Iterable[int],
+    language: str | None,
+    categories: tuple[str, ...],
+) -> HolidayBase:
+    info = check_calendar_args(country, subdiv, language, categories)
     year_tuple = tuple(sorted(set(years)))
     if not year_tuple or year_tuple[0] < MIN_YEAR or year_tuple[-1] > MAX_YEAR:
         raise YearOutOfRange(f"Years must be between {MIN_YEAR} and {MAX_YEAR}.")

@@ -8,7 +8,8 @@ closures on top.
 
 Built for payroll, HR, logistics and finance teams.
 
-> **Status:** Milestone 1 (public API) in progress. See the [roadmap](docs/roadmap.md).
+> **Status:** Milestone 1 (public API) done, Milestone 2 (accounts, organizations, company
+> calendars) in review. See the [roadmap](docs/roadmap.md).
 
 ## Features
 
@@ -50,8 +51,8 @@ docker compose up -d db redis
 
 cd backend
 uv sync
-uv run python manage.py migrate
-uv run python manage.py runserver
+uv run --env-file ../.env python manage.py migrate
+uv run --env-file ../.env python manage.py runserver
 ```
 
 Open <http://localhost:8000/api/v1/docs/>. Or run everything in containers: `docker compose up -d`.
@@ -60,7 +61,7 @@ Open <http://localhost:8000/api/v1/docs/>. Or run everything in containers: `doc
 
 ```bash
 cd backend
-uv run pytest                     # tests (the domain tests need no database)
+uv run --env-file ../.env pytest  # tests (MySQL must be running)
 uv run ruff check . && uv run ruff format --check .
 uv run mypy .
 ```
@@ -78,6 +79,7 @@ uv run mypy .
 ## Project docs
 
 - [Architecture](docs/architecture.md): domain layer, endpoints, data model
+- [Accounts, orgs and company calendars](docs/design/m2-orgs.md)
 - [Security design](docs/security.md)
 - [Roadmap](docs/roadmap.md)
 - [AGENTS.md](AGENTS.md): conventions for contributors and coding agents
