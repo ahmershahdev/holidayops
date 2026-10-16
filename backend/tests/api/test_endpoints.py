@@ -126,6 +126,18 @@ def test_security_headers(client: APIClient) -> None:
     assert response["X-Content-Type-Options"] == "nosniff"
     assert response["X-Frame-Options"] == "DENY"
     assert response["Referrer-Policy"] == "same-origin"
+    assert response["Content-Security-Policy"].startswith("default-src 'none'")
+
+
+def test_docs_csp_allows_only_the_pinned_swagger_cdn(client: APIClient) -> None:
+    page = client.get("/api/v1/docs/")
+    policy = page["Content-Security-Policy"]
+    assert "script-src 'self' https://cdn.jsdelivr.net;" in policy
+    assert "unsafe-eval" not in policy
+    assert "swagger-ui-dist@5.33.1" in page.content.decode()
+    assert "<script>" not in page.content.decode()
+    script = client.get("/api/v1/docs/", {"script": ""})
+    assert script["Content-Type"].startswith("application/javascript")
 
 
 def test_anonymous_requests_are_throttled(

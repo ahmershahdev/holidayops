@@ -1,0 +1,29 @@
+from collections.abc import Callable
+
+from django.http import HttpRequest, HttpResponse
+
+SWAGGER_CDN = "https://cdn.jsdelivr.net"
+
+# The API only returns JSON; inline styles are allowed so Django's own error pages stay readable.
+API_POLICY = (
+    "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'; "
+    "base-uri 'none'; form-action 'none'"
+)
+DOCS_POLICY = (
+    f"default-src 'self'; script-src 'self' {SWAGGER_CDN}; "
+    f"style-src 'self' 'unsafe-inline' {SWAGGER_CDN}; img-src 'self' data: {SWAGGER_CDN}; "
+    "frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
+)
+DOCS_PATH = "/api/v1/docs/"
+
+
+class ContentSecurityPolicyMiddleware:
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        response = self.get_response(request)
+        if "Content-Security-Policy" not in response:
+            policy = DOCS_POLICY if request.path == DOCS_PATH else API_POLICY
+            response["Content-Security-Policy"] = policy
+        return response

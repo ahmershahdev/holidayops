@@ -66,6 +66,7 @@ cp .env.example .env                         # once; fill in secrets
 npm install && npm run setup                 # once
 npm run dev                                  # Docker db+redis, Django :8000, Vite :5173
 docker compose up -d db redis                # MySQL + Redis only
+docker compose up -d                         # everything in containers (db, redis, backend, frontend)
 cd backend
 uv sync                                      # install pinned deps into .venv
 uv run --env-file ../.env python manage.py migrate
