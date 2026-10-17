@@ -1,15 +1,17 @@
 """A user from another org must get 404 on every org-scoped endpoint, so existence never leaks."""
 
 from collections.abc import Callable
+from datetime import timedelta
 from typing import Any
 
 import pytest
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
 from apps.calendars.models import Calendar, CustomDay
 from apps.feeds.models import FeedToken
-from apps.orgs.models import Membership, Role
+from apps.orgs.models import Invite, Membership, Role
 from apps.webhooks.models import Webhook
 from tests.factories import CalendarFactory, CustomDayFactory, MembershipFactory, SourceFactory
 
@@ -27,6 +29,13 @@ def victim() -> dict[str, Any]:
     feed.set_new_token()
     feed.save()
     hook = Webhook.objects.create(org=owner.org, url="https://hooks.example.com/", events=["ping"])
+    invite = Invite.objects.create(
+        org=owner.org,
+        email="pending@example.com",
+        role="viewer",
+        token_hash="0" * 64,
+        expires_at=timezone.now() + timedelta(days=1),
+    )
     return {
         "org": owner.org,
         "member": other,
@@ -34,6 +43,7 @@ def victim() -> dict[str, Any]:
         "day": day,
         "feed": feed,
         "hook": hook,
+        "invite": invite,
     }
 
 
@@ -69,6 +79,10 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
         ("get", f"{cal}/digest/", {}),
         ("put", f"{cal}/digest/", {}),
         ("delete", f"{cal}/digest/", {}),
+        ("get", f"{org}/invites/", {}),
+        ("post", f"{org}/invites/", {"email": "x@example.com", "role": "admin"}),
+        ("post", f"{org}/invites/{v['invite'].id}/resend/", {}),
+        ("delete", f"{org}/invites/{v['invite'].id}/", {}),
         ("get", f"{org}/webhooks/", {}),
         ("post", f"{org}/webhooks/", {"url": "https://evil.example.com/", "events": ["ping"]}),
         ("get", hook, {}),
@@ -102,6 +116,12 @@ def test_every_org_endpoint_returns_404_to_outsiders(
     assert (
         FeedToken.objects.filter(calendar=victim["calendar"], revoked_at__isnull=True).count() == 1
     )
+    hook = Webhook.objects.get(pk=victim["hook"].pk)
+    assert (hook.url, hook.secret) == (victim["hook"].url, victim["hook"].secret)
+    assert not hook.deliveries.exists()
+    invite = Invite.objects.get(pk=victim["invite"].pk)
+    assert invite.token_hash == "0" * 64
+    assert Invite.objects.filter(org=victim["org"]).count() == 1
 
 
 def test_nested_custom_day_of_another_org_is_404(

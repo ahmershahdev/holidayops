@@ -130,6 +130,7 @@ REST_FRAMEWORK = {
         "anon": env("API_ANON_RATE", "60/minute"),
         "user": env("API_USER_RATE", "600/minute"),
         "auth": env("API_AUTH_RATE", "10/minute"),
+        "invite": env("API_INVITE_RATE", "30/hour"),
     },
     "EXCEPTION_HANDLER": "apps.api.exceptions.api_exception_handler",
 }

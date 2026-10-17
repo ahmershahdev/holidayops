@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 06:30+0000\n"
+"POT-Creation-Date: 2026-10-17 06:56+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -122,8 +122,63 @@ msgstr "کیلنڈر کھولیں:"
 msgid "Unsubscribe:"
 msgstr "سبسکرپشن ختم کریں:"
 
+msgid "Only owners can grant the owner role."
+msgstr "صرف مالکان ہی مالک کا کردار دے سکتے ہیں۔"
+
+msgid "This person is already a member."
+msgstr "یہ شخص پہلے سے رکن ہے۔"
+
+#, python-format
+msgid "An organization can have at most %(max)s pending invites."
+msgstr "ایک تنظیم کے زیادہ سے زیادہ %(max)s زیرِ التوا دعوت نامے ہو سکتے ہیں۔"
+
+msgid "The invite email could not be sent. Try again."
+msgstr "دعوت نامے کی ای میل نہیں بھیجی جا سکی۔ دوبارہ کوشش کریں۔"
+
+#, python-format
+msgid "This invite is for %(email)s. Log in with that account to accept it."
+msgstr ""
+"یہ دعوت نامہ %(email)s کے لیے ہے۔ اسے قبول کرنے کے لیے اسی اکاؤنٹ سے لاگ اِن "
+"کریں۔"
+
+msgid "Owner"
+msgstr "مالک"
+
+msgid "Admin"
+msgstr "منتظم"
+
+msgid "Member"
+msgstr "رکن"
+
+msgid "Viewer"
+msgstr "ناظر"
+
+#, python-format
+msgid "You're invited to %(org)s on HolidayOps"
+msgstr "آپ کو HolidayOps پر %(org)s میں شامل ہونے کی دعوت دی گئی ہے"
+
 msgid "Your role does not allow this action."
 msgstr "آپ کا کردار اس عمل کی اجازت نہیں دیتا۔"
+
+#, python-format
+msgid "%(inviter)s invited you to join %(org)s on HolidayOps as %(role)s."
+msgstr ""
+"%(inviter)s نے آپ کو HolidayOps پر %(org)s میں بطور %(role)s شامل ہونے کی "
+"دعوت دی ہے۔"
+
+msgid "Accept the invite"
+msgstr "دعوت قبول کریں"
+
+#, python-format
+msgid ""
+"The link works once and expires in %(days)s days. If you weren't expecting "
+"this, you can ignore this email."
+msgstr ""
+"یہ لنک صرف ایک بار کام کرتا ہے اور %(days)s دن میں ختم ہو جائے گا۔ اگر آپ اس "
+"کی توقع نہیں کر رہے تھے تو اس ای میل کو نظرانداز کر دیں۔"
+
+msgid "Accept the invite:"
+msgstr "دعوت قبول کریں:"
 
 msgid "Only owners can grant or remove the owner role."
 msgstr "صرف مالکان ہی مالک کا کردار دے یا ہٹا سکتے ہیں۔"
@@ -131,14 +186,8 @@ msgstr "صرف مالکان ہی مالک کا کردار دے یا ہٹا سک�
 msgid "An organization needs at least one owner."
 msgstr "تنظیم کا کم از کم ایک مالک ہونا ضروری ہے۔"
 
-msgid "Only owners can grant the owner role."
-msgstr "صرف مالکان ہی مالک کا کردار دے سکتے ہیں۔"
-
 msgid "No account uses this email yet."
 msgstr "اس ای میل سے ابھی کوئی اکاؤنٹ نہیں ہے۔"
-
-msgid "This person is already a member."
-msgstr "یہ شخص پہلے سے رکن ہے۔"
 
 msgid "Webhook URLs must use https."
 msgstr "ویب ہُک URL میں https ہونا لازمی ہے۔"

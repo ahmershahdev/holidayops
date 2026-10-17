@@ -21,7 +21,7 @@ a country-year in well under a millisecond; Redis is added in 5.3 when there are
 ## Milestone 2 — Organizations, company calendars, auth ✅
 
 Design: [design/m2-orgs.md](design/m2-orgs.md). Parts 2.1–2.5 are implemented; invites by email
-wait for Milestone 4 (email sending).
+shipped after Milestone 4.3 (email sending).
 
 | Part | Scope |
 |---|---|

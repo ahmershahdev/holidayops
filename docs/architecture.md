@@ -65,6 +65,7 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
 
 - `User(email, name, language)`; `language` is `en`, `ur` or `ar` and picks the email language
 - `Organization`, `Membership(user, org, role)` with roles `owner`, `admin`, `member`, `viewer`
+- `Invite(org, email, role, token_hash, invited_by, expires_at, accepted_at)`
 - `Calendar(id: uuid, org, name, slug, is_public, language, weekend)`
 - `CalendarSource(calendar, country, subdiv, categories, position)`
 - `CustomDay(calendar, date, name, kind: closure|half_day|working_day)`

@@ -197,6 +197,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/invites/{token}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["invites_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/invites/{token}/accept/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["invites_accept_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orgs/": {
         parameters: {
             query?: never;
@@ -389,6 +421,58 @@ export interface paths {
         head?: never;
         /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
         patch: operations["orgs_calendars_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/invites/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_invites_list"];
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_invites_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/invites/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        delete: operations["orgs_invites_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/invites/{id}/resend/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_invites_resend_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/orgs/{org_slug}/members/": {
@@ -689,6 +773,28 @@ export interface components {
             language: string | null;
             categories: string[];
             holidays: components["schemas"]["Holiday"][];
+        };
+        Invite: {
+            readonly id: number;
+            /** Format: email */
+            email: string;
+            role: components["schemas"]["RoleEnum"];
+            /** Format: email */
+            readonly invited_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly expires_at: string;
+        };
+        InvitePreview: {
+            org_name: string;
+            org_slug: string;
+            /** Format: email */
+            email: string;
+            role: components["schemas"]["RoleEnum"];
+            readonly invited_by: string;
+            /** Format: date-time */
+            expires_at: string;
         };
         /**
          * @description * `en` - English
@@ -1261,6 +1367,48 @@ export interface operations {
             };
         };
     };
+    invites_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitePreview"];
+                };
+            };
+        };
+    };
+    invites_accept_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Org"];
+                };
+            };
+        };
+    };
     orgs_list: {
         parameters: {
             query?: never;
@@ -1815,6 +1963,99 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Calendar"];
+                };
+            };
+        };
+    };
+    orgs_invites_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Invite"][];
+                };
+            };
+        };
+    };
+    orgs_invites_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MemberCreateRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MemberCreateRequest"];
+                "multipart/form-data": components["schemas"]["MemberCreateRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Invite"];
+                };
+            };
+        };
+    };
+    orgs_invites_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this invite. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    orgs_invites_resend_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this invite. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Invite"];
                 };
             };
         };
