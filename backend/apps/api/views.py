@@ -1,13 +1,20 @@
 from collections.abc import Iterable
 from typing import Any
 
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 
 from apps.api import serializers as s
+from apps.api.authentication import ApiKeyAuthentication
+from apps.api.models import ApiKey
+from apps.api.throttles import AnonRateThrottle, ApiKeyRateThrottle, QuotaThrottle
+from apps.api.usage import record
 from apps.calendars.services import build_merged, visible_calendar
 from apps.core import (
     MAX_YEAR,
@@ -37,7 +44,8 @@ def _parse[T: s.CalendarQuerySerializer](serializer_class: type[T], request: Req
 def _calendar(request: Request, query: s.CalendarQuerySerializer, years: Iterable[int]) -> Calendar:
     calendar_id = query.validated_data.get("calendar")
     if calendar_id is not None:
-        return build_merged(visible_calendar(request.user, calendar_id), years)
+        key_org = request.auth.org_id if isinstance(request.auth, ApiKey) else None
+        return build_merged(visible_calendar(request.user, calendar_id, key_org), years)
     return get_calendar(years=years, **query.calendar_args())
 
 
@@ -59,7 +67,24 @@ def _holiday_entries(cal: Calendar) -> list[dict[str, Any]]:
 
 
 class PublicView(APIView):
+    authentication_classes = [ApiKeyAuthentication, SessionAuthentication]
     permission_classes = [AllowAny]
+    throttle_classes = [
+        AnonRateThrottle,
+        UserRateThrottle,
+        ScopedRateThrottle,
+        ApiKeyRateThrottle,
+        QuotaThrottle,
+    ]
+
+    def finalize_response(
+        self, request: Request, response: Response, *args: Any, **kwargs: Any
+    ) -> Response:
+        response = super().finalize_response(request, response, *args, **kwargs)
+        if isinstance(request.auth, ApiKey):
+            endpoint = request.resolver_match.url_name if request.resolver_match else ""
+            record(request.auth, endpoint or "", response.status_code, timezone.now())
+        return response
 
 
 class CountryListView(PublicView):

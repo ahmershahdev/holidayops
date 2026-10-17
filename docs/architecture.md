@@ -25,7 +25,8 @@ Versioned under `/api/v1/`. OpenAPI at `/api/v1/schema/`, Swagger UI at `/api/v1
 
 Outside `/api/v1/`: `GET /feeds/<token>.ics`, a private iCal feed of a company calendar.
 
-From Milestone 2 the same endpoints accept `calendar=<id>` instead of `country`.
+From Milestone 2 the same endpoints accept `calendar=<id>` instead of `country`. They also accept
+`Authorization: Bearer hops_…` API keys (Milestone 5.1): [design/m5-api-keys.md](design/m5-api-keys.md).
 Exact parameters, limits and response shapes: [design/m1-api.md](design/m1-api.md).
 
 ## Domain layer (`backend/apps/core/`)
@@ -69,12 +70,13 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
 - `Calendar(id: uuid, org, name, slug, is_public, language, weekend)`
 - `CalendarSource(calendar, country, subdiv, categories, position)`
 - `CustomDay(calendar, date, name, kind: closure|half_day|working_day)`
-- Milestone 5: `ApiKey(org, name, prefix, hashed_key, created_by, last_used_at, revoked_at)`
+- `ApiKey(org, name, prefix, key_hash, created_by, last_used_at, revoked_at)`; `Organization.plan`
+  (`free`/`pro`) sets per-key rate, monthly quota and key count
 - `FeedToken(org, calendar, label, token_hash, created_by, last_used_at, revoked_at)`
 - `DigestSubscription(org, calendar, user, last_sent_on)`, one per user and calendar
 - `Webhook(org, url, secret, events, is_active, failure_count)` and
   `WebhookDelivery(webhook, event, payload, status, attempts, response_status, next_attempt_at)`
-- `UsageEvent(api_key, endpoint, status, created_at)`
+- `UsageEvent(org, api_key, endpoint, status, created_at)`, kept 90 days
 - `AuditLog(org, actor, action, target, created_at)`
 
 Every org-owned model has an `org` foreign key; querysets are always filtered by the current org.

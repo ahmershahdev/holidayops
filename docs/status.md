@@ -10,7 +10,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | ⏭ next |
+| 5. API keys, limits, deployment, SEO pages | 🚧 5.1 on `feat/api-keys` |
 | 6. Showcase website | planned |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
@@ -35,7 +35,10 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 
 1. ✅ Org invites by email: `Invite` (hashed token, 7 days, one use), email sent in the request,
    accept only with the invited address; `/invite` page, pending list in org settings.
-2. Milestone 5 (see [roadmap.md](roadmap.md)): API keys first (5.1).
+2. ✅ **5.1 API keys** – `hops_<prefix>_<secret>` (hashed), plans `free`/`pro` (`set_plan`
+   command, limits in settings/env), per-key rate + monthly org quota, `UsageEvent` (90 days),
+   "API keys" and "Usage" cards (30-day chart) in org settings.
+3. Next: 5.2 public SEO pages ([seo.md](seo.md)), then 5.3 deployment, 5.4 docs.
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
@@ -49,7 +52,6 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 
 - Redis cache for serialized holiday lists — 5.3 (in-process LRU is enough today).
 - CD pipeline, health endpoint, slimmer multi-stage backend image (now 801 MB) — 5.3.
-- API keys and usage chart in org settings — 5.1.
 
 ## Gotchas learned
 
@@ -62,6 +64,8 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 - Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
   `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
 - `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
+- Git Bash heredocs here turn a doubled backslash into a single one: write files containing
+  escapes, regexes or `\u` sequences with the editor tools, not `cat <<EOF` or inline `python -`.
 - Don't mock `socket.*` through an app module (`apps.x.socket.getaddrinfo` is the real `socket`
   module): patch a small wrapper like `apps.webhooks.net.resolve` instead.
 - `makemessages` can fuzzy-match a new string to an unrelated old translation: check for

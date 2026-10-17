@@ -219,5 +219,38 @@
     "useEmail": "Use {{email}}, the address the invite was sent to.",
     "wrongAccount": "This invite is for {{email}}, but you're logged in as {{current}}. Log out and log in with the invited address.",
     "accept": "Accept and join"
+  },
+  "apiKeys": {
+    "title": "API keys",
+    "intro": "Use a key to call the public API for this organization, including its private calendars. Send it as {{header}}.",
+    "copyOnce": "Copy this key now. It won't be shown again.",
+    "key": "API key",
+    "none": "No API keys yet.",
+    "name": "Key name",
+    "namePlaceholder": "e.g. Payroll service",
+    "create": "Create key",
+    "ownersOnly": "Only owners can create or revoke keys."
+  },
+  "usage": {
+    "title": "API usage",
+    "quota": "{{used}} of {{quota}} requests this month",
+    "quotaLabel": "Monthly quota used",
+    "plan": "{{plan}} plan · {{rate}} per key",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "chartTitle_one": "Requests per day, last {{count}} day",
+    "chartTitle_other": "Requests per day, last {{count}} days",
+    "chartLabel": "Requests per day. Use the arrow keys to read each day.",
+    "showTable": "Show table",
+    "hideTable": "Hide table",
+    "requests_one": "{{count}} request",
+    "requests_other": "{{count}} requests",
+    "failed_one": "{{count}} failed",
+    "failed_other": "{{count}} failed",
+    "date": "Date",
+    "requestsColumn": "Requests",
+    "failedColumn": "Failed"
   }
 }

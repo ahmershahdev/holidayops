@@ -231,5 +231,50 @@
     "useEmail": "استخدم {{email}}، وهو العنوان الذي أُرسلت إليه الدعوة.",
     "wrongAccount": "هذه الدعوة موجّهة إلى {{email}}، لكنك مسجّل الدخول باسم {{current}}. سجّل الخروج ثم ادخل بالعنوان المدعو.",
     "accept": "القبول والانضمام"
+  },
+  "apiKeys": {
+    "title": "مفاتيح API",
+    "intro": "استخدم مفتاحًا لاستدعاء الواجهة العامة لهذه المؤسسة، بما في ذلك تقاويمها الخاصة. أرسله بالشكل {{header}}.",
+    "copyOnce": "انسخ هذا المفتاح الآن. لن يظهر مرة أخرى.",
+    "key": "مفتاح API",
+    "none": "لا توجد مفاتيح API بعد.",
+    "name": "اسم المفتاح",
+    "namePlaceholder": "مثلًا: خدمة الرواتب",
+    "create": "إنشاء مفتاح",
+    "ownersOnly": "المالكون فقط يمكنهم إنشاء المفاتيح أو إلغاؤها."
+  },
+  "usage": {
+    "title": "استخدام API",
+    "quota": "{{used}} من {{quota}} طلب هذا الشهر",
+    "quotaLabel": "المستخدم من الحصة الشهرية",
+    "plan": "خطة {{plan}} · {{rate}} لكل مفتاح",
+    "plans": {
+      "free": "مجانية",
+      "pro": "احترافية"
+    },
+    "chartTitle_zero": "الطلبات اليومية",
+    "chartTitle_one": "الطلبات اليومية، آخر يوم",
+    "chartTitle_two": "الطلبات اليومية، آخر يومين",
+    "chartTitle_few": "الطلبات اليومية، آخر {{count}} أيام",
+    "chartTitle_many": "الطلبات اليومية، آخر {{count}} يومًا",
+    "chartTitle_other": "الطلبات اليومية، آخر {{count}} يوم",
+    "chartLabel": "الطلبات اليومية. استخدم مفاتيح الأسهم لقراءة كل يوم.",
+    "showTable": "عرض الجدول",
+    "hideTable": "إخفاء الجدول",
+    "requests_zero": "لا طلبات",
+    "requests_one": "طلب واحد",
+    "requests_two": "طلبان",
+    "requests_few": "{{count}} طلبات",
+    "requests_many": "{{count}} طلبًا",
+    "requests_other": "{{count}} طلب",
+    "failed_zero": "لا إخفاقات",
+    "failed_one": "إخفاق واحد",
+    "failed_two": "إخفاقان",
+    "failed_few": "{{count}} إخفاقات",
+    "failed_many": "{{count}} إخفاقًا",
+    "failed_other": "{{count}} إخفاق",
+    "date": "التاريخ",
+    "requestsColumn": "الطلبات",
+    "failedColumn": "الفاشلة"
   }
 }

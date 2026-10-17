@@ -9,6 +9,7 @@ from django.utils import timezone
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
+from apps.api.models import ApiKey
 from apps.calendars.models import Calendar, CustomDay
 from apps.feeds.models import FeedToken
 from apps.orgs.models import Invite, Membership, Role
@@ -36,7 +37,11 @@ def victim() -> dict[str, Any]:
         token_hash="0" * 64,
         expires_at=timezone.now() + timedelta(days=1),
     )
+    api_key = ApiKey(org=owner.org, name="Payroll")
+    api_key.set_new_key()
+    api_key.save()
     return {
+        "api_key": api_key,
         "org": owner.org,
         "member": other,
         "calendar": calendar,
@@ -79,6 +84,10 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
         ("get", f"{cal}/digest/", {}),
         ("put", f"{cal}/digest/", {}),
         ("delete", f"{cal}/digest/", {}),
+        ("get", f"{org}/api-keys/", {}),
+        ("post", f"{org}/api-keys/", {"name": "x"}),
+        ("delete", f"{org}/api-keys/{v['api_key'].id}/", {}),
+        ("get", f"{org}/usage/", {}),
         ("get", f"{org}/invites/", {}),
         ("post", f"{org}/invites/", {"email": "x@example.com", "role": "admin"}),
         ("post", f"{org}/invites/{v['invite'].id}/resend/", {}),
@@ -119,6 +128,8 @@ def test_every_org_endpoint_returns_404_to_outsiders(
     hook = Webhook.objects.get(pk=victim["hook"].pk)
     assert (hook.url, hook.secret) == (victim["hook"].url, victim["hook"].secret)
     assert not hook.deliveries.exists()
+    assert ApiKey.objects.get(pk=victim["api_key"].pk).revoked_at is None
+    assert ApiKey.objects.filter(org=victim["org"]).count() == 1
     invite = Invite.objects.get(pk=victim["invite"].pk)
     assert invite.token_hash == "0" * 64
     assert Invite.objects.filter(org=victim["org"]).count() == 1

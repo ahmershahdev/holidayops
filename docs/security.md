@@ -6,7 +6,9 @@ Reporting a vulnerability: see [SECURITY.md](../SECURITY.md).
 
 - Web app: Django session auth with CSRF, same origin.
 - Public API: `Authorization: Bearer hops_<prefix>_<secret>`. Keys are shown once and stored as a
-  SHA-256 hash of a high-entropy secret. The prefix is stored in clear for lookup and display.
+  SHA-256 hash of a high-entropy secret, compared in constant time. The prefix is stored in clear
+  for lookup and display. Keys only authenticate the public endpoints; org management stays
+  session-only. A key reaches its own org's private calendars and nothing else.
 - Passwords use Argon2.
 
 ## Tenant isolation
@@ -21,8 +23,8 @@ DRF permission classes per role. Viewers can't write; only owners manage billing
 
 ## Rate limiting
 
-Redis-backed throttles per API key, and per IP for anonymous calls. Over the limit: `429` with
-`Retry-After`.
+Redis-backed throttles per API key (rate from the org's plan), a monthly quota per org, and per IP
+for anonymous calls. Over the limit: `429` with `Retry-After`.
 
 ## Input validation
 

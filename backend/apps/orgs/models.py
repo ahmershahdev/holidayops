@@ -12,9 +12,15 @@ class Role(models.TextChoices):
 ROLE_RANK = {Role.VIEWER: 0, Role.MEMBER: 1, Role.ADMIN: 2, Role.OWNER: 3}
 
 
+class Plan(models.TextChoices):
+    FREE = "free"
+    PRO = "pro"
+
+
 class Organization(models.Model):
     name = models.CharField(max_length=120)
     slug = models.SlugField(max_length=60, unique=True)
+    plan = models.CharField(max_length=10, choices=Plan.choices, default=Plan.FREE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

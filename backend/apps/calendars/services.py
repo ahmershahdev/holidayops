@@ -9,10 +9,13 @@ from apps.calendars.models import Calendar
 from apps.core import CustomDay, MergedCalendar, get_calendar, get_country, merge_calendars
 
 
-def visible_calendar(user: Any, calendar_id: uuid.UUID) -> Calendar:
+def visible_calendar(user: Any, calendar_id: uuid.UUID, org_id: int | None = None) -> Calendar:
+    """Public calendars, the user's orgs' calendars, and those of `org_id` (an API key's org)."""
     access = Q(is_public=True)
     if user is not None and user.is_authenticated:
         access |= Q(org__memberships__user=user)
+    if org_id is not None:
+        access |= Q(org_id=org_id)
     calendar = Calendar.objects.filter(access, id=calendar_id).distinct().first()
     if calendar is None:
         raise Http404
