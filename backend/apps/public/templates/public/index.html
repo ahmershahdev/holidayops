@@ -3,6 +3,6 @@
 <h1>{{ title }}</h1>
 <p class="lead">{{ description }}</p>
 <ul class="countries">
-{% for country, path in countries %}<li><a href="{{ path }}">{% flag country.code %}<span>{{ country.name }}</span></a></li>
+{% for code, name, path in countries %}<li><a href="{{ path }}">{% flag code %}<span>{{ name }}</span></a></li>
 {% endfor %}</ul>
 {% endblock %}

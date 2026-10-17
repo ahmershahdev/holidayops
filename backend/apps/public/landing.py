@@ -2,7 +2,7 @@
 
 import json
 from dataclasses import dataclass
-from datetime import date, timedelta
+from datetime import date
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -11,7 +11,16 @@ from django.utils.translation import gettext as _
 
 from apps.api.serializers import CheckResultSerializer
 from apps.core import CoreError, get_calendar, is_business_day, list_countries
-from apps.public.content import PREFIX, holiday_language, page_path, year_window
+from apps.public.content import (
+    PREFIX,
+    Cell,
+    country_name,
+    holiday_language,
+    month_grid,
+    page_path,
+    week_headers,
+    year_window,
+)
 from apps.public.views import PUBLIC_POLICY, _meta, public_page
 
 # Country shown in the hero calendar and preselected in the demo, by page language.
@@ -55,13 +64,6 @@ LANDING_POLICY = PUBLIC_POLICY.replace("form-action 'none'", "form-action 'self'
 
 
 @dataclass(frozen=True)
-class Cell:
-    day: date | None
-    kind: str
-    names: tuple[str, ...] = ()
-
-
-@dataclass(frozen=True)
 class Answer:
     country: str
     day: date
@@ -80,29 +82,9 @@ def reason_label(reason: str) -> str:
 
 
 def month_cells(country: str, lang: str, today: date) -> tuple[list[date], list[list[Cell]]]:
-    """The current month as weeks of cells, starting the day after the country's weekend."""
     info = list_countries()[country]
     cal = get_calendar(country, None, [today.year], holiday_language(info, lang), ())
-    week_start = (max(info.weekend) + 1) % 7 if info.weekend else 0
-    first = today.replace(day=1)
-    lead = (first.weekday() - week_start) % 7
-    headers = [date(2027, 3, 22) + timedelta(days=(week_start + n) % 7) for n in range(7)]
-    cells: list[Cell] = [Cell(None, "pad")] * lead
-    day = first
-    while day.month == first.month:
-        names = tuple(cal.get_list(day))
-        if names:
-            kind = "holiday"
-        elif day.weekday() in info.weekend:
-            kind = "weekend"
-        else:
-            kind = "work"
-        if day == today:
-            kind += " today"
-        cells.append(Cell(day, kind, names))
-        day += timedelta(days=1)
-    cells += [Cell(None, "pad")] * (-len(cells) % 7)
-    return headers, [cells[i : i + 7] for i in range(0, len(cells), 7)]
+    return week_headers(info), month_grid(cal, info, today.replace(day=1), today)
 
 
 def demo(
@@ -130,7 +112,9 @@ def demo(
         return values, None, _("That date can't be checked.")
     return (
         values,
-        Answer(info.name, day, result.is_business_day, result.reason, result.holidays),
+        Answer(
+            country_name(country, lang), day, result.is_business_day, result.reason, result.holidays
+        ),
         "",
     )
 
@@ -163,18 +147,18 @@ def landing(request: HttpRequest, lang: str) -> HttpResponse:
         "home": f"{PREFIX[lang]}/",
         "country_count": len(countries),
         "region_count": sum(len(c.subdivisions) for c in countries.values()),
-        "home_country": countries[home],
+        "home_country": country_name(home, lang),
         "month": today,
         "weekday_headers": headers,
         "weeks": weeks,
-        "choices": sorted(((c.code, c.name) for c in countries.values()), key=lambda c: c[1]),
+        "choices": sorted(((c, country_name(c, lang)) for c in countries), key=lambda c: c[1]),
         "values": values,
         "answer": answer,
         "reason": reason_label(answer.reason) if answer else "",
         "error": error,
         "curl": curl,
         "response_json": response_json,
-        "marquee": [(countries[c].name, page_path(lang, c, today.year)) for c in MARQUEE],
+        "marquee": [(country_name(c, lang), page_path(lang, c, today.year)) for c in MARQUEE],
         "today": today,
     }
     response = render(request, "public/landing.html", context)

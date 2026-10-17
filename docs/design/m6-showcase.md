@@ -116,10 +116,23 @@ context, so it renders even when those fail.
 demo (a GET form answered by the server), product story (countries, company calendars, feeds,
 webhooks, API keys), code sample, pricing summary, links into the country pages.
 
-## 6.3 Country pages
+## 6.3 Country pages (done)
 
-The 5.2 pages get the pattern banner, the year as a scroll-animated calendar, and View
-Transitions between years.
+- **Banner** (`apps/public/patterns.py`, `_pattern.html`): 20×4 tiles of three motifs out of six
+  (quarter, half circle, triangle, dot, bar, star), with turns and gaps from a SHA-256 seed of the
+  country code. Colours are read from the country's own flag SVG: the most used ones that reach
+  1.8:1 on the night panel, at most four, topped up with brand teal. Inline, `aria-hidden`, about
+  4 KB, mirrored in RTL; alternate rows drift as it scrolls.
+- **Year calendar**: twelve months from the same `month_grid` the landing hero uses, revealed on
+  scroll, `aria-hidden` because the table below lists the same days. Phones: two months a row with
+  CLDR narrow day names (M T W, ح ن ث); Urdu stays one a row with full names, because CLDR has no
+  narrow Urdu names.
+- **View Transitions** between years: banner and heading morph, the calendar rises in.
+- **Language**: country names, day and month names and lists come from CLDR (Babel), the same data
+  the web app gets from `Intl`. Lists use each language's own pattern ("Friday and Saturday",
+  «الجمعة والسبت», «جمعہ اور ہفتہ», «ب، ج، اور د»), never a hard-coded ", ". Django's own Urdu
+  and Arabic date names differ in places (Urdu Saturday ھفتہ instead of ہفتہ), so public pages
+  use the `cldr` filter, keeping Latin digits.
 
 ## 6.4 Performance and accessibility
 

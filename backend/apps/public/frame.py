@@ -7,8 +7,7 @@ from urllib.parse import quote
 from django.http import HttpRequest
 from django.utils import timezone
 
-from apps.core import list_countries
-from apps.public.content import LANGUAGES, PREFIX, page_path
+from apps.public.content import LANGUAGES, PREFIX, country_name, page_path
 from apps.public.theme import get_theme
 
 POPULAR = ("PK", "SA", "AE", "US", "GB", "IN")
@@ -20,7 +19,6 @@ def frame_context(
 ) -> dict[str, Any]:
     year = timezone.now().year
     here = request.get_full_path()
-    countries = list_countries()
     return {
         "lang": lang,
         "dir": "rtl" if lang in {"ur", "ar"} else "ltr",
@@ -32,6 +30,6 @@ def frame_context(
             (code, path_for(code) if path_for else f"{PREFIX[code]}/") for code in LANGUAGES
         ],
         "year": year,
-        "popular": [(countries[c].name, page_path(lang, c, year)) for c in POPULAR],
+        "popular": [(country_name(c, lang), page_path(lang, c, year)) for c in POPULAR],
         "repo_url": REPO_URL,
     }

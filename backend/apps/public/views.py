@@ -1,6 +1,5 @@
 import json
 from collections.abc import Callable
-from datetime import date, timedelta
 from functools import wraps
 from typing import Any
 
@@ -20,14 +19,18 @@ from apps.public.content import (
     LANGUAGES,
     PREFIX,
     YearPage,
+    country_name,
     find_country,
     find_subdivision,
     page_path,
+    week_headers,
+    weekend_names,
     year_page,
     year_window,
 )
 from apps.public.frame import frame_context
 from apps.public.palette import swatches
+from apps.public.patterns import pattern
 from apps.public.theme import get_theme
 from config.security_log import security_event
 
@@ -135,7 +138,7 @@ def _breadcrumbs(request: HttpRequest, items: list[tuple[str, str]]) -> SafeStri
 @public_page
 def country_index(request: HttpRequest, lang: str) -> HttpResponse:
     year = timezone.now().year
-    countries = sorted(list_countries().values(), key=lambda c: c.name)
+    countries = sorted(list_countries(), key=lambda c: country_name(c, lang))
     context = {
         **_meta(request, lang, lambda code: f"{PREFIX[code]}/holidays/"),
         "title": _("Public holidays by country"),
@@ -144,7 +147,7 @@ def country_index(request: HttpRequest, lang: str) -> HttpResponse:
             "every year."
         )
         % {"count": len(countries)},
-        "countries": [(c, page_path(lang, c.code, year)) for c in countries],
+        "countries": [(c, country_name(c, lang), page_path(lang, c, year)) for c in countries],
         "year": year,
     }
     return render(request, "public/index.html", context)
@@ -165,8 +168,9 @@ def year_view(
     code = find_subdivision(info, subdiv) if info and subdiv else None
     if info is None or (subdiv and code is None) or year not in year_window(timezone.now().date()):
         raise Http404
-    page = year_page(info, code, year, lang)
-    place = f"{info.name} ({code})" if code else info.name
+    page = year_page(info, code, year, lang, timezone.now().date())
+    name = country_name(info.code, lang)
+    place = f"{name} ({code})" if code else name
     title = _("Public holidays in %(place)s %(year)s") % {"place": place, "year": year}
     description = _(
         "All %(count)s public holidays in %(place)s in %(year)s, with dates, weekdays and "
@@ -174,7 +178,7 @@ def year_view(
     ) % {"count": len(page.holidays), "place": place, "year": year, "working": page.working_days}
     crumbs = [
         (_("Holidays"), f"{PREFIX[lang]}/holidays/"),
-        (info.name, page_path(lang, info.code, year)),
+        (name, page_path(lang, info.code, year)),
     ]
     if code:
         crumbs.append((code, page_path(lang, info.code, year, code)))
@@ -186,7 +190,10 @@ def year_view(
         "page": page,
         "place": place,
         "country_code": info.code,
-        "weekend": [date(2027, 3, 22) + timedelta(days=d) for d in info.weekend],
+        "country_name": name,
+        "pattern": pattern(info.code),
+        "weekend": weekend_names(info, lang),
+        "weekday_headers": week_headers(info),
         "previous": page_path(lang, info.code, year - 1, code) if year - 1 in window else None,
         "next": page_path(lang, info.code, year + 1, code) if year + 1 in window else None,
         "country_path": page_path(lang, info.code, year) if code else None,

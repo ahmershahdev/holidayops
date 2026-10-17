@@ -48,7 +48,7 @@ def test_year_page_lists_every_holiday_with_structured_data(web: Client) -> None
     assert "Pakistan Day" in html
     working = business_days_between(cal, date(YEAR, 1, 1), date(YEAR, 12, 31))
     assert f"<strong>{working}</strong>" in html
-    assert "Saturday, Sunday" in html
+    assert "<strong>Saturday and Sunday</strong>" in html
 
     breadcrumbs, events = ld_blocks(html)
     assert breadcrumbs["@type"] == "BreadcrumbList"

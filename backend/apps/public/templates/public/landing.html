@@ -1,4 +1,4 @@
-{% extends "public/base.html" %}{% load i18n static %}
+{% extends "public/base.html" %}{% load i18n static text %}
 {% block head %}<link rel="stylesheet" href="{% static 'public/landing.css' %}">{% endblock %}
 {% block content %}
 <section class="hero">
@@ -21,11 +21,11 @@
       <li><strong>3</strong><span>{% translate "languages, RTL ready" %}</span></li>
     </ul>
   </div>
-  <figure class="hero-calendar" aria-label="{% blocktranslate with country=home_country.name %}Public holidays in {{ country }} this month{% endblocktranslate %}">
-    <figcaption><strong>{{ month|date:"F Y" }}</strong><span>{{ home_country.name }}</span></figcaption>
+  <figure class="hero-calendar" aria-label="{% blocktranslate with country=home_country %}Public holidays in {{ country }} this month{% endblocktranslate %}">
+    <figcaption><strong>{{ month|cldr:"LLLL y" }}</strong><span>{{ home_country }}</span></figcaption>
     <div class="cal-grid" role="grid">
-      {% for d in weekday_headers %}<span class="cal-head" role="columnheader">{{ d|date:"D" }}</span>{% endfor %}
-      {% for week in weeks %}{% for cell in week %}<span class="cal-cell {{ cell.kind }}"{% if cell.names %} title="{{ cell.names|join:'; ' }}"{% endif %} role="gridcell">{% if cell.day %}{{ cell.day|date:"j" }}{% endif %}</span>{% endfor %}{% endfor %}
+      {% for d in weekday_headers %}<span class="cal-head" role="columnheader">{{ d|cldr:"EEE" }}</span>{% endfor %}
+      {% for week in weeks %}{% for cell in week %}<span class="cal-cell {{ cell.kind }}"{% if cell.names %} title="{{ cell.names|as_list }}"{% endif %} role="gridcell">{% if cell.day %}{{ cell.day|date:"j" }}{% endif %}</span>{% endfor %}{% endfor %}
     </div>
     <p class="cal-legend"><i class="dot holiday"></i>{% translate "Holiday" %} <i class="dot weekend"></i>{% translate "Weekend" %} <i class="dot today"></i>{% translate "Today" %}</p>
   </figure>
@@ -47,7 +47,7 @@
   {% if answer %}
   <div class="demo-answer {% if answer.working %}yes{% else %}no{% endif %}" role="status">
     <p class="verdict">{% if answer.working %}{% translate "Yes, it's a working day." %}{% else %}{% translate "No, it's a day off." %}{% endif %}</p>
-    <p>{% blocktranslate with day=answer.day|date:"l j F Y" country=answer.country %}{{ day }} in {{ country }} is {{ reason }}.{% endblocktranslate %}{% if answer.names %} <strong>{{ answer.names|join:"; " }}</strong>{% endif %}</p>
+    <p>{% blocktranslate with day=answer.day|cldr:"EEEE d MMMM y" country=answer.country %}{{ day }} in {{ country }} is {{ reason }}.{% endblocktranslate %}{% if answer.names %} <strong>{{ answer.names|as_list }}</strong>{% endif %}</p>
   </div>
   {% endif %}
 </section>
