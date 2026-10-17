@@ -57,11 +57,13 @@ Design: [design/m4-subscriptions.md](design/m4-subscriptions.md).
 | 4.3 Digests ✅ | Monthly email "holidays in the next 30 days" |
 | 4.4 Webhooks ✅ | HMAC signing, SSRF guard, retries with backoff |
 
-## Milestone 5 — Plans, limits, launch
+## Milestone 5 — Plans, limits, launch ← in progress
+
+Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 
 | Part | Scope |
 |---|---|
-| 5.1 API keys | `hops_<prefix>_<secret>`, hashed, per-key throttles, quotas, `UsageEvent` |
+| 5.1 API keys ✅ | `hops_<prefix>_<secret>`, hashed, per-key throttles, quotas, `UsageEvent` |
 | 5.2 Public SEO pages | See [seo.md](seo.md) |
 | 5.3 Deployment | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs | README setup, API examples, screenshots |

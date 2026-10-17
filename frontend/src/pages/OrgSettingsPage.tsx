@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import { api, type Schemas, unwrap } from "../api/client";
 import { Badge, Button, Card, ErrorText, Field, Input, PageHeader, Select } from "../components/ui";
+import { ApiKeysCard } from "../components/ApiKeysCard";
+import { UsageCard } from "../components/UsageCard";
 import { WebhooksCard } from "../components/WebhooksCard";
 import { useMe } from "../lib/auth";
 import { useFormat } from "../lib/format";
@@ -235,7 +237,13 @@ export function OrgSettingsPage() {
         )}
       </Card>
 
-      {isAdmin && <WebhooksCard org={org} />}
+      {isAdmin && (
+        <>
+          <ApiKeysCard org={org} canManage={isOwner} />
+          <UsageCard org={org} />
+          <WebhooksCard org={org} />
+        </>
+      )}
 
       {isOwner && detail.data && (
         <Card title={t("settings.dangerZone")}>

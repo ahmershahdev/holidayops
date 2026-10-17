@@ -109,5 +109,6 @@ class CountryInfo: code, name, subdivisions, languages, default_language, catego
 
 ## Throttling
 
-Anonymous: `60/minute` per IP via DRF `AnonRateThrottle`. Cache backend: local memory in dev and
-test, Redis in prod.
+Anonymous: `60/minute` per IP (`apps.api.throttles.AnonRateThrottle`). Requests with an API key
+skip it and get the plan's per-key rate and monthly quota instead
+([m5-api-keys.md](m5-api-keys.md)). Cache backend: local memory in dev and test, Redis in prod.

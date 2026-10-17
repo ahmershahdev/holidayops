@@ -122,7 +122,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
+        "apps.api.throttles.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
         "rest_framework.throttling.ScopedRateThrottle",
     ],
@@ -133,6 +133,19 @@ REST_FRAMEWORK = {
         "invite": env("API_INVITE_RATE", "30/hour"),
     },
     "EXCEPTION_HANDLER": "apps.api.exceptions.api_exception_handler",
+}
+
+PLANS: dict[str, dict[str, str | int]] = {
+    "free": {
+        "rate": env("PLAN_FREE_RATE", "120/minute"),
+        "monthly_quota": int(env("PLAN_FREE_QUOTA", "10000")),
+        "max_keys": int(env("PLAN_FREE_KEYS", "3")),
+    },
+    "pro": {
+        "rate": env("PLAN_PRO_RATE", "1200/minute"),
+        "monthly_quota": int(env("PLAN_PRO_QUOTA", "1000000")),
+        "max_keys": int(env("PLAN_PRO_KEYS", "20")),
+    },
 }
 
 SPECTACULAR_SETTINGS = {
@@ -170,6 +183,7 @@ CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
         "schedule": crontab(minute="0", hour="6", day_of_month="1"),
     },
     "webhook-retries": {"task": "webhooks.retry_due", "schedule": 60.0},
+    "prune-usage": {"task": "api.prune_usage", "schedule": crontab(minute="0", hour="3")},
 }
 
 APP_URL = env("APP_URL", "http://localhost:5173").rstrip("/")

@@ -172,6 +172,7 @@ paths:
       tags:
       - business-days
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -230,6 +231,7 @@ paths:
       tags:
       - business-days
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -282,6 +284,7 @@ paths:
       tags:
       - business-days
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -340,6 +343,7 @@ paths:
       tags:
       - business-days
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -357,6 +361,7 @@ paths:
       tags:
       - countries
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -438,6 +443,7 @@ paths:
       tags:
       - holidays
       security:
+      - apiKey: []
       - cookieAuth: []
       - {}
       responses:
@@ -586,6 +592,90 @@ paths:
         name: org_slug
         schema:
           type: string
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/api-keys/:
+    get:
+      operationId: orgs_api_keys_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+          description: ''
+    post:
+      operationId: orgs_api_keys_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ApiKeyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApiKeyRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyCreated'
+          description: ''
+  /api/v1/orgs/{org_slug}/api-keys/{id}/:
+    delete:
+      operationId: orgs_api_keys_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this api key.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
         required: true
       tags:
       - orgs
@@ -1428,6 +1518,34 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/orgs/{org_slug}/usage/:
+    get:
+      operationId: orgs_usage_retrieve
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: query
+        name: days
+        schema:
+          type: integer
+        description: 1-90, default 30.
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usage'
+          description: ''
   /api/v1/orgs/{org_slug}/webhooks/:
     get:
       operationId: orgs_webhooks_list
@@ -1689,6 +1807,86 @@ components:
       - days
       - result
       - start
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 80
+        prefix:
+          type: string
+          readOnly: true
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_used_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - last_used_at
+      - name
+      - prefix
+    ApiKeyCreated:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 80
+        prefix:
+          type: string
+          readOnly: true
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_used_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        key:
+          type: string
+          readOnly: true
+          description: Shown only once. Keep it secret.
+      required:
+      - created_at
+      - created_by
+      - id
+      - key
+      - last_used_at
+      - name
+      - prefix
+    ApiKeyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 80
+      required:
+      - name
     AuditLog:
       type: object
       properties:
@@ -2573,6 +2771,45 @@ components:
           minLength: 1
       required:
       - token
+    Usage:
+      type: object
+      properties:
+        plan:
+          type: string
+        rate:
+          type: string
+        monthly_quota:
+          type: integer
+        used_this_month:
+          type: integer
+        max_keys:
+          type: integer
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDay'
+      required:
+      - days
+      - max_keys
+      - monthly_quota
+      - plan
+      - rate
+      - used_this_month
+    UsageDay:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        requests:
+          type: integer
+        failed:
+          type: integer
+          description: Responses with status 400 or higher.
+      required:
+      - date
+      - failed
+      - requests
     User:
       type: object
       properties:
@@ -2698,6 +2935,10 @@ components:
       - secret
       - url
   securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: hops_<prefix>_<secret>
     cookieAuth:
       type: apiKey
       in: cookie

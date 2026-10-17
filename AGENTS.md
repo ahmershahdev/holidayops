@@ -19,6 +19,7 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 | Auth, orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
 | UI, design system, i18n/RTL, calendar views | [docs/design/m3-ui.md](docs/design/m3-ui.md) |
 | Celery tasks, iCal feeds, digests, webhooks | [docs/design/m4-subscriptions.md](docs/design/m4-subscriptions.md) |
+| API keys, plans, quotas, usage | [docs/design/m5-api-keys.md](docs/design/m5-api-keys.md) |
 
 ## Stack
 

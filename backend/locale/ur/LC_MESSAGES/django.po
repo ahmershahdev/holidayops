@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 06:56+0000\n"
+"POT-Creation-Date: 2026-10-17 12:31+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -19,6 +19,9 @@ msgstr "اس ای میل سے پہلے ہی ایک اکاؤنٹ موجود ہے�
 
 msgid "Invalid email or password."
 msgstr "ای میل یا پاس ورڈ درست نہیں۔"
+
+msgid "Invalid or revoked API key."
+msgstr "API کلید غلط ہے یا منسوخ کی جا چکی ہے۔"
 
 #, python-format
 msgid "Country %(value)s is not supported."
@@ -42,6 +45,10 @@ msgstr "سال %(min)s اور %(max)s کے درمیان ہونے چاہییں۔"
 
 msgid "Result falls outside the supported year range."
 msgstr "نتیجہ معاون سالوں کی حد سے باہر ہے۔"
+
+#, python-format
+msgid "Your plan allows at most %(max)s active API keys."
+msgstr "آپ کے پلان میں زیادہ سے زیادہ %(max)s فعال API کلیدیں ہو سکتی ہیں۔"
 
 #, python-format
 msgid "Year must be between %(min)s and %(max)s."

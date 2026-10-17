@@ -261,6 +261,41 @@ export interface paths {
         patch: operations["orgs_partial_update"];
         trace?: never;
     };
+    "/api/v1/orgs/{org_slug}/api-keys/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_api_keys_list"];
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_api_keys_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/api-keys/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        delete: operations["orgs_api_keys_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orgs/{org_slug}/audit-log/": {
         parameters: {
             query?: never;
@@ -511,6 +546,23 @@ export interface paths {
         patch: operations["orgs_members_partial_update"];
         trace?: never;
     };
+    "/api/v1/orgs/{org_slug}/usage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_usage_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orgs/{org_slug}/webhooks/": {
         parameters: {
             query?: never;
@@ -609,6 +661,33 @@ export interface components {
             days: number;
             /** Format: date */
             result: string;
+        };
+        ApiKey: {
+            readonly id: number;
+            name: string;
+            readonly prefix: string;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly last_used_at: string | null;
+        };
+        ApiKeyCreated: {
+            readonly id: number;
+            name: string;
+            readonly prefix: string;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly last_used_at: string | null;
+            /** @description Shown only once. Keep it secret. */
+            readonly key: string;
+        };
+        ApiKeyRequest: {
+            name: string;
         };
         AuditLog: {
             readonly id: number;
@@ -980,6 +1059,21 @@ export interface components {
         StatusEnum: "pending" | "success" | "failed";
         UnsubscribeRequest: {
             token: string;
+        };
+        Usage: {
+            plan: string;
+            rate: string;
+            monthly_quota: number;
+            used_this_month: number;
+            max_keys: number;
+            days: components["schemas"]["UsageDay"][];
+        };
+        UsageDay: {
+            /** Format: date */
+            date: string;
+            requests: number;
+            /** @description Responses with status 400 or higher. */
+            failed: number;
         };
         User: {
             readonly id: number;
@@ -1518,6 +1612,76 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Org"];
                 };
+            };
+        };
+    };
+    orgs_api_keys_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiKey"][];
+                };
+            };
+        };
+    };
+    orgs_api_keys_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApiKeyRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ApiKeyRequest"];
+                "multipart/form-data": components["schemas"]["ApiKeyRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiKeyCreated"];
+                };
+            };
+        };
+    };
+    orgs_api_keys_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this api key. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -2155,6 +2319,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Member"];
+                };
+            };
+        };
+    };
+    orgs_usage_retrieve: {
+        parameters: {
+            query?: {
+                /** @description 1-90, default 30. */
+                days?: number;
+            };
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Usage"];
                 };
             };
         };
