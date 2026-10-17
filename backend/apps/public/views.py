@@ -243,13 +243,32 @@ def _events(page: YearPage, place: str) -> SafeString:
     )
 
 
+def plan_card(code: str, limits: dict[str, str | int]) -> dict[str, object]:
+    """A plan's limits as the pricing page shows them: "120/minute" -> 120, 10000 -> "10K"."""
+    quota = int(limits["monthly_quota"])
+    short = f"{quota // 1_000_000}M" if quota >= 1_000_000 else f"{quota // 1000}K"
+    return {
+        "code": code,
+        **limits,
+        "per_minute": int(str(limits["rate"]).split("/")[0]),
+        "monthly_short": short if quota >= 1000 else str(quota),
+    }
+
+
 @public_page
 def pricing(request: HttpRequest, lang: str) -> HttpResponse:
     context = {
         **_meta(request, lang, lambda code: f"{PREFIX[code]}/pricing/"),
         "title": _("Pricing"),
         "description": _("API plans for HolidayOps: requests per minute, per month and API keys."),
-        "plans": [{"code": code, **limits} for code, limits in settings.PLANS.items()],
+        "plans": [plan_card(code, limits) for code, limits in settings.PLANS.items()],
+        "included": [
+            _("Company calendars"),
+            _("iCal feeds"),
+            _("Monthly digests"),
+            _("Signed webhooks"),
+            _("Usage chart"),
+        ],
         "signup": "/signup",
         "docs": reverse("docs"),
     }
