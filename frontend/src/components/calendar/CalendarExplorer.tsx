@@ -120,7 +120,7 @@ export function CalendarExplorer({ target, weekStart, language, sources = [], ed
               role="tab"
               aria-selected={view === v}
               onClick={() => setView(v)}
-              className={`rounded-md px-3 py-1.5 text-sm ${view === v ? "bg-accent text-white" : "text-muted hover:text-ink"}`}
+              className={`rounded-md px-3 py-1.5 text-sm ${view === v ? "bg-accent text-on-accent" : "text-muted hover:text-ink"}`}
             >
               {t(`calendar.views.${v}`)}
             </button>

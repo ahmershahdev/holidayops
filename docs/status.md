@@ -54,7 +54,10 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
    - ✅ 6.1 art direction: palette with measured contrast, Outfit display font, motion primitives
      (flight path, scroll-driven reveals, View Transitions), living style guide at `/style/`,
      app re-skinned; `tests/public/test_tokens.py` keeps both stylesheets in sync.
-   - Next: 6.2 landing page at `/` (Playground moves to `/playground`).
+   - ✅ Site frame: shared header/footer (public + app), light/dark/device themes via one cookie
+     with no flash, custom scrollbar and selection, mobile/tablet layouts checked by device
+     emulation, branded 404/500.
+   - Next: 6.2 landing page at `/`, then flags, a security pass, 6.3, 6.4.
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 

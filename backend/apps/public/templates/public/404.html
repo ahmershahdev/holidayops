@@ -1,0 +1,19 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<section class="error-page">
+  <p class="error-code" aria-hidden="true">404</p>
+  <h1>{% translate "This flight went off course" %}</h1>
+  <p class="lead">{% translate "The page you asked for doesn't exist, or it moved. Pick a destination below." %}</p>
+  <svg class="flight" viewBox="0 0 600 140" aria-hidden="true">
+    <path class="trail" pathLength="1" d="M10 120 C 150 120, 220 40, 330 60"/>
+    <path class="route" pathLength="1" d="M10 120 C 150 120, 220 40, 330 60"/>
+    <path class="detour" pathLength="1" d="M330 60 C 420 76, 470 20, 590 110"/>
+    <path class="plane" style="offset-path: path('M10 120 C 150 120, 220 40, 330 60')" d="M-10 -3 L6 -3 L12 0 L6 3 L-10 3 L-6 0 Z M-2 -3 L2 -10 L5 -10 L3 -3 Z M-2 3 L2 10 L5 10 L3 3 Z"/>
+  </svg>
+  <div class="error-links">
+    <a class="button" href="{{ home }}">{% translate "Go home" %}</a>
+    <a class="button button-small" href="{{ prefix }}/holidays/">{% translate "Browse holidays by country" %}</a>
+    <a href="/api/v1/docs/">{% translate "API docs" %}</a>
+  </div>
+</section>
+{% endblock %}

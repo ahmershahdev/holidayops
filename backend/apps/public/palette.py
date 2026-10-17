@@ -27,9 +27,16 @@ def contrast(a: str, b: str) -> float:
     return round((high + 0.05) / (low + 0.05), 2)
 
 
+def theme_tokens(css: str, selector: str) -> dict[str, str]:
+    """The colour tokens declared in the first block whose selector is exactly `selector`."""
+    start = css.index(selector + " {")
+    block = css[start : css.index("}", start)]
+    return dict(_TOKEN.findall(block))
+
+
 @cache
 def swatches() -> tuple[Swatch, ...]:
-    tokens = dict(_TOKEN.findall(SITE_CSS.read_text(encoding="utf-8")))
+    tokens = theme_tokens(SITE_CSS.read_text(encoding="utf-8"), ":root")
     surface, night = tokens["surface"], tokens["night"]
     return tuple(
         Swatch(name, value.lower(), contrast(value, surface), contrast(value, night))

@@ -5,13 +5,14 @@ from functools import wraps
 from typing import Any
 
 from django.conf import settings
+from django.core.cache import cache
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
+from django.utils.cache import patch_vary_headers
 from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext as _
-from django.views.decorators.cache import cache_page
 
 from apps.core import list_countries
 from apps.public.content import (
@@ -24,7 +25,9 @@ from apps.public.content import (
     year_page,
     year_window,
 )
+from apps.public.frame import frame_context
 from apps.public.palette import swatches
+from apps.public.theme import get_theme
 
 CACHE_SECONDS = 6 * 3600
 # No JavaScript at all: the pages are plain HTML and one stylesheet. JSON-LD blocks are data, not
@@ -42,16 +45,27 @@ View = Callable[..., HttpResponse]
 
 
 def public_page(view: View) -> View:
+    """Language from the URL, strict CSP, and a server-side page cache keyed by theme: the
+    theme is written into the HTML, so one cached copy per theme. Browsers revalidate the HTML
+    (no-cache) so a theme switch shows at once; static files keep long cache lifetimes."""
+
     @wraps(view)
     def wrapper(request: HttpRequest, *args: Any, lang: str = "en", **kwargs: Any) -> HttpResponse:
+        key = f"page:{get_theme(request)}:{request.get_host()}:{request.get_full_path()}"
+        cached: HttpResponse | None = cache.get(key)
+        if cached is not None:
+            return cached
         with translation.override(lang):
             response = view(request, *args, lang=lang, **kwargs)
         response["Content-Language"] = lang
         response.setdefault("Content-Security-Policy", PUBLIC_POLICY)
-        response["Cache-Control"] = f"public, max-age={CACHE_SECONDS // 6}"
+        response["Cache-Control"] = "no-cache"
+        patch_vary_headers(response, ["Cookie"])
+        if response.status_code == 200:
+            cache.set(key, response, CACHE_SECONDS)
         return response
 
-    return cache_page(CACHE_SECONDS)(wrapper)
+    return wrapper
 
 
 def ld_json(data: Any) -> SafeString:
@@ -67,8 +81,7 @@ def _meta(request: HttpRequest, lang: str, path_for: Callable[[str], str]) -> di
         "canonical": request.build_absolute_uri(path_for(lang)),
         "alternates": alternates,
         "x_default": alternates[0][1],
-        "prefix": PREFIX[lang],
-        "languages": [(code, path_for(code)) for code in LANGUAGES],
+        **frame_context(request, lang, path_for),
     }
 
 
@@ -216,6 +229,7 @@ def robots(request: HttpRequest) -> HttpResponse:
         "Disallow: /feeds/",
         "Disallow: /invite",
         "Disallow: /unsubscribe",
+        "Disallow: /theme/",
         f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
     ]
     return HttpResponse("\n".join(lines) + "\n", content_type="text/plain; charset=utf-8")

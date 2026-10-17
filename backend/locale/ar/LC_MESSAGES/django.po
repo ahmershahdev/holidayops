@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:55+0000\n"
+"POT-Creation-Date: 2026-10-17 14:19+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -191,11 +191,32 @@ msgstr "يجب أن يكون للمؤسسة مالك واحد على الأقل.
 msgid "No account uses this email yet."
 msgstr "لا يوجد حساب بهذا البريد الإلكتروني بعد."
 
-msgid "Skip to content"
-msgstr "انتقل إلى المحتوى"
+msgid "This flight went off course"
+msgstr "هذه الرحلة ضلّت طريقها"
 
-msgid "Main"
-msgstr "الرئيسية"
+msgid ""
+"The page you asked for doesn't exist, or it moved. Pick a destination below."
+msgstr "الصفحة التي طلبتها غير موجودة أو نُقلت. اختر وجهة من الأسفل."
+
+msgid "Go home"
+msgstr "الصفحة الرئيسية"
+
+msgid "Browse holidays by country"
+msgstr "تصفّح العطلات حسب الدولة"
+
+msgid "API docs"
+msgstr "توثيق API"
+
+msgid ""
+"Holidays and working days for 250 countries, merged with your own company "
+"calendar."
+msgstr "العطلات وأيام العمل لـ250 دولة، مدمجة مع تقويم شركتك."
+
+msgid "Start free"
+msgstr "ابدأ مجانًا"
+
+msgid "Product"
+msgstr "المنتج"
 
 msgid "Holidays"
 msgstr "العطلات"
@@ -203,21 +224,56 @@ msgstr "العطلات"
 msgid "Pricing"
 msgstr "الأسعار"
 
-msgid "API docs"
-msgstr "توثيق API"
+msgid "Playground"
+msgstr "ساحة التجربة"
+
+msgid "Company calendars"
+msgstr "تقاويم الشركة"
+
+msgid "Popular countries"
+msgstr "دول شائعة"
+
+msgid "Developers"
+msgstr "المطوّرون"
+
+msgid "OpenAPI schema"
+msgstr "مخطط OpenAPI"
+
+msgid "Sitemap"
+msgstr "خريطة الموقع"
+
+msgid "Holiday data: the open-source holidays library."
+msgstr "بيانات العطلات: مكتبة holidays مفتوحة المصدر."
+
+msgid "Back to top"
+msgstr "العودة للأعلى"
+
+msgid "Main"
+msgstr "الرئيسية"
 
 msgid "Log in"
 msgstr "تسجيل الدخول"
 
+msgid "Menu"
+msgstr "القائمة"
+
 msgid "Language"
 msgstr "اللغة"
 
-msgid ""
-"Holiday data from the open-source holidays library. Dates marked “estimated” "
-"follow the lunar calendar and can move by a day."
-msgstr ""
-"بيانات العطلات من مكتبة holidays مفتوحة المصدر. التواريخ الموسومة "
-"بـ“estimated” تتبع التقويم القمري وقد تتغير بيوم."
+msgid "Theme"
+msgstr "المظهر"
+
+msgid "Light"
+msgstr "فاتح"
+
+msgid "Match my device"
+msgstr "حسب جهازي"
+
+msgid "Dark"
+msgstr "داكن"
+
+msgid "Skip to content"
+msgstr "انتقل إلى المحتوى"
 
 msgid "Pro"
 msgstr "احترافية"
@@ -245,9 +301,6 @@ msgstr[5] "%(keys)s مفتاح API"
 
 msgid "Company calendars, iCal feeds, digests and webhooks"
 msgstr "تقاويم الشركة وخلاصات iCal والملخصات وخطافات الويب"
-
-msgid "Start free"
-msgstr "ابدأ مجانًا"
 
 msgid "Contact us to upgrade."
 msgstr "تواصل معنا للترقية."
@@ -338,3 +391,9 @@ msgstr "يجب أن يشير مضيف الخطاف إلى عناوين عامة 
 #, python-format
 msgid "An organization can have at most %(max)s webhooks."
 msgstr "يمكن أن تحتوي المؤسسة على %(max)s من الخطافات كحد أقصى."
+
+msgid "Page not found"
+msgstr "الصفحة غير موجودة"
+
+msgid "This page doesn't exist."
+msgstr "هذه الصفحة غير موجودة."

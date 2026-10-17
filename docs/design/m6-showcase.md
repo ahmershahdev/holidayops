@@ -68,6 +68,43 @@ in RTL.
 A living style guide at `/style/` (noindex) shows the palette with contrast, the type scale and
 the motion primitives, so every later part can be checked against it.
 
+### Site frame (shared by the public pages and the web app)
+
+- **Header**: sticky glass bar (blurred paper), logo mark + two-tone wordmark, nav with a teal
+  underline that draws from the reading start, segmented language (EN · اردو · عربي) and theme
+  (light · device · dark) switches, log in, "Start free". It settles (border, shadow, smaller mark)
+  over the first 8rem of scroll via a scroll-driven animation. Below 56rem: a full-screen sheet with
+  large display-type links (`<details>` on public pages, so no JavaScript; React state in the app).
+  The header's `backdrop-filter` is dropped while the sheet is open: it would otherwise become the
+  containing block of the fixed sheet.
+- **Footer**: night panel with rounded top, a teal route drawn as it scrolls in, four columns
+  (brand + CTA, product, popular countries, developers), switches, credit, back to top, and an
+  oversized outlined "HolidayOps" that rises in. Footer text is checked on both night colours.
+- **Mark**: a simplified logo (teal and navy bars, swoosh, plane) as inline SVG and
+  `icon.svg` favicon that follows the device theme.
+- **Scrollbar and selection**: thin teal thumb on the page colour (`scrollbar-color`, ≥ 3:1,
+  `auto` in forced colours), stable gutter; selection is navy text on logo teal (7.1:1).
+
+### Themes
+
+- Light (above) and dark: dark uses lighter surfaces for depth (`#0a1428` page, `#111d36` cards),
+  off-white text, a brighter teal with navy text on buttons (`on-accent`); every pair is AA,
+  tested in `tests/public/test_tokens.py`.
+- One `theme` cookie (`light` / `dark`; absent = follow the device) shared by both halves. The
+  server writes it into `<html data-theme>` on public pages and into the web app's `index.html`,
+  so there is no flash and no inline script; `system` uses `prefers-color-scheme`.
+- No-JS switch: `/theme/<light|dark|system>/?next=` sets the cookie and redirects (same-site `next`
+  only). The web app writes the same cookie from JavaScript.
+- Public pages are cached server-side per theme; HTML is sent `no-cache` with `Vary: Cookie` so a
+  switch shows at once, while static files keep long cache lifetimes.
+
+### Error pages
+
+Branded 404 ("This flight went off course", the route breaking into a dashed detour) on public
+paths, in the URL's language; the web app has the same page for unknown client routes. `/api/`
+and `/feeds/` keep JSON 404s. The 500 page is a static template with no database or request
+context, so it renders even when those fail.
+
 ## 6.2 Landing page (next)
 
 `/` (and `/ur/`, `/ar/`): hero with the flight-path animation, a no-JS "is it a working day?"
