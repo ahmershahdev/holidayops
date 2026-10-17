@@ -1,0 +1,20 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }}</p>
+<div class="plans">
+{% for plan in plans %}
+  <section class="plan">
+    <h2>{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</h2>
+    <ul>
+      <li>{% blocktranslate with rate=plan.rate %}<span class="ltr">{{ rate }}</span> per API key{% endblocktranslate %}</li>
+      <li>{% blocktranslate with quota=plan.monthly_quota|floatformat:"0g" %}{{ quota }} requests a month{% endblocktranslate %}</li>
+      <li>{% blocktranslate count keys=plan.max_keys %}{{ keys }} API key{% plural %}{{ keys }} API keys{% endblocktranslate %}</li>
+      <li>{% translate "Company calendars, iCal feeds, digests and webhooks" %}</li>
+    </ul>
+    {% if plan.code == "free" %}<a class="button" href="{{ signup }}">{% translate "Start free" %}</a>{% else %}<p>{% translate "Contact us to upgrade." %}</p>{% endif %}
+  </section>
+{% endfor %}
+</div>
+<p><a href="{{ docs }}">{% translate "Read the API docs" %}</a></p>
+{% endblock %}

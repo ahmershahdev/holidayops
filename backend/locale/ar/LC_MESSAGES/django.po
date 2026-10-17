@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:31+0000\n"
+"POT-Creation-Date: 2026-10-17 12:55+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -190,6 +190,132 @@ msgstr "يجب أن يكون للمؤسسة مالك واحد على الأقل.
 
 msgid "No account uses this email yet."
 msgstr "لا يوجد حساب بهذا البريد الإلكتروني بعد."
+
+msgid "Skip to content"
+msgstr "انتقل إلى المحتوى"
+
+msgid "Main"
+msgstr "الرئيسية"
+
+msgid "Holidays"
+msgstr "العطلات"
+
+msgid "Pricing"
+msgstr "الأسعار"
+
+msgid "API docs"
+msgstr "توثيق API"
+
+msgid "Log in"
+msgstr "تسجيل الدخول"
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid ""
+"Holiday data from the open-source holidays library. Dates marked “estimated” "
+"follow the lunar calendar and can move by a day."
+msgstr ""
+"بيانات العطلات من مكتبة holidays مفتوحة المصدر. التواريخ الموسومة "
+"بـ“estimated” تتبع التقويم القمري وقد تتغير بيوم."
+
+msgid "Pro"
+msgstr "احترافية"
+
+msgid "Free"
+msgstr "مجانية"
+
+#, python-format
+msgid "<span class=\"ltr\">%(rate)s</span> per API key"
+msgstr "<span class=\"ltr\">%(rate)s</span> لكل مفتاح API"
+
+#, python-format
+msgid "%(quota)s requests a month"
+msgstr "%(quota)s طلب شهريًا"
+
+#, python-format
+msgid "%(keys)s API key"
+msgid_plural "%(keys)s API keys"
+msgstr[0] "لا مفاتيح API"
+msgstr[1] "مفتاح API واحد"
+msgstr[2] "مفتاحا API"
+msgstr[3] "%(keys)s مفاتيح API"
+msgstr[4] "%(keys)s مفتاحًا API"
+msgstr[5] "%(keys)s مفتاح API"
+
+msgid "Company calendars, iCal feeds, digests and webhooks"
+msgstr "تقاويم الشركة وخلاصات iCal والملخصات وخطافات الويب"
+
+msgid "Start free"
+msgstr "ابدأ مجانًا"
+
+msgid "Contact us to upgrade."
+msgstr "تواصل معنا للترقية."
+
+msgid "Read the API docs"
+msgstr "اقرأ توثيق API"
+
+msgid "Public holidays"
+msgstr "العطلات الرسمية"
+
+msgid "Working days"
+msgstr "أيام العمل"
+
+msgid "Weekend"
+msgstr "عطلة نهاية الأسبوع"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "No public holidays this year."
+msgstr "لا توجد عطلات رسمية هذه السنة."
+
+msgid "Other years"
+msgstr "سنوات أخرى"
+
+#, python-format
+msgid "All of %(country)s"
+msgstr "كل %(country)s"
+
+msgid "Regions"
+msgstr "المناطق"
+
+msgid "Use these dates in your software"
+msgstr "استخدم هذه التواريخ في برامجك"
+
+msgid ""
+"Check working days, add business days and merge countries with your own "
+"company closures through the HolidayOps API."
+msgstr ""
+"تحقق من أيام العمل وأضف أيام العمل وادمج الدول مع أيام إغلاق شركتك عبر واجهة "
+"HolidayOps."
+
+msgid "Get an API key"
+msgstr "احصل على مفتاح API"
+
+msgid "Public holidays by country"
+msgstr "العطلات الرسمية حسب الدولة"
+
+#, python-format
+msgid ""
+"Public holidays and working days for %(count)s countries, with the dates for "
+"every year."
+msgstr "العطلات الرسمية وأيام العمل لـ%(count)s دولة، مع التواريخ لكل سنة."
+
+#, python-format
+msgid "Public holidays in %(place)s %(year)s"
+msgstr "العطلات الرسمية في %(place)s لعام %(year)s"
+
+#, python-format
+msgid ""
+"All %(count)s public holidays in %(place)s in %(year)s, with dates, weekdays "
+"and %(working)s working days."
+msgstr ""
+"جميع العطلات الرسمية الـ%(count)s في %(place)s لعام %(year)s، مع التواريخ "
+"وأيام الأسبوع و%(working)s يوم عمل."
+
+msgid "API plans for HolidayOps: requests per minute, per month and API keys."
+msgstr "خطط API في HolidayOps: الطلبات في الدقيقة وفي الشهر ومفاتيح API."
 
 msgid "Webhook URLs must use https."
 msgstr "يجب أن تستخدم عناوين الخطافات https."

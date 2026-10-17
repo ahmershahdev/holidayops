@@ -10,7 +10,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | 🚧 5.1 on `feat/api-keys` |
+| 5. API keys, limits, deployment, SEO pages | 🚧 5.1 merged (#17); 5.2 on `feat/seo-pages` |
 | 6. Showcase website | planned |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
@@ -38,7 +38,11 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 2. ✅ **5.1 API keys** – `hops_<prefix>_<secret>` (hashed), plans `free`/`pro` (`set_plan`
    command, limits in settings/env), per-key rate + monthly org quota, `UsageEvent` (90 days),
    "API keys" and "Usage" cards (30-day chart) in org settings.
-3. Next: 5.2 public SEO pages ([seo.md](seo.md)), then 5.3 deployment, 5.4 docs.
+3. ✅ **5.2 Public SEO pages** – `apps/public`: country index, country/year and subdivision/year
+   pages, pricing, in en/ur/ar (`/ur/`, `/ar/`), JSON-LD, hreflang, per-country sitemaps,
+   robots.txt, no JavaScript ([seo.md](seo.md)).
+4. Next: 5.3 deployment (production settings, static files, health endpoint, Redis cache, CD,
+   demo URL, Lighthouse check), then 5.4 docs.
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 

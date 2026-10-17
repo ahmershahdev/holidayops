@@ -1,0 +1,8 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }}</p>
+<ul class="countries">
+{% for country, path in countries %}<li><a href="{{ path }}">{{ country.name }}</a></li>
+{% endfor %}</ul>
+{% endblock %}
