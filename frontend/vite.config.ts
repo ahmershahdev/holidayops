@@ -8,6 +8,7 @@ const DJANGO_PATHS = [
   "/feeds",
   "/holidays",
   "/pricing",
+  "/style",
   "/ur/",
   "/ar/",
   "/static",

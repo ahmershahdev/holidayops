@@ -24,14 +24,16 @@ from apps.public.content import (
     year_page,
     year_window,
 )
+from apps.public.palette import swatches
 
 CACHE_SECONDS = 6 * 3600
 # No JavaScript at all: the pages are plain HTML and one stylesheet. JSON-LD blocks are data, not
 # script, so script-src 'none' doesn't affect them. connect-src 'self' lets audit tools (e.g.
 # Lighthouse) fetch /robots.txt from the page.
 PUBLIC_POLICY = (
-    "default-src 'none'; style-src 'self'; img-src 'self' data:; script-src 'none'; "
-    "connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    "default-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; "
+    "script-src 'none'; connect-src 'self'; base-uri 'none'; form-action 'none'; "
+    "frame-ancestors 'none'"
 )
 # Same escapes as Django's json_script, so a holiday name can never close the <script> element.
 _JSON_ESCAPES = {ord("<"): "\\u003C", ord(">"): "\\u003E", ord("&"): "\\u0026"}
@@ -45,7 +47,7 @@ def public_page(view: View) -> View:
         with translation.override(lang):
             response = view(request, *args, lang=lang, **kwargs)
         response["Content-Language"] = lang
-        response["Content-Security-Policy"] = PUBLIC_POLICY
+        response.setdefault("Content-Security-Policy", PUBLIC_POLICY)
         response["Cache-Control"] = f"public, max-age={CACHE_SECONDS // 6}"
         return response
 
@@ -186,6 +188,24 @@ def pricing(request: HttpRequest, lang: str) -> HttpResponse:
         "docs": reverse("docs"),
     }
     return render(request, "public/pricing.html", context)
+
+
+@public_page
+def style_guide(request: HttpRequest, lang: str) -> HttpResponse:
+    """Living style guide for the showcase (docs/design/m6-showcase.md); not indexed."""
+    context = {
+        **_meta(request, lang, lambda code: f"{PREFIX[code]}/style/"),
+        "title": "Style guide",
+        "description": "HolidayOps palette, type and motion primitives.",
+        "swatches": swatches(),
+        "noindex": True,
+    }
+    response = render(request, "public/style.html", context)
+    # Internal page with no user content: swatches and the motion path use inline styles.
+    response["Content-Security-Policy"] = PUBLIC_POLICY.replace(
+        "style-src 'self'", "style-src 'self' 'unsafe-inline'"
+    )
+    return response
 
 
 def robots(request: HttpRequest) -> HttpResponse:

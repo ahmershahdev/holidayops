@@ -11,7 +11,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
 | 5. API keys, limits, deployment, SEO pages | ✅ code done (#17–#19); hosting and 5.4 wait for launch |
-| 6. Showcase website | ⏭ next |
+| 6. Showcase website | 🚧 6.1 on `feat/art-direction` |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
 (`demo@holidayops.test`, password = `DEMO_PASSWORD` in `.env`). Docker Desktop must be running.
@@ -49,7 +49,12 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
    around GSoC 2027, which the owner put at Feb 2028. Azure is the likely host, not confirmed. When
    it's time: follow [deployment.md](deployment.md), then do 5.4 docs (README, API examples,
    screenshots from the live site).
-6. Next: Milestone 6, the showcase website (frontend/design).
+6. **Milestone 6** ([design/m6-showcase.md](design/m6-showcase.md)): owner chose logo-led palette
+   (app too), geometric country patterns, bold motion, landing at `/`.
+   - ✅ 6.1 art direction: palette with measured contrast, Outfit display font, motion primitives
+     (flight path, scroll-driven reveals, View Transitions), living style guide at `/style/`,
+     app re-skinned; `tests/public/test_tokens.py` keeps both stylesheets in sync.
+   - Next: 6.2 landing page at `/` (Playground moves to `/playground`).
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
@@ -57,7 +62,6 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 
 - [ ] Native-speaker review of `frontend/src/i18n/{ur,ar}.json` and `backend/locale/*/django.po`.
 - [ ] Update local Node.js to ≥ 22.22 (jsdom 30 warns on 22.19).
-- [ ] Align the design tokens with the logo palette (navy + bright teal) — Milestone 6 art direction.
 
 ## Deferred on purpose (owner milestone)
 

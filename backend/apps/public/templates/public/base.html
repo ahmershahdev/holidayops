@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ title }} · HolidayOps</title>
 <meta name="description" content="{{ description }}">
+{% if noindex %}<meta name="robots" content="noindex">{% endif %}
 <link rel="canonical" href="{{ canonical }}">
 {% for code, url in alternates %}<link rel="alternate" hreflang="{{ code }}" href="{{ url }}">
 {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ x_default }}">
@@ -15,6 +16,7 @@
 <meta property="og:url" content="{{ canonical }}">
 <meta property="og:locale" content="{% if lang == 'ur' %}ur_PK{% elif lang == 'ar' %}ar_AR{% else %}en_US{% endif %}">
 <meta name="twitter:card" content="summary">
+<link rel="preload" href="{% static 'public/fonts/outfit-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{% static 'public/site.css' %}">
 {% block head %}{% endblock %}
 </head>
@@ -22,7 +24,7 @@
 <a class="skip" href="#main">{% translate "Skip to content" %}</a>
 <header class="site">
   <div class="wrap">
-    <a class="brand" href="{{ prefix }}/holidays/">HolidayOps</a>
+    <a class="brand" href="{{ prefix }}/holidays/" dir="ltr">Holiday<span class="ops">Ops</span></a>
     <nav class="main" aria-label="{% translate 'Main' %}">
       <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
       <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
