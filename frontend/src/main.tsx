@@ -8,6 +8,7 @@ import "./index.css";
 import { AuthPage } from "./pages/AuthPage";
 import { CalendarPage } from "./pages/CalendarPage";
 import { CalendarSettingsPage } from "./pages/CalendarSettingsPage";
+import { InvitePage } from "./pages/InvitePage";
 import { OrgPage } from "./pages/OrgPage";
 import { OrgSettingsPage } from "./pages/OrgSettingsPage";
 import { OrgsPage } from "./pages/OrgsPage";
@@ -31,6 +32,7 @@ createRoot(root).render(
             <Route path="login" element={<AuthPage mode="login" />} />
             <Route path="signup" element={<AuthPage mode="signup" />} />
             <Route path="unsubscribe" element={<UnsubscribePage />} />
+            <Route path="invite" element={<InvitePage />} />
             <Route path="app" element={<OrgsPage />} />
             <Route path="app/:org" element={<OrgPage />} />
             <Route path="app/:org/settings" element={<OrgSettingsPage />} />

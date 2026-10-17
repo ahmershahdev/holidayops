@@ -55,3 +55,22 @@ class AuditLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.action} {self.target}"
+
+
+class Invite(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="invites")
+    email = models.EmailField()
+    role = models.CharField(max_length=10, choices=Role.choices)
+    token_hash = models.CharField(max_length=64, unique=True)
+    invited_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="+"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    accepted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at", "-id"]
+
+    def __str__(self) -> str:
+        return f"{self.email} to {self.org} ({self.role})"

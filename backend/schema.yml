@@ -447,6 +447,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/HolidayList'
           description: ''
+  /api/v1/invites/{token}/:
+    get:
+      operationId: invites_retrieve
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - invites
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitePreview'
+          description: ''
+  /api/v1/invites/{token}/accept/:
+    post:
+      operationId: invites_accept_create
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - invites
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+          description: ''
   /api/v1/orgs/:
     get:
       operationId: orgs_list
@@ -1151,6 +1192,119 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/orgs/{org_slug}/invites/:
+    get:
+      operationId: orgs_invites_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invite'
+          description: ''
+    post:
+      operationId: orgs_invites_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberCreateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invite'
+          description: ''
+  /api/v1/orgs/{org_slug}/invites/{id}/:
+    delete:
+      operationId: orgs_invites_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invite.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/invites/{id}/resend/:
+    post:
+      operationId: orgs_invites_resend_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invite.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invite'
+          description: ''
   /api/v1/orgs/{org_slug}/members/:
     get:
       operationId: orgs_members_list
@@ -1976,6 +2130,64 @@ components:
       - language
       - subdiv
       - year
+    Invite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        invited_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - expires_at
+      - id
+      - invited_by
+      - role
+    InvitePreview:
+      type: object
+      properties:
+        org_name:
+          type: string
+        org_slug:
+          type: string
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        invited_by:
+          type: string
+          readOnly: true
+        expires_at:
+          type: string
+          format: date-time
+      required:
+      - email
+      - expires_at
+      - invited_by
+      - org_name
+      - org_slug
+      - role
     LanguageEnum:
       enum:
       - en

@@ -1,0 +1,13 @@
+{% load i18n %}<!doctype html>
+<html lang="{{ language }}" dir="{{ dir }}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:24px;background:#fbf8f3;color:#1c1917;font-family:system-ui,'Segoe UI',Tahoma,sans-serif;">
+<table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e7e1d8;border-radius:12px;">
+<tr><td style="padding:24px;">
+<p style="margin:0 0 20px;font-size:16px;">{% blocktranslate with inviter=inviter org=org.name role=role %}{{ inviter }} invited you to join {{ org }} on HolidayOps as {{ role }}.{% endblocktranslate %}</p>
+<p style="margin:0 0 20px;"><a href="{{ url }}" style="display:inline-block;background:#0f5e5a;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:8px;font-size:14px;">{% translate "Accept the invite" %}</a></p>
+<p style="margin:0;color:#6b635a;font-size:12px;">{% blocktranslate %}The link works once and expires in {{ days }} days. If you weren't expecting this, you can ignore this email.{% endblocktranslate %}</p>
+</td></tr>
+</table>
+</body>
+</html>

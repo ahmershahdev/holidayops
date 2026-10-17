@@ -56,6 +56,31 @@ Lists from generic views are paginated: `{"count", "next", "previous", "results"
 `{"date": "2027-04-05", "name": "Office move", "kind": "closure" | "half_day" | "working_day"}`,
 one per calendar per date.
 
+## Invites (built after Milestone 4.3, once email sending existed)
+
+`Invite(org, email, role, token_hash, invited_by, created_at, expires_at, accepted_at)`.
+
+- Admins invite any email address; only owners invite owners. Inviting an address that already
+  has a pending invite replaces it (new token, new expiry, new email). Members can't be invited.
+  At most 50 pending invites per org; `invite` throttle (30/hour per user) on create and resend.
+- Token: `secrets.token_urlsafe(32)`; only its SHA-256 is stored. Valid for 7 days, once.
+- The email is sent inside the request, not by Celery, so the raw token never sits in the broker:
+  if sending fails the transaction rolls back and the admin gets a `503` to try again. It is
+  written in the invitee's language when they have an account, otherwise the inviter's.
+- The link opens `/invite?token=…`. The preview shows org, role, inviter and invited email
+  without login. Accepting needs a session whose email matches the invite (case-insensitive),
+  so a forwarded link can't be used by someone else; it creates the membership and is audited.
+- Unknown, used, revoked or expired tokens all get `404`, so a token's history doesn't leak.
+- `POST /orgs/{org}/members/` (add an existing account directly) stays for API clients.
+
+```
+GET POST    /api/v1/orgs/{org}/invites/                {email, role}
+DELETE      /api/v1/orgs/{org}/invites/{id}/           revoke
+POST        /api/v1/orgs/{org}/invites/{id}/resend/    new token and expiry, email again
+GET         /api/v1/invites/{token}/                   preview, no login
+POST        /api/v1/invites/{token}/accept/            logged in, email must match
+```
+
 ## Business-day endpoints with a company calendar
 
 Pass `calendar=<uuid>` instead of `country` (not both; `subdiv`, `language` and `categories` are
@@ -77,4 +102,4 @@ Holiday lists gain `kind`: `holiday`, `closure` or `half_day`.
 ## Audit log actions
 
 `org.create`, `org.update`, `member.add`, `member.role_change`, `member.remove`, `calendar.create`,
-`calendar.delete`.
+`calendar.delete`, `invite.create`, `invite.resend`, `invite.revoke`, `invite.accept`.

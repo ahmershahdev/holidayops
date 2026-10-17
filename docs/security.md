@@ -34,6 +34,13 @@ Redis-backed throttles per API key, and per IP for anonymous calls. Over the lim
 
 iCal URLs carry a random token, stored hashed, revocable and rotatable.
 
+## Invites
+
+Invite links carry a random token stored as a SHA-256 hash, valid once for 7 days. Accepting needs
+a session whose email matches the invite, so a forwarded link can't be used by someone else. The
+email is sent inside the request, so the raw token never sits in the Celery broker. Login and
+signup only follow same-site `next` paths (`frontend/src/lib/navigation.ts`).
+
 ## Email
 
 Digest unsubscribe links carry a signed subscription id (`django.core.signing`, purpose salt), so

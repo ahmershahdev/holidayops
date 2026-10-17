@@ -1,0 +1,6 @@
+{% load i18n %}{% autoescape off %}{% blocktranslate with inviter=inviter org=org.name role=role %}{{ inviter }} invited you to join {{ org }} on HolidayOps as {{ role }}.{% endblocktranslate %}
+
+{% translate "Accept the invite:" %} {{ url }}
+
+{% blocktranslate %}The link works once and expires in {{ days }} days. If you weren't expecting this, you can ignore this email.{% endblocktranslate %}
+{% endautoescape %}

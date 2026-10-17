@@ -6,6 +6,7 @@ import { api, type Schemas, unwrap } from "../api/client";
 import { Badge, Button, Card, ErrorText, Field, Input, PageHeader, Select } from "../components/ui";
 import { WebhooksCard } from "../components/WebhooksCard";
 import { useMe } from "../lib/auth";
+import { useFormat } from "../lib/format";
 
 type Role = Schemas["RoleEnum"];
 const ROLES: Role[] = ["viewer", "member", "admin", "owner"];
@@ -16,6 +17,7 @@ export function OrgSettingsPage() {
   const client = useQueryClient();
   const navigate = useNavigate();
   const me = useMe().data;
+  const fmt = useFormat();
   const path = { params: { path: { org_slug: org } } };
   const detail = useQuery({
     queryKey: ["org", org],
@@ -40,15 +42,39 @@ export function OrgSettingsPage() {
       unwrap(api.PATCH("/api/v1/orgs/{org_slug}/", { ...path, body: { name: name ?? "" } })),
     onSuccess: () => client.invalidateQueries({ queryKey: ["org", org] }),
   });
+  const invites = useQuery({
+    queryKey: ["invites", org],
+    queryFn: () => unwrap(api.GET("/api/v1/orgs/{org_slug}/invites/", path)),
+    enabled: isAdmin,
+  });
+  const refreshInvites = () => client.invalidateQueries({ queryKey: ["invites", org] });
   const add = useMutation({
     mutationFn: () =>
       unwrap(
-        api.POST("/api/v1/orgs/{org_slug}/members/", { ...path, body: { email, role: newRole } }),
+        api.POST("/api/v1/orgs/{org_slug}/invites/", { ...path, body: { email, role: newRole } }),
       ),
     onSuccess: () => {
       setEmail("");
-      return refreshMembers();
+      return refreshInvites();
     },
+  });
+  const resend = useMutation({
+    mutationFn: (id: number) =>
+      unwrap(
+        api.POST("/api/v1/orgs/{org_slug}/invites/{id}/resend/", {
+          params: { path: { org_slug: org, id } },
+        }),
+      ),
+    onSettled: refreshInvites,
+  });
+  const revoke = useMutation({
+    mutationFn: (id: number) =>
+      unwrap(
+        api.DELETE("/api/v1/orgs/{org_slug}/invites/{id}/", {
+          params: { path: { org_slug: org, id } },
+        }),
+      ),
+    onSettled: refreshInvites,
   });
   const changeRole = useMutation({
     mutationFn: ({ id, role }: { id: number; role: Role }) =>
@@ -175,11 +201,38 @@ export function OrgSettingsPage() {
                 </option>
               ))}
             </Select>
-            <Button type="submit">{t("common.add")}</Button>
+            <Button type="submit" disabled={add.isPending}>
+              {t("invites.send")}
+            </Button>
             <p className="w-full text-xs text-muted">{t("org.addHint")}</p>
           </form>
         )}
         <ErrorText error={add.error} />
+        {isAdmin && (invites.data?.length ?? 0) > 0 && (
+          <div className="mt-4 border-t border-line pt-4">
+            <h3 className="mb-2 text-sm font-medium">{t("invites.pending")}</h3>
+            <ul className="divide-y divide-line">
+              {invites.data?.map((i) => (
+                <li key={i.id} className="flex flex-wrap items-center gap-3 py-2 text-sm">
+                  <span className="min-w-0 flex-1" dir="ltr">
+                    {i.email}
+                  </span>
+                  <Badge tone="neutral">{t(`roles.${i.role}`)}</Badge>
+                  <span className="text-muted">
+                    {t("invites.expires", { date: fmt.shortDate(i.expires_at.slice(0, 10)) })}
+                  </span>
+                  <Button variant="ghost" onClick={() => resend.mutate(i.id)}>
+                    {t("invites.resend")}
+                  </Button>
+                  <Button variant="danger" onClick={() => revoke.mutate(i.id)}>
+                    {t("invites.revoke")}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+            <ErrorText error={resend.error ?? revoke.error} />
+          </div>
+        )}
       </Card>
 
       {isAdmin && <WebhooksCard org={org} />}

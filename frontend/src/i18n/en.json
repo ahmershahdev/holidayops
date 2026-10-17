@@ -111,8 +111,8 @@
     "members": "Members",
     "role": "Role",
     "roleFor": "Role for {{name}}",
-    "addByEmail": "Add by email",
-    "addHint": "They need a HolidayOps account first.",
+    "addByEmail": "Invite by email",
+    "addHint": "We email them a link. It works once and expires in 7 days.",
     "delete": "Delete organization",
     "deleteHint": "This removes {{name}}, its calendars and its members for good. Type the name to confirm."
   },
@@ -202,5 +202,22 @@
     },
     "attempts_one": "{{count}} attempt",
     "attempts_other": "{{count}} attempts"
+  },
+  "invites": {
+    "send": "Send invite",
+    "pending": "Pending invites",
+    "expires": "expires {{date}}",
+    "resend": "Resend",
+    "revoke": "Revoke"
+  },
+  "invite": {
+    "title": "Invitation",
+    "invalid": "This invite link is not valid. It may have expired or been used already.",
+    "body": "{{inviter}} invited you to join {{org}} as {{role}}.",
+    "signup": "Create an account",
+    "login": "I already have an account",
+    "useEmail": "Use {{email}}, the address the invite was sent to.",
+    "wrongAccount": "This invite is for {{email}}, but you're logged in as {{current}}. Log out and log in with the invited address.",
+    "accept": "Accept and join"
   }
 }

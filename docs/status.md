@@ -10,7 +10,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | ⏭ next (after org invites) |
+| 5. API keys, limits, deployment, SEO pages | ⏭ next |
 | 6. Showcase website | planned |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
@@ -33,7 +33,8 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
    log, auto-disable after 20 failures; "Webhooks" card in org settings for admins.
 ## Next
 
-1. Org invites by email (deferred from Milestone 2): email sending now exists.
+1. ✅ Org invites by email: `Invite` (hashed token, 7 days, one use), email sent in the request,
+   accept only with the invited address; `/invite` page, pending list in org settings.
 2. Milestone 5 (see [roadmap.md](roadmap.md)): API keys first (5.1).
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.

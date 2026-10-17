@@ -1,13 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { api, unwrap } from "../api/client";
 import { Button, Card, ErrorText, Field, Input } from "../components/ui";
+import { safeNext } from "../lib/navigation";
 
 export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const { t } = useTranslation();
-  const [email, setEmail] = useState("");
+  const [search] = useSearchParams();
+  const next = safeNext(search.get("next"));
+  const [email, setEmail] = useState(search.get("email") ?? "");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const client = useQueryClient();
@@ -22,7 +25,7 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
       client.setQueryData(["me"], user);
       // Django rotates the CSRF token on login, so fetch the fresh one.
       await client.invalidateQueries({ queryKey: ["csrf"] });
-      navigate("/app");
+      navigate(next);
     },
   });
 
@@ -70,7 +73,10 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
           </Button>
           <p className="text-center text-sm text-muted">
             {mode === "login" ? t("auth.newHere") : t("auth.haveAccount")}{" "}
-            <Link className="text-accent underline" to={mode === "login" ? "/signup" : "/login"}>
+            <Link
+              className="text-accent underline"
+              to={`${mode === "login" ? "/signup" : "/login"}?${search.toString()}`}
+            >
               {mode === "login" ? t("auth.createAccount") : t("auth.login")}
             </Link>
           </p>

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 06:30+0000\n"
+"POT-Creation-Date: 2026-10-17 06:56+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -121,8 +121,59 @@ msgstr "افتح التقويم:"
 msgid "Unsubscribe:"
 msgstr "إلغاء الاشتراك:"
 
+msgid "Only owners can grant the owner role."
+msgstr "لا يمكن إلا للمالكين منح دور المالك."
+
+msgid "This person is already a member."
+msgstr "هذا الشخص عضو بالفعل."
+
+#, python-format
+msgid "An organization can have at most %(max)s pending invites."
+msgstr "يمكن أن تحتوي المؤسسة على %(max)s من الدعوات المعلّقة كحد أقصى."
+
+msgid "The invite email could not be sent. Try again."
+msgstr "تعذّر إرسال رسالة الدعوة. حاول مرة أخرى."
+
+#, python-format
+msgid "This invite is for %(email)s. Log in with that account to accept it."
+msgstr "هذه الدعوة موجّهة إلى %(email)s. سجّل الدخول بذلك الحساب لقبولها."
+
+msgid "Owner"
+msgstr "مالك"
+
+msgid "Admin"
+msgstr "مسؤول"
+
+msgid "Member"
+msgstr "عضو"
+
+msgid "Viewer"
+msgstr "مُشاهد"
+
+#, python-format
+msgid "You're invited to %(org)s on HolidayOps"
+msgstr "أنت مدعو للانضمام إلى %(org)s على HolidayOps"
+
 msgid "Your role does not allow this action."
 msgstr "دورك لا يسمح بهذا الإجراء."
+
+#, python-format
+msgid "%(inviter)s invited you to join %(org)s on HolidayOps as %(role)s."
+msgstr "دعاك %(inviter)s للانضمام إلى %(org)s على HolidayOps بصفة %(role)s."
+
+msgid "Accept the invite"
+msgstr "قبول الدعوة"
+
+#, python-format
+msgid ""
+"The link works once and expires in %(days)s days. If you weren't expecting "
+"this, you can ignore this email."
+msgstr ""
+"يعمل الرابط مرة واحدة وتنتهي صلاحيته خلال %(days)s أيام. إذا لم تكن تتوقع "
+"هذه الرسالة فيمكنك تجاهلها."
+
+msgid "Accept the invite:"
+msgstr "قبول الدعوة:"
 
 msgid "Only owners can grant or remove the owner role."
 msgstr "لا يمكن إلا للمالكين منح دور المالك أو إزالته."
@@ -130,14 +181,8 @@ msgstr "لا يمكن إلا للمالكين منح دور المالك أو إ
 msgid "An organization needs at least one owner."
 msgstr "يجب أن يكون للمؤسسة مالك واحد على الأقل."
 
-msgid "Only owners can grant the owner role."
-msgstr "لا يمكن إلا للمالكين منح دور المالك."
-
 msgid "No account uses this email yet."
 msgstr "لا يوجد حساب بهذا البريد الإلكتروني بعد."
-
-msgid "This person is already a member."
-msgstr "هذا الشخص عضو بالفعل."
 
 msgid "Webhook URLs must use https."
 msgstr "يجب أن تستخدم عناوين الخطافات https."
