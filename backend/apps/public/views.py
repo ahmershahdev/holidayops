@@ -61,7 +61,8 @@ def public_page(view: View) -> View:
         response.setdefault("Content-Security-Policy", PUBLIC_POLICY)
         response["Cache-Control"] = "no-cache"
         patch_vary_headers(response, ["Cookie"])
-        if response.status_code == 200:
+        # Query strings (the landing demo) aren't cached: arbitrary keys would flood the cache.
+        if response.status_code == 200 and not request.GET:
             cache.set(key, response, CACHE_SECONDS)
         return response
 

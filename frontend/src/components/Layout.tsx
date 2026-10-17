@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, NavLink, Outlet, useNavigate } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import { api, unwrap } from "../api/client";
 import { currentLanguage } from "../i18n";
 import { useEnsureCsrf, useLogout, useMe } from "../lib/auth";
@@ -21,7 +21,6 @@ export function Layout() {
   const client = useQueryClient();
   const language = currentLanguage();
   const logout = useLogout();
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const prefix = sitePrefix();
 
@@ -64,7 +63,7 @@ export function Layout() {
     <button
       type="button"
       className={pill}
-      onClick={() => logout.mutate(undefined, { onSuccess: () => navigate("/") })}
+      onClick={() => logout.mutate(undefined, { onSuccess: () => window.location.assign("/") })}
     >
       {t("auth.logout")}
     </button>
@@ -96,7 +95,7 @@ export function Layout() {
       >
         <div className="mx-auto flex min-h-[4.25rem] max-w-6xl items-center gap-6 px-4">
           <a
-            href={`${prefix}/holidays/`}
+            href={`${prefix}/`}
             className="brand flex items-center gap-2 text-xl text-ink"
             aria-label="HolidayOps"
           >

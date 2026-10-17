@@ -3,6 +3,7 @@ from django.urls import path, register_converter
 from django.views.decorators.cache import cache_page
 
 from apps.public import views
+from apps.public.landing import landing
 from apps.public.sitemaps import sitemaps
 from apps.public.theme import set_theme
 
@@ -25,6 +26,7 @@ SITEMAP_CACHE = 24 * 3600
 SECTIONS = sitemaps()
 
 _pages = [
+    path("", landing),
     path("holidays/", views.country_index),
     path("holidays/<slug:country>/", views.country_latest),
     path("holidays/<slug:country>/<int:year>/", views.year_view),

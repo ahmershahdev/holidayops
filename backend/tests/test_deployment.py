@@ -44,7 +44,15 @@ def test_healthz_is_503_when_a_dependency_is_down() -> None:
 def test_spa_routes_serve_the_built_index(tmp_path: Path, settings: Any) -> None:
     settings.SPA_DIR = tmp_path
     (tmp_path / "index.html").write_text("<!doctype html><title>HolidayOps</title>")
-    for path in ("/", "/login", "/signup", "/invite", "/unsubscribe", "/app", "/app/acme/x"):
+    for path in (
+        "/playground",
+        "/login",
+        "/signup",
+        "/invite",
+        "/unsubscribe",
+        "/app",
+        "/app/acme/x",
+    ):
         response = Client().get(path)
         assert response.status_code == 200, path
         assert b"<title>HolidayOps</title>" in response.content
