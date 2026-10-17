@@ -36,11 +36,16 @@ Prettier. Dev: Docker Compose. CI: GitHub Actions.
 backend/config/          settings/{base,dev,test,prod}.py, urls.py, celery.py
 backend/apps/core/       pure date logic: no Django imports, 100% branch coverage
 backend/apps/api/        DRF views, serializers, throttles, API keys
-backend/apps/{accounts,orgs,calendars,feeds,notifications,public}/
+backend/apps/{accounts,orgs,calendars,feeds,notifications,webhooks,public}/
 backend/tests/           mirrors apps/
 frontend/src/            api/ (generated client), components/, features/, i18n/, pages/
 docs/                    architecture, security, seo, roadmap, design notes
 ```
+
+Shared pieces to reuse, not rebuild: `apps/orgs/limits.within_limit` (any count-then-create limit),
+`config/security_log.security_event` (security events, never secrets), `apps/public/content`
+(`country_name`, `join_list`, `month_grid`), the `{% flag %}`, `cldr` and `as_list` template
+tags, `apps/public/flags.sanitize` (any third-party SVG).
 
 ## Hard rules
 
@@ -58,6 +63,8 @@ docs/                    architecture, security, seo, roadmap, design notes
 - The maintainer must be able to explain every line; keep core logic small and readable.
 - The footer's CSS is one `frame:footer` block pasted into both `site.css` and the app's
   `index.css`; change both (a test compares them). Same for the palette tokens.
+- Public pages (`apps/public`) work without JavaScript: motion is CSS only, off under
+  `prefers-reduced-motion`, and nothing readable starts at `opacity: 0`.
 
 ## Comments
 
@@ -115,4 +122,9 @@ npm run messages                             # (root) refresh + compile backend 
   a test enforces it), `gettext` in Django. `apps/core` errors stay English and carry `params`;
   `apps/api/errors.py` translates them.
 - Layout uses logical properties only (`ms-`, `ps-`, `text-start`, `rtl:` variants).
+- Never hard-code `", "` between items or English country/day/month names on public pages: use
+  `join_list`/`as_list`, `country_name` and the `cldr` filter (CLDR via Babel, the same data the
+  app gets from `Intl`).
+- Every ur/ar string is unverified until a native speaker marks it in the review sheet linked from
+  `docs/status.md`; don't describe translations as checked.
 - Commit both `.po` and `.mo`; CI fails on untranslated or stale catalogs.

@@ -68,7 +68,7 @@ Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 | 5.3 Deployment ✅ (host setup pending) | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs (at launch) | README setup, API examples, screenshots |
 
-## Milestone 6 — Showcase website ← in progress
+## Milestone 6 — Showcase website ✅ (Lighthouse re-run open)
 
 Design: [design/m6-showcase.md](design/m6-showcase.md).
 
@@ -80,6 +80,6 @@ animations and View Transitions. Must keep Lighthouse ≥ 90, readable without J
 | Part | Scope |
 |---|---|
 | 6.1 Art direction ✅ | Moodboard, illustration system, motion principles |
-| 6.2 Landing page | Hero, product story, live API demo, pricing |
-| 6.3 Country pages | Illustrated holiday pages per country and year |
-| 6.4 Performance and a11y pass | Lighthouse, axe, reduced-motion and RTL checks |
+| 6.2 Landing page ✅ | Hero, product story, live API demo, use cases, pricing page (#23, #33) |
+| 6.3 Country pages ✅ | Flags, flag-coloured patterns, year calendar, CLDR names (#27, #28) |
+| 6.4 Performance and a11y pass ✅ | Bundle split, Lighthouse on Linux and fixes (#29–#31); re-run open |
