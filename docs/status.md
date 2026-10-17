@@ -61,19 +61,47 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
      (measured, not eyeballed), no-JS working-day demo, story, code, marquee, pricing teaser.
    - ✅ Footer redesign (#24): matches the header (CTA pair, route underline), one shared
      `frame:footer` CSS block for both halves, guarded by `tests/public/test_frame_css.py`.
-   - Next: flags, a security pass, 6.3 country pages, 6.4 performance/accessibility.
+   - ✅ Security pass (#26): atomic API-key/invite/webhook/feed limits (MySQL named lock),
+     `NUM_PROXIES` (X-Forwarded-For could dodge every per-IP throttle), public page rate limit,
+     `holidayops.security` event log.
+   - ✅ Flags (#27): flag-icons 7.5.0 (MIT), sanitised by allowlist, CSP on static SVGs.
+   - ✅ 6.3 country pages (#28): flag-coloured pattern banner, 12-month calendar, CLDR (Babel)
+     country/day/month names and list patterns for ur/ar.
+   - ✅ 6.4 part 1 (#29): route-split bundle, translations on demand, vendor chunk, h1 fixes.
+   - Next: fix the Lighthouse findings below, native-speaker review via the review sheet.
+
+## Lighthouse 13.5.0, Linux (2026-10-18)
+
+Debian container with Chromium against the production image (`docker-compose.prod.yml`), single
+runs, mobile preset (throttled) / desktop. Before = `main` at #28, after = #29.
+
+| Page | Perf mobile before → after | Perf desktop | A11y | Best pr. | SEO |
+|---|---|---|---|---|---|
+| `/` | 90 → 93 | 100 | 91 → 84 | 100 → 96 | 100 |
+| `/holidays/pk/2026/` | 81 → 100 | 100 | 96 | 100 → 96 | 100 |
+| `/holidays/` | 87 (before only) | 97 | 100 | 100 | 100 |
+| `/playground` | 47 → **35** (LCP 6.9 s, CLS 0.115) | 96 → 94 | 100 | 92 | 54 |
+| `/login` | 47 → 65 | 96 → 95 | 100 | 92 | 54 |
+
+Open findings, in order:
+1. `/playground` mobile got worse: lazy routes add a waterfall (entry → i18n → page chunk) and
+   the Suspense placeholder shifts layout. Preload the playground chunk or keep it eager.
+2. `/` accessibility 84: `aria-required-children`/`-parent` (hero calendar `role="grid"` cells
+   without `row`s), a colour-contrast pair, small touch targets, a console error.
+3. SPA SEO 54: app pages have no meta description and are crawlable; add `noindex` + description.
+4. Best practices 96 on public pages: a console error, to identify.
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
 ## Open items
 
-- [ ] Native-speaker review of `frontend/src/i18n/{ur,ar}.json` and `backend/locale/*/django.po`.
+- [ ] Native-speaker review of `frontend/src/i18n/{ur,ar}.json` and `backend/locale/*/django.po`:
+  review sheet <https://claude.ai/artifact/8ysoXpDponxKUH7V8qET4q> (private; share it with the
+  reviewers). Every ur/ar string is AI-drafted and unverified until marked there.
 - [ ] Update local Node.js to ≥ 22.22 (jsdom 30 warns on 22.19).
 
 ## Deferred on purpose (owner milestone)
 
-- SPA performance (Lighthouse 47 on throttled mobile: one large bundle) — Milestone 6.4, code
-  splitting.
 
 ## Gotchas learned
 
@@ -104,3 +132,8 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
   Files/Git/ur/`): prefix the command with `MSYS_NO_PATHCONV=1`.
 - A scroll-driven animation on the last element of a page must finish by `entry 100%`: ranges
   like `cover 60%` are never reached at the bottom, so the element stays half animated.
+- On Windows, stopping a backgrounded `uv run ... runserver` can leave the Python child alive;
+  two servers then share port 8000 and requests hit the stale one. Check with
+  `Get-CimInstance Win32_Process` for `runserver` and stop the old tree.
+- Vite 8 builds with Rolldown: chunking is `build.rolldownOptions.output.codeSplitting.groups`,
+  not Rollup's `manualChunks` object.
