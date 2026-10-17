@@ -53,7 +53,7 @@ Design: [design/m4-subscriptions.md](design/m4-subscriptions.md).
 | Part | Scope |
 |---|---|
 | 4.1 Celery ✅ | Worker + Beat in Compose, task conventions |
-| 4.2 iCal feeds | `FeedToken`, hashed and rotatable, cached `.ics` |
+| 4.2 iCal feeds ✅ | `FeedToken`, hashed and rotatable, cached `.ics` |
 | 4.3 Digests | Monthly email "holidays in the next 30 days" |
 | 4.4 Webhooks | HMAC signing, SSRF guard, retries with backoff |
 

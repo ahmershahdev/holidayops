@@ -8,6 +8,7 @@ from rest_framework.test import APIClient
 
 from apps.accounts.models import User
 from apps.calendars.models import Calendar, CustomDay
+from apps.feeds.models import FeedToken
 from apps.orgs.models import Membership, Role
 from tests.factories import CalendarFactory, CustomDayFactory, MembershipFactory, SourceFactory
 
@@ -21,13 +22,17 @@ def victim() -> dict[str, Any]:
     calendar = CalendarFactory.create(org=owner.org)
     SourceFactory.create(calendar=calendar)
     day = CustomDayFactory.create(calendar=calendar)
-    return {"org": owner.org, "member": other, "calendar": calendar, "day": day}
+    feed = FeedToken(org=owner.org, calendar=calendar, label="Outlook")
+    feed.set_new_token()
+    feed.save()
+    return {"org": owner.org, "member": other, "calendar": calendar, "day": day, "feed": feed}
 
 
 def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
     org = f"/api/v1/orgs/{v['org'].slug}"
     cal = f"{org}/calendars/{v['calendar'].id}"
     day = f"{cal}/custom-days/{v['day'].id}/"
+    feed = f"{cal}/feeds/{v['feed'].id}/"
     return [
         ("get", f"{org}/", {}),
         ("patch", f"{org}/", {"name": "pwned"}),
@@ -47,6 +52,10 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
         ("get", day, {}),
         ("patch", day, {"name": "pwned"}),
         ("delete", day, {}),
+        ("get", f"{cal}/feeds/", {}),
+        ("post", f"{cal}/feeds/", {"label": "x"}),
+        ("delete", feed, {}),
+        ("post", f"{feed}rotate/", {}),
         (
             "get",
             "/api/v1/business-days/check/",
@@ -69,6 +78,9 @@ def test_every_org_endpoint_returns_404_to_outsiders(
     assert Membership.objects.filter(org=victim["org"]).count() == 2
     assert Calendar.objects.filter(pk=victim["calendar"].pk, name=victim["calendar"].name).exists()
     assert CustomDay.objects.filter(pk=victim["day"].pk, name="Office move").exists()
+    assert (
+        FeedToken.objects.filter(calendar=victim["calendar"], revoked_at__isnull=True).count() == 1
+    )
 
 
 def test_nested_custom_day_of_another_org_is_404(

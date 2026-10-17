@@ -785,6 +785,146 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/:
+    get:
+      operationId: orgs_calendars_feeds_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFeedTokenList'
+          description: ''
+    post:
+      operationId: orgs_calendars_feeds_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedTokenRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeedTokenRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeedTokenRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedTokenCreated'
+          description: ''
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/{id}/:
+    delete:
+      operationId: orgs_calendars_feeds_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this feed token.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/{id}/rotate/:
+    post:
+      operationId: orgs_calendars_feeds_rotate_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this feed token.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedTokenCreated'
+          description: ''
   /api/v1/orgs/{org_slug}/calendars/{id}/:
     get:
       operationId: orgs_calendars_retrieve
@@ -1249,6 +1389,74 @@ components:
       - date
       - kind
       - name
+    FeedToken:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          maxLength: 80
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_used_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - last_used_at
+    FeedTokenCreated:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          maxLength: 80
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_used_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: Shown only once. Keep it secret.
+      required:
+      - created_at
+      - created_by
+      - id
+      - last_used_at
+      - url
+    FeedTokenRequest:
+      type: object
+      properties:
+        label:
+          type: string
+          maxLength: 80
     Holiday:
       type: object
       properties:
@@ -1466,6 +1674,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomDay'
+    PaginatedFeedTokenList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedToken'
     PatchedCalendarRequest:
       type: object
       properties:

@@ -60,7 +60,11 @@
     "next": "Next",
     "today": "Today",
     "view": "View",
-    "views": { "month": "Month", "year": "Year", "list": "List" },
+    "views": {
+      "month": "Month",
+      "year": "Year",
+      "list": "List"
+    },
     "showHolidaysFrom": "Show holidays from",
     "noHolidays": "No holidays in this year.",
     "daysOff_one": "{{count}} day off",
@@ -140,5 +144,23 @@
     "deleteHint": "Deleting {{name}} removes its company days for good. Type the name to confirm.",
     "confirmName": "Type the name to confirm",
     "deleteCalendar": "Delete calendar"
+  },
+  "feeds": {
+    "title": "Calendar feeds",
+    "intro": "Subscribe from Google Calendar, Outlook or Apple Calendar. Each link is private: anyone who has it can read this calendar, so rotate or revoke it if it leaks.",
+    "copyOnce": "Copy this link now. It won't be shown again.",
+    "url": "Feed link",
+    "copy": "Copy",
+    "copied": "Copied",
+    "none": "No feed links yet.",
+    "unnamed": "Unnamed link",
+    "created": "Created {{date}}",
+    "lastUsed": "last used {{date}}",
+    "neverUsed": "never used",
+    "rotate": "New link",
+    "revoke": "Revoke",
+    "label": "Label",
+    "labelPlaceholder": "e.g. Team Outlook",
+    "create": "Create link"
   }
 }

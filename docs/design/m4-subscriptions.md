@@ -34,11 +34,15 @@ Org invites by email (deferred from Milestone 2) follow 4.3, once email sending 
 - `GET /feeds/<token>.ics` is public: no session, anonymous throttle. Unknown or revoked → `404`.
   Response: `text/calendar; charset=utf-8`, `ETag`, `Cache-Control: private, max-age=3600`.
 - Content: last year through next year (UTC "today" picked in the view). One all-day `VEVENT` per
-  holiday, closure and half-day; extra working days carry `CATEGORIES:WORKING-DAY`. Stable `UID`s
-  (`<date>-<kind>@<calendar uuid>`), so clients update events instead of duplicating them.
+  date: `CATEGORIES` is `HOLIDAY`, `CLOSURE`, `HALF-DAY` or `WORKING-DAY`; a custom day replaces
+  the holidays on its date. `UID` is `<yyyymmdd>@<calendar uuid>`, so when a day changes, clients
+  update the event instead of adding a second one. `TRANSP:TRANSPARENT` keeps free/busy free.
+- Calendar apps send odd `Accept` headers, so the feed view ignores content negotiation.
+  `If-None-Match` returns `304`. `last_used_at` is written at most once an hour.
 - The `.ics` text is built by a small pure function in `apps/core/ical.py` (RFC 5545 escaping and
   75-octet UTF-8-safe line folding), so no new dependency. Built bytes are cached per calendar and
-  year range; the key includes `calendar.updated_at`, and saving a custom day touches the calendar.
+  year for an hour; the key includes `calendar.updated_at`, and saving or deleting a custom day
+  touches the calendar (`CustomDay.save`/`delete`).
 - Roles: member and up create, rotate and revoke; viewers list (labels and dates, never tokens).
   At most 10 active tokens per calendar. Create, rotate and revoke go to the audit log.
 

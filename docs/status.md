@@ -9,7 +9,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 1. Public API over `holidays` | ✅ merged (#2) |
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
-| 4. iCal feeds, digests, webhooks | 🚧 4.1 Celery on `feat/celery` |
+| 4. iCal feeds, digests, webhooks | 🚧 4.1 merged (#12); 4.2 on `feat/ical-feeds` |
 | 5. API keys, limits, deployment, SEO pages | planned |
 | 6. Showcase website | planned |
 
@@ -22,8 +22,9 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 
 1. ✅ **4.1 Celery** – worker + Beat in Compose and `npm run dev`, `config/celery.py`, task
    conventions, eager-mode tests. `redis` went 8.1 → 6.4: kombu's Redis extra caps it below 6.5.
-2. **4.2 iCal feeds** – `FeedToken` model (hashed, revocable, rotatable), `/feeds/<token>.ics`,
-   cached build, UI to create/rotate/revoke the link in calendar settings.
+2. ✅ **4.2 iCal feeds** – `FeedToken` (hashed, revocable, rotatable, max 10 per calendar),
+   `/feeds/<token>.ics` built by `apps/core/ical.py`, cached by `calendar.updated_at`, ETag/304;
+   "Calendar feeds" card in calendar settings.
 3. **4.3 Digests** – monthly email "holidays in the next 30 days", per-member opt-in, email backend
    from env (console in dev).
 4. **4.4 Webhooks** – `Webhook` model, HMAC-SHA256 signature, HTTPS only, SSRF guard after DNS
@@ -34,8 +35,6 @@ Start each part on its own `feat/...` branch.
 
 ## Open items
 
-- [ ] Merge Dependabot #4 (actions/checkout 7) and #8 (actions/setup-node 7) if CI is green.
-- [ ] Close Dependabot #7 (TypeScript 7): typescript-eslint supports only < 6.1. Ignore rule added.
 - [ ] Native-speaker review of `frontend/src/i18n/{ur,ar}.json` and `backend/locale/*/django.po`.
 - [ ] Update local Node.js to ≥ 22.22 (jsdom 30 warns on 22.19).
 - [ ] Align the design tokens with the logo palette (navy + bright teal) — Milestone 6 art direction.
@@ -54,6 +53,9 @@ Start each part on its own `feat/...` branch.
 - No GNU gettext on Windows: use `npm run messages` (runs in the backend container).
 - After changing frontend dependencies, delete `frontend/node_modules/.vite` if the app shows a
   blank page with "Invalid hook call".
+- Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
+  `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
+- `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
 - The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).
 - Stacked PRs + squash merge: rebase the next branch with `git rebase --onto origin/main <old base>`
   before merging, and retarget it before deleting its base branch, or GitHub closes it.

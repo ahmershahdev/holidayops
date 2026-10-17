@@ -4,12 +4,18 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import { api, type Schemas, unwrap } from "../api/client";
 import { useCountries } from "../api/hooks";
+import { FeedsCard } from "../components/FeedsCard";
 import { type Source, SourcesEditor } from "../components/SourcesEditor";
 import { Button, Card, ErrorText, Field, Input, PageHeader, Select } from "../components/ui";
 import { useFormat } from "../lib/format";
 
 export function CalendarSettingsPage() {
   const { org = "", id = "" } = useParams();
+  const orgDetail = useQuery({
+    queryKey: ["org", org],
+    queryFn: () =>
+      unwrap(api.GET("/api/v1/orgs/{org_slug}/", { params: { path: { org_slug: org } } })),
+  });
   const calendar = useQuery({
     queryKey: ["calendar", org, id],
     queryFn: () =>
@@ -21,7 +27,17 @@ export function CalendarSettingsPage() {
   });
   if (calendar.error) return <ErrorText error={calendar.error} />;
   if (!calendar.data) return null;
-  return <SettingsForm key={calendar.data.updated_at} org={org} calendar={calendar.data} />;
+  const role = orgDetail.data?.role;
+  return (
+    <>
+      <SettingsForm key={calendar.data.updated_at} org={org} calendar={calendar.data} />
+      <FeedsCard
+        org={org}
+        calendar={calendar.data.id}
+        canWrite={Boolean(role && role !== "viewer")}
+      />
+    </>
+  );
 }
 
 function SettingsForm({ org, calendar }: { org: string; calendar: Schemas["Calendar"] }) {

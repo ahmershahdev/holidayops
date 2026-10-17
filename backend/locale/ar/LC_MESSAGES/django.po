@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 17:28+0000\n"
+"POT-Creation-Date: 2026-10-17 05:49+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -77,6 +77,10 @@ msgstr "لا تدعم أي من الدول المضافة هذه اللغة."
 
 msgid "This calendar already has a custom day on this date."
 msgstr "يحتوي هذا التقويم بالفعل على يوم خاص في هذا التاريخ."
+
+#, python-format
+msgid "A calendar can have at most %(max)s active feed links."
+msgstr "يمكن أن يحتوي التقويم على %(max)s من روابط الخلاصات النشطة كحد أقصى."
 
 msgid "Your role does not allow this action."
 msgstr "دورك لا يسمح بهذا الإجراء."

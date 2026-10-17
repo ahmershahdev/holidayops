@@ -1,6 +1,8 @@
 import uuid
+from typing import Any
 
 from django.db import models
+from django.utils import timezone
 
 from apps.orgs.models import Organization
 
@@ -60,3 +62,16 @@ class CustomDay(models.Model):
 
     def __str__(self) -> str:
         return f"{self.date} {self.name}"
+
+    # Feeds are cached by calendar.updated_at, so a custom-day change must move it too.
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        super().save(*args, **kwargs)
+        self._touch_calendar()
+
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        result = super().delete(*args, **kwargs)
+        self._touch_calendar()
+        return result
+
+    def _touch_calendar(self) -> None:
+        Calendar.objects.filter(pk=self.calendar_id).update(updated_at=timezone.now())
