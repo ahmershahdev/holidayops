@@ -26,6 +26,32 @@ DRF permission classes per role. Viewers can't write; only owners manage billing
 Redis-backed throttles per API key (rate from the org's plan), a monthly quota per org, and per IP
 for anonymous calls. Over the limit: `429` with `Retry-After`.
 
+- Login and signup: `auth` scope, 10/minute per IP. Invite creation: 30/hour per user.
+- Public pages: 120 renders/minute per IP (`PUBLIC_PAGE_RATE`). Cached pages are served without
+  counting, so only cache misses and landing-demo queries (never cached) use the budget.
+- The client IP is `REMOTE_ADDR` unless `NUM_PROXIES` says how many proxies to trust in
+  `X-Forwarded-For`. Left unset, DRF would take the whole header as the identity and anyone could
+  dodge every per-IP limit by sending a new one per request (`tests/test_security.py`).
+
+## Resource limits
+
+Pending invites (50/org), webhooks (10/org), API keys (plan) and active feed links
+(10/calendar) are checked and created under a MySQL named lock per owner
+(`apps/orgs/limits.py`), so concurrent requests queue instead of all passing the count. A row lock
+on the org would also block every usage and audit insert for that org while an invite email is
+sent. If the lock isn't free in 10 s the request gets `409` and can be retried.
+`tests/orgs/test_limits.py` races two requests against each limit.
+
+## Security events
+
+`config/security_log.py` logs one line per event on `holidayops.security` (console, so the host's
+log stream collects it): `auth.login_failed` (warning), `auth.login`, `auth.signup`,
+`api_key.invalid` (warning, key prefix only), `invite.wrong_account` (warning) and `rate_limited`
+(warning for `auth`/`invite`, info otherwise). Each has the client IP and path. Passwords,
+tokens, key secrets and email addresses are never logged; an email appears only as a 12-character
+SHA-256 prefix to group attempts on one account. Field values are stripped of anything but
+`[\w.:@/-]`, so user input can't forge extra log lines.
+
 ## Input validation
 
 - Country, subdivision, language and category are checked against the library's supported lists.

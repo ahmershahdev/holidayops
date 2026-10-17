@@ -49,7 +49,9 @@ production.
 | `REDIS_URL` | `redis://…` (or `rediss://` for TLS) |
 | `EMAIL_BACKEND`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL` | an SMTP provider; backend `django.core.mail.backends.smtp.EmailBackend` |
 | `PLAN_*`, `API_*_RATE` | optional overrides (`.env.example`) |
-| `LOG_LEVEL` | optional, default `INFO` |
+| `LOG_LEVEL` | optional, default `INFO`; security events log on `holidayops.security` |
+| `NUM_PROXIES` | proxies in front of Django: `1` behind Container Apps ingress. Throttles and security logs read the client IP from `X-Forwarded-For` only this many hops deep; `0` (default) uses the socket address |
+| `PUBLIC_PAGE_RATE` | optional, default `120/minute`: uncached public page renders per IP |
 
 ## Azure Container Apps
 

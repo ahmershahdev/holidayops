@@ -11,6 +11,7 @@ from rest_framework.request import Request
 
 from apps.api.models import KEY_PREFIX, ApiKey, hash_key
 from apps.api.usage import mark_used
+from config.security_log import security_event
 
 
 class ApiKeyAuthentication(BaseAuthentication):
@@ -30,6 +31,8 @@ class ApiKeyAuthentication(BaseAuthentication):
                 .first()
             )
         if api_key is None or not hmac.compare_digest(api_key.key_hash, hash_key(key.strip())):
+            prefix = parts[1] if len(parts) == 3 else "-"
+            security_event("api_key.invalid", request, prefix=prefix)
             raise AuthenticationFailed(_("Invalid or revoked API key."))
         mark_used(api_key, timezone.now())
         return AnonymousUser(), api_key
