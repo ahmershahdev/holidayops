@@ -1,0 +1,64 @@
+# Run the production image locally, the way a host runs it:
+#   docker compose -f docker-compose.prod.yml up --build
+# then open http://localhost:8080. It starts its own MySQL and Redis, separate from the dev ones.
+# DJANGO_HTTPS=false turns off the HTTPS redirect and secure cookies for plain-HTTP localhost.
+# Its own project name keeps its db and redis from replacing docker-compose.yml's dev containers.
+name: holidayops-prod
+
+x-app: &app
+  build: .
+  image: holidayops:local
+  env_file: .env
+  environment:
+    DJANGO_SETTINGS_MODULE: config.settings.prod
+    DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+    DJANGO_CSRF_TRUSTED_ORIGINS: http://localhost:8080
+    DJANGO_HTTPS: "false"
+    APP_URL: http://localhost:8080
+    MYSQL_HOST: db
+    REDIS_URL: redis://redis:6379/0
+  depends_on:
+    db: {condition: service_healthy}
+    redis: {condition: service_started}
+
+services:
+  db:
+    image: mysql:8.4
+    env_file: .env
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - prod-mysql-data:/var/lib/mysql
+      - ./docker/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+
+  migrate:
+    <<: *app
+    command: ["python", "manage.py", "migrate", "--noinput"]
+    restart: "no"
+
+  web:
+    <<: *app
+    ports: ["127.0.0.1:8080:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+  worker:
+    <<: *app
+    command: ["celery", "-A", "config", "worker", "--loglevel=info"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+
+  beat:
+    <<: *app
+    command: ["celery", "-A", "config", "beat", "--loglevel=info", "--schedule=/tmp/celerybeat-schedule"]
+    depends_on:
+      redis: {condition: service_started}
+
+volumes:
+  prod-mysql-data:

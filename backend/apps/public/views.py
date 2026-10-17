@@ -27,10 +27,11 @@ from apps.public.content import (
 
 CACHE_SECONDS = 6 * 3600
 # No JavaScript at all: the pages are plain HTML and one stylesheet. JSON-LD blocks are data, not
-# script, so script-src 'none' doesn't affect them.
+# script, so script-src 'none' doesn't affect them. connect-src 'self' lets audit tools (e.g.
+# Lighthouse) fetch /robots.txt from the page.
 PUBLIC_POLICY = (
     "default-src 'none'; style-src 'self'; img-src 'self' data:; script-src 'none'; "
-    "base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    "connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 )
 # Same escapes as Django's json_script, so a holiday name can never close the <script> element.
 _JSON_ESCAPES = {ord("<"): "\\u003C", ord(">"): "\\u003E", ord("&"): "\\u0026"}

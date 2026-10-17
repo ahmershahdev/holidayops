@@ -14,6 +14,7 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 | Endpoints, domain functions, data model, caching | [docs/architecture.md](docs/architecture.md) |
 | Auth, API keys, tenancy, webhooks, headers | [docs/security.md](docs/security.md) |
 | Public server-rendered pages, sitemaps | [docs/seo.md](docs/seo.md) |
+| Production image, Azure, domain, CD | [docs/deployment.md](docs/deployment.md) |
 | What to build next, milestone scope | [docs/roadmap.md](docs/roadmap.md) |
 | Milestone 1 API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
 | Auth, orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
@@ -71,6 +72,7 @@ npm install && npm run setup                 # once
 npm run dev                                  # Docker db+redis, Django :8000, Vite :5173, Celery
 docker compose up -d db redis                # MySQL + Redis only
 docker compose up -d                         # everything in containers (db, redis, backend, worker, beat, frontend)
+docker compose -f docker-compose.prod.yml up --build   # production image locally, :8080
 cd backend
 uv sync                                      # install pinned deps into .venv
 uv run --env-file ../.env python manage.py migrate

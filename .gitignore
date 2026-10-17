@@ -40,3 +40,6 @@ CLAUDE.local.md
 # Celery Beat
 .celerybeat-schedule*
 celerybeat-schedule*
+
+# Built web app copied in for production
+backend/spa/

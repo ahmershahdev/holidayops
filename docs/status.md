@@ -10,7 +10,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | 🚧 5.1 merged (#17); 5.2 on `feat/seo-pages` |
+| 5. API keys, limits, deployment, SEO pages | 🚧 5.1–5.2 merged (#17, #18); 5.3 on `feat/deployment` |
 | 6. Showcase website | planned |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
@@ -41,8 +41,13 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 3. ✅ **5.2 Public SEO pages** – `apps/public`: country index, country/year and subdivision/year
    pages, pricing, in en/ur/ar (`/ur/`, `/ar/`), JSON-LD, hreflang, per-country sitemaps,
    robots.txt, no JavaScript ([seo.md](seo.md)).
-4. Next: 5.3 deployment (production settings, static files, health endpoint, Redis cache, CD,
-   demo URL, Lighthouse check), then 5.4 docs.
+4. ✅ **5.3 Deployment (code side)** – root `Dockerfile` (324 MB, web + worker + beat), WhiteNoise,
+   built SPA served by Django, `/healthz`, TLS to MySQL, Redis cache for country holiday lists,
+   `docker-compose.prod.yml`, `deploy.yml` (GHCR on every main push; Azure job off until
+   `AZURE_DEPLOY=true`) ([deployment.md](deployment.md)).
+5. **Waiting on the owner**: confirm Azure, create the resources, DNS for
+   `holidayops.ahmershah.dev`, repo secrets/variables, SMTP provider. Then the demo URL is live.
+6. Next code: 5.4 docs (README setup, API examples, screenshots).
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
@@ -54,8 +59,8 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 
 ## Deferred on purpose (owner milestone)
 
-- Redis cache for serialized holiday lists — 5.3 (in-process LRU is enough today).
-- CD pipeline, health endpoint, slimmer multi-stage backend image (now 801 MB) — 5.3.
+- SPA performance (Lighthouse 47 on throttled mobile: one large bundle) — Milestone 6.4, code
+  splitting.
 
 ## Gotchas learned
 
@@ -68,6 +73,8 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 - Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
   `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
 - `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
+- Both compose files are in the same folder: `docker-compose.prod.yml` sets `name:
+  holidayops-prod`, or its db/redis would replace the dev containers.
 - Git Bash heredocs here turn a doubled backslash into a single one: write files containing
   escapes, regexes or `\u` sequences with the editor tools, not `cat <<EOF` or inline `python -`.
 - Don't mock `socket.*` through an app module (`apps.x.socket.getaddrinfo` is the real `socket`

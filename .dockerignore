@@ -1,0 +1,16 @@
+.git
+.github
+.env
+.env.*
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/.coverage
+backend/.venv
+backend/staticfiles
+backend/spa
+backend/.celerybeat-schedule*
+frontend/dist
+docs

@@ -9,8 +9,10 @@ dependencies = [
     "django-redis==7.0.0",
     "djangorestframework==3.18.3",
     "drf-spectacular==0.30.0",
+    "gunicorn==26.2.0",
     "holidays==0.106",
     "mysqlclient==2.3.0",
+    "whitenoise==6.12.0",
 ]
 
 [dependency-groups]
