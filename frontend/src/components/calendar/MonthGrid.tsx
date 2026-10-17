@@ -100,7 +100,7 @@ export function MonthGrid(props: Props) {
                 className={`relative flex min-h-16 flex-col items-start gap-1 p-1.5 text-start transition-colors sm:min-h-24 sm:p-2 ${TONE_CELL[tone]} ${isSelected ? "z-10 outline-2 -outline-offset-2 outline-accent" : "hover:brightness-[0.97]"}`}
               >
                 <span
-                  className={`grid size-7 place-items-center rounded-full text-sm font-medium ${date === today ? "bg-accent text-white" : ""}`}
+                  className={`grid size-7 place-items-center rounded-full text-sm font-medium ${date === today ? "bg-accent text-on-accent" : ""}`}
                 >
                   {fmt.dayNumber(date)}
                 </span>

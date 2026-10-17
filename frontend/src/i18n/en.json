@@ -5,7 +5,10 @@
     "playground": "Playground",
     "calendars": "My calendars",
     "apiDocs": "API docs",
-    "language": "Language"
+    "language": "Language",
+    "holidays": "Holidays",
+    "pricing": "Pricing",
+    "menu": "Menu"
   },
   "common": {
     "add": "Add",
@@ -252,5 +255,29 @@
     "date": "Date",
     "requestsColumn": "Requests",
     "failedColumn": "Failed"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "system": "Match my device",
+    "dark": "Dark"
+  },
+  "footer": {
+    "tagline": "Holidays and working days for 250 countries, merged with your own company calendar.",
+    "start": "Start free",
+    "product": "Product",
+    "calendars": "Company calendars",
+    "popular": "Popular countries",
+    "developers": "Developers",
+    "schema": "OpenAPI schema",
+    "sitemap": "Sitemap",
+    "credit": "Holiday data: the open-source holidays library.",
+    "top": "Back to top"
+  },
+  "notFound": {
+    "title": "This flight went off course",
+    "body": "The page you asked for doesn't exist, or it moved. Pick a destination below.",
+    "home": "Go home",
+    "holidays": "Browse holidays by country"
   }
 }

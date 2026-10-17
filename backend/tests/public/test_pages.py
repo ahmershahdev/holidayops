@@ -35,7 +35,7 @@ def test_country_index(web: Client) -> None:
     assert 'hreflang="x-default" href="http://testserver/holidays/"' in html
     assert response["Content-Security-Policy"] == PUBLIC_POLICY
     assert response["Content-Language"] == "en"
-    assert response["Cache-Control"] == "public, max-age=3600"
+    assert response["Cache-Control"] == "no-cache"
 
 
 def test_year_page_lists_every_holiday_with_structured_data(web: Client) -> None:
@@ -63,7 +63,7 @@ def test_urdu_page_is_rtl_with_urdu_holiday_names(web: Client) -> None:
     response = web.get(f"/ur/holidays/pk/{YEAR}/")
     assert response.status_code == 200
     html = response.content.decode()
-    assert '<html lang="ur" dir="rtl">' in html
+    assert '<html lang="ur" dir="rtl" data-theme="system">' in html
     assert f'<link rel="canonical" href="http://testserver/ur/holidays/pk/{YEAR}/">' in html
     urdu = get_calendar("PK", None, [YEAR], "ur_PK", ())
     assert urdu.get(date(YEAR, 3, 23)) in html
@@ -73,7 +73,7 @@ def test_urdu_page_is_rtl_with_urdu_holiday_names(web: Client) -> None:
 
 def test_arabic_page_uses_arabic_names_where_the_country_has_them(web: Client) -> None:
     html = web.get(f"/ar/holidays/sa/{YEAR}/").content.decode()
-    assert '<html lang="ar" dir="rtl">' in html
+    assert '<html lang="ar" dir="rtl" data-theme="system">' in html
     arabic = get_calendar("SA", None, [YEAR], "ar", ())
     assert next(iter(arabic.values())) in html
 

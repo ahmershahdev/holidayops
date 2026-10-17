@@ -68,7 +68,7 @@ export function Button({
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "ghost" | "danger" }) {
   const styles = {
-    primary: "bg-accent text-white hover:bg-accent-strong disabled:bg-muted",
+    primary: "bg-accent text-on-accent hover:bg-accent-strong disabled:bg-muted",
     ghost: "border border-line bg-surface text-ink hover:border-accent",
     danger: "text-holiday hover:bg-holiday-soft",
   }[variant];

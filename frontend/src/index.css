@@ -19,6 +19,7 @@
   --color-accent: #0e7c76;
   --color-accent-strong: #0b6b66;
   --color-accent-soft: #e0f5f3;
+  --color-on-accent: #ffffff;
   --color-glow: #00b3a6;
   --color-night: #0b1b3f;
   --color-holiday: #b23c22;
@@ -39,12 +40,90 @@
   --radius-card: 10px;
 }
 
+/* Dark theme: chosen (data-theme="dark") or following the device (data-theme="system").
+   Same values as backend/apps/public/static/public/site.css. */
+:root[data-theme="dark"] {
+  --color-paper: #0a1428;
+  --color-surface: #111d36;
+  --color-ink: #e6edf7;
+  --color-muted: #a3b3c9;
+  --color-line: #24375c;
+  --color-accent: #2dd4c4;
+  --color-accent-strong: #5eead4;
+  --color-accent-soft: #0f3a3a;
+  --color-on-accent: #06122a;
+  --color-glow: #00d1c1;
+  --color-night: #060e1f;
+  --color-holiday: #ff8f75;
+  --color-holiday-soft: #3b1d19;
+  --color-closure: #f39ac5;
+  --color-closure-soft: #3a1830;
+  --color-halfday: #f2b65e;
+  --color-halfday-soft: #3a2a12;
+  --color-weekend: #17243f;
+  --color-weekend-strong: #2a3b60;
+  --color-workday: #72d69d;
+  --color-workday-soft: #12301f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --color-paper: #0a1428;
+    --color-surface: #111d36;
+    --color-ink: #e6edf7;
+    --color-muted: #a3b3c9;
+    --color-line: #24375c;
+    --color-accent: #2dd4c4;
+    --color-accent-strong: #5eead4;
+    --color-accent-soft: #0f3a3a;
+    --color-on-accent: #06122a;
+    --color-glow: #00d1c1;
+    --color-night: #060e1f;
+    --color-holiday: #ff8f75;
+    --color-holiday-soft: #3b1d19;
+    --color-closure: #f39ac5;
+    --color-closure-soft: #3a1830;
+    --color-halfday: #f2b65e;
+    --color-halfday-soft: #3a2a12;
+    --color-weekend: #17243f;
+    --color-weekend-strong: #2a3b60;
+    --color-workday: #72d69d;
+    --color-workday-soft: #12301f;
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="system"] {
+  color-scheme: light dark;
+}
+
 @layer base {
   html {
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--color-accent) var(--color-paper);
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+  }
+
+  ::selection {
+    background: var(--color-glow);
+    color: #06122a;
+  }
+
+  @media (forced-colors: active) {
+    html {
+      scrollbar-color: auto;
+    }
   }
 
   html[lang="ar"] {
@@ -70,5 +149,204 @@
       transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
     }
+  }
+}
+
+/* ---- Site frame: the same header and footer as the server-rendered pages
+   (backend/apps/public/static/public/site.css). CSS-only motion, off under reduced motion. */
+@layer components {
+  .site-header {
+    background: color-mix(in srgb, var(--color-paper) 78%, transparent);
+    backdrop-filter: saturate(1.6) blur(14px);
+  }
+
+  /* backdrop-filter would make the header the containing block for the fixed mobile sheet. */
+  .site-header.menu-open {
+    backdrop-filter: none;
+    background: var(--color-paper);
+    animation: none;
+  }
+
+  .nav-underline::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: 0.2rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-glow);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  [dir="rtl"] .nav-underline::after {
+    transform-origin: right center;
+  }
+
+  .nav-underline:hover::after,
+  .nav-underline[aria-current]::after {
+    transform: scaleX(1);
+  }
+
+  .brand .mark-plane {
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .brand:hover .mark-plane {
+    transform: translate(2px, -2px);
+  }
+
+  .burger {
+    display: grid;
+    gap: 5px;
+  }
+
+  .burger i {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-ink);
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .burger.is-open i:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .burger.is-open i:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  .footer-route path {
+    fill: none;
+    stroke: #00d1c1;
+    stroke-width: 2;
+    stroke-dasharray: 1;
+    opacity: 0.6;
+  }
+
+  .footer-word {
+    margin: 0;
+    font-family: "Outfit Variable", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(4rem, 17vw, 15rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color: transparent;
+    -webkit-text-stroke: 1px #36548a;
+    background: linear-gradient(180deg, #1e3462 10%, transparent 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    user-select: none;
+    translate: 0 0.12em;
+  }
+}
+
+/* Unlayered so it beats the links' own utility classes inside the mobile sheet. */
+.sheet-links > * {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 8vw, 2.5rem);
+  font-weight: 600;
+  color: var(--color-ink);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-line);
+  border-radius: 0;
+  animation: sheet-in 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sheet-links > *::after {
+  display: none;
+}
+
+.sheet-links > :nth-child(2) {
+  animation-delay: 40ms;
+}
+.sheet-links > :nth-child(3) {
+  animation-delay: 80ms;
+}
+.sheet-links > :nth-child(4) {
+  animation-delay: 120ms;
+}
+.sheet-links > :nth-child(5) {
+  animation-delay: 160ms;
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes header-settle {
+  to {
+    background: color-mix(in srgb, var(--color-paper) 92%, transparent);
+    border-bottom-color: var(--color-line);
+    box-shadow: 0 8px 24px -16px color-mix(in srgb, var(--color-ink) 35%, transparent);
+  }
+}
+
+@keyframes draw-route {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(30%);
+    letter-spacing: 0.02em;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-settle linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 8rem;
+  }
+
+  .footer-route path {
+    animation: draw-route linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  .footer-word {
+    animation: word-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 60%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .footer-route path,
+  .footer-word,
+  .sheet-links > * {
+    animation: none !important;
+  }
+}
+
+.not-found-flight .route {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-route-in 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+}
+
+@keyframes draw-route-in {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found-flight .route {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }

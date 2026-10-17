@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 12:55+0000\n"
+"POT-Creation-Date: 2026-10-17 14:19+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -196,11 +196,34 @@ msgstr "تنظیم کا کم از کم ایک مالک ہونا ضروری ہے�
 msgid "No account uses this email yet."
 msgstr "اس ای میل سے ابھی کوئی اکاؤنٹ نہیں ہے۔"
 
-msgid "Skip to content"
-msgstr "مواد پر جائیں"
+msgid "This flight went off course"
+msgstr "یہ پرواز راستہ بھٹک گئی"
 
-msgid "Main"
-msgstr "مرکزی"
+msgid ""
+"The page you asked for doesn't exist, or it moved. Pick a destination below."
+msgstr ""
+"آپ کا مطلوبہ صفحہ موجود نہیں یا منتقل ہو گیا ہے۔ نیچے سے کوئی منزل چنیں۔"
+
+msgid "Go home"
+msgstr "ہوم پر جائیں"
+
+msgid "Browse holidays by country"
+msgstr "ملک کے لحاظ سے تعطیلات دیکھیں"
+
+msgid "API docs"
+msgstr "API دستاویزات"
+
+msgid ""
+"Holidays and working days for 250 countries, merged with your own company "
+"calendar."
+msgstr ""
+"250 ممالک کی تعطیلات اور کام کے دن، آپ کے اپنے کمپنی کیلنڈر کے ساتھ ملا کر۔"
+
+msgid "Start free"
+msgstr "مفت شروع کریں"
+
+msgid "Product"
+msgstr "پروڈکٹ"
 
 msgid "Holidays"
 msgstr "تعطیلات"
@@ -208,21 +231,56 @@ msgstr "تعطیلات"
 msgid "Pricing"
 msgstr "قیمتیں"
 
-msgid "API docs"
-msgstr "API دستاویزات"
+msgid "Playground"
+msgstr "پلے گراؤنڈ"
+
+msgid "Company calendars"
+msgstr "کمپنی کیلنڈر"
+
+msgid "Popular countries"
+msgstr "مقبول ممالک"
+
+msgid "Developers"
+msgstr "ڈویلپرز"
+
+msgid "OpenAPI schema"
+msgstr "OpenAPI اسکیما"
+
+msgid "Sitemap"
+msgstr "سائٹ میپ"
+
+msgid "Holiday data: the open-source holidays library."
+msgstr "تعطیلات کا ڈیٹا: اوپن سورس holidays لائبریری۔"
+
+msgid "Back to top"
+msgstr "اوپر جائیں"
+
+msgid "Main"
+msgstr "مرکزی"
 
 msgid "Log in"
 msgstr "لاگ اِن"
 
+msgid "Menu"
+msgstr "مینو"
+
 msgid "Language"
 msgstr "زبان"
 
-msgid ""
-"Holiday data from the open-source holidays library. Dates marked “estimated” "
-"follow the lunar calendar and can move by a day."
-msgstr ""
-"تعطیلات کا ڈیٹا اوپن سورس holidays لائبریری سے۔ “estimated” والی تاریخیں "
-"قمری کیلنڈر پر ہیں اور ایک دن آگے پیچھے ہو سکتی ہیں۔"
+msgid "Theme"
+msgstr "تھیم"
+
+msgid "Light"
+msgstr "روشن"
+
+msgid "Match my device"
+msgstr "ڈیوائس کے مطابق"
+
+msgid "Dark"
+msgstr "تاریک"
+
+msgid "Skip to content"
+msgstr "مواد پر جائیں"
 
 msgid "Pro"
 msgstr "پرو"
@@ -246,9 +304,6 @@ msgstr[1] "%(keys)s API کلیدیں"
 
 msgid "Company calendars, iCal feeds, digests and webhooks"
 msgstr "کمپنی کیلنڈر، iCal فیڈز، ڈائجسٹ اور ویب ہُکس"
-
-msgid "Start free"
-msgstr "مفت شروع کریں"
 
 msgid "Contact us to upgrade."
 msgstr "اپ گریڈ کے لیے ہم سے رابطہ کریں۔"
@@ -340,3 +395,9 @@ msgstr "ویب ہُک ہوسٹ کو صرف عوامی پتوں پر ہونا چ�
 #, python-format
 msgid "An organization can have at most %(max)s webhooks."
 msgstr "ایک تنظیم کے زیادہ سے زیادہ %(max)s ویب ہُکس ہو سکتے ہیں۔"
+
+msgid "Page not found"
+msgstr "صفحہ نہیں ملا"
+
+msgid "This page doesn't exist."
+msgstr "یہ صفحہ موجود نہیں ہے۔"

@@ -1,0 +1,33 @@
+{% load i18n %}<header class="site-header" id="top">
+  <div class="wrap header-bar">
+    <a class="brand" href="{{ home }}" dir="ltr" aria-label="HolidayOps">{% include "public/_mark.html" %}<span>Holiday<span class="ops">Ops</span></span></a>
+
+    <nav class="nav-desktop" aria-label="{% translate 'Main' %}">
+      <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
+      <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
+      <a href="/api/v1/docs/">{% translate "API docs" %}</a>
+      <a href="/playground">{% translate "Playground" %}</a>
+    </nav>
+
+    <div class="header-tools">
+      {% include "public/_switches.html" %}
+      <a class="nav-login" href="/login">{% translate "Log in" %}</a>
+      <a class="button button-small" href="/signup">{% translate "Start free" %}</a>
+    </div>
+
+    <details class="nav-mobile">
+      <summary aria-label="{% translate 'Menu' %}"><span class="burger" aria-hidden="true"><i></i><i></i></span></summary>
+      <div class="nav-sheet">
+        <nav aria-label="{% translate 'Main' %}">
+          <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
+          <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
+          <a href="/api/v1/docs/">{% translate "API docs" %}</a>
+          <a href="/playground">{% translate "Playground" %}</a>
+          <a href="/login">{% translate "Log in" %}</a>
+        </nav>
+        <a class="button" href="/signup">{% translate "Start free" %}</a>
+        {% include "public/_switches.html" %}
+      </div>
+    </details>
+  </div>
+</header>

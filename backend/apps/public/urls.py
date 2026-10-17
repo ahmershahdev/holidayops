@@ -4,6 +4,7 @@ from django.views.decorators.cache import cache_page
 
 from apps.public import views
 from apps.public.sitemaps import sitemaps
+from apps.public.theme import set_theme
 
 
 class LanguagePrefix:
@@ -36,6 +37,7 @@ urlpatterns = [
     *_pages,
     *[path(f"<lang:lang>/{p.pattern}", p.callback) for p in _pages],
     path("robots.txt", views.robots, name="robots"),
+    path("theme/<str:choice>/", set_theme, name="theme"),
     path(
         "sitemap.xml",
         cache_page(SITEMAP_CACHE)(sitemap_views.index),

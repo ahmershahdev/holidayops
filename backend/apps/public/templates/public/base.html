@@ -1,47 +1,35 @@
 {% load i18n static %}<!doctype html>
-<html lang="{{ lang }}" dir="{{ dir }}">
+<html lang="{{ lang }}" dir="{{ dir }}" data-theme="{{ theme }}">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ title }} · HolidayOps</title>
 <meta name="description" content="{{ description }}">
 {% if noindex %}<meta name="robots" content="noindex">{% endif %}
-<link rel="canonical" href="{{ canonical }}">
+{% if canonical %}<link rel="canonical" href="{{ canonical }}">
 {% for code, url in alternates %}<link rel="alternate" hreflang="{{ code }}" href="{{ url }}">
-{% endfor %}<link rel="alternate" hreflang="x-default" href="{{ x_default }}">
+{% endfor %}<link rel="alternate" hreflang="x-default" href="{{ x_default }}">{% endif %}
+<meta name="color-scheme" content="{% if theme == 'system' %}light dark{% else %}{{ theme }}{% endif %}">
+<meta name="theme-color" content="#f7fafc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1428" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HolidayOps">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
-<meta property="og:url" content="{{ canonical }}">
+{% if canonical %}<meta property="og:url" content="{{ canonical }}">{% endif %}
 <meta property="og:locale" content="{% if lang == 'ur' %}ur_PK{% elif lang == 'ar' %}ar_AR{% else %}en_US{% endif %}">
 <meta name="twitter:card" content="summary">
+<link rel="icon" href="{% static 'public/icon.svg' %}" type="image/svg+xml">
 <link rel="preload" href="{% static 'public/fonts/outfit-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{% static 'public/site.css' %}">
 {% block head %}{% endblock %}
 </head>
 <body>
 <a class="skip" href="#main">{% translate "Skip to content" %}</a>
-<header class="site">
-  <div class="wrap">
-    <a class="brand" href="{{ prefix }}/holidays/" dir="ltr">Holiday<span class="ops">Ops</span></a>
-    <nav class="main" aria-label="{% translate 'Main' %}">
-      <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
-      <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
-      <a href="/api/v1/docs/">{% translate "API docs" %}</a>
-      <a href="/login">{% translate "Log in" %}</a>
-    </nav>
-    <nav class="langs" aria-label="{% translate 'Language' %}">
-      {% for code, path in languages %}<a href="{{ path }}" hreflang="{{ code }}" lang="{{ code }}"{% if code == lang %} aria-current="page"{% endif %}>{% if code == "ur" %}اردو{% elif code == "ar" %}العربية{% else %}English{% endif %}</a>
-      {% endfor %}
-    </nav>
-  </div>
-</header>
+{% include "public/_header.html" %}
 <main id="main" class="wrap">
 {% block content %}{% endblock %}
 </main>
-<footer class="site">
-  <div class="wrap">{% blocktranslate %}Holiday data from the open-source holidays library. Dates marked “estimated” follow the lunar calendar and can move by a day.{% endblocktranslate %}</div>
-</footer>
+{% include "public/_footer.html" %}
 </body>
 </html>
