@@ -57,7 +57,7 @@ Design: [design/m4-subscriptions.md](design/m4-subscriptions.md).
 | 4.3 Digests ✅ | Monthly email "holidays in the next 30 days" |
 | 4.4 Webhooks ✅ | HMAC signing, SSRF guard, retries with backoff |
 
-## Milestone 5 — Plans, limits, launch ← in progress
+## Milestone 5 — Plans, limits, launch (code done; hosting deferred to launch)
 
 Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 
@@ -66,9 +66,9 @@ Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 | 5.1 API keys ✅ | `hops_<prefix>_<secret>`, hashed, per-key throttles, quotas, `UsageEvent` |
 | 5.2 Public SEO pages ✅ | See [seo.md](seo.md) |
 | 5.3 Deployment ✅ (host setup pending) | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
-| 5.4 Docs | README setup, API examples, screenshots |
+| 5.4 Docs (at launch) | README setup, API examples, screenshots |
 
-## Milestone 6 — Showcase website
+## Milestone 6 — Showcase website ← next
 
 Award-level public site built on Milestone 5's server-rendered pages and the Milestone 3 design
 system. Art-directed landing page, illustrated country and year pages, motion through CSS scroll-driven
