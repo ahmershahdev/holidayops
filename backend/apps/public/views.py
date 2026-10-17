@@ -185,6 +185,7 @@ def year_view(
         "description": description,
         "page": page,
         "place": place,
+        "country_code": info.code,
         "weekend": [date(2027, 3, 22) + timedelta(days=d) for d in info.weekend],
         "previous": page_path(lang, info.code, year - 1, code) if year - 1 in window else None,
         "next": page_path(lang, info.code, year + 1, code) if year + 1 in window else None,

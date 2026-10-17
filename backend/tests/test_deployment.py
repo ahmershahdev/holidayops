@@ -105,7 +105,8 @@ def test_production_settings() -> None:
         "print(json.dumps({'mw': settings.MIDDLEWARE, 'db': settings.DATABASES['default'],"
         "'redirect': settings.SECURE_SSL_REDIRECT, 'hsts': settings.SECURE_HSTS_SECONDS,"
         "'static': settings.STORAGES['staticfiles']['BACKEND'],"
-        "'root': str(settings.WHITENOISE_ROOT)}, default=str))"
+        "'root': str(settings.WHITENOISE_ROOT),"
+        "'headers': settings.WHITENOISE_ADD_HEADERS_FUNCTION.__name__}, default=str))"
     )
     env = {
         **os.environ,
@@ -136,6 +137,7 @@ def test_production_settings() -> None:
     assert conf["hsts"] == 63072000
     assert conf["static"].startswith("whitenoise.")
     assert conf["root"].endswith("spa")
+    assert conf["headers"] == "static_headers"
 
 
 def test_test_settings_are_untouched_by_production_settings() -> None:

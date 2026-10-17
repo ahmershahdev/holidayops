@@ -1096,6 +1096,32 @@ td.date {
   padding-block: 0.25rem;
 }
 
+.countries a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* A hairline ring keeps white flags (Japan, Cyprus) visible on a light page. */
+.flag {
+  flex: none;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--line);
+  object-fit: cover;
+}
+
+.title-flag {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.title-flag .flag {
+  width: clamp(2.25rem, 5vw, 3rem);
+  height: auto;
+  border-radius: 6px;
+}
+
 .cta {
   margin-block-start: 3rem;
   background: var(--accent-soft);

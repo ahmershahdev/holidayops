@@ -1,8 +1,8 @@
-{% extends "public/base.html" %}{% load i18n %}
+{% extends "public/base.html" %}{% load i18n flags %}
 {% block content %}
 <h1>{{ title }}</h1>
 <p class="lead">{{ description }}</p>
 <ul class="countries">
-{% for country, path in countries %}<li><a href="{{ path }}">{{ country.name }}</a></li>
+{% for country, path in countries %}<li><a href="{{ path }}">{% flag country.code %}<span>{{ country.name }}</span></a></li>
 {% endfor %}</ul>
 {% endblock %}

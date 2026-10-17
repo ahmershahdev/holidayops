@@ -99,3 +99,18 @@ layouts correct in RTL.
 
 `config/settings/{base,dev,test,prod}.py`, chosen by `DJANGO_SETTINGS_MODULE`. All secrets and
 connection strings come from environment variables; `.env.example` lists them.
+
+## Third-party assets
+
+| Asset | Source | Licence | Where |
+|---|---|---|---|
+| Country flags (4:3 SVG) | [flag-icons](https://github.com/lipis/flag-icons) 7.5.0 (May 2025) | MIT; notice kept in `flags/LICENSE.txt` | `apps/public/static/public/flags/` |
+| Fonts (Outfit, IBM Plex, Noto Nastaliq Urdu) | `@fontsource` | OFL 1.1 | self-hosted |
+
+Flags are imported with `manage.py import_flags <unpacked npm package>`: only the 250 countries the
+`holidays` library supports, each run through `apps/public/flags.sanitize` (an allowlist of SVG
+elements and attributes; DOCTYPE, entities, scripts, event handlers and any non-`#` reference are
+refused or dropped). `tests/public/test_flags.py` re-runs the sanitiser over the committed files.
+Static `.svg` responses also carry `default-src 'none'` (`config.csp.static_headers`), so even an
+SVG opened directly can't run anything. To update: `npm pack flag-icons@<version>` into an empty
+folder, read its LICENSE, run the command, review the diff.
