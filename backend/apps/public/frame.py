@@ -25,8 +25,7 @@ def frame_context(
         "lang": lang,
         "dir": "rtl" if lang in {"ur", "ar"} else "ltr",
         "prefix": PREFIX[lang],
-        # The landing page (6.2) takes over "/"; until then the brand links to the holidays index.
-        "home": f"{PREFIX[lang]}/holidays/",
+        "home": f"{PREFIX[lang]}/",
         "theme": get_theme(request),
         "theme_next": quote(here, safe="/"),
         "languages": [

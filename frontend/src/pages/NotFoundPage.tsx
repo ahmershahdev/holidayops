@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import { sitePrefix } from "../components/frame/SiteFooter";
 
 const ROUTE = "M10 120 C 150 120, 220 40, 330 60";
@@ -46,12 +45,12 @@ export function NotFoundPage() {
         />
       </svg>
       <div className="flex flex-wrap items-center gap-3">
-        <Link
-          to="/"
+        <a
+          href="/"
           className="rounded-full bg-accent px-5 py-2.5 font-semibold text-on-accent hover:bg-accent-strong"
         >
           {t("notFound.home")}
-        </Link>
+        </a>
         <a className="text-accent underline" href={`${sitePrefix()}/holidays/`}>
           {t("notFound.holidays")}
         </a>

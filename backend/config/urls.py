@@ -11,5 +11,5 @@ urlpatterns = [
     path("feeds/<str:token>.ics", FeedView.as_view(), name="feed"),
     path("", include("apps.public.urls")),
     # The web app's client-side routes (see frontend/src/main.tsx).
-    re_path(r"^(?:|playground|login|signup|invite|unsubscribe|app(?:/.*)?)$", spa, name="spa"),
+    re_path(r"^(?:playground|login|signup|invite|unsubscribe|app(?:/.*)?)$", spa, name="spa"),
 ]

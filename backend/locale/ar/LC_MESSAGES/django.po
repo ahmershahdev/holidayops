@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 14:19+0000\n"
+"POT-Creation-Date: 2026-10-17 14:53+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -191,6 +191,41 @@ msgstr "يجب أن يكون للمؤسسة مالك واحد على الأقل.
 msgid "No account uses this email yet."
 msgstr "لا يوجد حساب بهذا البريد الإلكتروني بعد."
 
+msgid "a working day"
+msgstr "يوم عمل"
+
+msgid "a weekend day"
+msgstr "يوم عطلة أسبوعية"
+
+msgid "a public holiday"
+msgstr "عطلة رسمية"
+
+msgid "a working weekend day (moved working day)"
+msgstr "يوم عمل في عطلة الأسبوع (يوم عمل منقول)"
+
+msgid "Pick a valid date."
+msgstr "اختر تاريخًا صحيحًا."
+
+msgid "Pick a country from the list."
+msgstr "اختر دولة من القائمة."
+
+msgid "Pick a date within five years of today."
+msgstr "اختر تاريخًا في حدود خمس سنوات من اليوم."
+
+msgid "That date can't be checked."
+msgstr "لا يمكن التحقق من هذا التاريخ."
+
+msgid "Holidays and working days for every country"
+msgstr "العطلات وأيام العمل لكل دولة"
+
+msgid ""
+"HolidayOps answers “is it a working day?” for 250 countries and their "
+"regions, merged with your own company closures, through a fast API, iCal "
+"feeds and webhooks."
+msgstr ""
+"يجيب HolidayOps عن سؤال ”هل هو يوم عمل؟“ لـ250 دولة ومناطقها، مدمجًا مع أيام "
+"إغلاق شركتك، عبر واجهة سريعة وخلاصات iCal وخطافات الويب."
+
 msgid "This flight went off course"
 msgstr "هذه الرحلة ضلّت طريقها"
 
@@ -275,6 +310,181 @@ msgstr "داكن"
 msgid "Skip to content"
 msgstr "انتقل إلى المحتوى"
 
+#, python-format
+msgid "%(countries)s countries · 3 languages · one API"
+msgstr "%(countries)s دولة · 3 لغات · واجهة واحدة"
+
+msgid "Every working day,"
+msgstr "كل يوم عمل،"
+
+msgid "in every country."
+msgstr "في كل دولة."
+
+msgid ""
+"Public holidays, weekends and your own company closures, merged into one "
+"answer: is this a working day? For payroll, HR, logistics and finance teams."
+msgstr ""
+"العطلات الرسمية وعطلات نهاية الأسبوع وأيام إغلاق شركتك في إجابة واحدة: هل "
+"هذا يوم عمل؟ لفرق الرواتب والموارد البشرية والخدمات اللوجستية والمالية."
+
+msgid "Explore holidays"
+msgstr "استكشف العطلات"
+
+msgid "countries"
+msgstr "دولة"
+
+msgid "regions"
+msgstr "منطقة"
+
+msgid "languages, RTL ready"
+msgstr "لغات، جاهزة للكتابة من اليمين"
+
+#, python-format
+msgid "Public holidays in %(country)s this month"
+msgstr "العطلات الرسمية في %(country)s هذا الشهر"
+
+msgid "Weekend"
+msgstr "عطلة نهاية الأسبوع"
+
+msgid "Today"
+msgstr "اليوم"
+
+msgid "Is it a working day?"
+msgstr "هل هو يوم عمل؟"
+
+msgid "Ask the same engine the API uses. No account needed."
+msgstr "اسأل المحرك نفسه الذي تستخدمه الواجهة. لا حاجة إلى حساب."
+
+msgid "Country"
+msgstr "الدولة"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Check"
+msgstr "تحقّق"
+
+msgid "Yes, it's a working day."
+msgstr "نعم، إنه يوم عمل."
+
+msgid "No, it's a day off."
+msgstr "لا، إنه يوم عطلة."
+
+#, python-format
+msgid "%(day)s in %(country)s is %(reason)s."
+msgstr "%(day)s في %(country)s هو %(reason)s."
+
+msgid "Everything a calendar of working days needs"
+msgstr "كل ما يحتاجه تقويم أيام العمل"
+
+msgid ""
+"Merge several countries and regions with your own closures, half days and "
+"extra working days. Office in Karachi, team in Riyadh? One calendar."
+msgstr ""
+"ادمج عدة دول ومناطق مع أيام الإغلاق وأنصاف الأيام وأيام العمل الإضافية "
+"الخاصة بك. مكتب في كراتشي وفريق في الرياض؟ تقويم واحد."
+
+msgid "Business-day maths"
+msgstr "حساب أيام العمل"
+
+msgid ""
+"Add or subtract working days and count them between two dates, with each "
+"country's own weekend."
+msgstr ""
+"أضف أيام العمل أو اطرحها واحسبها بين تاريخين، مع عطلة نهاية الأسبوع الخاصة "
+"بكل دولة."
+
+msgid "iCal feeds"
+msgstr "خلاصات iCal"
+
+msgid ""
+"Subscribe from Google Calendar, Outlook or Apple Calendar with a private, "
+"revocable link."
+msgstr "اشترك من تقويم Google أو Outlook أو تقويم Apple برابط خاص يمكن إلغاؤه."
+
+msgid "Monthly digests"
+msgstr "ملخصات شهرية"
+
+msgid ""
+"An email on the 1st with the next 30 days of holidays, in English, Urdu or "
+"Arabic."
+msgstr ""
+"رسالة في أول كل شهر بعطلات الأيام الثلاثين القادمة، بالإنجليزية أو الأردية "
+"أو العربية."
+
+msgid "Signed webhooks"
+msgstr "خطافات ويب موقّعة"
+
+msgid ""
+"HMAC-signed events when calendars change, with retries and a delivery log."
+msgstr "أحداث موقّعة بـHMAC عند تغيّر التقاويم، مع إعادة المحاولة وسجل التسليم."
+
+msgid "API keys with plans and quotas"
+msgstr "مفاتيح API مع خطط وحصص"
+
+msgid ""
+"Per-key rate limits, a monthly quota and a usage chart, so you always know "
+"where you stand."
+msgstr "حدود معدل لكل مفتاح وحصة شهرية ومخطط استخدام، لتعرف موقفك دائمًا."
+
+msgid "From sign-up to answers in three steps"
+msgstr "من التسجيل إلى الإجابات في ثلاث خطوات"
+
+msgid "Pick your countries"
+msgstr "اختر دولك"
+
+msgid ""
+"Choose countries, regions and holiday categories. Weekends come from each "
+"country's own rules."
+msgstr ""
+"اختر الدول والمناطق وفئات العطلات. عطلات نهاية الأسبوع تأتي من قواعد كل دولة."
+
+msgid "Add your own days"
+msgstr "أضف أيامك الخاصة"
+
+msgid "Mark office closures, half days and extra working days on the calendar."
+msgstr "حدّد أيام إغلاق المكتب وأنصاف الأيام وأيام العمل الإضافية على التقويم."
+
+msgid "Ask from anywhere"
+msgstr "اسأل من أي مكان"
+
+msgid ""
+"Call the API with a key, subscribe to the feed, or get a webhook when "
+"something changes."
+msgstr ""
+"استدعِ الواجهة بمفتاح، أو اشترك في الخلاصة، أو استقبل خطاف ويب عند حدوث تغيير."
+
+msgid "One request, one clear answer"
+msgstr "طلب واحد، إجابة واضحة"
+
+msgid ""
+"JSON over HTTPS, documented with OpenAPI. Holiday names come back in the "
+"language you ask for."
+msgstr "JSON عبر HTTPS موثّق بـOpenAPI. تعود أسماء العطلات باللغة التي تطلبها."
+
+msgid "Read the API docs"
+msgstr "اقرأ توثيق API"
+
+msgid "Holidays for every country, every year"
+msgstr "العطلات لكل دولة، كل سنة"
+
+#, python-format
+msgid "See all %(countries)s countries →"
+msgstr "عرض جميع الدول الـ%(countries)s ←"
+
+msgid "Start free. Upgrade when you grow."
+msgstr "ابدأ مجانًا. رقِّ خطتك عندما تكبر."
+
+msgid ""
+"The free plan includes company calendars, feeds, digests, webhooks and "
+"10,000 API requests a month."
+msgstr ""
+"تشمل الخطة المجانية تقاويم الشركة والخلاصات والملخصات وخطافات الويب و10,000 "
+"طلب API شهريًا."
+
+msgid "See pricing"
+msgstr "عرض الأسعار"
+
 msgid "Pro"
 msgstr "احترافية"
 
@@ -305,20 +515,11 @@ msgstr "تقاويم الشركة وخلاصات iCal والملخصات وخط�
 msgid "Contact us to upgrade."
 msgstr "تواصل معنا للترقية."
 
-msgid "Read the API docs"
-msgstr "اقرأ توثيق API"
-
 msgid "Public holidays"
 msgstr "العطلات الرسمية"
 
 msgid "Working days"
 msgstr "أيام العمل"
-
-msgid "Weekend"
-msgstr "عطلة نهاية الأسبوع"
-
-msgid "Date"
-msgstr "التاريخ"
 
 msgid "No public holidays this year."
 msgstr "لا توجد عطلات رسمية هذه السنة."

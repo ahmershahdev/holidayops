@@ -15,6 +15,8 @@ const DJANGO_PATHS = [
   "/static",
   "/robots.txt",
   "^/sitemap.*\\.xml$",
+  // The landing page; the web app's routes start at /playground, /app, /login…
+  "^/(\\?.*)?$",
 ];
 // Keep the browser's Host so Django's CSRF origin check matches the page origin.
 const django = {

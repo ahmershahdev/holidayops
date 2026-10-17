@@ -34,10 +34,7 @@ export function SiteFooter() {
       </svg>
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
         <div className="sm:col-span-2 lg:col-span-1">
-          <a
-            href={`${prefix}/holidays/`}
-            className="flex items-center gap-2 text-xl text-[#e6edf7]"
-          >
+          <a href={`${prefix}/`} className="flex items-center gap-2 text-xl text-[#e6edf7]">
             <Mark />
             <Wordmark />
           </a>
