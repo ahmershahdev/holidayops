@@ -9,14 +9,14 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 1. Public API over `holidays` | ✅ merged (#2) |
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
-| 4. iCal feeds, digests, webhooks | 🚧 4.1–4.2 merged (#12, #13); 4.3 on `feat/digests` |
-| 5. API keys, limits, deployment, SEO pages | planned |
+| 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
+| 5. API keys, limits, deployment, SEO pages | ⏭ next (after org invites) |
 | 6. Showcase website | planned |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
 (`demo@holidayops.test`, password = `DEMO_PASSWORD` in `.env`). Docker Desktop must be running.
 
-## Next: Milestone 4 (see [roadmap.md](roadmap.md))
+## Milestone 4 recap (see [roadmap.md](roadmap.md))
 
 Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four parts).
 
@@ -28,11 +28,15 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 3. ✅ **4.3 Digests** – `DigestSubscription`, Beat on the 1st at 06:00 UTC fans out one task per
    subscription, once per month even on retries; `User.language` for the email; one-click
    unsubscribe; "Email me monthly" toggle on the calendar page and `/unsubscribe` page.
-4. **4.4 Webhooks** – `Webhook` model, HMAC-SHA256 signature, HTTPS only, SSRF guard after DNS
-   resolution, retries with backoff, delivery log, UI in org settings.
-5. Org invites by email (deferred from Milestone 2) once email sending exists.
+4. ✅ **4.4 Webhooks** – `apps/webhooks`: HMAC-SHA256 `t=…,v1=…` signature, SSRF guard with
+   a pinned connection, DB-scheduled retries (Beat `webhooks.retry_due` every minute), delivery
+   log, auto-disable after 20 failures; "Webhooks" card in org settings for admins.
+## Next
 
-Start each part on its own `feat/...` branch.
+1. Org invites by email (deferred from Milestone 2): email sending now exists.
+2. Milestone 5 (see [roadmap.md](roadmap.md)): API keys first (5.1).
+
+Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
 ## Open items
 
@@ -57,6 +61,8 @@ Start each part on its own `feat/...` branch.
 - Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
   `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
 - `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
+- Don't mock `socket.*` through an app module (`apps.x.socket.getaddrinfo` is the real `socket`
+  module): patch a small wrapper like `apps.webhooks.net.resolve` instead.
 - `makemessages` can fuzzy-match a new string to an unrelated old translation: check for
   `#, fuzzy` in the `.po` files and fix those entries by hand.
 - The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).

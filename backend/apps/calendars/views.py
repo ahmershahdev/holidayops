@@ -11,6 +11,7 @@ from apps.calendars.models import Calendar, CustomDay
 from apps.calendars.serializers import CalendarSerializer, CustomDaySerializer
 from apps.orgs.models import Role
 from apps.orgs.scoping import OrgScopedMixin, audit, unique_slug
+from apps.webhooks.events import calendar_data, custom_day_data, emit
 
 
 class CalendarViewSet(OrgScopedMixin, viewsets.ModelViewSet[Calendar]):
@@ -29,9 +30,15 @@ class CalendarViewSet(OrgScopedMixin, viewsets.ModelViewSet[Calendar]):
         calendar = serializer.save(org=self.org, slug=slug)
         audit(self.membership, "calendar.create", calendar)
 
+    def perform_update(self, serializer: serializers.BaseSerializer[Calendar]) -> None:
+        calendar = serializer.save()
+        emit(self.org, "calendar.updated", calendar_data(calendar))
+
     def perform_destroy(self, instance: Calendar) -> None:
         audit(self.membership, "calendar.delete", instance)
+        data = calendar_data(instance)
         instance.delete()
+        emit(self.org, "calendar.deleted", data)
 
 
 @extend_schema_view(
@@ -58,4 +65,14 @@ class CustomDayViewSet(OrgScopedMixin, viewsets.ModelViewSet[CustomDay]):
         return {**super().get_serializer_context(), "calendar": self.calendar}
 
     def perform_create(self, serializer: serializers.BaseSerializer[CustomDay]) -> None:
-        serializer.save(calendar=self.calendar)
+        day = serializer.save(calendar=self.calendar)
+        emit(self.org, "custom_day.created", custom_day_data(day))
+
+    def perform_update(self, serializer: serializers.BaseSerializer[CustomDay]) -> None:
+        day = serializer.save()
+        emit(self.org, "custom_day.updated", custom_day_data(day))
+
+    def perform_destroy(self, instance: CustomDay) -> None:
+        data = custom_day_data(instance)
+        instance.delete()
+        emit(self.org, "custom_day.deleted", data)

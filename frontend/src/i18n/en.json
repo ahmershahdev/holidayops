@@ -172,5 +172,35 @@
     "unsubscribe": "Unsubscribe",
     "unsubscribed": "Done. You won't get this email any more.",
     "badLink": "This unsubscribe link is not valid."
+  },
+  "webhooks": {
+    "title": "Webhooks",
+    "intro": "HolidayOps POSTs a signed JSON event to your HTTPS endpoint when calendars or company days change. Check the X-HolidayOps-Signature header with the signing secret.",
+    "secretOnce": "Signing secret: copy it now. It won't be shown again.",
+    "secret": "Signing secret",
+    "none": "No webhooks yet.",
+    "active": "Active",
+    "disabled": "Disabled",
+    "ping": "Send test",
+    "deliveries": "Deliveries",
+    "disable": "Disable",
+    "enable": "Enable",
+    "rotate": "New secret",
+    "url": "Endpoint URL",
+    "urlHint": "HTTPS only, on a public address.",
+    "events": "Events",
+    "create": "Add webhook",
+    "noDeliveries": "No deliveries yet.",
+    "when": "When",
+    "event": "Event",
+    "status": "Status",
+    "response": "Response",
+    "statuses": {
+      "pending": "Pending",
+      "success": "Delivered",
+      "failed": "Failed"
+    },
+    "attempts_one": "{{count}} attempt",
+    "attempts_other": "{{count}} attempts"
   }
 }

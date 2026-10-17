@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router";
 import { api, type Schemas, unwrap } from "../api/client";
 import { Badge, Button, Card, ErrorText, Field, Input, PageHeader, Select } from "../components/ui";
+import { WebhooksCard } from "../components/WebhooksCard";
 import { useMe } from "../lib/auth";
 
 type Role = Schemas["RoleEnum"];
@@ -180,6 +181,8 @@ export function OrgSettingsPage() {
         )}
         <ErrorText error={add.error} />
       </Card>
+
+      {isAdmin && <WebhooksCard org={org} />}
 
       {isOwner && detail.data && (
         <Card title={t("settings.dangerZone")}>

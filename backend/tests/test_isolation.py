@@ -10,6 +10,7 @@ from apps.accounts.models import User
 from apps.calendars.models import Calendar, CustomDay
 from apps.feeds.models import FeedToken
 from apps.orgs.models import Membership, Role
+from apps.webhooks.models import Webhook
 from tests.factories import CalendarFactory, CustomDayFactory, MembershipFactory, SourceFactory
 
 pytestmark = pytest.mark.django_db
@@ -25,7 +26,15 @@ def victim() -> dict[str, Any]:
     feed = FeedToken(org=owner.org, calendar=calendar, label="Outlook")
     feed.set_new_token()
     feed.save()
-    return {"org": owner.org, "member": other, "calendar": calendar, "day": day, "feed": feed}
+    hook = Webhook.objects.create(org=owner.org, url="https://hooks.example.com/", events=["ping"])
+    return {
+        "org": owner.org,
+        "member": other,
+        "calendar": calendar,
+        "day": day,
+        "feed": feed,
+        "hook": hook,
+    }
 
 
 def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
@@ -33,6 +42,7 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
     cal = f"{org}/calendars/{v['calendar'].id}"
     day = f"{cal}/custom-days/{v['day'].id}/"
     feed = f"{cal}/feeds/{v['feed'].id}/"
+    hook = f"{org}/webhooks/{v['hook'].id}/"
     return [
         ("get", f"{org}/", {}),
         ("patch", f"{org}/", {"name": "pwned"}),
@@ -59,6 +69,14 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
         ("get", f"{cal}/digest/", {}),
         ("put", f"{cal}/digest/", {}),
         ("delete", f"{cal}/digest/", {}),
+        ("get", f"{org}/webhooks/", {}),
+        ("post", f"{org}/webhooks/", {"url": "https://evil.example.com/", "events": ["ping"]}),
+        ("get", hook, {}),
+        ("patch", hook, {"url": "https://evil.example.com/"}),
+        ("post", f"{hook}rotate-secret/", {}),
+        ("post", f"{hook}ping/", {}),
+        ("get", f"{hook}deliveries/", {}),
+        ("delete", hook, {}),
         (
             "get",
             "/api/v1/business-days/check/",

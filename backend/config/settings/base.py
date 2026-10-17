@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "apps.calendars",
     "apps.feeds",
     "apps.notifications",
+    "apps.webhooks",
     "apps.api",
 ]
 
@@ -167,6 +168,7 @@ CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
         "task": "notifications.send_digests",
         "schedule": crontab(minute="0", hour="6", day_of_month="1"),
     },
+    "webhook-retries": {"task": "webhooks.retry_due", "schedule": 60.0},
 }
 
 APP_URL = env("APP_URL", "http://localhost:5173").rstrip("/")

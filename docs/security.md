@@ -42,8 +42,12 @@ credentials come from env only.
 
 ## Webhooks
 
-HMAC-SHA256 signature header, HTTPS only, private/loopback/link-local IPs blocked (SSRF, checked
-after DNS resolution), timeouts, retries with backoff.
+HMAC-SHA256 signature header over `<timestamp>.<body>`, HTTPS only, no credentials in URLs, no
+redirects. SSRF guard (`apps/webhooks/net.py`), at save time and before every attempt: resolve the
+host, require every address to be global and not multicast (IPv4-mapped IPv6 unwrapped first),
+then connect to that vetted address with the original host for SNI, certificate check and `Host`,
+so DNS rebinding can't redirect it. 5 s connect and 10 s read timeouts, 4 KB response cap. Only
+admins and owners manage webhooks.
 
 ## HTTP headers and cookies
 

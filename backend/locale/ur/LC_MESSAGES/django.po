@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 06:06+0000\n"
+"POT-Creation-Date: 2026-10-17 06:30+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -139,3 +139,25 @@ msgstr "اس ای میل سے ابھی کوئی اکاؤنٹ نہیں ہے۔"
 
 msgid "This person is already a member."
 msgstr "یہ شخص پہلے سے رکن ہے۔"
+
+msgid "Webhook URLs must use https."
+msgstr "ویب ہُک URL میں https ہونا لازمی ہے۔"
+
+msgid "Webhook URLs must not contain credentials."
+msgstr "ویب ہُک URL میں لاگ اِن کی معلومات نہیں ہونی چاہئیں۔"
+
+msgid "Webhook URL has no host."
+msgstr "ویب ہُک URL میں ہوسٹ موجود نہیں۔"
+
+msgid "Webhook URL has an invalid port."
+msgstr "ویب ہُک URL کا پورٹ درست نہیں۔"
+
+msgid "Webhook host does not resolve."
+msgstr "ویب ہُک ہوسٹ کا پتہ نہیں مل سکا۔"
+
+msgid "Webhook host must resolve to public addresses only."
+msgstr "ویب ہُک ہوسٹ کو صرف عوامی پتوں پر ہونا چاہیے۔"
+
+#, python-format
+msgid "An organization can have at most %(max)s webhooks."
+msgstr "ایک تنظیم کے زیادہ سے زیادہ %(max)s ویب ہُکس ہو سکتے ہیں۔"
