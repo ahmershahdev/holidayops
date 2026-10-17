@@ -32,7 +32,16 @@
     "passwordHint": "At least 10 characters.",
     "newHere": "New here?",
     "createAccount": "Create an account",
-    "haveAccount": "Have an account?"
+    "haveAccount": "Have an account?",
+    "loginLead": "Log in to manage your company calendars, feeds and API keys.",
+    "signupLead": "The free plan needs no card. Your first company calendar takes a minute.",
+    "namePlaceholder": "Your name",
+    "passwordPlaceholder": "Your password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "point1": "250 countries and their regions",
+    "point2": "Your own closures and half days",
+    "point3": "iCal feeds, digests and webhooks"
   },
   "status": {
     "businessDay": "Business day",
