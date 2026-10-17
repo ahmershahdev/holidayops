@@ -13,6 +13,7 @@ from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext as _
+from rest_framework.throttling import SimpleRateThrottle
 
 from apps.core import list_countries
 from apps.public.content import (
@@ -28,6 +29,7 @@ from apps.public.content import (
 from apps.public.frame import frame_context
 from apps.public.palette import swatches
 from apps.public.theme import get_theme
+from config.security_log import security_event
 
 CACHE_SECONDS = 6 * 3600
 # No JavaScript at all: the pages are plain HTML and one stylesheet. JSON-LD blocks are data, not
@@ -44,6 +46,28 @@ _JSON_ESCAPES = {ord("<"): "\\u003C", ord(">"): "\\u003E", ord("&"): "\\u0026"}
 View = Callable[..., HttpResponse]
 
 
+class PublicPageThrottle(SimpleRateThrottle):
+    scope = "public"
+
+    # Used on plain Django views: the throttle only reads request.META, which both have.
+    def allow_request(self, request: Any, view: Any) -> bool:
+        return super().allow_request(request, view)
+
+    def get_cache_key(self, request: Any, view: Any) -> str:
+        return self.cache_format % {"scope": self.scope, "ident": self.get_ident(request)}
+
+
+def too_many_requests(request: HttpRequest, wait: float | None) -> HttpResponse:
+    security_event("rate_limited", request, scope="public")
+    response = HttpResponse(
+        _("Too many requests. Wait a minute and try again."),
+        status=429,
+        content_type="text/plain; charset=utf-8",
+    )
+    response["Retry-After"] = str(int(wait or 60))
+    return response
+
+
 def public_page(view: View) -> View:
     """Language from the URL, strict CSP, and a server-side page cache keyed by theme: the
     theme is written into the HTML, so one cached copy per theme. Browsers revalidate the HTML
@@ -55,6 +79,10 @@ def public_page(view: View) -> View:
         cached: HttpResponse | None = cache.get(key)
         if cached is not None:
             return cached
+        throttle = PublicPageThrottle()
+        if not throttle.allow_request(request, None):
+            with translation.override(lang):
+                return too_many_requests(request, throttle.wait())
         with translation.override(lang):
             response = view(request, *args, lang=lang, **kwargs)
         response["Content-Language"] = lang

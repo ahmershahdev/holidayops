@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 
 from apps.api.models import ApiKey
 from apps.api.usage import daily_counts, plan_limits, used_this_month
+from apps.orgs.limits import within_limit
 from apps.orgs.models import Role
 from apps.orgs.scoping import OrgScopedMixin, audit
 
@@ -73,16 +74,16 @@ class ApiKeyViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         max_keys = int(plan_limits(self.org)["max_keys"])
-        if self.get_queryset().count() >= max_keys:
-            raise serializers.ValidationError(
-                _("Your plan allows at most %(max)s active API keys.") % {"max": max_keys}
+        message = _("Your plan allows at most %(max)s active API keys.") % {"max": max_keys}
+        with within_limit("api_keys", self.org.pk, self.get_queryset(), max_keys, message):
+            api_key = ApiKey(
+                org=self.org,
+                name=serializer.validated_data["name"],
+                created_by=self.membership.user,
             )
-        api_key = ApiKey(
-            org=self.org, name=serializer.validated_data["name"], created_by=self.membership.user
-        )
-        key = api_key.set_new_key()
-        api_key.save()
-        audit(self.membership, "api_key.create", api_key)
+            key = api_key.set_new_key()
+            api_key.save()
+            audit(self.membership, "api_key.create", api_key)
         data = ApiKeyCreatedSerializer(api_key).data
         data["key"] = key
         return Response(data, status=status.HTTP_201_CREATED)

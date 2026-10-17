@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 17:42+0000\n"
+"POT-Creation-Date: 2026-10-17 18:04+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -160,6 +160,9 @@ msgstr "مُشاهد"
 #, python-format
 msgid "You're invited to %(org)s on HolidayOps"
 msgstr "أنت مدعو للانضمام إلى %(org)s على HolidayOps"
+
+msgid "Another change is in progress. Try again."
+msgstr "هناك تغيير آخر قيد التنفيذ. حاول مرة أخرى."
 
 msgid "Your role does not allow this action."
 msgstr "دورك لا يسمح بهذا الإجراء."
@@ -546,6 +549,9 @@ msgstr ""
 
 msgid "Get an API key"
 msgstr "احصل على مفتاح API"
+
+msgid "Too many requests. Wait a minute and try again."
+msgstr "طلبات كثيرة جدًا. انتظر دقيقة ثم حاول مرة أخرى."
 
 msgid "Public holidays by country"
 msgstr "العطلات الرسمية حسب الدولة"

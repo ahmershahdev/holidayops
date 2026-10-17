@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
@@ -14,6 +16,7 @@ from rest_framework.views import APIView
 from apps.accounts.auth import current_user
 from apps.accounts.models import User
 from apps.accounts.serializers import LoginSerializer, SignupSerializer, UserSerializer
+from config.security_log import email_ref, security_event
 
 
 class CsrfView(APIView):
@@ -41,6 +44,7 @@ class SignupView(APIView):
             data["email"], data["password"], name=data.get("name", ""), language=language
         )
         login(request._request, user, backend="django.contrib.auth.backends.ModelBackend")
+        security_event("auth.signup", request, logging.INFO, user=user.pk)
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
 
@@ -52,17 +56,18 @@ class LoginView(APIView):
     def post(self, request: Request) -> Response:
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].lower()
         user = authenticate(
-            request._request,
-            email=serializer.validated_data["email"].lower(),
-            password=serializer.validated_data["password"],
+            request._request, email=email, password=serializer.validated_data["password"]
         )
         if user is None:
+            security_event("auth.login_failed", request, account=email_ref(email))
             return Response(
                 {"non_field_errors": [_("Invalid email or password.")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         login(request._request, user)
+        security_event("auth.login", request, logging.INFO, user=user.pk)
         return Response(UserSerializer(user).data)
 
 

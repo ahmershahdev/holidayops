@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.negotiation import BaseContentNegotiation
 from rest_framework.parsers import BaseParser
@@ -27,6 +27,7 @@ from apps.calendars.services import build_merged
 from apps.core import build_ical, feed_events
 from apps.feeds.models import FeedToken, hash_token
 from apps.feeds.serializers import FeedTokenCreatedSerializer, FeedTokenSerializer
+from apps.orgs.limits import within_limit
 from apps.orgs.scoping import OrgScopedMixin, audit
 
 MAX_ACTIVE_FEEDS = 10
@@ -58,13 +59,14 @@ class FeedTokenViewSet(
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        if self.get_queryset().count() >= MAX_ACTIVE_FEEDS:
-            raise serializers.ValidationError(
-                _("A calendar can have at most %(max)s active feed links.")
-                % {"max": MAX_ACTIVE_FEEDS}
-            )
-        feed, token = self._issue(serializer.validated_data.get("label", ""))
-        audit(self.membership, "feed.create", feed)
+        message = _("A calendar can have at most %(max)s active feed links.") % {
+            "max": MAX_ACTIVE_FEEDS
+        }
+        with within_limit(
+            "feeds", self.calendar.pk, self.get_queryset(), MAX_ACTIVE_FEEDS, message
+        ):
+            feed, token = self._issue(serializer.validated_data.get("label", ""))
+            audit(self.membership, "feed.create", feed)
         return self._created(feed, token)
 
     @extend_schema(request=None, responses={201: FeedTokenCreatedSerializer})

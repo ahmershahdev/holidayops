@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from apps.orgs.limits import within_limit
 from apps.orgs.models import Role
 from apps.orgs.scoping import OrgScopedMixin, audit
 from apps.webhooks import events
@@ -37,12 +38,10 @@ class WebhookViewSet(OrgScopedMixin, viewsets.ModelViewSet[Webhook]):
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        if self.get_queryset().count() >= MAX_WEBHOOKS:
-            raise serializers.ValidationError(
-                _("An organization can have at most %(max)s webhooks.") % {"max": MAX_WEBHOOKS}
-            )
-        webhook = serializer.save(org=self.org, created_by=self.membership.user)
-        audit(self.membership, "webhook.create", webhook)
+        message = _("An organization can have at most %(max)s webhooks.") % {"max": MAX_WEBHOOKS}
+        with within_limit("webhooks", self.org.pk, self.get_queryset(), MAX_WEBHOOKS, message):
+            webhook = serializer.save(org=self.org, created_by=self.membership.user)
+            audit(self.membership, "webhook.create", webhook)
         return Response(WebhookSecretSerializer(webhook).data, status=status.HTTP_201_CREATED)
 
     def perform_update(self, serializer: serializers.BaseSerializer[Webhook]) -> None:

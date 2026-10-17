@@ -53,11 +53,3 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = HTTPS
 SECURE_HSTS_PRELOAD = HTTPS
 SESSION_COOKIE_SECURE = HTTPS
 CSRF_COOKIE_SECURE = HTTPS
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {"plain": {"format": "%(asctime)s %(levelname)s %(name)s %(message)s"}},
-    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "plain"}},
-    "root": {"handlers": ["console"], "level": env("LOG_LEVEL", "INFO")},
-}

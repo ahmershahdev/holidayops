@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 
 from apps.accounts.auth import current_user
 from apps.orgs import invites
+from apps.orgs.limits import within_limit
 from apps.orgs.models import Invite, Role
 from apps.orgs.scoping import OrgScopedMixin, audit
 from apps.orgs.serializers import (
@@ -25,6 +26,7 @@ from apps.orgs.serializers import (
     MemberCreateSerializer,
     OrgSerializer,
 )
+from config.security_log import security_event
 
 MAX_PENDING_INVITES = 50
 
@@ -66,12 +68,11 @@ class InviteViewSet(
             raise PermissionDenied(_("Only owners can grant the owner role."))
         if self.org.memberships.filter(user__email__iexact=email).exists():
             raise ValidationError({"email": [_("This person is already a member.")]})
-        if self.get_queryset().exclude(email=email).count() >= MAX_PENDING_INVITES:
-            raise ValidationError(
-                _("An organization can have at most %(max)s pending invites.")
-                % {"max": MAX_PENDING_INVITES}
-            )
-        with transaction.atomic():
+        message = _("An organization can have at most %(max)s pending invites.") % {
+            "max": MAX_PENDING_INVITES
+        }
+        others = self.get_queryset().exclude(email=email)
+        with within_limit("invites", self.org.pk, others, MAX_PENDING_INVITES, message):
             self.org.invites.filter(email=email, accepted_at__isnull=True).delete()
             invite = Invite(org=self.org, email=email, role=role, invited_by=self.membership.user)
             token = invites.issue(invite)
@@ -128,6 +129,7 @@ class InviteAcceptView(APIView):
         with transaction.atomic():
             invite = _pending_or_404(token)
             if invite.email.lower() != user.email.lower():
+                security_event("invite.wrong_account", request, user=user.pk, invite=invite.pk)
                 raise PermissionDenied(
                     _("This invite is for %(email)s. Log in with that account to accept it.")
                     % {"email": invite.email}

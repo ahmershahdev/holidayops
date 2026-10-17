@@ -137,7 +137,12 @@ REST_FRAMEWORK = {
         "user": env("API_USER_RATE", "600/minute"),
         "auth": env("API_AUTH_RATE", "10/minute"),
         "invite": env("API_INVITE_RATE", "30/hour"),
+        "public": env("PUBLIC_PAGE_RATE", "120/minute"),
     },
+    # Without this DRF takes the whole X-Forwarded-For header as the client's identity, so any
+    # client could send a new one per request and never be throttled. Set it to the number of
+    # proxies in front of Django in production.
+    "NUM_PROXIES": int(env("NUM_PROXIES", "0")),
     "EXCEPTION_HANDLER": "apps.api.exceptions.api_exception_handler",
 }
 
@@ -202,3 +207,11 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS", "true").lower() == "true"
 EMAIL_TIMEOUT = 10
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "HolidayOps <no-reply@holidayops.test>")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"plain": {"format": "%(asctime)s %(levelname)s %(name)s %(message)s"}},
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "plain"}},
+    "root": {"handlers": ["console"], "level": env("LOG_LEVEL", "INFO")},
+}
