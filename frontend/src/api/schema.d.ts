@@ -284,6 +284,58 @@ export interface paths {
         patch: operations["orgs_calendars_custom_days_partial_update"];
         trace?: never;
     };
+    "/api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_calendars_feeds_list"];
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_calendars_feeds_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        delete: operations["orgs_calendars_feeds_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/{id}/rotate/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_calendars_feeds_rotate_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orgs/{org_slug}/calendars/{id}/": {
         parameters: {
             query?: never;
@@ -431,6 +483,34 @@ export interface components {
             name: string;
             kind: components["schemas"]["CustomDayKindEnum"];
         };
+        FeedToken: {
+            readonly id: number;
+            label?: string;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly last_used_at: string | null;
+        };
+        FeedTokenCreated: {
+            readonly id: number;
+            label?: string;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly last_used_at: string | null;
+            /**
+             * Format: uri
+             * @description Shown only once. Keep it secret.
+             */
+            readonly url: string;
+        };
+        FeedTokenRequest: {
+            label?: string;
+        };
         Holiday: {
             /** Format: date */
             date: string;
@@ -528,6 +608,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["CustomDay"][];
+        };
+        PaginatedFeedTokenList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["FeedToken"][];
         };
         PatchedCalendarRequest: {
             name?: string;
@@ -1197,6 +1292,106 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CustomDay"];
+                };
+            };
+        };
+    };
+    orgs_calendars_feeds_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path: {
+                calendar_id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedFeedTokenList"];
+                };
+            };
+        };
+    };
+    orgs_calendars_feeds_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["FeedTokenRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["FeedTokenRequest"];
+                "multipart/form-data": components["schemas"]["FeedTokenRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedTokenCreated"];
+                };
+            };
+        };
+    };
+    orgs_calendars_feeds_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                /** @description A unique integer value identifying this feed token. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    orgs_calendars_feeds_rotate_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                /** @description A unique integer value identifying this feed token. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedTokenCreated"];
                 };
             };
         };

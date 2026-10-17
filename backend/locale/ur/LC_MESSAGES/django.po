@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 17:28+0000\n"
+"POT-Creation-Date: 2026-10-17 05:49+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -76,6 +76,10 @@ msgstr "کوئی بھی شامل ملک یہ زبان استعمال نہیں ک
 
 msgid "This calendar already has a custom day on this date."
 msgstr "اس تاریخ کو اس کیلنڈر میں پہلے سے ایک کمپنی کا دن موجود ہے۔"
+
+#, python-format
+msgid "A calendar can have at most %(max)s active feed links."
+msgstr "ایک کیلنڈر کے زیادہ سے زیادہ %(max)s فعال فیڈ لنکس ہو سکتے ہیں۔"
 
 msgid "Your role does not allow this action."
 msgstr "آپ کا کردار اس عمل کی اجازت نہیں دیتا۔"

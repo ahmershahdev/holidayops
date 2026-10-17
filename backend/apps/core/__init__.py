@@ -25,6 +25,7 @@ from apps.core.errors import (
     YearNotCovered,
     YearOutOfRange,
 )
+from apps.core.ical import FeedEvent, build_ical, feed_events
 from apps.core.merge import (
     CustomDay,
     CustomKind,
@@ -43,6 +44,7 @@ __all__ = [
     "CountryInfo",
     "CustomDay",
     "CustomKind",
+    "FeedEvent",
     "MergedCalendar",
     "Reason",
     "UnsupportedCategory",
@@ -52,9 +54,11 @@ __all__ = [
     "YearNotCovered",
     "YearOutOfRange",
     "add_business_days",
+    "build_ical",
     "business_days_between",
     "check_calendar_args",
     "describe_days",
+    "feed_events",
     "get_calendar",
     "get_country",
     "holiday_sources",
