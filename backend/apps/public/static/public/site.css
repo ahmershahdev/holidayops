@@ -157,6 +157,50 @@ main {
   color: #06122a;
 }
 
+/* Headings and calendars are read, not copied; dragging across them shouldn't paint them. */
+h1,
+h2,
+.hero-calendar,
+.year-cal,
+.cal-grid {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Native selects drawn in the theme: a two-stroke chevron from gradients (no image file), options
+   in the page colours, the arrow on the reading end in RTL. */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.15rem) 52%,
+    calc(100% - 0.8rem) 52%;
+  background-size: 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  padding-inline-end: 2.25rem;
+  cursor: pointer;
+}
+
+[dir="rtl"] select {
+  background-position:
+    0.8rem 52%,
+    1.15rem 52%;
+}
+
+option {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
 a {
   color: var(--accent);
   text-underline-offset: 0.2em;
@@ -554,31 +598,18 @@ h2 {
   font-size: 0.9rem;
 }
 
+.nav-desktop a,
+.nav-login,
+.button-small {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.5rem;
+  white-space: nowrap;
+}
+
 /* ---- Footer ---- */
 .site-footer {
   background-color: var(--night);
-}
-
-.site-footer .langs,
-.site-footer .themes {
-  background: #111d36;
-  border-color: #24375c;
-}
-
-.site-footer .langs a,
-.site-footer .themes a {
-  color: #a3b3c9;
-}
-
-.site-footer .langs a:hover,
-.site-footer .themes a:hover {
-  color: #e6edf7;
-}
-
-.site-footer .langs a[aria-current],
-.site-footer .themes a[aria-current] {
-  background: #0f3a3a;
-  color: #e6edf7;
 }
 
 /* frame:footer — identical in site.css and frontend/src/index.css (tests/public/test_frame_css.py).
@@ -817,45 +848,114 @@ html[lang="ar"] .footer-col h2 {
   color: var(--f-quiet);
 }
 
-.footer-top {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-weight: 600;
-}
-
-.footer-top svg {
-  box-sizing: content-box;
-  width: 1rem;
-  height: 1rem;
-  padding: 0.7rem;
-  border: 1px solid var(--f-line);
+/* Floating back-to-top: appears after the first screen; the ring fills as you read. Pure CSS,
+   so it works on the no-JavaScript public pages too. It targets #page-top, not the sticky
+   header: a sticky element is always on screen, so the browser never scrolls to it. */
+.to-top {
+  position: fixed;
+  inset-inline-end: max(1.25rem, env(safe-area-inset-right, 0px));
+  inset-block-end: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: 999px;
-  background: var(--f-raise);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  color: #e6edf7;
+  background: rgb(11 27 63 / 0.82);
+  backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow:
+    0 14px 34px -14px rgb(6 18 42 / 0.7),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08);
   transition:
     transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 150ms ease-out;
+    background-color 200ms ease-out;
 }
 
-.site-footer .footer-top:hover {
-  color: var(--f-glow);
+.site-footer .to-top {
+  color: #e6edf7;
 }
 
-.footer-top:hover svg {
+.to-top svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.to-top-track,
+.to-top-ring {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.to-top-track {
+  stroke: rgb(255 255 255 / 0.12);
+}
+
+.to-top-ring {
+  stroke: #2dd4c4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+
+.to-top-arrow {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.to-top:hover {
   transform: translateY(-3px);
-  border-color: var(--f-glow);
+  background: rgb(14 124 118 / 0.95);
+}
+
+.to-top:hover .to-top-arrow {
+  transform: translateY(-3px);
+}
+
+.to-top:focus-visible {
+  outline: 2px solid #2dd4c4;
+  outline-offset: 3px;
+}
+
+@keyframes to-top-in {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem) scale(0.85);
+  }
+}
+
+@keyframes to-top-fill {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .to-top {
+    animation: to-top-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 60vh;
+  }
+
+  .to-top-ring {
+    animation: to-top-fill linear both;
+    animation-timeline: scroll(root);
+  }
 }
 
 .footer-word {
   font-family: "Outfit Variable", system-ui, sans-serif;
   font-weight: 800;
   font-size: clamp(4rem, 17.5vw, 16rem);
-  line-height: 0.72;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   text-align: center;
   white-space: nowrap;
@@ -864,9 +964,9 @@ html[lang="ar"] .footer-col h2 {
   -webkit-background-clip: text;
   background-clip: text;
   user-select: none;
-  text-box: trim-both cap alphabetic;
+  text-box-trim: trim-start;
+  text-box-edge: cap alphabetic;
   margin: clamp(1.5rem, 4vw, 3rem) 0 0;
-  translate: 0 0.08em;
 }
 
 @keyframes footer-draw {
@@ -932,11 +1032,13 @@ html[lang="ar"] .footer-col h2 {
 
 @media (prefers-reduced-motion: reduce) {
   .footer-route path,
-  .footer-word {
+  .footer-word,
+  .to-top-ring {
     animation: none;
   }
 
-  .footer-top svg,
+  .to-top,
+  .to-top-arrow,
   .footer-col a::after {
     transition: none;
   }
@@ -1510,9 +1612,10 @@ pre {
   }
 }
 
+/* Movement only: text that fades in gets measured mid-fade by contrast checkers, and is
+   unreadable in a still frame. */
 @keyframes reveal {
   from {
-    opacity: 0;
     transform: translateY(2.5rem) scale(0.97);
   }
 }

@@ -1,3 +1,6 @@
+from collections.abc import Callable
+
+from django.conf import settings
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import loader
@@ -41,3 +44,22 @@ def server_error(request: HttpRequest) -> HttpResponse:
     if request.path.startswith(JSON_PREFIXES):
         return JsonResponse({"detail": "Server error."}, status=500)
     return HttpResponse(loader.get_template("public/500.html").render(), status=500)
+
+
+class BrandedNotFoundMiddleware:
+    """With DEBUG on, Django answers 404s with its technical page instead of handler404;
+    development should show the same page visitors get."""
+
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        response = self.get_response(request)
+        if (
+            settings.DEBUG
+            and response.status_code == 404
+            and not request.path.startswith(JSON_PREFIXES)
+            and response.get("Content-Type", "").startswith("text/html")
+        ):
+            return not_found(request)
+        return response

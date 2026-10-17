@@ -8,7 +8,8 @@
     "language": "Language",
     "holidays": "Holidays",
     "pricing": "Pricing",
-    "menu": "Menu"
+    "menu": "Menu",
+    "account": "Account"
   },
   "common": {
     "add": "Add",
@@ -274,7 +275,8 @@
     "schema": "OpenAPI schema",
     "sitemap": "Sitemap",
     "credit": "Holiday data: the open-source holidays library.",
-    "top": "Back to top"
+    "top": "Back to top",
+    "openCalendars": "Open my calendars"
   },
   "notFound": {
     "title": "This flight went off course",

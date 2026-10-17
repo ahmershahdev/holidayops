@@ -1,5 +1,7 @@
+import hashlib
 import json
 from collections.abc import Callable
+from functools import cache as memoize
 from functools import wraps
 from typing import Any
 
@@ -71,6 +73,18 @@ def too_many_requests(request: HttpRequest, wait: float | None) -> HttpResponse:
     return response
 
 
+@memoize
+def build_id() -> str:
+    """Changes with every deploy's static files. Cached pages name hashed stylesheets, so a page
+    cached before a deploy would point at files that no longer exist."""
+    try:
+        return hashlib.sha256((settings.STATIC_ROOT / "staticfiles.json").read_bytes()).hexdigest()[
+            :12
+        ]
+    except OSError:
+        return "dev"
+
+
 def public_page(view: View) -> View:
     """Language from the URL, strict CSP, and a server-side page cache keyed by theme: the
     theme is written into the HTML, so one cached copy per theme. Browsers revalidate the HTML
@@ -78,7 +92,9 @@ def public_page(view: View) -> View:
 
     @wraps(view)
     def wrapper(request: HttpRequest, *args: Any, lang: str = "en", **kwargs: Any) -> HttpResponse:
-        key = f"page:{get_theme(request)}:{request.get_host()}:{request.get_full_path()}"
+        key = (
+            f"page:{build_id()}:{get_theme(request)}:{request.get_host()}:{request.get_full_path()}"
+        )
         cached: HttpResponse | None = cache.get(key)
         if cached is not None:
             return cached

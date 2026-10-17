@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { currentLanguage } from "../../i18n";
+import { useMe } from "../../lib/auth";
 import { useFormat } from "../../lib/format";
 import { Mark, Wordmark } from "./Brand";
-import { Switches } from "./Switches";
 
 // Same markup and classes as backend/apps/public/templates/public/_footer.html; the styles are
 // one block shared by both stylesheets.
@@ -20,6 +20,7 @@ export function SiteFooter() {
   const fmt = useFormat();
   const prefix = sitePrefix();
   const year = new Date().getFullYear();
+  const { data: me } = useMe();
 
   return (
     <footer className="site-footer">
@@ -30,12 +31,20 @@ export function SiteFooter() {
             <span className="footer-accent">{t("footer.ctaLine2")}</span>
           </p>
           <div className="footer-actions">
-            <Link className="footer-button footer-button-ghost" to="/login">
-              {t("auth.login")}
-            </Link>
-            <Link className="footer-button" to="/signup">
-              {t("footer.start")}
-            </Link>
+            {me ? (
+              <Link className="footer-button" to="/app">
+                {t("footer.openCalendars")}
+              </Link>
+            ) : (
+              <>
+                <Link className="footer-button footer-button-ghost" to="/login">
+                  {t("auth.login")}
+                </Link>
+                <Link className="footer-button" to="/signup">
+                  {t("footer.start")}
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <svg
@@ -81,21 +90,20 @@ export function SiteFooter() {
           </nav>
         </div>
         <div className="footer-bottom">
-          <Switches dark />
-          <p>
-            © {year} HolidayOps · {t("footer.credit")}
-          </p>
-          <a className="footer-top" href="#top">
-            {t("footer.top")}
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-          </a>
+          <p>© {year} HolidayOps</p>
+          <p>{t("footer.credit")}</p>
         </div>
       </div>
       <p className="footer-word" aria-hidden="true" dir="ltr">
         HolidayOps
       </p>
+      <a className="to-top" href="#page-top" aria-label={t("footer.top")}>
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <circle className="to-top-track" cx="24" cy="24" r="21" />
+          <circle className="to-top-ring" cx="24" cy="24" r="21" pathLength={1} />
+          <path className="to-top-arrow" d="M24 31V17M17.5 23.5 24 17l6.5 6.5" />
+        </svg>
+      </a>
     </footer>
   );
 }

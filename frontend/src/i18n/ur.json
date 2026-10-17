@@ -8,7 +8,8 @@
     "language": "زبان",
     "holidays": "تعطیلات",
     "pricing": "قیمتیں",
-    "menu": "مینو"
+    "menu": "مینو",
+    "account": "اکاؤنٹ"
   },
   "common": {
     "add": "شامل کریں",
@@ -274,7 +275,8 @@
     "schema": "OpenAPI اسکیما",
     "sitemap": "سائٹ میپ",
     "credit": "تعطیلات کا ڈیٹا: اوپن سورس holidays لائبریری۔",
-    "top": "اوپر جائیں"
+    "top": "اوپر جائیں",
+    "openCalendars": "میرے کیلنڈر کھولیں"
   },
   "notFound": {
     "title": "یہ پرواز راستہ بھٹک گئی",
