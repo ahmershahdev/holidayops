@@ -218,31 +218,6 @@
   .burger.is-open i:last-child {
     transform: translateY(-3.5px) rotate(-45deg);
   }
-
-  .footer-route path {
-    fill: none;
-    stroke: #00d1c1;
-    stroke-width: 2;
-    stroke-dasharray: 1;
-    opacity: 0.6;
-  }
-
-  .footer-word {
-    margin: 0;
-    font-family: "Outfit Variable", system-ui, sans-serif;
-    font-weight: 800;
-    font-size: clamp(4rem, 17vw, 15rem);
-    line-height: 0.8;
-    letter-spacing: -0.05em;
-    text-align: center;
-    color: transparent;
-    -webkit-text-stroke: 1px #36548a;
-    background: linear-gradient(180deg, #1e3462 10%, transparent 85%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    user-select: none;
-    translate: 0 0.12em;
-  }
 }
 
 /* Unlayered so it beats the links' own utility classes inside the mobile sheet. */
@@ -289,13 +264,323 @@
   }
 }
 
-@keyframes draw-route {
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-settle linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .sheet-links > * {
+    animation: none !important;
+  }
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  background-color: var(--color-night);
+}
+
+/* frame:footer — identical in site.css and frontend/src/index.css (tests/public/test_frame_css.py).
+   Night panel colours are local so the block needs no theme tokens; background-color is set
+   per stylesheet. */
+.site-footer {
+  --f-text: #c7d3e3;
+  --f-strong: #e6edf7;
+  --f-muted: #8fa3bd;
+  --f-quiet: #a3b3c9;
+  --f-glow: #2dd4c4;
+  --f-line: #24375c;
+  --f-raise: #111d36;
+  position: relative;
+  margin-block-start: 4rem;
+  padding-block-start: clamp(3rem, 6vw, 5rem);
+  overflow: hidden;
+  color: var(--f-text);
+  background-image: radial-gradient(60rem 20rem at 50% 0%, rgb(0 209 193 / 0.1), transparent 70%);
+  border-start-start-radius: 2rem;
+  border-start-end-radius: 2rem;
+  box-shadow: inset 0 1px 0 var(--f-line);
+}
+
+.site-footer a {
+  color: var(--f-strong);
+  text-decoration: none;
+}
+
+.footer-inner {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: max(1rem, env(safe-area-inset-left));
+}
+
+.footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+}
+
+.footer-cta-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5.5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--f-strong);
+}
+
+html[lang="ur"] .footer-cta-title {
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+
+.footer-cta-title span {
+  display: block;
+}
+
+.footer-cta-title .footer-accent {
+  color: var(--f-glow);
+}
+
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.site-footer .footer-button {
+  display: inline-block;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  background: var(--f-glow);
+  color: #06122a;
+  font-weight: 600;
+  transition:
+    background-color 150ms ease-out,
+    transform 150ms ease-out;
+}
+
+.site-footer .footer-button:hover {
+  background: #5eead4;
+}
+
+.site-footer .footer-button:active {
+  transform: scale(0.97);
+}
+
+.site-footer .footer-button-ghost {
+  background: transparent;
+  color: var(--f-strong);
+  box-shadow: inset 0 0 0 1.5px var(--f-line);
+}
+
+.site-footer .footer-button-ghost:hover {
+  background: var(--f-raise);
+  box-shadow: inset 0 0 0 1.5px var(--f-glow);
+}
+
+/* The logo's flight path, drawn across the panel as it scrolls in. */
+.footer-route {
+  display: block;
+  width: 100%;
+  height: clamp(3rem, 7vw, 5rem);
+  margin-block: 1.5rem 2.5rem;
+  overflow: visible;
+}
+
+.footer-route path {
+  fill: none;
+  stroke: #00d1c1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  opacity: 0.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.footer-route circle {
+  fill: #00d1c1;
+}
+
+[dir="rtl"] .footer-route {
+  transform: scaleX(-1);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 2.5rem 2rem;
+}
+
+.footer-brand {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.footer-brand .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.footer-brand .brand .ops {
+  color: var(--f-glow);
+}
+
+.footer-brand .mark-swoosh {
+  stroke: var(--f-glow);
+}
+
+.footer-brand p {
+  max-width: 22rem;
+  margin: 0;
+}
+
+.footer-col {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 0.35rem;
+}
+
+.footer-col h2 {
+  margin: 0 0 0.5rem;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--f-muted);
+}
+
+html[lang="ur"] .footer-col h2,
+html[lang="ar"] .footer-col h2 {
+  font-size: 0.9rem;
+  letter-spacing: 0;
+}
+
+/* Same underline as the header nav: a short route drawn from the reading start. */
+.footer-col a {
+  position: relative;
+  padding-block: 0.2rem;
+  transition: color 150ms ease-out;
+}
+
+.footer-col a::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--f-glow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[dir="rtl"] .footer-col a::after {
+  transform-origin: right center;
+}
+
+.footer-col a:hover {
+  color: var(--f-glow);
+}
+
+.footer-col a:hover::after,
+.footer-col a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-block-start: 3.5rem;
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--f-line);
+  font-size: 0.875rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: var(--f-quiet);
+}
+
+.footer-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+}
+
+.footer-top svg {
+  box-sizing: content-box;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.7rem;
+  border: 1px solid var(--f-line);
+  border-radius: 999px;
+  background: var(--f-raise);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 150ms ease-out;
+}
+
+.site-footer .footer-top:hover {
+  color: var(--f-glow);
+}
+
+.footer-top:hover svg {
+  transform: translateY(-3px);
+  border-color: var(--f-glow);
+}
+
+.footer-word {
+  font-family: "Outfit Variable", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(4rem, 17.5vw, 16rem);
+  line-height: 0.72;
+  letter-spacing: -0.01em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(45 212 196 / 0.55);
+  background: linear-gradient(180deg, rgb(45 212 196 / 0.4), rgb(45 212 196 / 0.04) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  user-select: none;
+  text-box: trim-both cap alphabetic;
+  margin: clamp(1.5rem, 4vw, 3rem) 0 0;
+  translate: 0 0.08em;
+}
+
+@keyframes footer-draw {
   from {
     stroke-dashoffset: 1;
   }
 }
 
-@keyframes word-rise {
+@keyframes footer-rise {
   from {
     opacity: 0;
     transform: translateY(30%);
@@ -303,34 +588,65 @@
   }
 }
 
-@supports (animation-timeline: scroll()) {
-  .site-header {
-    animation: header-settle linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0 8rem;
-  }
-
+@supports (animation-timeline: view()) {
   .footer-route path {
-    animation: draw-route linear both;
+    animation: footer-draw linear both;
     animation-timeline: view();
-    animation-range: entry 0% entry 100%;
+    animation-range: entry 10% cover 45%;
   }
 
   .footer-word {
-    animation: word-rise linear both;
+    animation: footer-rise linear both;
     animation-timeline: view();
-    animation-range: entry 0% cover 60%;
+    animation-range: entry 0% entry 100%;
+  }
+}
+
+@media (max-width: 56rem) {
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 36rem) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-countries {
+    grid-column: 1 / -1;
+    order: 1;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+  }
+
+  .footer-countries h2 {
+    grid-column: 1 / -1;
+  }
+
+  .footer-cta .footer-actions,
+  .footer-cta .footer-button {
+    flex: 1 1 auto;
+    text-align: center;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header,
   .footer-route path,
-  .footer-word,
-  .sheet-links > * {
-    animation: none !important;
+  .footer-word {
+    animation: none;
+  }
+
+  .footer-top svg,
+  .footer-col a::after {
+    transition: none;
   }
 }
+/* end frame:footer */
 
 .not-found-flight .route {
   stroke-dasharray: 1;

@@ -264,6 +264,8 @@
   },
   "footer": {
     "tagline": "Holidays and working days for 250 countries, merged with your own company calendar.",
+    "ctaLine1": "Every working day,",
+    "ctaLine2": "in every country.",
     "start": "Start free",
     "product": "Product",
     "calendars": "Company calendars",

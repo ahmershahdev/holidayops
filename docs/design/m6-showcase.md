@@ -77,9 +77,14 @@ the motion primitives, so every later part can be checked against it.
   large display-type links (`<details>` on public pages, so no JavaScript; React state in the app).
   The header's `backdrop-filter` is dropped while the sheet is open: it would otherwise become the
   containing block of the fixed sheet.
-- **Footer**: night panel with rounded top, a teal route drawn as it scrolls in, four columns
-  (brand + CTA, product, popular countries, developers), switches, credit, back to top, and an
-  oversized outlined "HolidayOps" that rises in. Footer text is checked on both night colours.
+- **Footer**: night panel with rounded top and a soft teal glow. A call-to-action band (the hero
+  line "Every working day, in every country." with log in + start free, the same pair as the
+  header), the logo's route drawn across the panel ending in a dot, four columns (brand, product,
+  popular countries, developers), switches, credit, a round back-to-top button, and an oversized
+  outlined "HolidayOps" that rises in. Footer links use the header's route underline. The styles
+  are one `frame:footer` block pasted into both `site.css` and the app's `index.css`;
+  `tests/public/test_frame_css.py` fails if the copies drift. On phones the product and developer
+  columns sit side by side and the countries list wraps into two columns.
 - **Mark**: a simplified logo (teal and navy bars, swoosh, plane) as inline SVG and
   `icon.svg` favicon that follows the device theme.
 - **Scrollbar and selection**: thin teal thumb on the page colour (`scrollbar-color`, ≥ 3:1,

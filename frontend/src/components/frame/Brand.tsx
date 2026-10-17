@@ -10,7 +10,7 @@ export function Mark({ className = "size-8" }: { className?: string }) {
         fill="none"
         strokeWidth="4"
         strokeLinecap="round"
-        className="stroke-accent"
+        className="mark-swoosh stroke-accent"
       />
       <path d="M33 9.5 l5 1.6 -4.2 3.1 z" fill="currentColor" className="mark-plane" />
     </svg>
@@ -20,7 +20,7 @@ export function Mark({ className = "size-8" }: { className?: string }) {
 export function Wordmark() {
   return (
     <span dir="ltr" className="font-display font-bold tracking-tight">
-      Holiday<span className="text-accent">Ops</span>
+      Holiday<span className="ops text-accent">Ops</span>
     </span>
   );
 }
