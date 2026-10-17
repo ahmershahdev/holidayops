@@ -15,6 +15,14 @@ DOCS_POLICY = (
     "frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
 )
 DOCS_PATH = "/api/v1/docs/"
+# WhiteNoise answers before this middleware runs. An SVG opened directly is a document that
+# could run script, so static SVGs get their own policy even though the flags are sanitised.
+STATIC_SVG_POLICY = "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'"
+
+
+def static_headers(headers: dict[str, str], path: str, url: str) -> None:
+    if path.endswith(".svg"):
+        headers["Content-Security-Policy"] = STATIC_SVG_POLICY
 
 
 class ContentSecurityPolicyMiddleware:

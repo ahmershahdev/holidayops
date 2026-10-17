@@ -1,5 +1,6 @@
 from typing import Any
 
+from config.csp import static_headers
 from config.settings.base import *  # noqa: F403
 from config.settings.base import DATABASES, MIDDLEWARE, SPA_DIR, env, env_list
 
@@ -43,6 +44,7 @@ STORAGES = {
 # WhiteNoise serves the web app's built files from the site root; config.spa serves its
 # index.html for the app's routes.
 WHITENOISE_ROOT = SPA_DIR
+WHITENOISE_ADD_HEADERS_FUNCTION = static_headers
 
 # DJANGO_HTTPS=false is only for running the production image locally over plain HTTP.
 HTTPS = env("DJANGO_HTTPS", "true").lower() == "true"
