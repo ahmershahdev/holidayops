@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 05:49+0000\n"
+"POT-Creation-Date: 2026-10-17 06:06+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -80,6 +80,47 @@ msgstr "اس تاریخ کو اس کیلنڈر میں پہلے سے ایک کم�
 #, python-format
 msgid "A calendar can have at most %(max)s active feed links."
 msgstr "ایک کیلنڈر کے زیادہ سے زیادہ %(max)s فعال فیڈ لنکس ہو سکتے ہیں۔"
+
+#, python-format
+msgid "Holidays in the next %(days)s days: %(calendar)s"
+msgstr "اگلے %(days)s دنوں کی تعطیلات: %(calendar)s"
+
+msgid "Company closure"
+msgstr "کمپنی بند"
+
+msgid "Half day"
+msgstr "آدھا دن"
+
+msgid "Extra working day"
+msgstr "اضافی کام کا دن"
+
+msgid "Holiday"
+msgstr "تعطیل"
+
+#, python-format
+msgid "%(name)s: the next %(days)s days"
+msgstr "%(name)s: اگلے %(days)s دن"
+
+msgid "No holidays or company days off in this period."
+msgstr "اس مدت میں کوئی تعطیل یا کمپنی کی چھٹی نہیں۔"
+
+msgid "Open the calendar"
+msgstr "کیلنڈر کھولیں"
+
+msgid ""
+"You get this email once a month because you subscribed to this calendar."
+msgstr ""
+"آپ کو یہ ای میل مہینے میں ایک بار ملتی ہے کیونکہ آپ نے اس کیلنڈر کو سبسکرائب "
+"کیا ہے۔"
+
+msgid "Unsubscribe"
+msgstr "سبسکرپشن ختم کریں"
+
+msgid "Open the calendar:"
+msgstr "کیلنڈر کھولیں:"
+
+msgid "Unsubscribe:"
+msgstr "سبسکرپشن ختم کریں:"
 
 msgid "Your role does not allow this action."
 msgstr "آپ کا کردار اس عمل کی اجازت نہیں دیتا۔"

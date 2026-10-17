@@ -60,3 +60,29 @@ def test_login_is_throttled(client: APIClient) -> None:
         client.post("/api/v1/auth/login/", {"email": "x@example.com", "password": "nope"})
     response = client.post("/api/v1/auth/login/", {"email": "x@example.com", "password": "nope"})
     assert response.status_code == 429
+
+
+def test_signup_records_the_ui_language(client: APIClient) -> None:
+    body = {"email": "urdu@example.com", "password": PASSWORD}
+    response = client.post("/api/v1/auth/signup/", body, HTTP_ACCEPT_LANGUAGE="ur")
+    assert response.data["language"] == "ur"
+    other = {"email": "fr@example.com", "password": PASSWORD}
+    assert (
+        client.post("/api/v1/auth/signup/", other, HTTP_ACCEPT_LANGUAGE="fr").data["language"]
+        == "en"
+    )
+
+
+def test_me_can_change_name_and_language_but_not_email(client: APIClient) -> None:
+    client.post("/api/v1/auth/signup/", {"email": "me@example.com", "password": PASSWORD})
+    response = client.patch(
+        "/api/v1/auth/me/",
+        {"name": "Ahmer", "language": "ar", "email": "x@example.com"},
+        format="json",
+    )
+    assert response.status_code == 200
+    assert response.data["name"] == "Ahmer"
+    assert response.data["language"] == "ar"
+    assert response.data["email"] == "me@example.com"
+    bad = client.patch("/api/v1/auth/me/", {"language": "fr"}, format="json")
+    assert bad.status_code == 400

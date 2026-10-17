@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router";
 import { api, unwrap } from "../api/client";
 import { useCountries } from "../api/hooks";
 import { CalendarExplorer } from "../components/calendar/CalendarExplorer";
+import { DigestToggle } from "../components/DigestToggle";
 import { ErrorText, PageHeader } from "../components/ui";
 import { weekStartFor } from "../lib/dates";
 
@@ -49,6 +50,7 @@ export function CalendarPage() {
             >
               {t("common.back")}
             </Link>
+            <DigestToggle org={org} calendar={id} />
             {role && role !== "viewer" && (
               <Link
                 to={`/app/${org}/calendars/${id}/settings`}

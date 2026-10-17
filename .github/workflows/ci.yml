@@ -55,6 +55,8 @@ jobs:
           for lang in ur ar; do
             missing=$(msgattrib --untranslated --no-wrap locale/$lang/LC_MESSAGES/django.po | grep -c '^msgid "[^"]' || true)
             test "$missing" -eq 0 || { echo "$lang has $missing untranslated messages"; exit 1; }
+            fuzzy=$(msgattrib --only-fuzzy --no-wrap locale/$lang/LC_MESSAGES/django.po | grep -c '^msgid "[^"]' || true)
+            test "$fuzzy" -eq 0 || { echo "$lang has $fuzzy fuzzy messages: check and fix them"; exit 1; }
           done
         env:
           DJANGO_SETTINGS_MODULE: config.settings.test

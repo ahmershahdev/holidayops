@@ -10,7 +10,8 @@ from apps.accounts.models import User
 class UserSerializer(serializers.ModelSerializer[User]):
     class Meta:
         model = User
-        fields = ["id", "email", "name"]
+        fields = ["id", "email", "name", "language"]
+        read_only_fields = ["email"]
 
 
 class SignupSerializer(serializers.Serializer[Any]):

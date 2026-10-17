@@ -1,0 +1,11 @@
+{% load i18n %}{% autoescape off %}{% blocktranslate with name=calendar.name %}{{ name }}: the next {{ days }} days{% endblocktranslate %}
+{{ start|date:"j F Y" }} – {{ end|date:"j F Y" }}
+
+{% for event in events %}{{ event.day|date:"l j F" }}  {{ event.summary }} ({% include "notifications/_kind.txt" %})
+{% empty %}{% translate "No holidays or company days off in this period." %}
+{% endfor %}
+{% translate "Open the calendar:" %} {{ calendar_url }}
+
+{% translate "You get this email once a month because you subscribed to this calendar." %}
+{% translate "Unsubscribe:" %} {{ unsubscribe_url }}
+{% endautoescape %}

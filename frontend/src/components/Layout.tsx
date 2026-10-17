@@ -1,5 +1,8 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
+import { api, unwrap } from "../api/client";
 import { changeLanguage, currentLanguage, type Language, LANGUAGES } from "../i18n";
 import { useEnsureCsrf, useLogout, useMe } from "../lib/auth";
 import { Button, Select } from "./ui";
@@ -11,6 +14,16 @@ export function Layout() {
   useEnsureCsrf();
   const { t } = useTranslation();
   const { data: me } = useMe();
+  const client = useQueryClient();
+  const language = currentLanguage();
+
+  // Emails are written in the account's language, so keep it in step with the UI choice.
+  useEffect(() => {
+    if (!me || me.language === language) return;
+    void unwrap(api.PATCH("/api/v1/auth/me/", { body: { language } })).then((user) =>
+      client.setQueryData(["me"], user),
+    );
+  }, [me, language, client]);
   const logout = useLogout();
   const navigate = useNavigate();
 

@@ -55,21 +55,28 @@ POST       /api/v1/orgs/{org}/calendars/{uuid}/feeds/{id}/rotate/   → new URL,
 ## 4.3 Monthly digests
 
 - Email settings from env: `EMAIL_BACKEND` (console by default), `EMAIL_HOST`, `EMAIL_PORT`,
-  `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL`.
+  `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL`. `APP_URL` is
+  the web app's origin, used for links in emails.
 - `DigestSubscription(user, calendar, org, created_at, last_sent_on)`, unique per user and
   calendar. Any member, viewers included, opts in or out for themselves only.
 - Beat on the 1st of each month, 06:00 UTC: `notifications.send_digests` enqueues
   `notifications.send_digest(subscription_id, run_date)` per subscription. The task skips if
   `last_sent_on` is already in that month, so retries and duplicate Beat runs send once.
-- Body: holidays, closures and half-days in the 30 days from `run_date`, holiday names in the
-  calendar's language, template text in the user's `language` (new field, default `en`). Plain
-  text and HTML, `dir="rtl"` for ur/ar.
-- One-click unsubscribe: a signed token (`django.core.signing`, salted per purpose) in the link
-  and in `List-Unsubscribe` / `List-Unsubscribe-Post`.
+- Before sending, the task checks the user is still a member of the calendar's org; if not, the
+  subscription is deleted and nothing is sent. SMTP and network errors retry with backoff (5 max).
+- Body: every day from `feed_events` in the 30 days starting at `run_date` (inclusive), holiday
+  names in the calendar's language, template text and dates in the user's `language`. An empty
+  period still sends a short "nothing coming up" email. Plain text and HTML, `dir="rtl"` for ur/ar.
+- `User.language` (`en`/`ur`/`ar`): set from `Accept-Language` at signup and kept in step with
+  the UI language switcher through `PATCH /api/v1/auth/me/` (`name`, `language`).
+- One-click unsubscribe (RFC 8058): a signed subscription id (`django.core.signing`, own salt, no
+  expiry) in `List-Unsubscribe` + `List-Unsubscribe-Post`, which mail clients POST to the API
+  without a session; the email's own link opens `/unsubscribe?token=…` in the web app, which asks
+  before posting. Unsubscribing twice is fine (`204`); a forged token gets `400`.
 
 ```
-GET PUT DELETE  /api/v1/orgs/{org}/calendars/{uuid}/digest/   current user's subscription
-POST            /api/v1/digests/unsubscribe/                  {token}, no login needed
+GET PUT DELETE  /api/v1/orgs/{org}/calendars/{uuid}/digest/   {subscribed, last_sent_on} for me
+POST            /api/v1/digests/unsubscribe/                  {token} or ?token=, no login
 ```
 
 ## 4.4 Webhooks

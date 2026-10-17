@@ -63,12 +63,14 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
 
 ## Data model
 
+- `User(email, name, language)`; `language` is `en`, `ur` or `ar` and picks the email language
 - `Organization`, `Membership(user, org, role)` with roles `owner`, `admin`, `member`, `viewer`
 - `Calendar(id: uuid, org, name, slug, is_public, language, weekend)`
 - `CalendarSource(calendar, country, subdiv, categories, position)`
 - `CustomDay(calendar, date, name, kind: closure|half_day|working_day)`
 - Milestone 5: `ApiKey(org, name, prefix, hashed_key, created_by, last_used_at, revoked_at)`
 - `FeedToken(org, calendar, label, token_hash, created_by, last_used_at, revoked_at)`
+- `DigestSubscription(org, calendar, user, last_sent_on)`, one per user and calendar
 - `Webhook(org, url, secret, events)`
 - `UsageEvent(api_key, endpoint, status, created_at)`
 - `AuditLog(org, actor, action, target, created_at)`
