@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.webhooks.models import EVENTS, Webhook, WebhookDelivery
-from apps.webhooks.net import UnsafeURL, check_url
+from apps.webhooks.net import vet
 
 
 class WebhookSerializer(serializers.ModelSerializer[Webhook]):
@@ -16,10 +16,9 @@ class WebhookSerializer(serializers.ModelSerializer[Webhook]):
         read_only_fields = ["failure_count", "created_at"]
 
     def validate_url(self, value: str) -> str:
-        try:
-            check_url(value)
-        except UnsafeURL as exc:
-            raise serializers.ValidationError(str(exc)) from exc
+        problem = vet(value)
+        if isinstance(problem, str):
+            raise serializers.ValidationError(problem)
         return value
 
     def validate_events(self, value: list[str]) -> list[str]:

@@ -13,10 +13,11 @@ REAL_RESOLVE = net.resolve
 
 
 def test_public_https_url_is_accepted(dns: mock.MagicMock) -> None:
-    target = net.check_url("https://hooks.example.com:8443/in?team=ops")
+    target = net.vet("https://hooks.example.com:8443/in?team=ops")
     assert target == net.Target("hooks.example.com", 8443, "/in?team=ops", PUBLIC_IP)
-    assert net.check_url("https://hooks.example.com").path == "/"
-    assert net.check_url("https://hooks.example.com").port == 443
+    assert net.vet("https://hooks.example.com") == net.Target(
+        "hooks.example.com", 443, "/", PUBLIC_IP
+    )
 
 
 @pytest.mark.parametrize(
@@ -30,8 +31,7 @@ def test_public_https_url_is_accepted(dns: mock.MagicMock) -> None:
     ],
 )
 def test_bad_urls_are_rejected(url: str) -> None:
-    with pytest.raises(net.UnsafeURL):
-        net.check_url(url)
+    assert isinstance(net.vet(url), str)
 
 
 @pytest.mark.parametrize(
@@ -53,24 +53,20 @@ def test_bad_urls_are_rejected(url: str) -> None:
 )
 def test_internal_addresses_are_rejected(dns: mock.MagicMock, address: str) -> None:
     dns.return_value = addrinfo(address)
-    with pytest.raises(net.UnsafeURL):
-        net.check_url("https://hooks.example.com/")
+    assert isinstance(net.vet("https://hooks.example.com/"), str)
 
 
 def test_one_internal_address_among_public_ones_is_enough_to_reject(dns: mock.MagicMock) -> None:
     dns.return_value = addrinfo(PUBLIC_IP, "10.0.0.5")
-    with pytest.raises(net.UnsafeURL):
-        net.check_url("https://hooks.example.com/")
+    assert isinstance(net.vet("https://hooks.example.com/"), str)
 
 
 def test_unresolvable_or_empty_hosts_are_rejected(dns: mock.MagicMock) -> None:
     dns.side_effect = OSError("no such host")
-    with pytest.raises(net.UnsafeURL):
-        net.check_url("https://nope.example.com/")
+    assert isinstance(net.vet("https://nope.example.com/"), str)
     dns.side_effect = None
     dns.return_value = []
-    with pytest.raises(net.UnsafeURL):
-        net.check_url("https://nope.example.com/")
+    assert isinstance(net.vet("https://nope.example.com/"), str)
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -138,5 +134,4 @@ def test_post_reports_network_errors() -> None:
 
 def test_real_lookup_of_localhost_is_rejected(dns: mock.MagicMock) -> None:
     dns.side_effect = REAL_RESOLVE
-    with pytest.raises(net.UnsafeURL):
-        net.check_url("https://localhost/")
+    assert isinstance(net.vet("https://localhost/"), str)

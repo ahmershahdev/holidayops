@@ -50,10 +50,9 @@ def attempt(delivery: WebhookDelivery, now: datetime) -> None:
     if not webhook.is_active:
         _finish(delivery, DeliveryStatus.FAILED, error="Webhook is disabled.")
         return
-    try:
-        target = net.check_url(webhook.url)
-    except net.UnsafeURL as exc:
-        _fail(delivery, net.Result(None, "", 0, str(exc)[:300]), now, retry=False)
+    target = net.vet(webhook.url)
+    if isinstance(target, str):
+        _fail(delivery, net.Result(None, "", 0, target), now, retry=False)
         return
     body = body_of(delivery)
     headers = {

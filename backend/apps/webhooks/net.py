@@ -20,10 +20,6 @@ READ_TIMEOUT = 10
 MAX_BODY = 4096
 
 
-class UnsafeURL(ValueError):
-    pass
-
-
 @dataclass(frozen=True)
 class Target:
     host: str
@@ -52,24 +48,25 @@ def resolve(host: str, port: int) -> list[str]:
     return [str(info[4][0]) for info in socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)]
 
 
-def check_url(url: str) -> Target:
+def vet(url: str) -> Target | str:
+    """The connection target, or why the URL is refused (a message that is safe to show)."""
     parts = urlsplit(url)
     if parts.scheme != "https":
-        raise UnsafeURL(_("Webhook URLs must use https."))
+        return _("Webhook URLs must use https.")
     if parts.username or parts.password:
-        raise UnsafeURL(_("Webhook URLs must not contain credentials."))
+        return _("Webhook URLs must not contain credentials.")
     if not parts.hostname:
-        raise UnsafeURL(_("Webhook URL has no host."))
+        return _("Webhook URL has no host.")
     try:
         port = parts.port or 443
-    except ValueError as exc:
-        raise UnsafeURL(_("Webhook URL has an invalid port.")) from exc
+    except ValueError:
+        return _("Webhook URL has an invalid port.")
     try:
         addresses = resolve(parts.hostname, port)
-    except OSError as exc:
-        raise UnsafeURL(_("Webhook host does not resolve.")) from exc
+    except OSError:
+        return _("Webhook host does not resolve.")
     if not addresses or not all(_is_public(a) for a in addresses):
-        raise UnsafeURL(_("Webhook host must resolve to public addresses only."))
+        return _("Webhook host must resolve to public addresses only.")
     path = parts.path or "/"
     if parts.query:
         path = f"{path}?{parts.query}"
