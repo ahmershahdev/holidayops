@@ -57,7 +57,11 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
    - ✅ Site frame: shared header/footer (public + app), light/dark/device themes via one cookie
      with no flash, custom scrollbar and selection, mobile/tablet layouts checked by device
      emulation, branded 404/500.
-   - Next: 6.2 landing page at `/`, then flags, a security pass, 6.3, 6.4.
+   - ✅ 6.2 landing page at `/` (#23): hero route kept clear of the copy at every width
+     (measured, not eyeballed), no-JS working-day demo, story, code, marquee, pricing teaser.
+   - ✅ Footer redesign (#24): matches the header (CTA pair, route underline), one shared
+     `frame:footer` CSS block for both halves, guarded by `tests/public/test_frame_css.py`.
+   - Next: flags, a security pass, 6.3 country pages, 6.4 performance/accessibility.
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
@@ -93,3 +97,10 @@ Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the b
 - The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).
 - Stacked PRs + squash merge: rebase the next branch with `git rebase --onto origin/main <old base>`
   before merging, and retarget it before deleting its base branch, or GitHub closes it.
+- Stale pages in screenshots: public HTML is cached in Redis per theme and `runserver --noreload`
+  keeps Django's cached template loader. Run `runserver` with autoreload and clear the cache
+  (`manage.py shell -c "from django.core.cache import cache; cache.clear()"`) before shooting.
+- Git Bash rewrites arguments that start with `/` into Windows paths (`/ur/` → `C:/Program
+  Files/Git/ur/`): prefix the command with `MSYS_NO_PATHCONV=1`.
+- A scroll-driven animation on the last element of a page must finish by `entry 100%`: ranges
+  like `cover 60%` are never reached at the bottom, so the element stays half animated.

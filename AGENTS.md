@@ -55,8 +55,25 @@ docs/                    architecture, security, seo, roadmap, design notes
 - Secrets come only from environment variables. Never commit `.env`, dumps or personal data.
 - API changes update the OpenAPI schema and the frontend client in the same PR.
 - No new dependency without a reason in the PR description. Pin exact versions.
-- Code is comment-free by default; comment only a non-obvious why, a data quirk or a source URL.
 - The maintainer must be able to explain every line; keep core logic small and readable.
+- The footer's CSS is one `frame:footer` block pasted into both `site.css` and the app's
+  `index.css`; change both (a test compares them). Same for the palette tokens.
+
+## Comments
+
+Few, short, written like a colleague's note. Names and structure explain *what*; a comment is
+only for what the code can't say:
+
+- why it's done this way (`# Signer, not signing.dumps: the link never expires`),
+- a data or library quirk (`# The UAE moved from Fri-Sat to Sat-Sun in 2022`),
+- a spec or source (`# RFC 5545 3.1: lines are at most 75 octets`),
+- a trap for the next person (`# backdrop-filter makes the header the containing block…`).
+
+Not: restating the line below, section banners in templates, "This function…" docstrings,
+history ("changed from…", "new:"), TODOs without an owner, or filler words (simply, robust,
+seamless, ensure, leverage, comprehensive). Delete a comment the code made obsolete in the same
+change. Short docstrings are fine on public functions and classes when they add a fact the
+signature doesn't.
 
 ## Workflow
 
@@ -64,6 +81,11 @@ docs/                    architecture, security, seo, roadmap, design notes
   history, no force-push.
 - Commit messages: short, imperative, no prefixes (`Add business_days_between endpoint`).
 - Every feature PR has tests.
+- Before pushing, run what CI runs: backend ruff, ruff format, **mypy**, pytest; frontend lint,
+  typecheck, Prettier, tests. If a template or `gettext` string changed, run `npm run messages`
+  (reusing a string elsewhere reorders the catalog, and CI fails on that too).
+- Check UI changes with screenshots at phone (390), tablet (820) and desktop (1440), light and
+  dark, en and one RTL language.
 
 ## Commands
 

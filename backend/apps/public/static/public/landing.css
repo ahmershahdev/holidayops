@@ -113,7 +113,6 @@
   font-size: 0.875rem;
 }
 
-/* Floating calendar card: drops in, then tilts away as it scrolls off. */
 .hero-calendar {
   margin: 0;
   padding: 1.25rem;
