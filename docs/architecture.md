@@ -75,7 +75,9 @@ Every org-owned model has an `org` foreign key; querysets are always filtered by
 
 ## Background jobs (Milestone 4)
 
-Celery with a Redis broker and Celery Beat: iCal rebuilds, monthly digests, webhook delivery.
+Celery with a Redis broker and Celery Beat: monthly digests and webhook delivery. No result
+backend; tasks record outcomes in the database. Task conventions:
+[design/m4-subscriptions.md](design/m4-subscriptions.md).
 
 ## Internationalization
 

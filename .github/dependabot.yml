@@ -4,10 +4,16 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
   - package-ecosystem: uv
     directory: /backend
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      backend:
+        patterns: ["*"]
     ignore:
       # Stay on the Django LTS line; move to the next LTS in a planned PR.
       - dependency-name: django
@@ -15,7 +21,10 @@ updates:
   - package-ecosystem: npm
     directory: /frontend
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      frontend:
+        patterns: ["*"]
     ignore:
       # typescript-eslint supports TypeScript < 6.1; lift this when it supports 7.
       - dependency-name: typescript

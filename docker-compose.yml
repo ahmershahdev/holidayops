@@ -29,6 +29,29 @@ services:
       db: {condition: service_healthy}
       redis: {condition: service_started}
 
+  worker:
+    build: ./backend
+    env_file: .env
+    environment:
+      MYSQL_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    command: ["celery", "-A", "config", "worker", "--loglevel=info"]
+    volumes: [./backend:/app]
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_started}
+
+  beat:
+    build: ./backend
+    env_file: .env
+    environment:
+      MYSQL_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    command: ["celery", "-A", "config", "beat", "--loglevel=info", "--schedule=/tmp/celerybeat-schedule"]
+    volumes: [./backend:/app]
+    depends_on:
+      redis: {condition: service_started}
+
   frontend:
     image: node:24-alpine
     working_dir: /app
