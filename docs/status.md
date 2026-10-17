@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-16. Update this file at the end of every work session.
+Last updated: 2026-10-17. Update this file at the end of every work session.
 
 ## Where we are
 
@@ -9,7 +9,7 @@ Last updated: 2026-10-16. Update this file at the end of every work session.
 | 1. Public API over `holidays` | ✅ merged (#2) |
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
-| 4. iCal feeds, digests, webhooks | ⏭ next |
+| 4. iCal feeds, digests, webhooks | 🚧 4.1 Celery on `feat/celery` |
 | 5. API keys, limits, deployment, SEO pages | planned |
 | 6. Showcase website | planned |
 
@@ -18,8 +18,10 @@ Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo l
 
 ## Next: Milestone 4 (see [roadmap.md](roadmap.md))
 
-1. **4.1 Celery** – worker + Beat services in Compose, `config/celery.py`, task conventions, tests
-   with eager mode.
+Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four parts).
+
+1. ✅ **4.1 Celery** – worker + Beat in Compose and `npm run dev`, `config/celery.py`, task
+   conventions, eager-mode tests. `redis` went 8.1 → 6.4: kombu's Redis extra caps it below 6.5.
 2. **4.2 iCal feeds** – `FeedToken` model (hashed, revocable, rotatable), `/feeds/<token>.ics`,
    cached build, UI to create/rotate/revoke the link in calendar settings.
 3. **4.3 Digests** – monthly email "holidays in the next 30 days", per-member opt-in, email backend
@@ -28,7 +30,7 @@ Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo l
    resolution, retries with backoff, delivery log, UI in org settings.
 5. Org invites by email (deferred from Milestone 2) once email sending exists.
 
-Start each part on its own `feat/...` branch; write the design note in `docs/design/m4-*.md` first.
+Start each part on its own `feat/...` branch.
 
 ## Open items
 
@@ -52,5 +54,6 @@ Start each part on its own `feat/...` branch; write the design note in `docs/des
 - No GNU gettext on Windows: use `npm run messages` (runs in the backend container).
 - After changing frontend dependencies, delete `frontend/node_modules/.vite` if the app shows a
   blank page with "Invalid hook call".
+- The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).
 - Stacked PRs + squash merge: rebase the next branch with `git rebase --onto origin/main <old base>`
   before merging, and retarget it before deleting its base branch, or GitHub closes it.

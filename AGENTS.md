@@ -18,6 +18,7 @@ web UI in en/ur/ar) built on the Python [holidays](https://github.com/vacanza/ho
 | Milestone 1 API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
 | Auth, orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
 | UI, design system, i18n/RTL, calendar views | [docs/design/m3-ui.md](docs/design/m3-ui.md) |
+| Celery tasks, iCal feeds, digests, webhooks | [docs/design/m4-subscriptions.md](docs/design/m4-subscriptions.md) |
 
 ## Stack
 
@@ -66,9 +67,9 @@ docs/                    architecture, security, seo, roadmap, design notes
 ```
 cp .env.example .env                         # once; fill in secrets
 npm install && npm run setup                 # once
-npm run dev                                  # Docker db+redis, Django :8000, Vite :5173
+npm run dev                                  # Docker db+redis, Django :8000, Vite :5173, Celery
 docker compose up -d db redis                # MySQL + Redis only
-docker compose up -d                         # everything in containers (db, redis, backend, frontend)
+docker compose up -d                         # everything in containers (db, redis, backend, worker, beat, frontend)
 cd backend
 uv sync                                      # install pinned deps into .venv
 uv run --env-file ../.env python manage.py migrate
