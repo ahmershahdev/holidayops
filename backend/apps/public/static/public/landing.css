@@ -602,6 +602,12 @@
     min-height: 0;
   }
 
+  /* Stacked, the copy fills the top: keep the route behind the calendar. */
+  .hero-route {
+    inset-block: auto 0;
+    height: 38%;
+  }
+
   .hero-calendar {
     max-width: 26rem;
   }
