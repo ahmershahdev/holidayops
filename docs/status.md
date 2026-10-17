@@ -10,8 +10,8 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
 | 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | 🚧 5.1–5.2 merged (#17, #18); 5.3 on `feat/deployment` |
-| 6. Showcase website | planned |
+| 5. API keys, limits, deployment, SEO pages | ✅ code done (#17–#19); hosting and 5.4 wait for launch |
+| 6. Showcase website | ⏭ next |
 
 Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
 (`demo@holidayops.test`, password = `DEMO_PASSWORD` in `.env`). Docker Desktop must be running.
@@ -45,9 +45,11 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
    built SPA served by Django, `/healthz`, TLS to MySQL, Redis cache for country holiday lists,
    `docker-compose.prod.yml`, `deploy.yml` (GHCR on every main push; Azure job off until
    `AZURE_DEPLOY=true`) ([deployment.md](deployment.md)).
-5. **Waiting on the owner**: confirm Azure, create the resources, DNS for
-   `holidayops.ahmershah.dev`, repo secrets/variables, SMTP provider. Then the demo URL is live.
-6. Next code: 5.4 docs (README setup, API examples, screenshots).
+5. **Hosting deferred by the owner** (decided 2026-10-17): no deployment now. Launch is planned
+   around GSoC 2027, which the owner put at Feb 2028. Azure is the likely host, not confirmed. When
+   it's time: follow [deployment.md](deployment.md), then do 5.4 docs (README, API examples,
+   screenshots from the live site).
+6. Next: Milestone 6, the showcase website (frontend/design).
 
 Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
 
