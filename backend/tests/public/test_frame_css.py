@@ -12,9 +12,11 @@ BLOCK = re.compile(r"/\* frame:footer .*?/\* end frame:footer \*/", re.S)
 
 
 def footer_block(path: Path) -> str:
-    found = BLOCK.findall(path.read_text(encoding="utf-8"))
-    assert len(found) == 1, path
-    return found[0]
+    css = path.read_text(encoding="utf-8")
+    assert len(BLOCK.findall(css)) == 1, path
+    match = BLOCK.search(css)
+    assert match
+    return match.group(0)
 
 
 def test_footer_block_is_identical_in_both_stylesheets() -> None:
