@@ -1,139 +1,105 @@
 # Project status
 
-Last updated: 2026-10-17. Update this file at the end of every work session.
+Last updated: 2026-10-18 (through #34). Update this file at the end of every work session.
+
+Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
+(`demo@holidayops.test`, password = `DEMO_PASSWORD` in `.env`). Docker Desktop must be running.
 
 ## Where we are
 
 | Milestone | State |
 |---|---|
-| 1. Public API over `holidays` | ✅ merged (#2) |
-| 2. Accounts, orgs, company calendars | ✅ merged (#6) |
-| 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
-| 4. iCal feeds, digests, webhooks | ✅ merged (#12, #13, #14, #15) |
-| 5. API keys, limits, deployment, SEO pages | ✅ code done (#17–#19); hosting and 5.4 wait for launch |
-| 6. Showcase website | 🚧 6.1 on `feat/art-direction` |
+| 1. Public API over `holidays` | ✅ #2 |
+| 2. Accounts, orgs, company calendars, invites | ✅ #6, invites after M4 |
+| 3. Web app UI, design system, ur/ar RTL | ✅ #9 |
+| 4. Celery, iCal feeds, digests, webhooks | ✅ #12–#15 |
+| 5. API keys and plans, SEO pages, production image | ✅ #17–#19; hosting and 5.4 docs wait for launch |
+| 6. Showcase website | ✅ code done (#21–#33); Lighthouse re-run and translation review open |
 
-Run it: `npm run dev` → <http://localhost:5173>; `npm run seed` for the demo login
-(`demo@holidayops.test`, password = `DEMO_PASSWORD` in `.env`). Docker Desktop must be running.
+Hosting is deferred by the owner (2026-10-17): launch around GSoC 2027 (owner put it at Feb 2028),
+Azure likely. Then follow [deployment.md](deployment.md) and write 5.4 (README, API examples,
+screenshots from the live site).
 
-## Milestone 4 recap (see [roadmap.md](roadmap.md))
+## Milestone 6 log
 
-Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four parts).
+| PR | What |
+|---|---|
+| #21 | Art direction: logo-led palette with measured contrast, Outfit, motion primitives, `/style/` |
+| #22 | Site frame: shared header/footer, light/dark/device theme cookie, branded 404/500 |
+| #23 | Landing page at `/`: hero route kept clear of the copy at every width, no-JS working-day demo |
+| #24 | Footer matches the header; one `frame:footer` CSS block for both halves (tested) |
+| #25 | Comment rule in AGENTS.md; comments that restated code removed |
+| #26 | Security: count-then-create limits under a MySQL named lock, `NUM_PROXIES` (X-Forwarded-For could dodge every per-IP throttle), public page rate limit, `holidayops.security` event log |
+| #27 | Country flags: flag-icons 7.5.0 (MIT), allowlist-sanitised, CSP on static SVGs |
+| #28 | Country pages: flag-coloured pattern banner, 12-month calendar, CLDR names, day/month names and list patterns via Babel |
+| #29 | Route-split app bundle (446 → 382 KB on `/playground`), translations on demand, h1 fixes |
+| #30 | Lighthouse 13.5.0 on Linux recorded (below) |
+| #31 | Footer cleanup and wordmark fix, CSS scroll-to-top, account menu, themed selects, dev 404 page, page cache versioned per deploy, Lighthouse findings fixed |
+| #32 | Log in / sign up redesign: art panel, icons, placeholders, password eye toggle |
+| #33 | Pricing redesign (plan cards, request route with arrows, compare table, FAQ); landing use cases and step arrows |
+| #34 | AGENTS.md, roadmap and this log brought up to date |
 
-1. ✅ **4.1 Celery** – worker + Beat in Compose and `npm run dev`, `config/celery.py`, task
-   conventions, eager-mode tests. `redis` went 8.1 → 6.4: kombu's Redis extra caps it below 6.5.
-2. ✅ **4.2 iCal feeds** – `FeedToken` (hashed, revocable, rotatable, max 10 per calendar),
-   `/feeds/<token>.ics` built by `apps/core/ical.py`, cached by `calendar.updated_at`, ETag/304;
-   "Calendar feeds" card in calendar settings.
-3. ✅ **4.3 Digests** – `DigestSubscription`, Beat on the 1st at 06:00 UTC fans out one task per
-   subscription, once per month even on retries; `User.language` for the email; one-click
-   unsubscribe; "Email me monthly" toggle on the calendar page and `/unsubscribe` page.
-4. ✅ **4.4 Webhooks** – `apps/webhooks`: HMAC-SHA256 `t=…,v1=…` signature, SSRF guard with
-   a pinned connection, DB-scheduled retries (Beat `webhooks.retry_due` every minute), delivery
-   log, auto-disable after 20 failures; "Webhooks" card in org settings for admins.
-## Next
+## Lighthouse 13.5.0, Linux (2026-10-18, before #31)
 
-1. ✅ Org invites by email: `Invite` (hashed token, 7 days, one use), email sent in the request,
-   accept only with the invited address; `/invite` page, pending list in org settings.
-2. ✅ **5.1 API keys** – `hops_<prefix>_<secret>` (hashed), plans `free`/`pro` (`set_plan`
-   command, limits in settings/env), per-key rate + monthly org quota, `UsageEvent` (90 days),
-   "API keys" and "Usage" cards (30-day chart) in org settings.
-3. ✅ **5.2 Public SEO pages** – `apps/public`: country index, country/year and subdivision/year
-   pages, pricing, in en/ur/ar (`/ur/`, `/ar/`), JSON-LD, hreflang, per-country sitemaps,
-   robots.txt, no JavaScript ([seo.md](seo.md)).
-4. ✅ **5.3 Deployment (code side)** – root `Dockerfile` (324 MB, web + worker + beat), WhiteNoise,
-   built SPA served by Django, `/healthz`, TLS to MySQL, Redis cache for country holiday lists,
-   `docker-compose.prod.yml`, `deploy.yml` (GHCR on every main push; Azure job off until
-   `AZURE_DEPLOY=true`) ([deployment.md](deployment.md)).
-5. **Hosting deferred by the owner** (decided 2026-10-17): no deployment now. Launch is planned
-   around GSoC 2027, which the owner put at Feb 2028. Azure is the likely host, not confirmed. When
-   it's time: follow [deployment.md](deployment.md), then do 5.4 docs (README, API examples,
-   screenshots from the live site).
-6. **Milestone 6** ([design/m6-showcase.md](design/m6-showcase.md)): owner chose logo-led palette
-   (app too), geometric country patterns, bold motion, landing at `/`.
-   - ✅ 6.1 art direction: palette with measured contrast, Outfit display font, motion primitives
-     (flight path, scroll-driven reveals, View Transitions), living style guide at `/style/`,
-     app re-skinned; `tests/public/test_tokens.py` keeps both stylesheets in sync.
-   - ✅ Site frame: shared header/footer (public + app), light/dark/device themes via one cookie
-     with no flash, custom scrollbar and selection, mobile/tablet layouts checked by device
-     emulation, branded 404/500.
-   - ✅ 6.2 landing page at `/` (#23): hero route kept clear of the copy at every width
-     (measured, not eyeballed), no-JS working-day demo, story, code, marquee, pricing teaser.
-   - ✅ Footer redesign (#24): matches the header (CTA pair, route underline), one shared
-     `frame:footer` CSS block for both halves, guarded by `tests/public/test_frame_css.py`.
-   - ✅ Security pass (#26): atomic API-key/invite/webhook/feed limits (MySQL named lock),
-     `NUM_PROXIES` (X-Forwarded-For could dodge every per-IP throttle), public page rate limit,
-     `holidayops.security` event log.
-   - ✅ Flags (#27): flag-icons 7.5.0 (MIT), sanitised by allowlist, CSP on static SVGs.
-   - ✅ 6.3 country pages (#28): flag-coloured pattern banner, 12-month calendar, CLDR (Babel)
-     country/day/month names and list patterns for ur/ar.
-   - ✅ 6.4 part 1 (#29): route-split bundle, translations on demand, vendor chunk, h1 fixes.
-   - Next: fix the Lighthouse findings below, native-speaker review via the review sheet.
+Debian container with Chromium against the production image, single runs, mobile (throttled).
 
-## Lighthouse 13.5.0, Linux (2026-10-18)
+| Page | Perf | A11y | Best pr. | SEO |
+|---|---|---|---|---|
+| `/` | 93 | 84 | 96 | 100 |
+| `/holidays/pk/2026/` | 100 | 96 | 96 | 100 |
+| `/playground` | 35 | 100 | 92 | 54 |
+| `/login` | 65 | 100 | 92 | 54 |
 
-Debian container with Chromium against the production image (`docker-compose.prod.yml`), single
-runs, mobile preset (throttled) / desktop. Before = `main` at #28, after = #29.
-
-| Page | Perf mobile before → after | Perf desktop | A11y | Best pr. | SEO |
-|---|---|---|---|---|---|
-| `/` | 90 → 93 | 100 | 91 → 84 | 100 → 96 | 100 |
-| `/holidays/pk/2026/` | 81 → 100 | 100 | 96 | 100 → 96 | 100 |
-| `/holidays/` | 87 (before only) | 97 | 100 | 100 | 100 |
-| `/playground` | 47 → **35** (LCP 6.9 s, CLS 0.115) | 96 → 94 | 100 | 92 | 54 |
-| `/login` | 47 → 65 | 96 → 95 | 100 | 92 | 54 |
-
-Open findings, in order:
-1. `/playground` mobile got worse: lazy routes add a waterfall (entry → i18n → page chunk) and
-   the Suspense placeholder shifts layout. Preload the playground chunk or keep it eager.
-2. `/` accessibility 84: `aria-required-children`/`-parent` (hero calendar `role="grid"` cells
-   without `row`s), a colour-contrast pair, small touch targets, a console error.
-3. SPA SEO 54: app pages have no meta description and are crawlable; add `noindex` + description.
-4. Best practices 96 on public pages: a console error, to identify.
-
-Each part: one `feat/...` branch, PR, merge as soon as CI is green, delete the branch.
+#31 fixed every finding (playground eager again, hero calendar roles, contrast measured mid-fade,
+touch targets, blocked `data:` fonts, stale hashed CSS after deploys, SPA `noindex` and meta
+description). **Not re-measured yet.** The runner lives outside the repo; rebuild it from
+`node:22-bookworm-slim` + `chromium` + `lighthouse@13.5.0` and run it on the
+`holidayops-prod_default` network.
 
 ## Open items
 
-- [ ] Native-speaker review of `frontend/src/i18n/{ur,ar}.json` and `backend/locale/*/django.po`:
-  review sheet <https://claude.ai/artifact/8ysoXpDponxKUH7V8qET4q> (private; share it with the
-  reviewers). Every ur/ar string is AI-drafted and unverified until marked there.
+- [ ] Re-run Lighthouse on Linux after #31–#33 and record the scores here.
+- [ ] Native-speaker review of every ur/ar string (all AI-drafted, none verified). Review sheet:
+  <https://claude.ai/artifact/8ysoXpDponxKUH7V8qET4q> (private; share it with reviewers). It
+  predates #31–#33: about 60 newer strings still need adding to it.
 - [ ] Update local Node.js to ≥ 22.22 (jsdom 30 warns on 22.19).
-
-## Deferred on purpose (owner milestone)
-
+- [ ] At launch: hosting, then 5.4 docs.
 
 ## Gotchas learned
 
 - Use `uv run --env-file ../.env ...` for backend commands; pytest always uses
   `config.settings.test` (`--ds` in `pyproject.toml`).
 - Only one test run against MySQL at a time: parallel runs share `test_holidayops` and drop it.
-- No GNU gettext on Windows: use `npm run messages` (runs in the backend container).
+- No GNU gettext on Windows: use `npm run messages` (runs in the backend container;
+  `docker compose build backend` first after dependency changes).
+- `makemessages` fuzzy-matches new strings to unrelated old ones ("Questions" became «علاقے»,
+  "regions"): after every run, grep `#, fuzzy` and fix those entries by hand.
 - After changing frontend dependencies, delete `frontend/node_modules/.vite` if the app shows a
   blank page with "Invalid hook call".
 - Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
   `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
-- `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
-- Both compose files are in the same folder: `docker-compose.prod.yml` sets `name:
-  holidayops-prod`, or its db/redis would replace the dev containers.
-- Git Bash heredocs here turn a doubled backslash into a single one: write files containing
-  escapes, regexes or `\u` sequences with the editor tools, not `cat <<EOF` or inline `python -`.
-- Don't mock `socket.*` through an app module (`apps.x.socket.getaddrinfo` is the real `socket`
-  module): patch a small wrapper like `apps.webhooks.net.resolve` instead.
-- `makemessages` can fuzzy-match a new string to an unrelated old translation: check for
-  `#, fuzzy` in the `.po` files and fix those entries by hand.
+- `docker-compose.prod.yml` sets `name: holidayops-prod`, or its db/redis would replace the dev
+  containers (both files live in the same folder).
+- Git Bash heredocs turn `\\` into `\`: write files containing escapes or regexes with the editor
+  tools, not `cat <<EOF` or inline `python -`.
+- Git Bash rewrites arguments that start with `/` into Windows paths: prefix the command with
+  `MSYS_NO_PATHCONV=1`.
+- Stale pages in screenshots: public HTML is cached in Redis, and Django's cached template loader
+  keeps old templates until the server restarts. Restart `runserver` and clear the cache
+  (`manage.py shell -c "from django.core.cache import cache; cache.clear()"`).
+- On Windows, stopping a backgrounded `uv run ... runserver` can leave the Python child alive and
+  two servers share port 8000. Find them with `Get-CimInstance Win32_Process` (`runserver`).
+- Don't mock `socket.*` through an app module: patch a small wrapper like
+  `apps.webhooks.net.resolve` instead.
 - The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).
 - Stacked PRs + squash merge: rebase the next branch with `git rebase --onto origin/main <old base>`
-  before merging, and retarget it before deleting its base branch, or GitHub closes it.
-- Stale pages in screenshots: public HTML is cached in Redis per theme and `runserver --noreload`
-  keeps Django's cached template loader. Run `runserver` with autoreload and clear the cache
-  (`manage.py shell -c "from django.core.cache import cache; cache.clear()"`) before shooting.
-- Git Bash rewrites arguments that start with `/` into Windows paths (`/ur/` → `C:/Program
-  Files/Git/ur/`): prefix the command with `MSYS_NO_PATHCONV=1`.
-- A scroll-driven animation on the last element of a page must finish by `entry 100%`: ranges
-  like `cover 60%` are never reached at the bottom, so the element stays half animated.
-- On Windows, stopping a backgrounded `uv run ... runserver` can leave the Python child alive;
-  two servers then share port 8000 and requests hit the stale one. Check with
-  `Get-CimInstance Win32_Process` for `runserver` and stop the old tree.
-- Vite 8 builds with Rolldown: chunking is `build.rolldownOptions.output.codeSplitting.groups`,
-  not Rollup's `manualChunks` object.
+  and retarget it before deleting its base branch, or GitHub closes it.
+- A scroll-driven animation on the last element of a page must finish by `entry 100%`; `cover 60%`
+  is never reached at the bottom of the page.
+- Variable fonts (Outfit) keep overlapping contours: `-webkit-text-stroke` draws them as stray
+  lines. Fill outlined display text with a gradient instead.
+- `background-clip: text` only paints inside the element's box: a line height below 1 or a
+  bottom `text-box` trim cuts off descenders.
+- Links to `#top` on a sticky header never scroll (it's always in view); use `#page-top`.
+- Vite 8 builds with Rolldown: chunking is `build.rolldownOptions.output.codeSplitting.groups`;
+  keep `assetsInlineLimit: 0` (the CSP has no `data:` fonts).
