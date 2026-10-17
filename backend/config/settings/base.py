@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Any
 
 from celery.schedules import crontab
 
@@ -57,6 +58,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 MIDDLEWARE = [
+    "config.health.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "config.csp.ContentSecurityPolicyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -85,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
+DATABASES: dict[str, dict[str, Any]] = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": env("MYSQL_DATABASE", "holidayops"),
@@ -115,6 +117,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# The built web app (frontend/dist); the production image copies it here.
+SPA_DIR = BASE_DIR / "spa"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],

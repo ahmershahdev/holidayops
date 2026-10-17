@@ -61,7 +61,8 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
 ## Caching
 
 1. In-process LRU on `get_calendar` keyed by `(country, subdiv, years, language, categories)`.
-2. Redis for serialized holiday lists (Milestone 1 ships the LRU; Redis lists come with load).
+2. Serialized country holiday lists in the Django cache (Redis in production) for 24 hours, keyed
+   by the query and the `holidays` version; company-calendar lists are always built fresh.
 
 ## Data model
 

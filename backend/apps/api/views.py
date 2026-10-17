@@ -1,6 +1,8 @@
 from collections.abc import Iterable
+from importlib.metadata import version
 from typing import Any
 
+from django.core.cache import cache
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework.authentication import SessionAuthentication
@@ -33,6 +35,9 @@ from apps.core import (
 # A year has at least ~150 working days in every supported country, so this many extra years
 # always covers an `add` walk.
 WORKING_DAYS_PER_YEAR_FLOOR = 150
+# Country holiday lists only change when the library does, and its version is in the key.
+LIST_CACHE_SECONDS = 24 * 3600
+HOLIDAYS_VERSION = version("holidays")
 
 
 def _parse[T: s.CalendarQuerySerializer](serializer_class: type[T], request: Request) -> T:
@@ -98,6 +103,29 @@ class HolidayListView(PublicView):
     def get(self, request: Request) -> Response:
         query = _parse(s.HolidaysQuerySerializer, request)
         year = query.validated_data["year"]
+        if query.validated_data.get("calendar") is not None:
+            return Response(self._build(request, query, year))
+        args = query.calendar_args()
+        key = ":".join(
+            [
+                "holidays",
+                HOLIDAYS_VERSION,
+                args["country"],
+                args["subdiv"] or "",
+                str(year),
+                args["language"] or "",
+                ",".join(sorted(args["categories"])),
+            ]
+        )
+        data = cache.get(key)
+        if data is None:
+            data = self._build(request, query, year)
+            cache.set(key, data, LIST_CACHE_SECONDS)
+        return Response(data)
+
+    def _build(
+        self, request: Request, query: s.HolidaysQuerySerializer, year: int
+    ) -> dict[str, Any]:
         cal = _calendar(request, query, [year])
         merged = isinstance(cal, MergedCalendar)
         base = cal.holidays if isinstance(cal, MergedCalendar) else cal
@@ -110,7 +138,8 @@ class HolidayListView(PublicView):
             "categories": [] if merged else sorted(base.categories),
             "holidays": _holiday_entries(cal),
         }
-        return Response(s.HolidayListSerializer(payload).data)
+        data: dict[str, Any] = s.HolidayListSerializer(payload).data
+        return data
 
 
 class CheckView(PublicView):
