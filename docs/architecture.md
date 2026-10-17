@@ -23,7 +23,8 @@ Versioned under `/api/v1/`. OpenAPI at `/api/v1/schema/`, Swagger UI at `/api/v1
 | `GET /business-days/add/?country=PK&date=2027-03-20&days=5` | Add or subtract N working days |
 | `GET /business-days/between/?country=AE&start=…&end=…` | Working days, inclusive of both ends |
 
-Outside `/api/v1/`: `GET /feeds/<token>.ics`, a private iCal feed of a company calendar.
+Outside `/api/v1/`: `GET /feeds/<token>.ics`, a private iCal feed of a company calendar, and the
+server-rendered public pages, sitemaps and robots.txt ([seo.md](seo.md)).
 
 From Milestone 2 the same endpoints accept `calendar=<id>` instead of `country`. They also accept
 `Authorization: Bearer hops_…` API keys (Milestone 5.1): [design/m5-api-keys.md](design/m5-api-keys.md).

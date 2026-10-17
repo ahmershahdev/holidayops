@@ -1,0 +1,45 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block head %}{{ ld_breadcrumbs }}
+{{ ld_events }}{% endblock %}
+{% block content %}
+<ol class="crumbs">
+{% for name, path in breadcrumbs %}<li>{% if forloop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>
+{% endfor %}</ol>
+<h1>{{ title }}</h1>
+<p class="lead">{{ description }}</p>
+
+<ul class="stats">
+  <li><strong>{{ page.holidays|length }}</strong><span>{% translate "Public holidays" %}</span></li>
+  <li><strong>{{ page.working_days }}</strong><span>{% translate "Working days" %}</span></li>
+  <li><strong>{% for day in weekend %}{{ day|date:"l" }}{% if not forloop.last %}, {% endif %}{% endfor %}</strong><span>{% translate "Weekend" %}</span></li>
+</ul>
+
+<table>
+  <caption class="skip">{{ title }}</caption>
+  <thead><tr><th scope="col">{% translate "Date" %}</th><th scope="col">{% translate "Holiday" %}</th></tr></thead>
+  <tbody>
+  {% for row in page.holidays %}<tr><td class="date"><time datetime="{{ row.day|date:'Y-m-d' }}">{{ row.day|date:"l j F" }}</time></td><td>{{ row.names|join:"; " }}</td></tr>
+  {% empty %}<tr><td colspan="2">{% translate "No public holidays this year." %}</td></tr>
+  {% endfor %}</tbody>
+</table>
+
+<nav class="years" aria-label="{% translate 'Other years' %}">
+  <span>{% if previous %}<a href="{{ previous }}" rel="prev">← {{ page.year|add:"-1" }}</a>{% endif %}</span>
+  <span>{% if next %}<a href="{{ next }}" rel="next">{{ page.year|add:"1" }} →</a>{% endif %}</span>
+</nav>
+
+{% if country_path %}<p><a href="{{ country_path }}">{% blocktranslate with country=page.country.name %}All of {{ country }}{% endblocktranslate %}</a></p>{% endif %}
+{% if subdivisions %}
+<h2>{% translate "Regions" %}</h2>
+<ul class="chips">
+{% for code, path in subdivisions %}<li><a href="{{ path }}"{% if code == page.subdiv %} aria-current="page"{% endif %}>{{ code }}</a></li>
+{% endfor %}</ul>
+{% endif %}
+
+<section class="cta">
+  <h2>{% translate "Use these dates in your software" %}</h2>
+  <p>{% translate "Check working days, add business days and merge countries with your own company closures through the HolidayOps API." %}</p>
+  <pre class="ltr"><code>curl "{{ api_example }}"</code></pre>
+  <p><a class="button" href="/signup">{% translate "Get an API key" %}</a> <a href="/api/v1/docs/">{% translate "Read the API docs" %}</a></p>
+</section>
+{% endblock %}

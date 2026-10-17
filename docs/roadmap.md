@@ -64,7 +64,7 @@ Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 | Part | Scope |
 |---|---|
 | 5.1 API keys ✅ | `hops_<prefix>_<secret>`, hashed, per-key throttles, quotas, `UsageEvent` |
-| 5.2 Public SEO pages | See [seo.md](seo.md) |
+| 5.2 Public SEO pages ✅ | See [seo.md](seo.md) |
 | 5.3 Deployment | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs | README setup, API examples, screenshots |
 

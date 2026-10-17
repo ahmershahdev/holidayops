@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "rest_framework",
     "drf_spectacular",
     "apps.accounts",
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     "apps.notifications",
     "apps.webhooks",
     "apps.api",
+    "apps.public",
 ]
 
 AUTH_USER_MODEL = "accounts.User"

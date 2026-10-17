@@ -1,0 +1,48 @@
+from typing import Any
+
+from django.contrib.sitemaps import Sitemap
+from django.utils import timezone, translation
+
+from apps.core import list_countries
+from apps.public.content import LANGUAGES, PREFIX, SITEMAP_YEARS, page_path
+
+
+# Sitemap is generic only in django-stubs, not at runtime.
+class _Localized(Sitemap):  # type: ignore[type-arg]
+    i18n = True
+    languages = list(LANGUAGES)
+    alternates = True
+    x_default = True
+
+
+class PagesSitemap(_Localized):
+    changefreq = "monthly"
+
+    def items(self) -> list[str]:
+        return ["/holidays/", "/pricing/"]
+
+    def location(self, item: str) -> str:
+        return f"{PREFIX[translation.get_language()]}{item}"
+
+
+class CountrySitemap(_Localized):
+    changefreq = "monthly"
+
+    def __init__(self, code: str) -> None:
+        self.code = code
+
+    def items(self) -> list[tuple[int, str | None]]:
+        this_year = timezone.now().year
+        places: list[str | None] = [None, *list_countries()[self.code].subdivisions]
+        return [(this_year + offset, place) for offset in SITEMAP_YEARS for place in places]
+
+    def location(self, item: tuple[int, str | None]) -> str:
+        year, subdiv = item
+        return page_path(translation.get_language(), self.code, year, subdiv)
+
+
+def sitemaps() -> "dict[str, Sitemap[Any]]":
+    sections: dict[str, Sitemap[Any]] = {"pages": PagesSitemap()}
+    for code in sorted(list_countries()):
+        sections[code.lower()] = CountrySitemap(code)
+    return sections
