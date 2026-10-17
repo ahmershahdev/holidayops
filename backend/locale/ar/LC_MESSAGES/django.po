@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 06:06+0000\n"
+"POT-Creation-Date: 2026-10-17 06:30+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -138,3 +138,25 @@ msgstr "لا يوجد حساب بهذا البريد الإلكتروني بعد
 
 msgid "This person is already a member."
 msgstr "هذا الشخص عضو بالفعل."
+
+msgid "Webhook URLs must use https."
+msgstr "يجب أن تستخدم عناوين الخطافات https."
+
+msgid "Webhook URLs must not contain credentials."
+msgstr "يجب ألا تحتوي عناوين الخطافات على بيانات اعتماد."
+
+msgid "Webhook URL has no host."
+msgstr "عنوان الخطاف لا يحتوي على مضيف."
+
+msgid "Webhook URL has an invalid port."
+msgstr "منفذ عنوان الخطاف غير صالح."
+
+msgid "Webhook host does not resolve."
+msgstr "تعذّر العثور على مضيف الخطاف."
+
+msgid "Webhook host must resolve to public addresses only."
+msgstr "يجب أن يشير مضيف الخطاف إلى عناوين عامة فقط."
+
+#, python-format
+msgid "An organization can have at most %(max)s webhooks."
+msgstr "يمكن أن تحتوي المؤسسة على %(max)s من الخطافات كحد أقصى."

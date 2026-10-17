@@ -1274,6 +1274,250 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/orgs/{org_slug}/webhooks/:
+    get:
+      operationId: orgs_webhooks_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWebhookList'
+          description: ''
+    post:
+      operationId: orgs_webhooks_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSecret'
+          description: ''
+  /api/v1/orgs/{org_slug}/webhooks/{id}/:
+    get:
+      operationId: orgs_webhooks_retrieve
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+          description: ''
+    patch:
+      operationId: orgs_webhooks_partial_update
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWebhookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWebhookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWebhookRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+          description: ''
+    delete:
+      operationId: orgs_webhooks_destroy
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/webhooks/{id}/deliveries/:
+    get:
+      operationId: orgs_webhooks_deliveries_list
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delivery'
+          description: ''
+  /api/v1/orgs/{org_slug}/webhooks/{id}/ping/:
+    post:
+      operationId: orgs_webhooks_ping_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delivery'
+          description: ''
+  /api/v1/orgs/{org_slug}/webhooks/{id}/rotate-secret/:
+    post:
+      operationId: orgs_webhooks_rotate_secret_create
+      description: Resolves the org from the URL. Non-members get 404, too-low roles
+        get 403.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this webhook.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSecret'
+          description: ''
 components:
   schemas:
     AddResult:
@@ -1520,6 +1764,60 @@ components:
       - date
       - kind
       - name
+    Delivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        event:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        attempts:
+          type: integer
+          readOnly: true
+        response_status:
+          type: integer
+          readOnly: true
+          nullable: true
+        response_body:
+          type: string
+          readOnly: true
+        duration_ms:
+          type: integer
+          readOnly: true
+          nullable: true
+        error:
+          type: string
+          readOnly: true
+        payload:
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        next_attempt_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - attempts
+      - created_at
+      - duration_ms
+      - error
+      - event
+      - id
+      - next_attempt_at
+      - payload
+      - response_body
+      - response_status
+      - status
     Digest:
       type: object
       properties:
@@ -1532,6 +1830,20 @@ components:
       required:
       - last_sent_on
       - subscribed
+    EventsEnum:
+      enum:
+      - calendar.updated
+      - calendar.deleted
+      - custom_day.created
+      - custom_day.updated
+      - custom_day.deleted
+      type: string
+      description: |-
+        * `calendar.updated` - calendar.updated
+        * `calendar.deleted` - calendar.deleted
+        * `custom_day.created` - custom_day.created
+        * `custom_day.updated` - custom_day.updated
+        * `custom_day.deleted` - custom_day.deleted
     FeedToken:
       type: object
       properties:
@@ -1850,6 +2162,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FeedToken'
+    PaginatedWebhookList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
     PatchedCalendarRequest:
       type: object
       properties:
@@ -1908,6 +2243,22 @@ components:
           maxLength: 150
         language:
           $ref: '#/components/schemas/LanguageEnum'
+    PatchedWebhookRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          minLength: 1
+          maxLength: 500
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventsEnum'
+          maxItems: 5
+          minItems: 1
+        is_active:
+          type: boolean
     ReasonEnum:
       enum:
       - working_day
@@ -1992,6 +2343,16 @@ components:
           maxItems: 10
       required:
       - country
+    StatusEnum:
+      enum:
+      - pending
+      - success
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `success` - Success
+        * `failed` - Failed
     UnsubscribeRequest:
       type: object
       properties:
@@ -2026,6 +2387,104 @@ components:
           maxLength: 150
         language:
           $ref: '#/components/schemas/LanguageEnum'
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          maxLength: 500
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventsEnum'
+          maxItems: 5
+          minItems: 1
+        is_active:
+          type: boolean
+        failure_count:
+          type: integer
+          readOnly: true
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - events
+      - failure_count
+      - id
+      - url
+    WebhookRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          minLength: 1
+          maxLength: 500
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventsEnum'
+          maxItems: 5
+          minItems: 1
+        is_active:
+          type: boolean
+      required:
+      - events
+      - url
+    WebhookSecret:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          maxLength: 500
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventsEnum'
+          maxItems: 5
+          minItems: 1
+        is_active:
+          type: boolean
+        failure_count:
+          type: integer
+          readOnly: true
+        created_by:
+          type: string
+          format: email
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        secret:
+          type: string
+          readOnly: true
+          description: Shown only once. Keep it secret.
+      required:
+      - created_at
+      - created_by
+      - events
+      - failure_count
+      - id
+      - secret
+      - url
   securitySchemes:
     cookieAuth:
       type: apiKey

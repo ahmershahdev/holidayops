@@ -71,7 +71,8 @@ def merge_calendars(sources: Sequence[HolidayBase], custom: Iterable[CustomDay],
 - Milestone 5: `ApiKey(org, name, prefix, hashed_key, created_by, last_used_at, revoked_at)`
 - `FeedToken(org, calendar, label, token_hash, created_by, last_used_at, revoked_at)`
 - `DigestSubscription(org, calendar, user, last_sent_on)`, one per user and calendar
-- `Webhook(org, url, secret, events)`
+- `Webhook(org, url, secret, events, is_active, failure_count)` and
+  `WebhookDelivery(webhook, event, payload, status, attempts, response_status, next_attempt_at)`
 - `UsageEvent(api_key, endpoint, status, created_at)`
 - `AuditLog(org, actor, action, target, created_at)`
 

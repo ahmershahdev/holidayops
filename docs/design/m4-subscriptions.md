@@ -82,12 +82,14 @@ POST            /api/v1/digests/unsubscribe/                  {token} or ?token=
 ## 4.4 Webhooks
 
 `Webhook(org, url, secret, events, is_active, created_by, created_at, failure_count)` and
-`WebhookDelivery(webhook, event, payload, status, attempts, response_status, duration_ms, error,
-created_at, next_attempt_at)`.
+`WebhookDelivery(id: uuid, webhook, event, payload, status, attempts, response_status,
+response_body, duration_ms, error, created_at, next_attempt_at)`.
 
 - Events: `calendar.updated`, `calendar.deleted`, `custom_day.created`, `custom_day.updated`,
-  `custom_day.deleted`, `ping`. Payload: `{"id", "event", "created_at", "org", "data"}`.
-- Secret: 32 random bytes, shown once on create and on rotate. It is stored as is, because
+  `custom_day.deleted`, plus `ping` on request. Payload: `{"id", "event", "created_at", "org",
+  "data"}`; `data` has `calendar {id, name, slug}` and, for custom days, `custom_day {id, date,
+  name, kind}`. The calendar views emit them after saving; deliveries are queued on commit.
+- Secret: `whsec_` + 32 random bytes in hex, shown once on create and on rotate. It is stored as is, because
   signing needs it; the database is the trust boundary, as with any webhook provider.
 - Headers: `X-HolidayOps-Event`, `X-HolidayOps-Delivery`, and
   `X-HolidayOps-Signature: t=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>.<body>">`.
@@ -96,9 +98,16 @@ created_at, next_attempt_at)`.
   URL, resolve the host and reject unless every address is global (`ipaddress.is_global`), then
   connect to that vetted address with the original host for SNI and `Host`, so a DNS rebind
   can't swap it. No redirects. Timeouts 5 s connect, 10 s read; response body capped at 4 KB.
-- Retries: network errors, `429` and `5xx` retry with backoff (1 min, 5 min, 30 min, 2 h, 12 h);
-  other `4xx` fail at once. After 20 failed deliveries in a row the webhook is deactivated and the
-  org admins see it in settings.
+- Retries: network errors, `429` and `5xx` retry with backoff (1 min, 5 min, 30 min, 2 h, 12 h),
+  so at most 6 attempts; `3xx` and other `4xx` fail at once. Retries are scheduled in the
+  database (`next_attempt_at`), not as Celery countdowns: Redis redelivers tasks whose ETA is past
+  its 1 h visibility timeout. Beat runs `webhooks.retry_due` every minute.
+- Each attempt first claims the delivery with a conditional `UPDATE` that pushes
+  `next_attempt_at` 5 minutes out (a lease), so two workers never send the same attempt and a
+  worker that dies mid-request leaves it due again.
+- After 20 failed deliveries in a row the webhook is disabled and shows as such in org settings;
+  re-enabling it clears the count. A success also clears it.
+- The delivery log shows the last 50 deliveries per webhook.
 - Roles: admin and up. At most 10 webhooks per org. Create, rotate, delete go to the audit log.
 
 ```

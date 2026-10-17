@@ -16,13 +16,15 @@ UNSUBSCRIBE_SALT = "notifications.digest.unsubscribe"
 RTL = {"ur", "ar"}
 
 
+# Signer, not signing.dumps: the link never expires, and a timestamp would only make each
+# email's link differ for no gain.
 def unsubscribe_token(subscription: DigestSubscription) -> str:
-    return signing.dumps(subscription.pk, salt=UNSUBSCRIBE_SALT)
+    return signing.Signer(salt=UNSUBSCRIBE_SALT).sign_object(subscription.pk)
 
 
 def subscription_id_from(token: str) -> int | None:
     try:
-        value = signing.loads(token, salt=UNSUBSCRIBE_SALT)
+        value = signing.Signer(salt=UNSUBSCRIBE_SALT).unsign_object(token)
     except signing.BadSignature:
         return None
     return value if isinstance(value, int) else None

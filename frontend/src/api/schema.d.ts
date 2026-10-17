@@ -427,6 +427,94 @@ export interface paths {
         patch: operations["orgs_members_partial_update"];
         trace?: never;
     };
+    "/api/v1/orgs/{org_slug}/webhooks/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_webhooks_list"];
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_webhooks_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/webhooks/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_webhooks_retrieve"];
+        put?: never;
+        post?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        delete: operations["orgs_webhooks_destroy"];
+        options?: never;
+        head?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        patch: operations["orgs_webhooks_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/webhooks/{id}/deliveries/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        get: operations["orgs_webhooks_deliveries_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/webhooks/{id}/ping/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_webhooks_ping_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/webhooks/{id}/rotate-secret/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
+        post: operations["orgs_webhooks_rotate_secret_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -519,11 +607,36 @@ export interface components {
             name: string;
             kind: components["schemas"]["CustomDayKindEnum"];
         };
+        Delivery: {
+            /** Format: uuid */
+            readonly id: string;
+            readonly event: string;
+            readonly status: components["schemas"]["StatusEnum"];
+            readonly attempts: number;
+            readonly response_status: number | null;
+            readonly response_body: string;
+            readonly duration_ms: number | null;
+            readonly error: string;
+            readonly payload: unknown;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** Format: date-time */
+            readonly next_attempt_at: string | null;
+        };
         Digest: {
             subscribed: boolean;
             /** Format: date */
             last_sent_on: string | null;
         };
+        /**
+         * @description * `calendar.updated` - calendar.updated
+         *     * `calendar.deleted` - calendar.deleted
+         *     * `custom_day.created` - custom_day.created
+         *     * `custom_day.updated` - custom_day.updated
+         *     * `custom_day.deleted` - custom_day.deleted
+         * @enum {string}
+         */
+        EventsEnum: "calendar.updated" | "calendar.deleted" | "custom_day.created" | "custom_day.updated" | "custom_day.deleted";
         FeedToken: {
             readonly id: number;
             label?: string;
@@ -672,6 +785,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["FeedToken"][];
         };
+        PaginatedWebhookList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Webhook"][];
+        };
         PatchedCalendarRequest: {
             name?: string;
             is_public?: boolean;
@@ -695,6 +823,12 @@ export interface components {
         PatchedUserRequest: {
             name?: string;
             language?: components["schemas"]["LanguageEnum"];
+        };
+        PatchedWebhookRequest: {
+            /** Format: uri */
+            url?: string;
+            events?: components["schemas"]["EventsEnum"][];
+            is_active?: boolean;
         };
         /**
          * @description * `working_day` - working_day
@@ -731,6 +865,13 @@ export interface components {
             subdiv?: string;
             categories?: string[];
         };
+        /**
+         * @description * `pending` - Pending
+         *     * `success` - Success
+         *     * `failed` - Failed
+         * @enum {string}
+         */
+        StatusEnum: "pending" | "success" | "failed";
         UnsubscribeRequest: {
             token: string;
         };
@@ -744,6 +885,38 @@ export interface components {
         UserRequest: {
             name?: string;
             language?: components["schemas"]["LanguageEnum"];
+        };
+        Webhook: {
+            readonly id: number;
+            /** Format: uri */
+            url: string;
+            events: components["schemas"]["EventsEnum"][];
+            is_active?: boolean;
+            readonly failure_count: number;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+        };
+        WebhookRequest: {
+            /** Format: uri */
+            url: string;
+            events: components["schemas"]["EventsEnum"][];
+            is_active?: boolean;
+        };
+        WebhookSecret: {
+            readonly id: number;
+            /** Format: uri */
+            url: string;
+            events: components["schemas"]["EventsEnum"][];
+            is_active?: boolean;
+            readonly failure_count: number;
+            /** Format: email */
+            readonly created_by: string | null;
+            /** Format: date-time */
+            readonly created_at: string;
+            /** @description Shown only once. Keep it secret. */
+            readonly secret: string;
         };
     };
     responses: never;
@@ -1741,6 +1914,200 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Member"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedWebhookList"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WebhookRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["WebhookRequest"];
+                "multipart/form-data": components["schemas"]["WebhookRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookSecret"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Webhook"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    orgs_webhooks_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedWebhookRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedWebhookRequest"];
+                "multipart/form-data": components["schemas"]["PatchedWebhookRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Webhook"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_deliveries_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Delivery"][];
+                };
+            };
+        };
+    };
+    orgs_webhooks_ping_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Delivery"];
+                };
+            };
+        };
+    };
+    orgs_webhooks_rotate_secret_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this webhook. */
+                id: number;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookSecret"];
                 };
             };
         };

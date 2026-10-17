@@ -180,5 +180,39 @@
     "unsubscribe": "إلغاء الاشتراك",
     "unsubscribed": "تم. لن تصلك هذه الرسالة بعد الآن.",
     "badLink": "رابط إلغاء الاشتراك هذا غير صالح."
+  },
+  "webhooks": {
+    "title": "خطافات الويب",
+    "intro": "يرسل HolidayOps حدث JSON موقّعًا إلى نقطة HTTPS الخاصة بك عند تغيّر التقاويم أو أيام الشركة. تحقّق من الترويسة X-HolidayOps-Signature باستخدام سرّ التوقيع.",
+    "secretOnce": "سرّ التوقيع: انسخه الآن. لن يظهر مرة أخرى.",
+    "secret": "سرّ التوقيع",
+    "none": "لا توجد خطافات بعد.",
+    "active": "مفعّل",
+    "disabled": "معطّل",
+    "ping": "إرسال تجربة",
+    "deliveries": "عمليات التسليم",
+    "disable": "تعطيل",
+    "enable": "تفعيل",
+    "rotate": "سرّ جديد",
+    "url": "عنوان نقطة النهاية",
+    "urlHint": "HTTPS فقط، على عنوان عام.",
+    "events": "الأحداث",
+    "create": "إضافة خطاف",
+    "noDeliveries": "لا توجد عمليات تسليم بعد.",
+    "when": "متى",
+    "event": "الحدث",
+    "status": "الحالة",
+    "response": "الاستجابة",
+    "statuses": {
+      "pending": "قيد الانتظار",
+      "success": "تم التسليم",
+      "failed": "فشل"
+    },
+    "attempts_zero": "لا محاولات",
+    "attempts_one": "محاولة واحدة",
+    "attempts_two": "محاولتان",
+    "attempts_few": "{{count}} محاولات",
+    "attempts_many": "{{count}} محاولة",
+    "attempts_other": "{{count}} محاولة"
   }
 }
