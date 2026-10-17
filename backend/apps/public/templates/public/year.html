@@ -1,24 +1,40 @@
-{% extends "public/base.html" %}{% load i18n flags %}
+{% extends "public/base.html" %}{% load i18n flags text %}
 {% block head %}{{ ld_breadcrumbs }}
 {{ ld_events }}{% endblock %}
 {% block content %}
 <ol class="crumbs">
 {% for name, path in breadcrumbs %}<li>{% if forloop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>
 {% endfor %}</ol>
-<h1 class="title-flag">{% flag country_code 48 lazy=False %}<span>{{ title }}</span></h1>
-<p class="lead">{{ description }}</p>
+<header class="country-hero">
+  {% include "public/_pattern.html" %}
+  <div class="country-hero-copy">
+    <h1 class="title-flag">{% flag country_code 48 lazy=False %}<span>{{ title }}</span></h1>
+    <p class="lead">{{ description }}</p>
+  </div>
+</header>
 
 <ul class="stats">
   <li><strong>{{ page.holidays|length }}</strong><span>{% translate "Public holidays" %}</span></li>
   <li><strong>{{ page.working_days }}</strong><span>{% translate "Working days" %}</span></li>
-  <li><strong>{% for day in weekend %}{{ day|date:"l" }}{% if not forloop.last %}, {% endif %}{% endfor %}</strong><span>{% translate "Weekend" %}</span></li>
+  <li><strong>{{ weekend }}</strong><span>{% translate "Weekend" %}</span></li>
 </ul>
+
+{# The table below lists the same days for screen readers; this is the visual overview. #}
+<section class="year-cal" aria-hidden="true">
+  <p class="cal-legend"><i class="dot holiday"></i>{% translate "Holiday" %} <i class="dot weekend"></i>{% translate "Weekend" %} <i class="dot today"></i>{% translate "Today" %}</p>
+  <div class="months">
+  {% for first, weeks in page.months %}<div class="month reveal">
+    <p class="month-name">{{ first|cldr:"LLLL" }}</p>
+    <div class="cal-grid">{% for d in weekday_headers %}<span class="cal-head"><span class="day-short">{{ d|cldr:"EEEEEE" }}</span><span class="day-narrow">{{ d|cldr:"EEEEE" }}</span></span>{% endfor %}{% for week in weeks %}{% for cell in week %}<span class="cal-cell {{ cell.kind }}"{% if cell.names %} title="{{ cell.names|as_list }}"{% endif %}>{% if cell.day %}{{ cell.day|date:"j" }}{% endif %}</span>{% endfor %}{% endfor %}</div>
+  </div>
+  {% endfor %}</div>
+</section>
 
 <table>
   <caption class="skip">{{ title }}</caption>
   <thead><tr><th scope="col">{% translate "Date" %}</th><th scope="col">{% translate "Holiday" %}</th></tr></thead>
   <tbody>
-  {% for row in page.holidays %}<tr><td class="date"><time datetime="{{ row.day|date:'Y-m-d' }}">{{ row.day|date:"l j F" }}</time></td><td>{{ row.names|join:"; " }}</td></tr>
+  {% for row in page.holidays %}<tr><td class="date"><time datetime="{{ row.day|date:'Y-m-d' }}">{{ row.day|cldr:"EEEE d MMMM" }}</time></td><td>{{ row.names|as_list }}</td></tr>
   {% empty %}<tr><td colspan="2">{% translate "No public holidays this year." %}</td></tr>
   {% endfor %}</tbody>
 </table>
@@ -28,7 +44,7 @@
   <span>{% if next %}<a href="{{ next }}" rel="next">{{ page.year|add:"1" }} →</a>{% endif %}</span>
 </nav>
 
-{% if country_path %}<p><a href="{{ country_path }}">{% blocktranslate with country=page.country.name %}All of {{ country }}{% endblocktranslate %}</a></p>{% endif %}
+{% if country_path %}<p><a href="{{ country_path }}">{% blocktranslate with country=country_name %}All of {{ country }}{% endblocktranslate %}</a></p>{% endif %}
 {% if subdivisions %}
 <h2>{% translate "Regions" %}</h2>
 <ul class="chips">

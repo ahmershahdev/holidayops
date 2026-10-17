@@ -1168,6 +1168,238 @@ pre {
   unicode-bidi: isolate;
 }
 
+/* ---- Calendars: the landing hero month and the country year ---- */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.cal-head {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  padding-block-end: 0.25rem;
+}
+
+.cal-cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.cal-cell.work {
+  background: var(--paper);
+}
+
+.cal-cell.weekend {
+  background: var(--weekend);
+  color: var(--muted);
+}
+
+.cal-cell.holiday {
+  background: var(--holiday-soft);
+  color: var(--holiday);
+  font-weight: 700;
+}
+
+.cal-cell.today {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 3px;
+  margin-inline-end: 0.3rem;
+  vertical-align: -0.05em;
+}
+
+.dot.holiday {
+  background: var(--holiday);
+}
+
+.dot.weekend {
+  background: var(--weekend-strong);
+}
+
+.dot.today {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+/* ---- Country page ---- */
+.country-hero {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  margin-block-end: 1.5rem;
+}
+
+.pattern {
+  height: clamp(6rem, 14vw, 9.5rem);
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--night);
+  view-transition-name: country-pattern;
+}
+
+.pattern svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+[dir="rtl"] .pattern svg {
+  transform: scaleX(-1);
+}
+
+.country-hero .title-flag {
+  view-transition-name: page-title;
+}
+
+.year-cal {
+  margin-block: 2.5rem;
+  view-transition-name: year-cal;
+}
+
+.months {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+  gap: 1.25rem;
+}
+
+@media (max-width: 36rem) {
+  .months {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  /* CLDR has no narrow Urdu day names (it falls back to M, T, W), so Urdu keeps full names
+     and one month per row. */
+  html[lang="ur"] .months {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html:not([lang="ur"]) .month .day-short,
+  html[lang="ur"] .month .day-narrow {
+    display: none;
+  }
+
+  .month {
+    padding: 0.6rem;
+  }
+
+  .month .cal-grid {
+    gap: 2px;
+  }
+
+  .month .cal-cell {
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+
+  .month .cal-head {
+    letter-spacing: 0;
+  }
+}
+
+@media (min-width: 36.01rem) {
+  .month .day-narrow {
+    display: none;
+  }
+}
+
+.month {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.month-name {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.month .cal-grid {
+  gap: 3px;
+}
+
+.month .cal-cell {
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.month .cal-head {
+  font-size: 0.65rem;
+}
+
+.month .cal-cell.pad {
+  background: none;
+}
+
+/* Alternate rows drift in opposite directions while the banner is on screen. */
+@supports (animation-timeline: view()) {
+  .pattern-row {
+    animation: pattern-drift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  .pattern-row:nth-child(odd) {
+    animation-direction: reverse;
+  }
+}
+
+@keyframes pattern-drift {
+  from {
+    transform: translateX(-3%);
+  }
+  to {
+    transform: translateX(3%);
+  }
+}
+
+::view-transition-old(year-cal) {
+  animation: var(--dur) var(--ease-out) both fade-out;
+}
+
+::view-transition-new(year-cal) {
+  animation: var(--dur-slow) var(--ease-out) both rise-in;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
 /* ---- Error pages ---- */
 .error-page {
   display: grid;
