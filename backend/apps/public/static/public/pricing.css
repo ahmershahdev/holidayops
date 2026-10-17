@@ -1,0 +1,376 @@
+/* Pricing page only; tokens and motion primitives come from site.css. */
+
+.price-hero {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+  padding-block: clamp(1.5rem, 5vw, 3.5rem) 2rem;
+}
+
+.price-hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  max-width: 16ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.price-hero .lead {
+  margin: 0.75rem 0 0;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.plan-pro {
+  --plan-ink: #e6edf7;
+  --plan-muted: #a3b3c9;
+  color: var(--plan-ink);
+  background:
+    radial-gradient(30rem 18rem at 100% 0%, rgb(0 209 193 / 0.18), transparent 70%),
+    var(--night);
+  border-color: #24375c;
+}
+
+.plan-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.plan h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.plan-tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: #0f3a3a;
+  color: #2dd4c4;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.plan-price {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.plan-for {
+  margin: 0;
+  color: var(--muted);
+}
+
+.plan-pro .plan-for,
+.plan-pro .plan-limits dt,
+.plan-pro .plan-note {
+  color: var(--plan-muted);
+}
+
+.plan-limits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding-block: 1.1rem;
+  border-block: 1px solid var(--line);
+}
+
+.plan-pro .plan-limits {
+  border-color: #24375c;
+}
+
+.plan-limits div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.15rem;
+}
+
+.plan-limits dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.plan-pro .plan-limits dd {
+  color: #2dd4c4;
+}
+
+.plan-limits dt {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.checks {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* A ring with a tick drawn from two bars of a rotated box. */
+.checks li::before,
+.tick {
+  content: "";
+  display: inline-block;
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  --tick: var(--accent);
+  background:
+    linear-gradient(var(--tick), var(--tick)) 38% 66% / 2px 6px no-repeat,
+    linear-gradient(var(--tick), var(--tick)) 60% 52% / 2px 10px no-repeat,
+    var(--accent-soft);
+  box-shadow: inset 0 0 0 1.5px var(--tick);
+  rotate: 40deg;
+}
+
+.plan-pro .checks li::before {
+  --tick: #2dd4c4;
+  background-color: #0f3a3a;
+}
+
+.plan .button,
+.plan-note {
+  margin-top: auto;
+}
+
+.plan .button {
+  align-self: flex-start;
+}
+
+.plan-note {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+/* ---- How requests are counted: four stops on one route, arrows between them ---- */
+.counting {
+  position: relative;
+  margin-block: clamp(3rem, 8vw, 6rem) 0;
+}
+
+.route {
+  position: relative;
+}
+
+.route-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+  z-index: 1;
+}
+
+.route-steps li {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+}
+
+.route-steps h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.1rem;
+}
+
+.route-steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.stop {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.stop-end .stop {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.route-arrows {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(1.5rem - 60px);
+  width: 100%;
+  height: 120px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+[dir="rtl"] .route-arrows {
+  transform: scaleX(-1);
+}
+
+.route-arrows path {
+  fill: none;
+  stroke: var(--glow);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.route-arrows marker path {
+  stroke-dasharray: none;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+@supports (animation-timeline: view()) {
+  .route-arrows path:not(marker path) {
+    animation: draw linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 50%;
+  }
+}
+
+/* ---- Compare ---- */
+.compare {
+  margin-block-start: clamp(3rem, 8vw, 6rem);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.compare table {
+  min-width: 32rem;
+}
+
+.compare th[scope="row"] {
+  font-weight: 500;
+  text-align: start;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.compare td,
+.compare thead th:not(:first-child) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- FAQ: native details, a plus that turns into a minus ---- */
+.faq {
+  margin-block-start: clamp(3rem, 8vw, 6rem);
+  display: grid;
+  gap: 0.75rem;
+  max-width: 48rem;
+}
+
+.faq details {
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  padding: 0 1.25rem;
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-block-size: 3.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  background:
+    linear-gradient(var(--accent), var(--accent)) center / 100% 2px no-repeat,
+    linear-gradient(var(--accent), var(--accent)) center / 2px 100% no-repeat;
+  transition: rotate var(--dur) var(--ease-out);
+}
+
+.faq details[open] summary::after {
+  rotate: 135deg;
+}
+
+.faq details p {
+  margin: 0 0 1.1rem;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+@media (max-width: 56rem) {
+  .route-steps {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding-inline-start: 1.5rem;
+    border-inline-start: 2px dashed var(--line);
+  }
+
+  .route-steps .stop {
+    margin-inline-start: -2.6rem;
+  }
+
+  .route-arrows {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-arrows path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

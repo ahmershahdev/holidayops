@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:04+0000\n"
+"POT-Creation-Date: 2026-10-17 20:14+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -443,6 +443,35 @@ msgstr ""
 "ہر کلید کی شرح کی حد، ماہانہ کوٹا اور استعمال کا چارٹ، تاکہ آپ ہمیشہ اپنی "
 "صورتحال جانیں۔"
 
+msgid "Built for the teams that count days"
+msgstr "ان ٹیموں کے لیے جو دن گنتی ہیں"
+
+msgid "Payroll"
+msgstr "تنخواہیں"
+
+msgid "Count the working days in a pay period for every country you pay in."
+msgstr ""
+"ہر اُس ملک کے لیے تنخواہ کی مدت کے کام کے دن گنیں جہاں آپ ادائیگی کرتے ہیں۔"
+
+msgid "HR and leave"
+msgstr "ایچ آر اور چھٹیاں"
+
+msgid "Work out leave days without counting holidays or the local weekend."
+msgstr "تعطیلات اور مقامی ہفتہ وار چھٹی گنے بغیر چھٹی کے دن نکالیں۔"
+
+msgid "Logistics"
+msgstr "لاجسٹکس"
+
+msgid "Promise delivery dates that skip closures at both ends of the route."
+msgstr ""
+"ایسی ترسیل کی تاریخیں دیں جو راستے کے دونوں سروں کی بندشوں کو چھوڑ دیں۔"
+
+msgid "Finance"
+msgstr "مالیات"
+
+msgid "Settle on the next business day in the right market, every time."
+msgstr "ہر بار درست مارکیٹ کے اگلے کاروباری دن پر ادائیگی طے کریں۔"
+
 msgid "From sign-up to answers in three steps"
 msgstr "سائن اپ سے جواب تک تین مراحل میں"
 
@@ -504,31 +533,156 @@ msgstr ""
 msgid "See pricing"
 msgstr "قیمتیں دیکھیں"
 
+msgid ""
+"Every plan has the full product: company calendars, iCal feeds, digests and "
+"webhooks. Plans only differ in how much you call the API."
+msgstr ""
+"ہر پلان میں پوری پروڈکٹ شامل ہے: کمپنی کیلنڈر، iCal فیڈز، ڈائجسٹ اور ویب "
+"ہُکس۔ پلانز میں فرق صرف اتنا ہے کہ آپ API کتنا استعمال کرتے ہیں۔"
+
 msgid "Pro"
 msgstr "پرو"
 
 msgid "Free"
 msgstr "مفت"
 
-#, python-format
-msgid "<span class=\"ltr\">%(rate)s</span> per API key"
-msgstr "ہر API کلید کے لیے <span class=\"ltr\">%(rate)s</span>"
+msgid "For production"
+msgstr "پروڈکشن کے لیے"
 
-#, python-format
-msgid "%(quota)s requests a month"
-msgstr "ماہانہ %(quota)s درخواستیں"
+msgid "Talk to us"
+msgstr "ہم سے بات کریں"
 
-#, python-format
-msgid "%(keys)s API key"
-msgid_plural "%(keys)s API keys"
-msgstr[0] "%(keys)s API کلید"
-msgstr[1] "%(keys)s API کلیدیں"
+msgid "Free forever"
+msgstr "ہمیشہ مفت"
 
-msgid "Company calendars, iCal feeds, digests and webhooks"
-msgstr "کمپنی کیلنڈر، iCal فیڈز، ڈائجسٹ اور ویب ہُکس"
+msgid "For products that check working days on every request."
+msgstr "ان پروڈکٹس کے لیے جو ہر درخواست پر کام کے دن جانچتی ہیں۔"
+
+msgid "For trying the API and small internal tools."
+msgstr "API آزمانے اور چھوٹے اندرونی ٹولز کے لیے۔"
+
+msgid "per minute, per key"
+msgstr "فی منٹ، فی کلید"
+
+msgid "requests a month"
+msgstr "درخواستیں ماہانہ"
+
+msgid "API keys"
+msgstr "API کلیدیں"
+
+msgid "Company calendars with your own closures"
+msgstr "آپ کی اپنی بندشوں کے ساتھ کمپنی کیلنڈر"
+
+msgid "Private iCal feeds and monthly digests"
+msgstr "نجی iCal فیڈز اور ماہانہ ڈائجسٹ"
+
+msgid "Signed webhooks with retries"
+msgstr "دوبارہ کوشش کے ساتھ دستخط شدہ ویب ہُکس"
+
+msgid "English, Urdu and Arabic"
+msgstr "انگریزی، اردو اور عربی"
 
 msgid "Contact us to upgrade."
 msgstr "اپ گریڈ کے لیے ہم سے رابطہ کریں۔"
+
+msgid "How requests are counted"
+msgstr "درخواستیں کیسے گنی جاتی ہیں"
+
+msgid "One call, one request"
+msgstr "ایک کال، ایک درخواست"
+
+msgid ""
+"Each API call made with a key counts once. Public pages, the playground and "
+"your iCal feeds don't count."
+msgstr ""
+"کلید کے ساتھ کی گئی ہر API کال ایک بار گنی جاتی ہے۔ عوامی صفحات، پلے گراؤنڈ "
+"اور آپ کی iCal فیڈز نہیں گنی جاتیں۔"
+
+msgid "A per-minute limit for each key"
+msgstr "ہر کلید کے لیے فی منٹ حد"
+
+msgid ""
+"Bursts are smoothed per key, so one busy service can't use up another's "
+"allowance."
+msgstr ""
+"اچانک بڑھنے والی درخواستیں ہر کلید پر الگ سنبھالی جاتی ہیں، اس لیے ایک مصروف "
+"سروس دوسری کا حصہ ختم نہیں کر سکتی۔"
+
+msgid "A monthly quota for the organization"
+msgstr "ادارے کے لیے ماہانہ کوٹا"
+
+msgid ""
+"All keys share it. It resets on the 1st of each month, and your usage chart "
+"shows where you stand."
+msgstr ""
+"سب کلیدیں اسے بانٹتی ہیں۔ یہ ہر مہینے کی پہلی تاریخ کو دوبارہ شروع ہوتا ہے، "
+"اور استعمال کا چارٹ بتاتا ہے کہ آپ کہاں ہیں۔"
+
+msgid "Over the limit?"
+msgstr "حد سے تجاوز؟"
+
+msgid ""
+"You get <code>429 Too Many Requests</code> with a <code>Retry-After</code> "
+"header. Nothing is billed and nothing breaks."
+msgstr ""
+"آپ کو <code>Retry-After</code> ہیڈر کے ساتھ <code>429 Too Many Requests</"
+"code> ملتا ہے۔ نہ کوئی بل بنتا ہے، نہ کچھ ٹوٹتا ہے۔"
+
+msgid "Compare plans"
+msgstr "پلانز کا موازنہ"
+
+msgid "Feature"
+msgstr "خصوصیت"
+
+msgid "Requests per minute, per key"
+msgstr "فی کلید، فی منٹ درخواستیں"
+
+msgid "Requests a month"
+msgstr "ماہانہ درخواستیں"
+
+msgid "Included"
+msgstr "شامل"
+
+msgid "Questions"
+msgstr "سوالات"
+
+msgid "Do the public holiday pages count against my quota?"
+msgstr "کیا عوامی تعطیلات کے صفحات میرے کوٹے میں گنے جاتے ہیں؟"
+
+msgid ""
+"No. Only API calls made with one of your keys count. Browsing holidays, the "
+"playground and calendar feeds are free."
+msgstr ""
+"نہیں۔ صرف آپ کی کسی کلید سے کی گئی API کالز گنی جاتی ہیں۔ تعطیلات دیکھنا، "
+"پلے گراؤنڈ اور کیلنڈر فیڈز مفت ہیں۔"
+
+msgid "Where does the holiday data come from?"
+msgstr "تعطیلات کا ڈیٹا کہاں سے آتا ہے؟"
+
+msgid ""
+"From the open-source holidays library, kept up to date by its community. "
+"Your company closures stay in your own calendars."
+msgstr ""
+"اوپن سورس holidays لائبریری سے، جسے اس کی کمیونٹی تازہ رکھتی ہے۔ آپ کی کمپنی "
+"کی بندشیں آپ کے اپنے کیلنڈروں میں رہتی ہیں۔"
+
+msgid "Can I change plans later?"
+msgstr "کیا میں بعد میں پلان بدل سکتا ہوں؟"
+
+msgid ""
+"Yes. Your calendars, feeds and keys stay as they are; only the limits change."
+msgstr ""
+"جی ہاں۔ آپ کے کیلنڈر، فیڈز اور کلیدیں ویسی ہی رہتی ہیں؛ صرف حدیں بدلتی ہیں۔"
+
+msgid "Which languages are supported?"
+msgstr "کون سی زبانیں دستیاب ہیں؟"
+
+msgid ""
+"The app, the emails and holiday names come in English, Urdu and Arabic, with "
+"right-to-left layouts."
+msgstr ""
+"ایپ، ای میلز اور تعطیلات کے نام انگریزی، اردو اور عربی میں ہیں، دائیں سے "
+"بائیں ترتیب کے ساتھ۔"
 
 msgid "Public holidays"
 msgstr "عام تعطیلات"
@@ -589,6 +743,9 @@ msgstr ""
 
 msgid "API plans for HolidayOps: requests per minute, per month and API keys."
 msgstr "HolidayOps کے API پلان: فی منٹ اور ماہانہ درخواستیں اور API کلیدیں۔"
+
+msgid "Usage chart"
+msgstr "استعمال کا چارٹ"
 
 msgid "Webhook URLs must use https."
 msgstr "ویب ہُک URL میں https ہونا لازمی ہے۔"

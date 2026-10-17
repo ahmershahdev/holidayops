@@ -1,17 +1,6 @@
 /* Landing page (/) only; tokens and motion primitives come from site.css.
    Design: docs/design/m6-showcase.md, 6.2. */
 
-.button-ghost {
-  background: transparent;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1.5px var(--line);
-}
-
-.button-ghost:hover {
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1.5px var(--accent);
-}
-
 /* ---- Hero ---- */
 .hero {
   position: relative;
@@ -42,18 +31,6 @@
   animation-duration: 3.2s;
 }
 
-.eyebrow {
-  display: inline-block;
-  margin: 0 0 1.25rem;
-  padding: 0.35rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
 .hero-title {
   font-size: clamp(2.6rem, 7vw, 5.5rem);
   line-height: 0.98;
@@ -70,10 +47,6 @@
   animation-delay: 120ms;
 }
 
-.accent-line {
-  color: var(--accent);
-}
-
 .hero-copy .lead {
   animation: line-rise var(--dur-slow) var(--ease-out) 240ms both;
 }
@@ -83,13 +56,6 @@
     opacity: 0;
     transform: translateY(0.4em);
   }
-}
-
-.hero-ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-block: 0 2rem;
 }
 
 .hero-stats {
@@ -163,14 +129,6 @@
 .hero-calendar figcaption span {
   color: var(--muted);
   font-size: 0.875rem;
-}
-
-.section-title {
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  max-width: 22ch;
-  margin: 0 0 2rem;
 }
 
 /* ---- Demo ---- */
@@ -375,18 +333,112 @@
 }
 
 .how-steps {
+  --how-gap: clamp(2.5rem, 6vw, 5rem);
   display: grid;
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: var(--how-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .how-steps li {
+  position: relative;
   padding: 1.75rem;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 1.5rem;
+}
+
+/* A dashed route from each step to the next, ending in an arrowhead. */
+.how-steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 3.25rem;
+  top: 100%;
+  width: 2px;
+  height: calc(var(--how-gap) - 6px);
+  background: repeating-linear-gradient(to bottom, var(--glow) 0 7px, transparent 7px 13px);
+  transform-origin: top;
+}
+
+.how-steps li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(3.25rem - 5px);
+  top: calc(100% + var(--how-gap) - 13px);
+  width: 10px;
+  height: 10px;
+  border-inline-end: 2px solid var(--glow);
+  border-block-end: 2px solid var(--glow);
+  rotate: 45deg;
+}
+
+@supports (animation-timeline: view()) {
+  .how-steps li:not(:last-child)::after {
+    animation: grow-down linear both;
+    animation-timeline: view();
+    animation-range: cover 30% cover 60%;
+  }
+}
+
+@keyframes grow-down {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* ---- Use cases ---- */
+.uses {
+  margin-block: clamp(4rem, 10vw, 7rem);
+}
+
+.uses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.uses-grid li {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition: border-color var(--dur-fast) var(--ease-out), translate var(--dur) var(--ease-out);
+}
+
+.uses-grid li:hover {
+  border-color: var(--accent);
+  translate: 0 -4px;
+}
+
+.uses-grid svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.55rem;
+  border-radius: 0.9rem;
+  background: var(--accent-soft);
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.uses-grid h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.15rem;
+}
+
+.uses-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .step-n {

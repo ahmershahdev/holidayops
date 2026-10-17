@@ -1,20 +1,98 @@
-{% extends "public/base.html" %}{% load i18n %}
+{% extends "public/base.html" %}{% load i18n static %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/pricing.css' %}">{% endblock %}
 {% block content %}
-<h1>{{ title }}</h1>
-<p class="lead">{{ description }}</p>
+<header class="price-hero">
+  <p class="eyebrow">{% translate "Pricing" %}</p>
+  <h1>{% translate "Start free. Upgrade when you grow." %}</h1>
+  <p class="lead">{% translate "Every plan has the full product: company calendars, iCal feeds, digests and webhooks. Plans only differ in how much you call the API." %}</p>
+</header>
+
 <div class="plans">
 {% for plan in plans %}
-  <section class="plan">
-    <h2>{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</h2>
-    <ul>
-      <li>{% blocktranslate with rate=plan.rate %}<span class="ltr">{{ rate }}</span> per API key{% endblocktranslate %}</li>
-      <li>{% blocktranslate with quota=plan.monthly_quota|floatformat:"0g" %}{{ quota }} requests a month{% endblocktranslate %}</li>
-      <li>{% blocktranslate count keys=plan.max_keys %}{{ keys }} API key{% plural %}{{ keys }} API keys{% endblocktranslate %}</li>
-      <li>{% translate "Company calendars, iCal feeds, digests and webhooks" %}</li>
+  <section class="plan{% if plan.code == 'pro' %} plan-pro{% endif %}" aria-labelledby="plan-{{ plan.code }}">
+    <div class="plan-top">
+      <h2 id="plan-{{ plan.code }}">{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</h2>
+      {% if plan.code == "pro" %}<span class="plan-tag">{% translate "For production" %}</span>{% endif %}
+    </div>
+    <p class="plan-price">{% if plan.code == "pro" %}{% translate "Talk to us" %}{% else %}{% translate "Free forever" %}{% endif %}</p>
+    <p class="plan-for">{% if plan.code == "pro" %}{% translate "For products that check working days on every request." %}{% else %}{% translate "For trying the API and small internal tools." %}{% endif %}</p>
+    <dl class="plan-limits">
+      <div><dt>{% translate "per minute, per key" %}</dt><dd class="ltr">{{ plan.per_minute|floatformat:"0g" }}</dd></div>
+      <div><dt>{% translate "requests a month" %}</dt><dd class="ltr">{{ plan.monthly_short }}</dd></div>
+      <div><dt>{% translate "API keys" %}</dt><dd class="ltr">{{ plan.max_keys }}</dd></div>
+    </dl>
+    <ul class="checks">
+      <li>{% translate "Company calendars with your own closures" %}</li>
+      <li>{% translate "Private iCal feeds and monthly digests" %}</li>
+      <li>{% translate "Signed webhooks with retries" %}</li>
+      <li>{% translate "English, Urdu and Arabic" %}</li>
     </ul>
-    {% if plan.code == "free" %}<a class="button" href="{{ signup }}">{% translate "Start free" %}</a>{% else %}<p>{% translate "Contact us to upgrade." %}</p>{% endif %}
+    {% if plan.code == "free" %}
+    <a class="button button-arrow" href="{{ signup }}">{% translate "Start free" %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+    {% else %}
+    <p class="plan-note">{% translate "Contact us to upgrade." %}</p>
+    {% endif %}
   </section>
 {% endfor %}
 </div>
-<p><a href="{{ docs }}">{% translate "Read the API docs" %}</a></p>
+
+<section class="counting" aria-labelledby="counting-title">
+  <h2 id="counting-title" class="section-title">{% translate "How requests are counted" %}</h2>
+  <div class="route">
+  <ol class="route-steps">
+    <li class="reveal">
+      <span class="stop" aria-hidden="true">1</span>
+      <h3>{% translate "One call, one request" %}</h3>
+      <p>{% translate "Each API call made with a key counts once. Public pages, the playground and your iCal feeds don't count." %}</p>
+    </li>
+    <li class="reveal">
+      <span class="stop" aria-hidden="true">2</span>
+      <h3>{% translate "A per-minute limit for each key" %}</h3>
+      <p>{% translate "Bursts are smoothed per key, so one busy service can't use up another's allowance." %}</p>
+    </li>
+    <li class="reveal">
+      <span class="stop" aria-hidden="true">3</span>
+      <h3>{% translate "A monthly quota for the organization" %}</h3>
+      <p>{% translate "All keys share it. It resets on the 1st of each month, and your usage chart shows where you stand." %}</p>
+    </li>
+    <li class="reveal stop-end">
+      <span class="stop" aria-hidden="true">↺</span>
+      <h3>{% translate "Over the limit?" %}</h3>
+      <p>{% blocktranslate %}You get <code>429 Too Many Requests</code> with a <code>Retry-After</code> header. Nothing is billed and nothing breaks.{% endblocktranslate %}</p>
+    </li>
+  </ol>
+  <svg class="route-arrows" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+    <defs><marker id="arrow-head" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 9 5 1 9"/></marker></defs>
+    <path pathLength="1" marker-end="url(#arrow-head)" d="M70 60 C 120 10, 195 10, 240 56"/>
+    <path pathLength="1" marker-end="url(#arrow-head)" d="M325 60 C 375 110, 445 110, 490 64"/>
+    <path pathLength="1" marker-end="url(#arrow-head)" d="M580 60 C 630 10, 700 10, 745 56"/>
+  </svg>
+  </div>
+</section>
+
+<section class="compare" aria-labelledby="compare-title">
+  <h2 id="compare-title" class="section-title">{% translate "Compare plans" %}</h2>
+  <div class="table-wrap">
+  <table>
+    <caption class="skip">{% translate "Compare plans" %}</caption>
+    <thead><tr><th scope="col"><span class="skip">{% translate "Feature" %}</span></th>{% for plan in plans %}<th scope="col">{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</th>{% endfor %}</tr></thead>
+    <tbody>
+      <tr><th scope="row">{% translate "Requests per minute, per key" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.per_minute|floatformat:"0g" }}</td>{% endfor %}</tr>
+      <tr><th scope="row">{% translate "Requests a month" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.monthly_quota|floatformat:"0g" }}</td>{% endfor %}</tr>
+      <tr><th scope="row">{% translate "API keys" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.max_keys }}</td>{% endfor %}</tr>
+      {% for feature in included %}<tr><th scope="row">{{ feature }}</th>{% for plan in plans %}<td><span class="tick" aria-label="{% translate 'Included' %}"></span></td>{% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="faq" aria-labelledby="faq-title">
+  <h2 id="faq-title" class="section-title">{% translate "Questions" %}</h2>
+  <details><summary>{% translate "Do the public holiday pages count against my quota?" %}</summary><p>{% translate "No. Only API calls made with one of your keys count. Browsing holidays, the playground and calendar feeds are free." %}</p></details>
+  <details><summary>{% translate "Where does the holiday data come from?" %}</summary><p>{% translate "From the open-source holidays library, kept up to date by its community. Your company closures stay in your own calendars." %}</p></details>
+  <details><summary>{% translate "Can I change plans later?" %}</summary><p>{% translate "Yes. Your calendars, feeds and keys stay as they are; only the limits change." %}</p></details>
+  <details><summary>{% translate "Which languages are supported?" %}</summary><p>{% translate "The app, the emails and holiday names come in English, Urdu and Arabic, with right-to-left layouts." %}</p></details>
+</section>
+
 {% endblock %}

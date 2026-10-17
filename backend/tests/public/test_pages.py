@@ -125,9 +125,11 @@ def test_json_ld_cannot_break_out_of_its_script() -> None:
 def test_pricing_page_follows_the_plan_settings(web: Client, settings: Any) -> None:
     settings.PLANS = {**settings.PLANS, "pro": {**settings.PLANS["pro"], "max_keys": 42}}
     html = web.get("/pricing/").content.decode()
-    assert "42 API keys" in html
-    assert "120/minute" in html
-    assert "10,000 requests a month" in html
+    assert '<dd class="ltr">42</dd>' in html
+    assert '<dd class="ltr">120</dd>' in html
+    assert '<dd class="ltr">10K</dd>' in html
+    assert '<td class="ltr">10,000</td>' in html
+    assert '<td class="ltr">1,000,000</td>' in html
 
 
 def test_robots_txt(web: Client) -> None:
