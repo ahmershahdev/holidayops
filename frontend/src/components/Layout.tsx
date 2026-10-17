@@ -5,12 +5,13 @@ import { Link, NavLink, Outlet } from "react-router";
 import { api, unwrap } from "../api/client";
 import { currentLanguage } from "../i18n";
 import { useEnsureCsrf, useLogout, useMe } from "../lib/auth";
+import { AccountMenu } from "./frame/AccountMenu";
 import { Mark, Wordmark } from "./frame/Brand";
 import { SiteFooter, sitePrefix } from "./frame/SiteFooter";
 import { Switches } from "./frame/Switches";
 
 const pill =
-  "relative rounded-full px-3 py-1.5 text-[0.95rem] font-medium text-muted transition-colors hover:text-ink";
+  "relative inline-flex min-h-10 items-center rounded-full px-3 py-1.5 text-[0.95rem] font-medium whitespace-nowrap text-muted transition-colors hover:text-ink";
 const navLink = ({ isActive }: { isActive: boolean }) =>
   `${pill} nav-underline ${isActive ? "text-ink" : ""}`;
 
@@ -58,12 +59,9 @@ export function Layout() {
     </>
   );
 
+  const signOut = () => logout.mutate(undefined, { onSuccess: () => window.location.assign("/") });
   const auth = me ? (
-    <button
-      type="button"
-      className={pill}
-      onClick={() => logout.mutate(undefined, { onSuccess: () => window.location.assign("/") })}
-    >
+    <button type="button" className={pill} onClick={signOut}>
       {t("auth.logout")}
     </button>
   ) : (
@@ -81,7 +79,7 @@ export function Layout() {
   );
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div id="page-top" className="flex min-h-dvh flex-col">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2"
@@ -106,8 +104,7 @@ export function Layout() {
           </nav>
           <div className="ms-auto hidden items-center gap-3 lg:flex">
             <Switches />
-            {me && <span className="hidden text-sm text-muted xl:inline">{me.email}</span>}
-            {auth}
+            {me ? <AccountMenu email={me.email} onLogout={signOut} /> : auth}
           </div>
           <button
             type="button"

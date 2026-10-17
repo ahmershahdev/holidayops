@@ -27,6 +27,8 @@ const django = {
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
+    // The CSP has no data: fonts, so small font files must stay files instead of inlined URIs.
+    assetsInlineLimit: 0,
     rolldownOptions: {
       output: {
         // Libraries change far less often than the app, so they get their own cached file.

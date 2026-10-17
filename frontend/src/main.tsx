@@ -6,6 +6,8 @@ import { Layout } from "./components/Layout";
 import { i18nReady } from "./i18n";
 import "./index.css";
 import { applyTheme, readTheme } from "./lib/theme";
+// The landing route of the app: loaded with the entry, so its first paint has no chunk waterfall.
+import { PlaygroundPage } from "./pages/PlaygroundPage";
 
 // One chunk per page: the playground doesn't download the org settings screens.
 const AuthPage = lazy(() => import("./pages/AuthPage").then((m) => ({ default: m.AuthPage })));
@@ -26,9 +28,6 @@ const OrgSettingsPage = lazy(() =>
   import("./pages/OrgSettingsPage").then((m) => ({ default: m.OrgSettingsPage })),
 );
 const OrgsPage = lazy(() => import("./pages/OrgsPage").then((m) => ({ default: m.OrgsPage })));
-const PlaygroundPage = lazy(() =>
-  import("./pages/PlaygroundPage").then((m) => ({ default: m.PlaygroundPage })),
-);
 const UnsubscribePage = lazy(() =>
   import("./pages/UnsubscribePage").then((m) => ({ default: m.UnsubscribePage })),
 );

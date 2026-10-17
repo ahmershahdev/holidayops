@@ -29,7 +29,7 @@ SHARED_CLASSES = [
     "footer-route",
     "footer-grid",
     "footer-countries",
-    "footer-top",
+    "to-top",
     "footer-word",
 ]
 
