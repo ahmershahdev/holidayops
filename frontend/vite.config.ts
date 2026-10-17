@@ -26,6 +26,21 @@ const django = {
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Libraries change far less often than the app, so they get their own cached file.
+        codeSplitting: {
+          groups: [
+            {
+              name: "vendor",
+              test: /node_modules[\\/](react|react-dom|scheduler|react-router|@tanstack|i18next|react-i18next)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: Object.fromEntries(DJANGO_PATHS.map((path) => [path, django])),

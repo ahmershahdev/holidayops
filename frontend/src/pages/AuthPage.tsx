@@ -36,7 +36,7 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      <Card title={mode === "login" ? t("auth.loginTitle") : t("auth.signupTitle")}>
+      <Card heading="h1" title={mode === "login" ? t("auth.loginTitle") : t("auth.signupTitle")}>
         <form onSubmit={onSubmit} className="flex flex-col gap-4">
           {mode === "signup" && (
             <Field label={t("auth.name")}>

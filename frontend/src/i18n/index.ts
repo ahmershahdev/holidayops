@@ -1,8 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import ar from "./ar.json";
 import en from "./en.json";
-import ur from "./ur.json";
 
 export const LANGUAGES = [
   { code: "en", label: "English", dir: "ltr" },
@@ -39,7 +37,20 @@ export function currentLanguage(): Language {
   return isLanguage(i18n.language) ? i18n.language : "en";
 }
 
+// English is bundled as the fallback; Urdu and Arabic load only for people who use them.
+const LOADERS = {
+  ur: () => import("./ur.json"),
+  ar: () => import("./ar.json"),
+};
+
+async function ensureLoaded(language: Language): Promise<void> {
+  if (language === "en" || i18n.hasResourceBundle(language, "translation")) return;
+  const { default: bundle } = await LOADERS[language]();
+  i18n.addResourceBundle(language, "translation", bundle);
+}
+
 export async function changeLanguage(language: Language): Promise<void> {
+  await ensureLoaded(language);
   await i18n.changeLanguage(language);
   try {
     localStorage.setItem(STORAGE_KEY, language);
@@ -66,14 +77,23 @@ export function holidayLanguage(
   );
 }
 
-void i18n.use(initReactI18next).init({
-  resources: { en: { translation: en }, ur: { translation: ur }, ar: { translation: ar } },
-  lng: initialLanguage(),
-  fallbackLng: "en",
-  interpolation: { escapeValue: false },
-});
+const startLanguage = initialLanguage();
 
-applyDocumentLanguage(currentLanguage());
+/** Resolves once the starting language's strings are in, so the first render is never English
+ * for someone who chose Urdu or Arabic. */
+export const i18nReady: Promise<void> = i18n
+  .use(initReactI18next)
+  .init({
+    resources: { en: { translation: en } },
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+  })
+  .then(() => ensureLoaded(startLanguage))
+  .then(() => i18n.changeLanguage(startLanguage))
+  .then(() => undefined);
+
+applyDocumentLanguage(startLanguage);
 i18n.on("languageChanged", (language) => {
   if (isLanguage(language)) applyDocumentLanguage(language);
 });

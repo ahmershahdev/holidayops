@@ -1,21 +1,37 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StrictMode } from "react";
+import { lazy, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { Layout } from "./components/Layout";
-import "./i18n";
+import { i18nReady } from "./i18n";
 import "./index.css";
 import { applyTheme, readTheme } from "./lib/theme";
-import { AuthPage } from "./pages/AuthPage";
-import { CalendarPage } from "./pages/CalendarPage";
-import { CalendarSettingsPage } from "./pages/CalendarSettingsPage";
-import { InvitePage } from "./pages/InvitePage";
-import { NotFoundPage } from "./pages/NotFoundPage";
-import { OrgPage } from "./pages/OrgPage";
-import { OrgSettingsPage } from "./pages/OrgSettingsPage";
-import { OrgsPage } from "./pages/OrgsPage";
-import { PlaygroundPage } from "./pages/PlaygroundPage";
-import { UnsubscribePage } from "./pages/UnsubscribePage";
+
+// One chunk per page: the playground doesn't download the org settings screens.
+const AuthPage = lazy(() => import("./pages/AuthPage").then((m) => ({ default: m.AuthPage })));
+const CalendarPage = lazy(() =>
+  import("./pages/CalendarPage").then((m) => ({ default: m.CalendarPage })),
+);
+const CalendarSettingsPage = lazy(() =>
+  import("./pages/CalendarSettingsPage").then((m) => ({ default: m.CalendarSettingsPage })),
+);
+const InvitePage = lazy(() =>
+  import("./pages/InvitePage").then((m) => ({ default: m.InvitePage })),
+);
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })),
+);
+const OrgPage = lazy(() => import("./pages/OrgPage").then((m) => ({ default: m.OrgPage })));
+const OrgSettingsPage = lazy(() =>
+  import("./pages/OrgSettingsPage").then((m) => ({ default: m.OrgSettingsPage })),
+);
+const OrgsPage = lazy(() => import("./pages/OrgsPage").then((m) => ({ default: m.OrgsPage })));
+const PlaygroundPage = lazy(() =>
+  import("./pages/PlaygroundPage").then((m) => ({ default: m.PlaygroundPage })),
+);
+const UnsubscribePage = lazy(() =>
+  import("./pages/UnsubscribePage").then((m) => ({ default: m.UnsubscribePage })),
+);
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
@@ -25,6 +41,8 @@ applyTheme(readTheme());
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element");
+
+await i18nReady;
 
 createRoot(root).render(
   <StrictMode>

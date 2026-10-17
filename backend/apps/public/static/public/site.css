@@ -860,8 +860,7 @@ html[lang="ar"] .footer-col h2 {
   text-align: center;
   white-space: nowrap;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgb(45 212 196 / 0.55);
-  background: linear-gradient(180deg, rgb(45 212 196 / 0.4), rgb(45 212 196 / 0.04) 80%);
+  background: linear-gradient(180deg, rgb(45 212 196 / 0.55), rgb(45 212 196 / 0.06) 85%);
   -webkit-background-clip: text;
   background-clip: text;
   user-select: none;

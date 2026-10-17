@@ -5,10 +5,18 @@ import type {
   SelectHTMLAttributes,
 } from "react";
 
-export function Card({ title, children }: { title?: ReactNode; children: ReactNode }) {
+export function Card({
+  title,
+  heading: Heading = "h2",
+  children,
+}: {
+  title?: ReactNode;
+  heading?: "h1" | "h2";
+  children: ReactNode;
+}) {
   return (
     <section className="rounded-[var(--radius-card)] border border-line bg-surface p-5">
-      {title && <h2 className="mb-4 font-display text-xl text-ink">{title}</h2>}
+      {title && <Heading className="mb-4 font-display text-xl text-ink">{title}</Heading>}
       {children}
     </section>
   );
