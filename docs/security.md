@@ -34,6 +34,12 @@ Redis-backed throttles per API key, and per IP for anonymous calls. Over the lim
 
 iCal URLs carry a random token, stored hashed, revocable and rotatable.
 
+## Email
+
+Digest unsubscribe links carry a signed subscription id (`django.core.signing`, purpose salt), so
+they work without logging in and can't be forged for someone else's subscription. Email
+credentials come from env only.
+
 ## Webhooks
 
 HMAC-SHA256 signature header, HTTPS only, private/loopback/link-local IPs blocked (SSRF, checked

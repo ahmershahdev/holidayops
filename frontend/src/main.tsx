@@ -12,6 +12,7 @@ import { OrgPage } from "./pages/OrgPage";
 import { OrgSettingsPage } from "./pages/OrgSettingsPage";
 import { OrgsPage } from "./pages/OrgsPage";
 import { PlaygroundPage } from "./pages/PlaygroundPage";
+import { UnsubscribePage } from "./pages/UnsubscribePage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
@@ -29,6 +30,7 @@ createRoot(root).render(
             <Route index element={<PlaygroundPage />} />
             <Route path="login" element={<AuthPage mode="login" />} />
             <Route path="signup" element={<AuthPage mode="signup" />} />
+            <Route path="unsubscribe" element={<UnsubscribePage />} />
             <Route path="app" element={<OrgsPage />} />
             <Route path="app/:org" element={<OrgPage />} />
             <Route path="app/:org/settings" element={<OrgSettingsPage />} />

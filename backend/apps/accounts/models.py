@@ -1,5 +1,6 @@
 from typing import Any, ClassVar
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
@@ -23,6 +24,7 @@ class User(AbstractUser):
     last_name = None  # type: ignore[assignment]
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150, blank=True)
+    language = models.CharField(max_length=5, choices=settings.LANGUAGES, default="en")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS: ClassVar[list[str]] = []

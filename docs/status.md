@@ -9,7 +9,7 @@ Last updated: 2026-10-17. Update this file at the end of every work session.
 | 1. Public API over `holidays` | ✅ merged (#2) |
 | 2. Accounts, orgs, company calendars | ✅ merged (#6) |
 | 3. Web app UI, design system, ur/ar RTL | ✅ merged (#9) |
-| 4. iCal feeds, digests, webhooks | 🚧 4.1 merged (#12); 4.2 on `feat/ical-feeds` |
+| 4. iCal feeds, digests, webhooks | 🚧 4.1–4.2 merged (#12, #13); 4.3 on `feat/digests` |
 | 5. API keys, limits, deployment, SEO pages | planned |
 | 6. Showcase website | planned |
 
@@ -25,8 +25,9 @@ Design note: [design/m4-subscriptions.md](design/m4-subscriptions.md) (all four 
 2. ✅ **4.2 iCal feeds** – `FeedToken` (hashed, revocable, rotatable, max 10 per calendar),
    `/feeds/<token>.ics` built by `apps/core/ical.py`, cached by `calendar.updated_at`, ETag/304;
    "Calendar feeds" card in calendar settings.
-3. **4.3 Digests** – monthly email "holidays in the next 30 days", per-member opt-in, email backend
-   from env (console in dev).
+3. ✅ **4.3 Digests** – `DigestSubscription`, Beat on the 1st at 06:00 UTC fans out one task per
+   subscription, once per month even on retries; `User.language` for the email; one-click
+   unsubscribe; "Email me monthly" toggle on the calendar page and `/unsubscribe` page.
 4. **4.4 Webhooks** – `Webhook` model, HMAC-SHA256 signature, HTTPS only, SSRF guard after DNS
    resolution, retries with backoff, delivery log, UI in org settings.
 5. Org invites by email (deferred from Milestone 2) once email sending exists.
@@ -56,6 +57,8 @@ Start each part on its own `feat/...` branch.
 - Any non-`/api/v1` route changes drf-spectacular's auto prefix and renames every operationId;
   `SCHEMA_PATH_PREFIX` is pinned to `/api/v1` for that reason.
 - `docker compose build backend` after backend dependency changes, or `npm run messages` fails.
+- `makemessages` can fuzzy-match a new string to an unrelated old translation: check for
+  `#, fuzzy` in the `.po` files and fix those entries by hand.
 - The Celery worker on Windows needs `--pool=solo` (`npm run dev:worker` passes it).
 - Stacked PRs + squash merge: rebase the next branch with `git rebase --onto origin/main <old base>`
   before merging, and retarget it before deleting its base branch, or GitHub closes it.

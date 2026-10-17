@@ -12,6 +12,7 @@ urlpatterns = [
     path("business-days/range/", views.RangeView.as_view(), name="business-days-range"),
     path("", include("apps.accounts.urls")),
     path("", include("apps.orgs.urls")),
+    path("", include("apps.notifications.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerSplitView.as_view(url_name="schema"), name="docs"),
 ]

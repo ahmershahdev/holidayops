@@ -162,5 +162,15 @@
     "label": "Label",
     "labelPlaceholder": "e.g. Team Outlook",
     "create": "Create link"
+  },
+  "digest": {
+    "off": "Email me monthly",
+    "on": "Monthly email: on",
+    "hint": "On the 1st of each month: holidays and company days off for the next 30 days.",
+    "unsubscribeTitle": "Unsubscribe",
+    "unsubscribeIntro": "Stop the monthly holiday email for this calendar?",
+    "unsubscribe": "Unsubscribe",
+    "unsubscribed": "Done. You won't get this email any more.",
+    "badLink": "This unsubscribe link is not valid."
   }
 }

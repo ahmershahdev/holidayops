@@ -1,0 +1,1 @@
+{% load i18n %}{% if event.category == "CLOSURE" %}{% translate "Company closure" %}{% elif event.category == "HALF-DAY" %}{% translate "Half day" %}{% elif event.category == "WORKING-DAY" %}{% translate "Extra working day" %}{% else %}{% translate "Holiday" %}{% endif %}

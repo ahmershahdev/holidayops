@@ -65,7 +65,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["auth_me_partial_update"];
         trace?: never;
     };
     "/api/v1/auth/signup/": {
@@ -158,6 +158,23 @@ export interface paths {
         get: operations["countries_list"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/digests/unsubscribe/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description One-click unsubscribe (RFC 8058): mail clients POST here without a session. */
+        post: operations["digests_unsubscribe_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -282,6 +299,25 @@ export interface paths {
         head?: never;
         /** @description Resolves the org from the URL. Non-members get 404, too-low roles get 403. */
         patch: operations["orgs_calendars_custom_days_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/orgs/{org_slug}/calendars/{calendar_id}/digest/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description The current user's own monthly digest for a calendar; any member may opt in. */
+        get: operations["orgs_calendars_digest_retrieve"];
+        /** @description The current user's own monthly digest for a calendar; any member may opt in. */
+        put: operations["orgs_calendars_digest_update"];
+        post?: never;
+        /** @description The current user's own monthly digest for a calendar; any member may opt in. */
+        delete: operations["orgs_calendars_digest_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/orgs/{org_slug}/calendars/{calendar_id}/feeds/": {
@@ -483,6 +519,11 @@ export interface components {
             name: string;
             kind: components["schemas"]["CustomDayKindEnum"];
         };
+        Digest: {
+            subscribed: boolean;
+            /** Format: date */
+            last_sent_on: string | null;
+        };
         FeedToken: {
             readonly id: number;
             label?: string;
@@ -536,6 +577,13 @@ export interface components {
             categories: string[];
             holidays: components["schemas"]["Holiday"][];
         };
+        /**
+         * @description * `en` - English
+         *     * `ur` - Urdu
+         *     * `ar` - Arabic
+         * @enum {string}
+         */
+        LanguageEnum: "en" | "ur" | "ar";
         LoginRequest: {
             /** Format: email */
             email: string;
@@ -644,6 +692,10 @@ export interface components {
         PatchedOrgRequest: {
             name?: string;
         };
+        PatchedUserRequest: {
+            name?: string;
+            language?: components["schemas"]["LanguageEnum"];
+        };
         /**
          * @description * `working_day` - working_day
          *     * `weekend` - weekend
@@ -679,16 +731,19 @@ export interface components {
             subdiv?: string;
             categories?: string[];
         };
+        UnsubscribeRequest: {
+            token: string;
+        };
         User: {
             readonly id: number;
             /** Format: email */
-            email: string;
+            readonly email: string;
             name?: string;
+            language?: components["schemas"]["LanguageEnum"];
         };
         UserRequest: {
-            /** Format: email */
-            email: string;
             name?: string;
+            language?: components["schemas"]["LanguageEnum"];
         };
     };
     responses: never;
@@ -769,6 +824,31 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    auth_me_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedUserRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedUserRequest"];
+                "multipart/form-data": components["schemas"]["PatchedUserRequest"];
+            };
+        };
         responses: {
             200: {
                 headers: {
@@ -944,6 +1024,37 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Country"][];
                 };
+            };
+        };
+    };
+    digests_unsubscribe_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UnsubscribeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["UnsubscribeRequest"];
+                "multipart/form-data": components["schemas"]["UnsubscribeRequest"];
+            };
+        };
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No response body */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1293,6 +1404,71 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CustomDay"];
                 };
+            };
+        };
+    };
+    orgs_calendars_digest_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Digest"];
+                };
+            };
+        };
+    };
+    orgs_calendars_digest_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Digest"];
+                };
+            };
+        };
+    };
+    orgs_calendars_digest_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                calendar_id: string;
+                org_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

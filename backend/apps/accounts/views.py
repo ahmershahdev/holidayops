@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
@@ -33,7 +34,12 @@ class SignupView(APIView):
         serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        user = User.objects.create_user(data["email"], data["password"], name=data.get("name", ""))
+        language = (
+            request.LANGUAGE_CODE if request.LANGUAGE_CODE in dict(settings.LANGUAGES) else "en"
+        )
+        user = User.objects.create_user(
+            data["email"], data["password"], name=data.get("name", ""), language=language
+        )
         login(request._request, user, backend="django.contrib.auth.backends.ModelBackend")
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
@@ -75,3 +81,10 @@ class MeView(APIView):
     @extend_schema(responses=UserSerializer)
     def get(self, request: Request) -> Response:
         return Response(UserSerializer(current_user(request)).data)
+
+    @extend_schema(request=UserSerializer, responses=UserSerializer)
+    def patch(self, request: Request) -> Response:
+        serializer = UserSerializer(current_user(request), data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

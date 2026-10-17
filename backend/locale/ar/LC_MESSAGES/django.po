@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 05:49+0000\n"
+"POT-Creation-Date: 2026-10-17 06:06+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -81,6 +81,45 @@ msgstr "يحتوي هذا التقويم بالفعل على يوم خاص في 
 #, python-format
 msgid "A calendar can have at most %(max)s active feed links."
 msgstr "يمكن أن يحتوي التقويم على %(max)s من روابط الخلاصات النشطة كحد أقصى."
+
+#, python-format
+msgid "Holidays in the next %(days)s days: %(calendar)s"
+msgstr "العطلات في الأيام الـ%(days)s القادمة: %(calendar)s"
+
+msgid "Company closure"
+msgstr "إغلاق الشركة"
+
+msgid "Half day"
+msgstr "نصف يوم"
+
+msgid "Extra working day"
+msgstr "يوم عمل إضافي"
+
+msgid "Holiday"
+msgstr "عطلة"
+
+#, python-format
+msgid "%(name)s: the next %(days)s days"
+msgstr "%(name)s: الأيام الـ%(days)s القادمة"
+
+msgid "No holidays or company days off in this period."
+msgstr "لا توجد عطلات أو أيام إجازة للشركة في هذه الفترة."
+
+msgid "Open the calendar"
+msgstr "افتح التقويم"
+
+msgid ""
+"You get this email once a month because you subscribed to this calendar."
+msgstr "تصلك هذه الرسالة مرة كل شهر لأنك اشتركت في هذا التقويم."
+
+msgid "Unsubscribe"
+msgstr "إلغاء الاشتراك"
+
+msgid "Open the calendar:"
+msgstr "افتح التقويم:"
+
+msgid "Unsubscribe:"
+msgstr "إلغاء الاشتراك:"
 
 msgid "Your role does not allow this action."
 msgstr "دورك لا يسمح بهذا الإجراء."

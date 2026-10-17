@@ -71,6 +71,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+    patch:
+      operationId: auth_me_partial_update
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
   /api/v1/auth/signup/:
     post:
       operationId: auth_signup_create
@@ -344,6 +368,32 @@ paths:
                 items:
                   $ref: '#/components/schemas/Country'
           description: ''
+  /api/v1/digests/unsubscribe/:
+    post:
+      operationId: digests_unsubscribe_create
+      description: 'One-click unsubscribe (RFC 8058): mail clients POST here without
+        a session.'
+      tags:
+      - digests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnsubscribeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnsubscribeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnsubscribeRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '204':
+          description: No response body
+        '400':
+          description: No response body
   /api/v1/holidays/:
     get:
       operationId: holidays_retrieve
@@ -771,6 +821,87 @@ paths:
         schema:
           type: integer
         description: A unique integer value identifying this custom day.
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/orgs/{org_slug}/calendars/{calendar_id}/digest/:
+    get:
+      operationId: orgs_calendars_digest_retrieve
+      description: The current user's own monthly digest for a calendar; any member
+        may opt in.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Digest'
+          description: ''
+    put:
+      operationId: orgs_calendars_digest_update
+      description: The current user's own monthly digest for a calendar; any member
+        may opt in.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
+        required: true
+      - in: path
+        name: org_slug
+        schema:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        required: true
+      tags:
+      - orgs
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Digest'
+          description: ''
+    delete:
+      operationId: orgs_calendars_digest_destroy
+      description: The current user's own monthly digest for a calendar; any member
+        may opt in.
+      parameters:
+      - in: path
+        name: calendar_id
+        schema:
+          type: string
+          pattern: ^[0-9a-f-]{36}$
         required: true
       - in: path
         name: org_slug
@@ -1389,6 +1520,18 @@ components:
       - date
       - kind
       - name
+    Digest:
+      type: object
+      properties:
+        subscribed:
+          type: boolean
+        last_sent_on:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - last_sent_on
+      - subscribed
     FeedToken:
       type: object
       properties:
@@ -1521,6 +1664,16 @@ components:
       - language
       - subdiv
       - year
+    LanguageEnum:
+      enum:
+      - en
+      - ur
+      - ar
+      type: string
+      description: |-
+        * `en` - English
+        * `ur` - Urdu
+        * `ar` - Arabic
     LoginRequest:
       type: object
       properties:
@@ -1747,6 +1900,14 @@ components:
           type: string
           minLength: 1
           maxLength: 120
+    PatchedUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 150
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
     ReasonEnum:
       enum:
       - working_day
@@ -1831,6 +1992,14 @@ components:
           maxItems: 10
       required:
       - country
+    UnsubscribeRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          minLength: 1
+      required:
+      - token
     User:
       type: object
       properties:
@@ -1840,26 +2009,23 @@ components:
         email:
           type: string
           format: email
-          maxLength: 254
+          readOnly: true
         name:
           type: string
           maxLength: 150
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
       required:
       - email
       - id
     UserRequest:
       type: object
       properties:
-        email:
-          type: string
-          format: email
-          minLength: 1
-          maxLength: 254
         name:
           type: string
           maxLength: 150
-      required:
-      - email
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
   securitySchemes:
     cookieAuth:
       type: apiKey

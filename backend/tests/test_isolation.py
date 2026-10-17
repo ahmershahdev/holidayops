@@ -56,6 +56,9 @@ def endpoints(v: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
         ("post", f"{cal}/feeds/", {"label": "x"}),
         ("delete", feed, {}),
         ("post", f"{feed}rotate/", {}),
+        ("get", f"{cal}/digest/", {}),
+        ("put", f"{cal}/digest/", {}),
+        ("delete", f"{cal}/digest/", {}),
         (
             "get",
             "/api/v1/business-days/check/",
@@ -71,7 +74,7 @@ def test_every_org_endpoint_returns_404_to_outsiders(
     outsider = MembershipFactory.create(role=Role.OWNER).user
     client = client_for(outsider)
     for method, url, data in endpoints(victim):
-        kwargs = {"format": "json"} if method in {"post", "patch"} else {}
+        kwargs = {"format": "json"} if method in {"post", "patch", "put"} else {}
         response = getattr(client, method)(url, data, **kwargs)
         assert response.status_code == 404, f"{method.upper()} {url} -> {response.status_code}"
 

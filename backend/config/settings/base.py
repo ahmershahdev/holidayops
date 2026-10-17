@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
@@ -30,6 +32,7 @@ INSTALLED_APPS = [
     "apps.orgs",
     "apps.calendars",
     "apps.feeds",
+    "apps.notifications",
     "apps.api",
 ]
 
@@ -159,4 +162,20 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERY_TASK_SOFT_TIME_LIMIT = 30
 CELERY_TASK_TIME_LIMIT = 60
 CELERY_TIMEZONE = "UTC"
-CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {}
+CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
+    "monthly-digests": {
+        "task": "notifications.send_digests",
+        "schedule": crontab(minute="0", hour="6", day_of_month="1"),
+    },
+}
+
+APP_URL = env("APP_URL", "http://localhost:5173").rstrip("/")
+
+EMAIL_BACKEND = env("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = env("EMAIL_HOST", "localhost")
+EMAIL_PORT = int(env("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", "true").lower() == "true"
+EMAIL_TIMEOUT = 10
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "HolidayOps <no-reply@holidayops.test>")
