@@ -380,7 +380,6 @@ h2 {
   }
 }
 
-/* Language and theme switches: small segmented controls. */
 .switches {
   display: flex;
   align-items: center;
@@ -684,7 +683,6 @@ html[lang="ur"] .footer-cta-title {
   box-shadow: inset 0 0 0 1.5px var(--f-glow);
 }
 
-/* The logo's flight path, drawn across the panel as it scrolls in. */
 .footer-route {
   display: block;
   width: 100%;
@@ -1024,7 +1022,6 @@ td.date {
   white-space: nowrap;
 }
 
-/* Small screens: each row becomes a stacked card. */
 @media (max-width: 36rem) {
   table,
   tbody,

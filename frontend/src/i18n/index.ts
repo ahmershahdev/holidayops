@@ -48,7 +48,6 @@ export async function changeLanguage(language: Language): Promise<void> {
   }
 }
 
-// Map the UI language to a holiday-name language the country supports.
 export function holidayLanguage(
   ui: Language,
   supported: readonly string[],

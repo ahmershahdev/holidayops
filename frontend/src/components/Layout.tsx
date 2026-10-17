@@ -32,7 +32,6 @@ export function Layout() {
     );
   }, [me, language, client]);
 
-  // Lock page scroll while the mobile sheet is open.
   useEffect(() => {
     document.documentElement.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);

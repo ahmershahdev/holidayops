@@ -1,7 +1,6 @@
 {% extends "public/base.html" %}{% load i18n static %}
 {% block head %}<link rel="stylesheet" href="{% static 'public/landing.css' %}">{% endblock %}
 {% block content %}
-{# ---- Hero ---- #}
 <section class="hero">
   <svg class="hero-route flight" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
     <path class="trail" pathLength="1" d="M560 530 C 700 520, 760 380, 880 300 S 1080 120, 1230 30"/>
@@ -32,7 +31,6 @@
   </figure>
 </section>
 
-{# ---- Live demo (a plain GET form: works without JavaScript) ---- #}
 <section class="demo reveal" id="demo" aria-labelledby="demo-title">
   <div class="demo-copy">
     <h2 id="demo-title">{% translate "Is it a working day?" %}</h2>
@@ -54,7 +52,6 @@
   {% endif %}
 </section>
 
-{# ---- Product story ---- #}
 <section class="story" aria-labelledby="story-title">
   <h2 id="story-title" class="section-title slide-in">{% translate "Everything a calendar of working days needs" %}</h2>
   <div class="bento">
@@ -91,7 +88,6 @@
   </div>
 </section>
 
-{# ---- How it works: pinned title, steps scroll past, a progress line follows ---- #}
 <section class="how" aria-labelledby="how-title">
   <div class="how-pin">
     <h2 id="how-title" class="section-title">{% translate "From sign-up to answers in three steps" %}</h2>
@@ -104,7 +100,6 @@
   </ol>
 </section>
 
-{# ---- Code ---- #}
 <section class="code night reveal" aria-labelledby="code-title">
   <div>
     <h2 id="code-title">{% translate "One request, one clear answer" %}</h2>
@@ -117,7 +112,6 @@
   </div>
 </section>
 
-{# ---- Countries marquee ---- #}
 <section class="marquee-section" aria-labelledby="marquee-title">
   <h2 id="marquee-title" class="section-title">{% translate "Holidays for every country, every year" %}</h2>
   <div class="marquee">
@@ -127,7 +121,6 @@
   <p><a href="{{ prefix }}/holidays/">{% blocktranslate with countries=country_count %}See all {{ countries }} countries →{% endblocktranslate %}</a></p>
 </section>
 
-{# ---- Pricing teaser + final call ---- #}
 <section class="finale reveal">
   <h2>{% translate "Start free. Upgrade when you grow." %}</h2>
   <p>{% translate "The free plan includes company calendars, feeds, digests, webhooks and 10,000 API requests a month." %}</p>
