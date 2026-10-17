@@ -5,7 +5,8 @@ import { useFormat } from "../../lib/format";
 import { Mark, Wordmark } from "./Brand";
 import { Switches } from "./Switches";
 
-// Same content and look as backend/apps/public/templates/public/_footer.html.
+// Same markup and classes as backend/apps/public/templates/public/_footer.html; the styles are
+// one block shared by both stylesheets.
 const POPULAR = ["PK", "SA", "AE", "US", "GB", "IN"];
 const REPO_URL = "https://github.com/ahmershahdev/holidayops";
 
@@ -19,84 +20,78 @@ export function SiteFooter() {
   const fmt = useFormat();
   const prefix = sitePrefix();
   const year = new Date().getFullYear();
-  const link = "text-[#e6edf7] hover:text-[#2dd4c4]";
-  const heading = "mb-1 text-xs font-semibold tracking-[0.12em] text-[#8fa3bd] uppercase";
 
   return (
-    <footer className="site-footer relative mt-16 overflow-hidden rounded-t-[2rem] bg-night pt-14 text-[#c7d3e3]">
-      <svg
-        className="footer-route absolute inset-x-0 top-0 h-14 w-full"
-        viewBox="0 0 1200 60"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path pathLength={1} d="M0 50 C 300 50, 420 10, 640 22 S 1000 40, 1200 8" />
-      </svg>
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
-        <div className="sm:col-span-2 lg:col-span-1">
-          <a href={`${prefix}/`} className="flex items-center gap-2 text-xl text-[#e6edf7]">
-            <Mark />
-            <Wordmark />
-          </a>
-          <p className="my-4 max-w-sm">{t("footer.tagline")}</p>
-          <Link
-            to="/signup"
-            className="inline-block rounded-full bg-[#2dd4c4] px-5 py-2.5 font-semibold text-[#06122a] hover:bg-[#5eead4]"
-          >
-            {t("footer.start")}
-          </Link>
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-cta">
+          <p className="footer-cta-title">
+            <span>{t("footer.ctaLine1")}</span>{" "}
+            <span className="footer-accent">{t("footer.ctaLine2")}</span>
+          </p>
+          <div className="footer-actions">
+            <Link className="footer-button footer-button-ghost" to="/login">
+              {t("auth.login")}
+            </Link>
+            <Link className="footer-button" to="/signup">
+              {t("footer.start")}
+            </Link>
+          </div>
         </div>
-        <nav className="grid content-start gap-2.5" aria-label={t("footer.product")}>
-          <h2 className={heading}>{t("footer.product")}</h2>
-          <a className={link} href={`${prefix}/holidays/`}>
-            {t("nav.holidays")}
-          </a>
-          <a className={link} href={`${prefix}/pricing/`}>
-            {t("nav.pricing")}
-          </a>
-          <Link className={link} to="/playground">
-            {t("nav.playground")}
-          </Link>
-          <Link className={link} to="/app">
-            {t("footer.calendars")}
-          </Link>
-        </nav>
-        <nav className="grid content-start gap-2.5" aria-label={t("footer.popular")}>
-          <h2 className={heading}>{t("footer.popular")}</h2>
-          {POPULAR.map((code) => (
-            <a
-              key={code}
-              className={link}
-              href={`${prefix}/holidays/${code.toLowerCase()}/${year}/`}
-            >
-              {fmt.country(code)}
+        <svg
+          className="footer-route"
+          viewBox="0 0 1200 80"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path pathLength={1} d="M4 70 C 260 70, 420 18, 640 30 S 1000 56, 1192 10" />
+          <circle cx="1192" cy="10" r="4" />
+        </svg>
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <a href={`${prefix}/`} className="brand">
+              <Mark />
+              <Wordmark />
             </a>
-          ))}
-        </nav>
-        <nav className="grid content-start gap-2.5" aria-label={t("footer.developers")}>
-          <h2 className={heading}>{t("footer.developers")}</h2>
-          <a className={link} href="/api/v1/docs/">
-            {t("nav.apiDocs")}
+            <p>{t("footer.tagline")}</p>
+          </div>
+          <nav className="footer-col" aria-label={t("footer.product")}>
+            <h2>{t("footer.product")}</h2>
+            <a href={`${prefix}/holidays/`}>{t("nav.holidays")}</a>
+            <a href={`${prefix}/pricing/`}>{t("nav.pricing")}</a>
+            <Link to="/playground">{t("nav.playground")}</Link>
+            <Link to="/app">{t("footer.calendars")}</Link>
+          </nav>
+          <nav className="footer-col footer-countries" aria-label={t("footer.popular")}>
+            <h2>{t("footer.popular")}</h2>
+            {POPULAR.map((code) => (
+              <a key={code} href={`${prefix}/holidays/${code.toLowerCase()}/${year}/`}>
+                {fmt.country(code)}
+              </a>
+            ))}
+          </nav>
+          <nav className="footer-col" aria-label={t("footer.developers")}>
+            <h2>{t("footer.developers")}</h2>
+            <a href="/api/v1/docs/">{t("nav.apiDocs")}</a>
+            <a href="/api/v1/schema/">{t("footer.schema")}</a>
+            <a href={REPO_URL} rel="noopener">
+              GitHub
+            </a>
+            <a href="/sitemap.xml">{t("footer.sitemap")}</a>
+          </nav>
+        </div>
+        <div className="footer-bottom">
+          <Switches dark />
+          <p>
+            © {year} HolidayOps · {t("footer.credit")}
+          </p>
+          <a className="footer-top" href="#top">
+            {t("footer.top")}
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
           </a>
-          <a className={link} href="/api/v1/schema/">
-            {t("footer.schema")}
-          </a>
-          <a className={link} href={REPO_URL} rel="noopener">
-            GitHub
-          </a>
-          <a className={link} href="/sitemap.xml">
-            {t("footer.sitemap")}
-          </a>
-        </nav>
-      </div>
-      <div className="mx-auto mt-12 flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-[#24375c] px-4 py-6 text-sm">
-        <Switches dark />
-        <p>
-          © {year} HolidayOps · {t("footer.credit")}
-        </p>
-        <a className={link} href="#top">
-          {t("footer.top")} ↑
-        </a>
+        </div>
       </div>
       <p className="footer-word" aria-hidden="true" dir="ltr">
         HolidayOps

@@ -1,34 +1,42 @@
 {% load i18n %}<footer class="site-footer">
-  <svg class="footer-route" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0 50 C 300 50, 420 10, 640 22 S 1000 40, 1200 8"/></svg>
-  <div class="wrap footer-grid">
-    <div class="footer-brand">
-      <a class="brand" href="{{ home }}" dir="ltr">{% include "public/_mark.html" %}<span>Holiday<span class="ops">Ops</span></span></a>
-      <p>{% translate "Holidays and working days for 250 countries, merged with your own company calendar." %}</p>
-      <a class="button" href="/signup">{% translate "Start free" %}</a>
+  <div class="footer-inner">
+    <div class="footer-cta">
+      <p class="footer-cta-title"><span>{% translate "Every working day," %}</span> <span class="footer-accent">{% translate "in every country." %}</span></p>
+      <div class="footer-actions">
+        <a class="footer-button footer-button-ghost" href="/login">{% translate "Log in" %}</a>
+        <a class="footer-button" href="/signup">{% translate "Start free" %}</a>
+      </div>
     </div>
-    <nav class="footer-col" aria-label="{% translate 'Product' %}">
-      <h2>{% translate "Product" %}</h2>
-      <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
-      <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
-      <a href="/playground">{% translate "Playground" %}</a>
-      <a href="/app">{% translate "Company calendars" %}</a>
-    </nav>
-    <nav class="footer-col" aria-label="{% translate 'Popular countries' %}">
-      <h2>{% translate "Popular countries" %}</h2>
-      {% for name, path in popular %}<a href="{{ path }}">{{ name }}</a>{% endfor %}
-    </nav>
-    <nav class="footer-col" aria-label="{% translate 'Developers' %}">
-      <h2>{% translate "Developers" %}</h2>
-      <a href="/api/v1/docs/">{% translate "API docs" %}</a>
-      <a href="/api/v1/schema/">{% translate "OpenAPI schema" %}</a>
-      <a href="{{ repo_url }}" rel="noopener">GitHub</a>
-      <a href="/sitemap.xml">{% translate "Sitemap" %}</a>
-    </nav>
-  </div>
-  <div class="wrap footer-bottom">
-    {% include "public/_switches.html" %}
-    <p>© {{ year }} HolidayOps · {% translate "Holiday data: the open-source holidays library." %}</p>
-    <a class="to-top" href="#top">{% translate "Back to top" %} ↑</a>
+    <svg class="footer-route" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 70 C 260 70, 420 18, 640 30 S 1000 56, 1192 10"/><circle cx="1192" cy="10" r="4"/></svg>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="{{ home }}" dir="ltr">{% include "public/_mark.html" %}<span>Holiday<span class="ops">Ops</span></span></a>
+        <p>{% translate "Holidays and working days for 250 countries, merged with your own company calendar." %}</p>
+      </div>
+      <nav class="footer-col" aria-label="{% translate 'Product' %}">
+        <h2>{% translate "Product" %}</h2>
+        <a href="{{ prefix }}/holidays/">{% translate "Holidays" %}</a>
+        <a href="{{ prefix }}/pricing/">{% translate "Pricing" %}</a>
+        <a href="/playground">{% translate "Playground" %}</a>
+        <a href="/app">{% translate "Company calendars" %}</a>
+      </nav>
+      <nav class="footer-col footer-countries" aria-label="{% translate 'Popular countries' %}">
+        <h2>{% translate "Popular countries" %}</h2>
+        {% for name, path in popular %}<a href="{{ path }}">{{ name }}</a>{% endfor %}
+      </nav>
+      <nav class="footer-col" aria-label="{% translate 'Developers' %}">
+        <h2>{% translate "Developers" %}</h2>
+        <a href="/api/v1/docs/">{% translate "API docs" %}</a>
+        <a href="/api/v1/schema/">{% translate "OpenAPI schema" %}</a>
+        <a href="{{ repo_url }}" rel="noopener">GitHub</a>
+        <a href="/sitemap.xml">{% translate "Sitemap" %}</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      {% include "public/_switches.html" %}
+      <p>© {{ year }} HolidayOps · {% translate "Holiday data: the open-source holidays library." %}</p>
+      <a class="footer-top" href="#top">{% translate "Back to top" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+    </div>
   </div>
   <p class="footer-word" aria-hidden="true" dir="ltr">HolidayOps</p>
 </footer>

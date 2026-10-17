@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 14:53+0000\n"
+"POT-Creation-Date: 2026-10-17 17:42+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -248,14 +248,23 @@ msgstr "ملک کے لحاظ سے تعطیلات دیکھیں"
 msgid "API docs"
 msgstr "API دستاویزات"
 
+msgid "Every working day,"
+msgstr "ہر کام کا دن،"
+
+msgid "in every country."
+msgstr "ہر ملک میں۔"
+
+msgid "Log in"
+msgstr "لاگ اِن"
+
+msgid "Start free"
+msgstr "مفت شروع کریں"
+
 msgid ""
 "Holidays and working days for 250 countries, merged with your own company "
 "calendar."
 msgstr ""
 "250 ممالک کی تعطیلات اور کام کے دن، آپ کے اپنے کمپنی کیلنڈر کے ساتھ ملا کر۔"
-
-msgid "Start free"
-msgstr "مفت شروع کریں"
 
 msgid "Product"
 msgstr "پروڈکٹ"
@@ -293,9 +302,6 @@ msgstr "اوپر جائیں"
 msgid "Main"
 msgstr "مرکزی"
 
-msgid "Log in"
-msgstr "لاگ اِن"
-
 msgid "Menu"
 msgstr "مینو"
 
@@ -320,12 +326,6 @@ msgstr "مواد پر جائیں"
 #, python-format
 msgid "%(countries)s countries · 3 languages · one API"
 msgstr "%(countries)s ممالک · 3 زبانیں · ایک API"
-
-msgid "Every working day,"
-msgstr "ہر کام کا دن،"
-
-msgid "in every country."
-msgstr "ہر ملک میں۔"
 
 msgid ""
 "Public holidays, weekends and your own company closures, merged into one "
