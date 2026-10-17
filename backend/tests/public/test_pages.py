@@ -158,3 +158,21 @@ def test_api_keeps_reading_accept_language(web: Client) -> None:
     assert response.status_code == 400
     assert "XX" in response.content.decode()
     assert response.headers["Content-Language"] == "ur"
+
+
+def test_style_guide_is_noindex_with_its_own_policy(web: Client) -> None:
+    response = web.get("/style/")
+    assert response.status_code == 200
+    html = response.content.decode()
+    assert '<meta name="robots" content="noindex">' in html
+    assert "#0b1b3f" in html
+    assert "'unsafe-inline'" in response["Content-Security-Policy"]
+    assert "'unsafe-inline'" not in web.get("/pricing/")["Content-Security-Policy"]
+    assert "/style/" not in web.get("/sitemap-pages.xml").content.decode()
+
+
+def test_public_pages_load_the_display_font(web: Client) -> None:
+    html = web.get("/holidays/").content.decode()
+    assert 'rel="preload"' in html
+    assert "outfit-latin-wght-normal" in html
+    assert "font-src 'self'" in web.get("/holidays/")["Content-Security-Policy"]

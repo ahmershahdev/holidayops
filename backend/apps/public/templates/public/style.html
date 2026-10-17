@@ -1,0 +1,46 @@
+{% extends "public/base.html" %}
+{% block content %}
+<h1>Style guide</h1>
+<p class="lead">The showcase's palette, type and motion, read live from <code>site.css</code>. Decisions and rules: <code>docs/design/m6-showcase.md</code>.</p>
+
+<h2>Palette</h2>
+<ul class="swatches">
+{% for s in swatches %}<li class="swatch">
+  <div class="chip" style="background: var(--{{ s.name }})"></div>
+  <div><strong>{{ s.name }}</strong> <code>{{ s.hex }}</code><br>
+  on surface {{ s.on_surface }}{% if s.on_surface >= 4.5 %} · AA{% elif s.on_surface >= 3 %} · graphics{% endif %}<br>
+  on night {{ s.on_night }}{% if s.on_night >= 4.5 %} · AA{% endif %}</div>
+</li>
+{% endfor %}</ul>
+
+<h2>Type</h2>
+<div class="type-scale">
+  <p style="font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700">Every working day</p>
+  <p style="font-size: 3rem; font-weight: 700">Public holidays 2027</p>
+  <p style="font-size: 2rem; font-weight: 600">Holiday<span style="color: var(--accent)">Ops</span></p>
+  <p style="font-size: 1.5rem; font-weight: 500">Company calendars for every country</p>
+</div>
+<p>Body text is IBM Plex Sans in the app and the system UI font on these pages: “Pakistan Day, Monday 23 March”.</p>
+
+<h2>Motion: flight path</h2>
+<div class="night">
+  <svg class="flight" viewBox="0 0 600 160" role="img" aria-label="A plane flies along a teal route">
+    <path class="trail" pathLength="1" d="M10 140 C 160 140, 220 30, 360 60 S 540 40, 590 20"/>
+    <path class="route" pathLength="1" d="M10 140 C 160 140, 220 30, 360 60 S 540 40, 590 20"/>
+    <path class="plane" style="offset-path: path('M10 140 C 160 140, 220 30, 360 60 S 540 40, 590 20')" d="M-10 -3 L6 -3 L12 0 L6 3 L-10 3 L-6 0 Z M-2 -3 L2 -10 L5 -10 L3 -3 Z M-2 3 L2 10 L5 10 L3 3 Z"/>
+  </svg>
+</div>
+
+<h2>Motion: scroll-driven</h2>
+<p>Scroll: cards rise in, rows slide in from the reading start, the badge drifts. Static where <code>animation-timeline</code> isn't supported or motion is reduced.</p>
+<div class="demo-grid">
+  <div class="demo-card reveal"><strong>250 countries</strong><br>Holidays from the open-source library.</div>
+  <div class="demo-card reveal"><strong>Company calendars</strong><br>Merge countries with your own closures.</div>
+  <div class="demo-card reveal"><strong>Feeds and webhooks</strong><br>iCal, digests and signed events.</div>
+</div>
+<div class="demo-card slide-in">Slides in from the start edge (flips in Urdu and Arabic).</div>
+<p style="text-align: center; margin-block: 3rem"><span class="demo-card drift" style="display: inline-block">✈ 2027</span></p>
+
+<h2>Motion: page transitions</h2>
+<p>Links between these pages cross-fade with View Transitions while the wordmark stays put: <a href="{{ prefix }}/pricing/">go to pricing</a> and come back.</p>
+{% endblock %}

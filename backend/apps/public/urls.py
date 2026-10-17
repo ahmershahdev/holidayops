@@ -29,6 +29,7 @@ _pages = [
     path("holidays/<slug:country>/<int:year>/", views.year_view),
     path("holidays/<slug:country>/<str:subdiv>/<int:year>/", views.year_view),
     path("pricing/", views.pricing),
+    path("style/", views.style_guide),
 ]
 
 urlpatterns = [

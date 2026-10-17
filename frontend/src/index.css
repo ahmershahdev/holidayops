@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/outfit";
 @import "@fontsource/ibm-plex-sans/400.css";
 @import "@fontsource/ibm-plex-sans/500.css";
 @import "@fontsource/ibm-plex-sans/600.css";
@@ -9,25 +9,30 @@
 @import "@fontsource/noto-nastaliq-urdu/600.css";
 
 @theme {
-  --color-paper: #fbf8f3;
+  /* Logo-led palette; contrast table in docs/design/m6-showcase.md. Keep in sync with
+     backend/apps/public/static/public/site.css (tests/public/test_tokens.py checks it). */
+  --color-paper: #f7fafc;
   --color-surface: #ffffff;
-  --color-ink: #1c1917;
-  --color-muted: #6b635a;
-  --color-line: #e7e1d8;
-  --color-accent: #0f5e5a;
-  --color-accent-soft: #e3efed;
-  --color-holiday: #b4432b;
-  --color-holiday-soft: #f8e6e1;
-  --color-closure: #7a2e4d;
-  --color-closure-soft: #f3e3ea;
-  --color-halfday: #9a6412;
-  --color-halfday-soft: #f7ecd9;
-  --color-weekend: #f1ebe1;
-  --color-weekend-strong: #d8cdbb;
-  --color-workday: #2f6b3f;
-  --color-workday-soft: #e2efe5;
+  --color-ink: #0b1b3f;
+  --color-muted: #4a5874;
+  --color-line: #d5dde8;
+  --color-accent: #0e7c76;
+  --color-accent-strong: #0b6b66;
+  --color-accent-soft: #e0f5f3;
+  --color-glow: #00b3a6;
+  --color-night: #0b1b3f;
+  --color-holiday: #b23c22;
+  --color-holiday-soft: #fbe9e4;
+  --color-closure: #8a2c5a;
+  --color-closure-soft: #f6e6ee;
+  --color-halfday: #8f5a0a;
+  --color-halfday-soft: #f8eedb;
+  --color-weekend: #eef2f7;
+  --color-weekend-strong: #c9d3e0;
+  --color-workday: #23704a;
+  --color-workday-soft: #e1f2e8;
 
-  --font-display: "Fraunces Variable", "IBM Plex Sans Arabic", Georgia, serif;
+  --font-display: "Outfit Variable", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --font-sans: "IBM Plex Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --font-urdu: "Noto Nastaliq Urdu", "IBM Plex Sans Arabic", serif;
 

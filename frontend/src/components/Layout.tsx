@@ -37,8 +37,8 @@ export function Layout() {
       </a>
       <header className="border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-          <Link to="/" className="font-display text-xl font-semibold text-accent">
-            HolidayOps
+          <Link to="/" className="font-display text-xl font-semibold text-ink" dir="ltr">
+            Holiday<span className="text-accent">Ops</span>
           </Link>
           <nav
             aria-label={t("nav.main")}
@@ -84,7 +84,7 @@ export function Layout() {
                 </Link>
                 <Link
                   to="/signup"
-                  className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent/90"
+                  className="rounded-lg bg-accent px-4 py-2 font-medium text-white hover:bg-accent-strong"
                 >
                   {t("auth.signup")}
                 </Link>

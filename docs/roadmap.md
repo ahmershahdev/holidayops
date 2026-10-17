@@ -68,7 +68,9 @@ Design: [design/m5-api-keys.md](design/m5-api-keys.md) (5.1).
 | 5.3 Deployment ✅ (host setup pending) | Production settings, HTTPS, health endpoint, Redis list cache, CD pipeline, demo URL, seed data |
 | 5.4 Docs (at launch) | README setup, API examples, screenshots |
 
-## Milestone 6 — Showcase website ← next
+## Milestone 6 — Showcase website ← in progress
+
+Design: [design/m6-showcase.md](design/m6-showcase.md).
 
 Award-level public site built on Milestone 5's server-rendered pages and the Milestone 3 design
 system. Art-directed landing page, illustrated country and year pages, motion through CSS scroll-driven
@@ -77,7 +79,7 @@ animations and View Transitions. Must keep Lighthouse ≥ 90, readable without J
 
 | Part | Scope |
 |---|---|
-| 6.1 Art direction | Moodboard, illustration system, motion principles |
+| 6.1 Art direction ✅ | Moodboard, illustration system, motion principles |
 | 6.2 Landing page | Hero, product story, live API demo, pricing |
 | 6.3 Country pages | Illustrated holiday pages per country and year |
 | 6.4 Performance and a11y pass | Lighthouse, axe, reduced-motion and RTL checks |

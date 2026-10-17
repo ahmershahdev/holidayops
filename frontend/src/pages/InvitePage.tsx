@@ -60,7 +60,7 @@ export function InvitePage() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to={auth("/signup")}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent/90"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-strong"
             >
               {t("invite.signup")}
             </Link>
