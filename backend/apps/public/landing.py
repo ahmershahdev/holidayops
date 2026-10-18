@@ -3,6 +3,7 @@
 import json
 from dataclasses import dataclass
 from datetime import date, timedelta
+from zoneinfo import ZoneInfo
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -25,8 +26,10 @@ from apps.public.seo import SUPPORT_EMAIL, fit_title, site_graph
 from apps.public.views import PUBLIC_POLICY, _meta, public_page
 from apps.public.world import world
 
-# Country shown in the hero calendar and preselected in the demo, by page language.
+# Country shown in the hero calendar and preselected in the demo, by page language, and the
+# zone its "today" is read in: at 02:00 in Karachi it's still yesterday in UTC.
 HOME_COUNTRY = {"en": "PK", "ur": "PK", "ar": "SA"}
+HOME_ZONE = {"PK": ZoneInfo("Asia/Karachi"), "SA": ZoneInfo("Asia/Riyadh")}
 MARQUEE = (
     "PK",
     "SA",
@@ -184,9 +187,9 @@ def api_sample() -> tuple[str, str]:
 
 @public_page
 def landing(request: HttpRequest, lang: str) -> HttpResponse:
-    today = timezone.now().date()
     countries = list_countries()
     home = HOME_COUNTRY[lang]
+    today = timezone.localdate(timezone=HOME_ZONE[home])
     headers, weeks = month_cells(home, lang, today)
     values, answer, error = demo(request.GET.dict(), lang, today)
     curl, response_json = api_sample()

@@ -90,8 +90,12 @@ def public_page(view: View) -> View:
 
     @wraps(view)
     def wrapper(request: HttpRequest, *args: Any, lang: str = "en", **kwargs: Any) -> HttpResponse:
+        # The hour keeps "today" on the landing and the year calendars current: a page cached
+        # before midnight would otherwise ring yesterday until the cache expired.
+        hour = timezone.now().strftime("%Y%m%d%H")
         key = (
-            f"page:{build_id()}:{get_theme(request)}:{request.get_host()}:{request.get_full_path()}"
+            f"page:{build_id()}:{hour}:{get_theme(request)}:{request.get_host()}:"
+            f"{request.get_full_path()}"
         )
         cached: HttpResponse | None = cache.get(key)
         if cached is not None:
