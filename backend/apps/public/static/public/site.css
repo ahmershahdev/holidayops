@@ -742,7 +742,7 @@ html[lang="ur"] .footer-cta-title {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr repeat(3, 1fr);
+  grid-template-columns: 1.4fr repeat(4, 1fr);
   gap: 2.5rem 2rem;
 }
 
@@ -846,6 +846,21 @@ html[lang="ar"] .footer-col h2 {
 .footer-bottom p {
   margin: 0;
   color: var(--f-quiet);
+}
+
+.footer-bottom a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--f-line);
+  text-underline-offset: 0.25em;
+  transition:
+    color 150ms ease-out,
+    text-decoration-color 150ms ease-out;
+}
+
+.footer-bottom a:hover {
+  color: var(--f-glow);
+  text-decoration-color: currentColor;
 }
 
 /* Floating back-to-top: appears after the first screen; the ring fills as you read. Pure CSS,
@@ -999,7 +1014,7 @@ html[lang="ar"] .footer-col h2 {
 
 @media (max-width: 56rem) {
   .footer-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .footer-brand {
@@ -1046,21 +1061,92 @@ html[lang="ar"] .footer-col h2 {
 /* end frame:footer */
 
 /* ---- Content pieces ---- */
+/* Breadcrumbs: a short dashed route between stops, the current page as the landed pill. Scrolls
+   sideways on narrow screens instead of wrapping into a ragged block. */
 .crumbs {
+  margin: 0 0 1.5rem;
   font-size: 0.875rem;
-  color: var(--muted);
-  margin: 0 0 0.75rem;
-  padding: 0;
-  list-style: none;
+}
+
+.crumbs ol {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+  mask-image: linear-gradient(to var(--crumb-end, right), #000 calc(100% - 1.5rem), transparent);
+}
+
+[dir="rtl"] .crumbs ol {
+  --crumb-end: left;
+}
+
+.crumbs li {
+  display: flex;
+  align-items: center;
+  flex: none;
 }
 
 .crumbs li + li::before {
-  content: "/";
-  margin-inline-end: 0.25rem;
-  color: var(--line);
+  content: "";
+  inline-size: 1.5rem;
+  block-size: 2px;
+  margin-inline: 0.4rem;
+  background: repeating-linear-gradient(to right, var(--glow) 0 4px, transparent 4px 7px);
+  border-radius: 2px;
+}
+
+.crumbs a,
+.crumbs [aria-current] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-block-size: 2rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.crumbs a {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.crumbs a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.crumbs [aria-current] {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 650;
+}
+
+.crumb-home svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 36rem) {
+  .crumb-home span {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
 }
 
 .stats {
@@ -1569,6 +1655,291 @@ pre {
   scale: -1 1;
 }
 
+/* ---- Section labels (landing and content pages) ---- */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.9rem;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kicker::before {
+  content: "";
+  inline-size: 1.75rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+html[lang="ur"] .kicker,
+html[lang="ar"] .kicker {
+  letter-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.section-lead {
+  max-width: 44rem;
+  margin: -1rem 0 2.5rem;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* ---- Content pages: about, contact, legal ---- */
+.page-head {
+  max-width: 50rem;
+  margin-block: clamp(1rem, 4vw, 2.5rem) clamp(2.5rem, 6vw, 4rem);
+}
+
+.page-head h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.page-head .lead {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--muted);
+}
+
+.mail-big {
+  display: inline-block;
+  margin-block-start: 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-decoration: none;
+  background: linear-gradient(var(--glow), var(--glow)) 0 100% / 0 3px no-repeat;
+  transition: background-size var(--dur) var(--ease-out);
+}
+
+.mail-big:hover {
+  background-size: 100% 3px;
+}
+
+[dir="rtl"] .mail-big {
+  background-position: 100% 100%;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-block-end: clamp(2.5rem, 6vw, 4rem);
+}
+
+.split h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  letter-spacing: -0.02em;
+}
+
+.prose {
+  max-width: 44rem;
+  font-size: 1.05rem;
+}
+
+.prose p,
+.prose ul {
+  margin: 0 0 1.1rem;
+}
+
+.prose li + li {
+  margin-block-start: 0.4rem;
+}
+
+.prose h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+.prose h2:first-child {
+  margin-block-start: 0;
+}
+
+.prose code {
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.9em;
+}
+
+.stats-big {
+  margin-block-end: clamp(3rem, 8vw, 5rem);
+}
+
+.stats-big strong {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+  margin-block-end: clamp(3rem, 8vw, 5rem);
+}
+
+.cards-contact {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+}
+
+.card {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  transition: border-color var(--dur-fast) var(--ease-out), translate var(--dur) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--accent);
+  translate: 0 -4px;
+}
+
+.card h2,
+.card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card > a:last-child {
+  justify-self: start;
+  margin-block-start: 0.4rem;
+  font-weight: 600;
+}
+
+.card-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.55rem;
+  border-radius: 0.9rem;
+  background: var(--accent-soft);
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-owner {
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--glow) 16%, transparent), transparent 60%),
+    var(--surface);
+}
+
+.maker {
+  display: grid;
+  grid-template-columns: 1.3fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--glow) 20%, transparent), transparent 55%),
+    var(--accent-soft);
+}
+
+.maker h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  letter-spacing: -0.03em;
+}
+
+.maker p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.maker-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.legal {
+  display: grid;
+  grid-template-columns: 14rem 1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-block-end: 4rem;
+}
+
+.legal-toc {
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
+  align-self: start;
+  font-size: 0.9rem;
+}
+
+.legal-toc p {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.legal-toc ol {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-inline-start: 2px solid var(--line);
+}
+
+.legal-toc a {
+  display: block;
+  margin-inline-start: -2px;
+  padding: 0.3rem 0.9rem;
+  border-inline-start: 2px solid transparent;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.legal-toc a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.legal-updated {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 56rem) {
+  .split,
+  .maker,
+  .legal {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-toc {
+    position: static;
+  }
+}
+
 /* ---- Error pages ---- */
 .error-page {
   display: grid;
@@ -1690,7 +2061,6 @@ pre {
 
 @keyframes slide-in {
   from {
-    opacity: 0;
     transform: translateX(calc(var(--dir) * -4rem));
   }
 }

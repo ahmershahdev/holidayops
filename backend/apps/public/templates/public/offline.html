@@ -1,0 +1,9 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<section class="error-page">
+  <svg class="flight" viewBox="0 0 600 120" aria-hidden="true"><path class="trail" pathLength="1" d="M10 100 C 160 100, 220 30, 320 40 S 520 90, 590 20"/><path class="detour" pathLength="1" d="M10 100 C 160 100, 220 30, 320 40"/></svg>
+  <h1>{{ title }}</h1>
+  <p class="lead">{{ description }}</p>
+  <div class="error-links"><a class="button" href="/">{% translate "Try again" %}</a></div>
+</section>
+{% endblock %}

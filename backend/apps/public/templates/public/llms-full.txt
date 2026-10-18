@@ -1,0 +1,81 @@
+{% autoescape off %}# HolidayOps: full reference
+
+> HolidayOps answers "is this date a working day?" for {{ country_count }} countries and {{ region_count }} regions, through a REST API, iCal feeds, email digests and signed webhooks. Holiday data comes from the open-source Python library `holidays`. Built by {{ owner }} ({{ owner_url }}). Support: {{ support_email }}.
+
+## What it does
+
+- Public holidays for every country and region the `holidays` library supports, in the country's own language where the library has it (for example Urdu for Pakistan, Arabic for Saudi Arabia).
+- Each country's own weekend. Most countries rest on Saturday and Sunday, but Saudi Arabia, Egypt and Qatar rest on Friday and Saturday, Iran on Friday only, and Brunei on Friday and Sunday.
+- Moved working days: some countries make a weekend day a working day to bridge a holiday. These count as working days.
+- Company calendars: merge several countries and regions, then add your own closures, half days and extra working days.
+- Delivery: REST API with API keys, private iCal feeds for Google Calendar, Outlook and Apple Calendar, a monthly email digest, and HMAC-signed webhooks.
+
+## REST API
+
+Base URL: {{ root }}api/v1/
+Format: JSON over HTTPS. Dates are ISO 8601 (YYYY-MM-DD). Weekday numbers are Monday = 0 to Sunday = 6.
+Authentication: optional. Without a key, requests are limited to 60 a minute per IP. With a key, send `Authorization: Bearer hops_<prefix>_<secret>` and the plan's limits apply.
+
+Common query parameters:
+
+- `country`: required. ISO 3166-1 alpha-2 code, case-insensitive.
+- `subdiv`: optional region code from the country's list.
+- `language`: optional. One of the country's supported languages; default is the country's own default.
+- `categories`: optional, comma-separated. Default `public`.
+- `calendar`: optional company calendar ID instead of `country` (needs a key from that organization).
+
+Limits: years 1970 to 2100; `days` from -1000 to 1000; `between` spans at most 3660 days.
+
+### GET /api/v1/countries/
+
+Every supported country with its regions, languages, categories and weekend.
+
+```json
+[{"code": "SA", "name": "Saudi Arabia", "subdivisions": [], "languages": ["ar", "en_US"], "default_language": "ar", "categories": ["public"], "weekend": [4, 5]}]
+```
+
+### GET /api/v1/holidays/?country=PK&year={{ year }}
+
+The holidays of one year, sorted by date. Two holidays on one date are two entries.
+
+### GET /api/v1/business-days/check/?country=SA&date={{ check_date }}
+
+```json
+{{ check_example }}
+```
+
+`reason` is one of `working_day`, `weekend`, `holiday`, `weekend_workday` (a moved working day), and for company calendars `closure`, `half_day` and `custom_working_day`.
+
+### GET /api/v1/business-days/add/?country=PK&date={{ year }}-03-20&days=5
+
+Adds (or with negative `days`, subtracts) working days. Counting starts the day after `date`. `days=0` returns `date` if it is a working day, otherwise the next one.
+
+### GET /api/v1/business-days/between/?country=AE&start={{ year }}-01-01&end={{ year }}-01-31
+
+Counts working days between two dates, inclusive of both ends.
+
+### GET /api/v1/business-days/range/?country=PK&start={{ year }}-01-01&end={{ year }}-01-31
+
+Every day in a range with its status, for drawing calendars.
+
+### Errors
+
+`400` with field errors, for example `{"days": ["Ensure this value is less than or equal to 1000."]}`. `429` with a `Retry-After` header when a limit is reached.
+
+## Plans
+
+{% for plan in plans %}- {{ plan.name }}: {{ plan.rate }} per key, {{ plan.monthly_quota }} requests a month, up to {{ plan.max_keys }} API keys.
+{% endfor %}Every plan includes company calendars, iCal feeds, digests and webhooks. Public pages, the playground and iCal feeds do not count against the quota.
+
+## Public pages
+
+- {{ root }}holidays/<country>/<year>/ : holidays, working days and weekend for a country and year, for example {{ root }}holidays/pk/{{ year }}/
+- {{ root }}holidays/<country>/<region>/<year>/ : the same for a region
+- Every page also exists in Urdu under {{ root }}ur/ and in Arabic under {{ root }}ar/.
+
+## Countries
+
+Code, name, weekend and number of regions.
+
+{% for c in countries %}- {{ c.code }}: {{ c.name }}; weekend {{ c.weekend }}; {{ c.regions }} regions
+{% endfor %}{% endautoescape %}

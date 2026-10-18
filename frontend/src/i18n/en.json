@@ -285,7 +285,13 @@
     "sitemap": "Sitemap",
     "credit": "Holiday data: the open-source holidays library.",
     "top": "Back to top",
-    "openCalendars": "Open my calendars"
+    "openCalendars": "Open my calendars",
+    "company": "Company",
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "builtBy": "Built by"
   },
   "notFound": {
     "title": "This flight went off course",

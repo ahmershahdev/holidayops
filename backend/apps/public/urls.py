@@ -2,7 +2,7 @@ from django.contrib.sitemaps import views as sitemap_views
 from django.urls import path, register_converter
 from django.views.decorators.cache import cache_page
 
-from apps.public import views
+from apps.public import discovery, pages, views
 from apps.public.landing import landing
 from apps.public.sitemaps import sitemaps
 from apps.public.theme import set_theme
@@ -32,13 +32,22 @@ _pages = [
     path("holidays/<slug:country>/<int:year>/", views.year_view),
     path("holidays/<slug:country>/<str:subdiv>/<int:year>/", views.year_view),
     path("pricing/", views.pricing),
+    path("about/", pages.about),
+    path("contact/", pages.contact),
     path("style/", views.style_guide),
 ]
 
 urlpatterns = [
     *_pages,
     *[path(f"<lang:lang>/{p.pattern}", p.callback) for p in _pages],
-    path("robots.txt", views.robots, name="robots"),
+    path("privacy/", pages.privacy),
+    path("terms/", pages.terms),
+    path("offline/", pages.offline),
+    path("robots.txt", discovery.robots, name="robots"),
+    path("llms.txt", discovery.llms, name="llms"),
+    path("llms-full.txt", discovery.llms_full, name="llms-full"),
+    path("manifest.webmanifest", discovery.manifest, name="manifest"),
+    path("sw.js", discovery.service_worker, name="service-worker"),
     path("theme/<str:choice>/", set_theme, name="theme"),
     path(
         "sitemap.xml",

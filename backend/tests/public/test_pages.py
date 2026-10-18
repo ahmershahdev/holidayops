@@ -9,7 +9,8 @@ from django.utils import timezone
 
 from apps.core import business_days_between, get_calendar
 from apps.public.content import YEARS_AROUND
-from apps.public.views import PUBLIC_POLICY, ld_json
+from apps.public.seo import ld_json
+from apps.public.views import PUBLIC_POLICY
 
 YEAR = timezone.now().year
 
@@ -52,7 +53,7 @@ def test_year_page_lists_every_holiday_with_structured_data(web: Client) -> None
 
     breadcrumbs, events = ld_blocks(html)
     assert breadcrumbs["@type"] == "BreadcrumbList"
-    assert [i["name"] for i in breadcrumbs["itemListElement"]] == ["Holidays", "Pakistan"]
+    assert [i["name"] for i in breadcrumbs["itemListElement"]] == ["Home", "Holidays", "Pakistan"]
     names = {e["name"] for e in events}
     assert names == {name for day in cal for name in cal.get_list(day)}
     assert all(e["@type"] == "Event" and e["location"]["name"] == "Pakistan" for e in events)

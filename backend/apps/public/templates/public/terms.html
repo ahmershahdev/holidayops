@@ -1,0 +1,49 @@
+{% extends "public/_legal.html" %}
+{% block toc %}
+<li><a href="#agreement">The agreement</a></li>
+<li><a href="#accounts">Accounts</a></li>
+<li><a href="#api">API keys and fair use</a></li>
+<li><a href="#data">Holiday data</a></li>
+<li><a href="#yours">Your content</a></li>
+<li><a href="#plans">Plans</a></li>
+<li><a href="#availability">Availability</a></li>
+<li><a href="#liability">Liability</a></li>
+<li><a href="#ending">Ending</a></li>
+<li><a href="#contact">Contact</a></li>
+{% endblock %}
+{% block legal %}
+<h2 id="agreement">The agreement</h2>
+<p>These terms apply when you use HolidayOps: the website, the web app and the API, run by {{ owner }}. By creating an account or calling the API you agree to them. The source code is a separate matter, licensed under the <a href="{{ repo_url }}/blob/main/LICENSE" rel="noopener">MIT License</a>.</p>
+
+<h2 id="accounts">Accounts</h2>
+<p>Give a real email address, keep your password to yourself, and tell us if you think someone else has access to your account. You're responsible for what happens in organizations you own, including who you invite.</p>
+
+<h2 id="api">API keys and fair use</h2>
+<ul>
+  <li>Keep keys secret. Don't put them in public code or in pages that run in someone else's browser.</li>
+  <li>Stay within your plan's limits, and don't try to get around them, for example by spreading requests over many accounts.</li>
+  <li>Don't use HolidayOps to attack other systems, send spam through webhooks, or probe the service for weaknesses outside a private report.</li>
+</ul>
+<p>We may slow down or suspend keys that break these rules, and we'll tell you why.</p>
+
+<h2 id="data">Holiday data</h2>
+<p>Dates come from the open-source <a href="https://github.com/vacanza/holidays" rel="noopener">holidays</a> library. Governments sometimes announce or move holidays at short notice, and some depend on the sighting of the moon. We work to keep the data current, but we can't guarantee it's complete or correct on every date. <strong>For decisions with legal or financial weight, check the official source as well.</strong></p>
+
+<h2 id="yours">Your content</h2>
+<p>Calendars, closures and other things you add stay yours. You give us permission to store and process them only to run the service for you. You can ask us to delete them at any time.</p>
+
+<h2 id="plans">Plans</h2>
+<p>The free plan is free and has the limits shown on the <a href="/pricing/">pricing page</a>. Pro is arranged by email. If limits change, we'll give account holders notice first.</p>
+
+<h2 id="availability">Availability</h2>
+<p>We aim to keep HolidayOps running all the time, but there will be maintenance and the occasional outage. We may change or remove features, and we'll give notice before removing anything you rely on.</p>
+
+<h2 id="liability">Liability</h2>
+<p>HolidayOps is provided "as is", without warranties of any kind. As far as the law allows, we aren't liable for indirect losses, such as lost profit, caused by using the service or by a wrong date. Nothing here limits rights you have under consumer law that can't be limited.</p>
+
+<h2 id="ending">Ending</h2>
+<p>You can stop using HolidayOps whenever you like and ask us to delete your data. We may close accounts that seriously or repeatedly break these terms.</p>
+
+<h2 id="contact">Contact</h2>
+<p>Questions about these terms: <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Contact" %}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{% translate "One inbox, read by the person who builds HolidayOps. Tell us what you were trying to do, and we'll take it from there." %}</p>
+  <a class="mail-big" href="mailto:{{ support_email }}">{{ support_email }}</a>
+</header>
+
+<div class="cards cards-contact">
+  <article class="card reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+    <h2>{% translate "Questions and support" %}</h2>
+    <p>{% translate "Something not working, or not sure HolidayOps fits your case? Write to us." %}</p>
+    <a href="mailto:{{ support_email }}?subject=HolidayOps%20support">{% translate "Email support" %}</a>
+  </article>
+  <article class="card reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg>
+    <h2>{% translate "Pro plan and higher limits" %}</h2>
+    <p>{% translate "Tell us roughly how many requests you expect a month and we'll set up Pro for your organization." %}</p>
+    <a href="mailto:{{ support_email }}?subject=HolidayOps%20Pro">{% translate "Ask about Pro" %}</a>
+  </article>
+  <article class="card reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M10 14l4 4M14 14l-4 4"/></svg>
+    <h2>{% translate "A wrong holiday date" %}</h2>
+    <p>{% translate "Dates come from the holidays library. Reporting it there fixes it for everyone; we're happy to pass it on for you." %}</p>
+    <a href="https://github.com/vacanza/holidays/issues" rel="noopener">{% translate "Report it to holidays" %}</a>
+  </article>
+  <article class="card reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+    <h2>{% translate "A security issue" %}</h2>
+    <p>{% translate "Please don't post it publicly. Report it privately on GitHub and we'll reply within 7 days." %}</p>
+    <a href="{{ repo_url }}/security/advisories/new" rel="noopener">{% translate "Report privately" %}</a>
+  </article>
+  <article class="card reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg>
+    <h2>{% translate "Bugs and ideas" %}</h2>
+    <p>{% translate "HolidayOps is open source. Open an issue, or send a pull request." %}</p>
+    <a href="{{ repo_url }}/issues" rel="noopener">{% translate "Open an issue" %}</a>
+  </article>
+  <article class="card card-owner reveal">
+    <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+    <h2>{{ owner }}</h2>
+    <p>{% translate "The maker of HolidayOps. More work and other ways to get in touch:" %}</p>
+    <a href="{{ owner_url }}" rel="author">ahmershah.dev</a>
+  </article>
+</div>
+{% endblock %}

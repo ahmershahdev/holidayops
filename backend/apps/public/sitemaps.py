@@ -19,10 +19,22 @@ class PagesSitemap(_Localized):
     changefreq = "monthly"
 
     def items(self) -> list[str]:
-        return ["/holidays/", "/pricing/"]
+        return ["/", "/holidays/", "/pricing/", "/about/", "/contact/"]
 
     def location(self, item: str) -> str:
         return f"{PREFIX[translation.get_language()]}{item}"
+
+
+class LegalSitemap(Sitemap):  # type: ignore[type-arg]
+    """English only: see apps/public/pages.py."""
+
+    changefreq = "yearly"
+
+    def items(self) -> list[str]:
+        return ["/privacy/", "/terms/"]
+
+    def location(self, item: str) -> str:
+        return item
 
 
 class CountrySitemap(_Localized):
@@ -42,7 +54,7 @@ class CountrySitemap(_Localized):
 
 
 def sitemaps() -> "dict[str, Sitemap[Any]]":
-    sections: dict[str, Sitemap[Any]] = {"pages": PagesSitemap()}
+    sections: dict[str, Sitemap[Any]] = {"pages": PagesSitemap(), "legal": LegalSitemap()}
     for code in sorted(list_countries()):
         sections[code.lower()] = CountrySitemap(code)
     return sections
