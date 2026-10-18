@@ -13,7 +13,6 @@ urlpatterns = [
     path("sso/<str:provider>/start/", sso_views.start, name="sso-start"),
     path("sso/<str:provider>/callback/", sso_views.callback, name="sso-callback"),
     path("", include("apps.public.urls")),
-    # The web app's client-side routes (see frontend/src/main.tsx).
     re_path(
         r"^(?:playground|login|signup|forgot-password|invite|unsubscribe|app(?:/.*)?)$",
         spa,

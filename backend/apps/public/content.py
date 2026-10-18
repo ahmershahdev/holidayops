@@ -19,7 +19,6 @@ LANGUAGES = ("en", "ur", "ar")
 PREFIX = {"en": "", "ur": "/ur", "ar": "/ar"}
 YEARS_AROUND = 5
 SITEMAP_YEARS = (-1, 0, 1, 2)
-# The library's language codes to try for each UI language, best first.
 HOLIDAY_LANGUAGES = {
     "en": ("en_US", "en_GB", "en"),
     "ur": ("ur_PK", "ur"),

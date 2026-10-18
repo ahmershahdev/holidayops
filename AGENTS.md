@@ -71,8 +71,9 @@ Reuse, don't rebuild: `apps/orgs/limits.within_limit` (count-then-create),
 
 ## Comments
 
-Few, short, like a colleague's note: why it's done this way, a data or library quirk, a spec, or a
-trap for the next person. Not: restating the code, section banners, "This function…" docstrings,
+Default is no comment. Write one only for what the code can't say: why it's done this way, a data or
+library quirk, a spec, or a trap for the next person. Test: would deleting it let someone reintroduce
+a bug? If not, don't write it. Not: restating the code, section banners (also in CSS), "This function…" docstrings,
 history, owner-less TODOs, or filler (simply, robust, seamless, ensure, leverage, comprehensive).
 Delete comments the change made obsolete. Short docstrings are fine when they add a fact the
 signature doesn't.

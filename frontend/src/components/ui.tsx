@@ -68,7 +68,7 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
 }
 
 export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select {...props} className={`${control} ${props.className ?? ""}`} />;
+  return <select {...props} className={`${control} pe-9 ${props.className ?? ""}`} />;
 }
 
 export function Button({

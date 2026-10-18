@@ -1,10 +1,7 @@
-/* Who is off today, a country's today page and the overlap tool. Tokens come from site.css. */
-
 .muted {
   color: var(--muted);
 }
 
-/* ---- Big tallies ---- */
 .tally {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -47,7 +44,6 @@
   color: var(--workday);
 }
 
-/* ---- Holiday cards and chip clouds ---- */
 .off-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
@@ -149,7 +145,6 @@
   height: auto;
 }
 
-/* ---- A country's today page ---- */
 .verdict-card {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -285,7 +280,6 @@
   border-radius: 16px;
 }
 
-/* ---- Overlap tool ---- */
 .overlap-form {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 0.9fr) auto;
@@ -312,10 +306,11 @@
   font: inherit;
   font-size: 0.95rem;
   color: var(--ink);
-  background: var(--paper);
+  background-color: var(--paper);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 0.65rem 0.75rem;
+  padding-block: 0.65rem;
+  padding-inline-start: 0.75rem;
 }
 
 .overlap-result {
@@ -431,7 +426,6 @@
   }
 }
 
-/* ---- Status ---- */
 .status-banner {
   display: flex;
   align-items: center;
@@ -522,7 +516,6 @@
   color: var(--holiday);
 }
 
-/* ---- Changelog ---- */
 .timeline {
   position: relative;
   margin: 0 0 3rem;

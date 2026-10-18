@@ -302,7 +302,6 @@ class IdentityView(APIView):
     def delete(self, request: Request, provider: str) -> Response:
         user = current_user(request)
         identities = SocialIdentity.objects.filter(user=user)
-        # Never remove the last way in.
         if not user.has_usable_password() and not identities.exclude(provider=provider).exists():
             return Response(
                 {"detail": _("Set a password first, or this account would have no way to log in.")},

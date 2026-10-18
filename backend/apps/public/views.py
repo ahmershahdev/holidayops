@@ -42,8 +42,8 @@ CACHE_SECONDS = 6 * 3600
 # Lighthouse) fetch /robots.txt from the page.
 PUBLIC_POLICY = (
     "default-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; "
-    "script-src 'none'; connect-src 'self'; base-uri 'none'; form-action 'none'; "
-    "frame-ancestors 'none'"
+    "script-src 'none'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; "
+    "form-action 'none'; frame-ancestors 'none'"
 )
 
 View = Callable[..., HttpResponse]

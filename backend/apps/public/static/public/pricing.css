@@ -1,5 +1,3 @@
-/* Pricing page only; tokens and motion primitives come from site.css. */
-
 .price-hero {
   display: grid;
   justify-items: start;
@@ -178,7 +176,6 @@
   font-weight: 600;
 }
 
-/* ---- How requests are counted: four stops on one route, arrows between them ---- */
 .counting {
   position: relative;
   margin-block: clamp(3rem, 8vw, 6rem) 0;
@@ -272,7 +269,6 @@
   }
 }
 
-/* ---- Compare ---- */
 .compare {
   margin-block-start: clamp(3rem, 8vw, 6rem);
 }
@@ -300,7 +296,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- FAQ: native details, a plus that turns into a minus ---- */
 .faq {
   margin-block-start: clamp(3rem, 8vw, 6rem);
   display: grid;
