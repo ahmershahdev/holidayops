@@ -65,7 +65,6 @@ class TwoFactorRequiredSerializer(serializers.Serializer[Any]):
 
 
 class CodeSerializer(serializers.Serializer[Any]):
-    # Six digits from the app, or a recovery code such as "abcde-fghjk".
     code = serializers.CharField(max_length=20, trim_whitespace=True)
 
 

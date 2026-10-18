@@ -215,7 +215,6 @@ export function GlobeArt({ className }: { className?: string }) {
       globe.rotation.y = -1.2 + time * 0.08 + pointer.x * 0.15;
       globe.rotation.x = 0.35 + pointer.y * 0.08;
       for (const flight of flights) {
-        // Each route draws in, carries its plane across, then fades before the next lap.
         const t = (time * 0.12 + flight.offset) % 1;
         const drawn = Math.min(1, t * 2);
         flight.geometry.setDrawRange(0, Math.max(2, Math.floor(drawn * (ARC_POINTS + 1))));
