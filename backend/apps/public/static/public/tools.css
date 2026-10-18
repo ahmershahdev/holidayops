@@ -1,0 +1,432 @@
+/* Who is off today, a country's today page and the overlap tool. Tokens come from site.css. */
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---- Big tallies ---- */
+.tally {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+  padding: 0;
+  list-style: none;
+}
+
+.tally li {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: var(--surface);
+}
+
+.tally strong {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.tally span {
+  color: var(--muted);
+}
+
+.tally-holiday strong {
+  color: var(--holiday);
+}
+
+.tally-weekend strong {
+  color: var(--muted);
+}
+
+.tally-work strong {
+  color: var(--workday);
+}
+
+/* ---- Holiday cards and chip clouds ---- */
+.off-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+  margin: 0 0 clamp(3rem, 8vw, 5rem);
+  padding: 0;
+  list-style: none;
+}
+
+.off-cards a {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.25rem 1rem;
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--holiday) 14%, transparent), transparent 55%),
+    var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out), translate var(--dur) var(--ease-out);
+}
+
+.off-cards a:hover {
+  border-color: var(--holiday);
+  translate: 0 -4px;
+}
+
+.off-flag {
+  grid-row: span 2;
+}
+
+.off-flag .flag {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  height: auto;
+}
+
+.off-body {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.off-body strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.off-body span {
+  color: var(--holiday);
+  font-weight: 600;
+}
+
+.off-cards time {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.today-group {
+  margin-block-end: clamp(2.5rem, 6vw, 4rem);
+}
+
+.chip-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip-cloud a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-block-size: 2.5rem;
+  padding-block: 0.3rem;
+  padding-inline: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.chip-cloud a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chip-cloud .flag {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  height: auto;
+}
+
+/* ---- A country's today page ---- */
+.verdict-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  margin-block-end: clamp(2.5rem, 6vw, 4rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border-radius: 2rem;
+}
+
+.verdict-card.yes {
+  background: var(--workday-soft);
+  color: var(--workday);
+}
+
+.verdict-card.no {
+  background: var(--holiday-soft);
+  color: var(--holiday);
+}
+
+.verdict-word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 14vw, 9rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+}
+
+.verdict-line {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.verdict-why,
+.verdict-zone {
+  margin: 0;
+}
+
+.verdict-zone {
+  margin-block-start: 0.4rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.week-strip li {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  min-block-size: 7.5rem;
+  padding: 0.85rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.week-strip li:first-child {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.week-strip .weekend {
+  background: var(--weekend);
+}
+
+.week-strip .holiday {
+  background: var(--holiday-soft);
+  border-color: transparent;
+}
+
+.week-name {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.week-date {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.week-state {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.week-strip .holiday .week-state {
+  color: var(--holiday);
+  font-weight: 600;
+}
+
+.tool-links {
+  margin-block: 0 3rem;
+}
+
+.embed {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 1.75rem;
+  background: var(--accent-soft);
+}
+
+.embed h2 {
+  margin-block-start: 0;
+}
+
+.embed pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.embed-preview {
+  border: 0;
+  border-radius: 16px;
+}
+
+/* ---- Overlap tool ---- */
+.overlap-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 0.9fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin-block-end: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--surface);
+}
+
+.overlap-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.overlap-form select,
+.overlap-form input {
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+}
+
+.overlap-result {
+  margin-block: clamp(2rem, 6vw, 4rem);
+}
+
+.overlap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.overlap-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.overlap-grid {
+  display: grid;
+  gap: 0.4rem;
+  margin-block-end: 2.5rem;
+}
+
+.overlap-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.overlap-day {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.25rem;
+  min-block-size: 5rem;
+  padding: 0.55rem;
+  border-radius: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.overlap-day.shared {
+  background: var(--workday-soft);
+  border-color: color-mix(in srgb, var(--workday) 30%, transparent);
+}
+
+.overlap-day.partial {
+  background: var(--halfday-soft);
+}
+
+.overlap-day.closed {
+  background: var(--weekend);
+}
+
+.overlap-date {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.overlap-off .flag {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  height: auto;
+}
+
+.off-line {
+  display: block;
+}
+
+@media (max-width: 56rem) {
+  .overlap-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .overlap-form .button {
+    grid-column: 1 / -1;
+  }
+
+  .embed {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 36rem) {
+  .tally {
+    grid-template-columns: 1fr;
+  }
+
+  .verdict-card {
+    grid-template-columns: 1fr;
+  }
+
+  .week-strip {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 6.5rem;
+    overflow-x: auto;
+  }
+
+  .overlap-date {
+    font-size: 0.7rem;
+  }
+
+  .overlap-day {
+    min-block-size: 3.75rem;
+    padding: 0.35rem;
+  }
+}

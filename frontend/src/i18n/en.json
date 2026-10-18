@@ -305,7 +305,9 @@
     "contact": "Contact",
     "privacy": "Privacy",
     "terms": "Terms",
-    "builtBy": "Built by"
+    "builtBy": "Built by",
+    "today": "Who is off today",
+    "overlap": "Working-day overlap"
   },
   "notFound": {
     "title": "This flight went off course",

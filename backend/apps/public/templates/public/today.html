@@ -1,0 +1,48 @@
+{% extends "public/base.html" %}{% load i18n static flags text %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/tools.css' %}">{% endblock %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Live" %}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{% translate "Each country on its own local date. Updated every hour." %}</p>
+</header>
+
+<ul class="tally">
+  <li class="tally-holiday"><strong>{{ world.holiday|length }}</strong><span>{% translate "on a public holiday" %}</span></li>
+  <li class="tally-weekend"><strong>{{ world.weekend|length }}</strong><span>{% translate "on their weekend" %}</span></li>
+  <li class="tally-work"><strong>{{ world.working|length }}</strong><span>{% translate "at work" %}</span></li>
+</ul>
+
+<section aria-labelledby="holiday-title">
+  <h2 id="holiday-title" class="section-title">{% translate "On a public holiday" %}</h2>
+  {% if world.holiday %}
+  <ul class="off-cards">
+    {% for row in world.holiday %}<li class="reveal">
+      <a href="{{ row.path }}">
+        <span class="off-flag">{% flag row.code 40 %}</span>
+        <span class="off-body"><strong>{{ row.name }}</strong><span>{{ row.status.names|as_list }}</span></span>
+        <time datetime="{{ row.status.day|date:'Y-m-d' }}">{{ row.status.day|cldr:"EEE d MMM" }}</time>
+      </a>
+    </li>{% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">{% translate "No country is on a public holiday right now." %}</p>
+  {% endif %}
+</section>
+
+<section aria-labelledby="weekend-title" class="today-group">
+  <h2 id="weekend-title" class="section-title">{% translate "On their weekend" %}</h2>
+  <ul class="chip-cloud">{% for row in world.weekend %}<li><a href="{{ row.path }}">{% flag row.code 18 %}<span>{{ row.name }}</span></a></li>{% endfor %}</ul>
+</section>
+
+<section aria-labelledby="work-title" class="today-group">
+  <h2 id="work-title" class="section-title">{% translate "At work today" %}</h2>
+  <ul class="chip-cloud">{% for row in world.working %}<li><a href="{{ row.path }}">{% flag row.code 18 %}<span>{{ row.name }}</span></a></li>{% endfor %}</ul>
+</section>
+
+<section class="cta">
+  <h2>{% translate "Need this in your own software?" %}</h2>
+  <p>{% translate "The same answer is one API call away, for any date and any of 250 countries." %}</p>
+  <p><a class="button" href="/signup">{% translate "Get an API key" %}</a> <a href="/api/v1/docs/">{% translate "Read the API docs" %}</a></p>
+</section>
+{% endblock %}

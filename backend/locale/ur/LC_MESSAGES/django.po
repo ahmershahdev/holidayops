@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:01+0000\n"
+"POT-Creation-Date: 2026-10-18 14:18+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -383,6 +383,21 @@ msgstr ""
 "کیا آج کام کا دن ہے؟ 250 ممالک کی عام تعطیلات، مقامی ہفتہ وار چھٹیاں اور آپ "
 "کی اپنی بندشیں، ایک API، iCal فیڈز اور ویب ہُکس کے ذریعے۔"
 
+#
+msgid "Pick a valid month."
+msgstr "درست مہینہ چنیں۔"
+
+#
+msgid "Pick a month within five years."
+msgstr "پانچ سال کے اندر کا مہینہ چنیں۔"
+
+#
+msgid "Pick countries from the list."
+msgstr "فہرست میں سے ممالک چنیں۔"
+
+msgid "Pick at least two countries to compare."
+msgstr "موازنے کے لیے کم از کم دو ممالک چنیں۔"
+
 msgid "About"
 msgstr "تعارف"
 
@@ -477,6 +492,14 @@ msgstr "تعطیلات"
 msgid "Pricing"
 msgstr "قیمتیں"
 
+#
+msgid "Who is off today"
+msgstr "آج کس کی چھٹی ہے"
+
+#
+msgid "Working-day overlap"
+msgstr "مشترکہ کام کے دن"
+
 msgid "Playground"
 msgstr "پلے گراؤنڈ"
 
@@ -516,6 +539,9 @@ msgstr "اوپر جائیں"
 
 msgid "Main"
 msgstr "مرکزی"
+
+msgid "Today"
+msgstr "آج"
 
 msgid "Menu"
 msgstr "مینو"
@@ -713,6 +739,62 @@ msgstr "ایشو کھولیں"
 msgid "The maker of HolidayOps. More work and other ways to get in touch:"
 msgstr "HolidayOps کے بانی۔ مزید کام اور رابطے کے دوسرے طریقے:"
 
+msgid "Yes"
+msgstr "ہاں"
+
+msgid "No"
+msgstr "نہیں"
+
+#, python-format
+msgid "Today is a working day in %(country)s."
+msgstr "آج %(country)s میں کام کا دن ہے۔"
+
+#, python-format
+msgid "Today is a day off in %(country)s."
+msgstr "آج %(country)s میں چھٹی ہے۔"
+
+#, python-format
+msgid "Local date in %(zone)s."
+msgstr "%(zone)s کی مقامی تاریخ۔"
+
+msgid "The next seven days"
+msgstr "اگلے سات دن"
+
+#
+msgid "Working"
+msgstr "کام"
+
+msgid "Weekend"
+msgstr "ہفتہ وار چھٹی"
+
+#
+msgid "Next public holiday"
+msgstr "اگلی عام تعطیل"
+
+#
+msgid "Next working day"
+msgstr "اگلا کام کا دن"
+
+#, python-format
+msgid "All holidays in %(country)s %(year)s"
+msgstr "%(country)s کی %(year)s کی تمام تعطیلات"
+
+#
+msgid "Compare with other countries"
+msgstr "دوسرے ممالک سے موازنہ کریں"
+
+msgid "Put this on your site"
+msgstr "اسے اپنی ویب سائٹ پر لگائیں"
+
+msgid ""
+"Copy this snippet into any page. The widget updates itself, needs no script "
+"and follows the language you choose: add ?lang=ur or ?lang=ar, and ?"
+"theme=dark for dark pages."
+msgstr ""
+"یہ کوڈ کسی بھی صفحے میں لگائیں۔ ویجٹ خود تازہ ہوتا ہے، کسی اسکرپٹ کی ضرورت "
+"نہیں اور آپ کی چنی زبان میں دکھتا ہے: ?lang=ur یا ?lang=ar لگائیں، اور تاریک "
+"صفحات کے لیے ?theme=dark۔"
+
 #, python-format
 msgid "%(counter)s country is on a public holiday today"
 msgid_plural "%(counter)s countries are on a public holiday today"
@@ -735,12 +817,6 @@ msgstr "زبانیں، دائیں سے بائیں کے لیے تیار"
 #, python-format
 msgid "Public holidays in %(country)s this month"
 msgstr "اس مہینے %(country)s کی عام تعطیلات"
-
-msgid "Weekend"
-msgstr "ہفتہ وار چھٹی"
-
-msgid "Today"
-msgstr "آج"
 
 msgid "Live"
 msgstr "براہِ راست"
@@ -998,6 +1074,43 @@ msgstr "قیمتیں دیکھیں"
 msgid "Try again"
 msgstr "دوبارہ کوشش کریں"
 
+msgid "Tool"
+msgstr "ٹول"
+
+#, python-format
+msgid "Country %(n)s"
+msgstr "ملک %(n)s"
+
+msgid "None"
+msgstr "کوئی نہیں"
+
+msgid "Month"
+msgstr "مہینہ"
+
+#
+#
+msgid "Compare"
+msgstr "موازنہ کریں"
+
+msgid "days everyone works"
+msgstr "دن جب سب کام کرتے ہیں"
+
+msgid "days someone is off"
+msgstr "دن جب کسی کی چھٹی ہے"
+
+msgid "days everyone is off"
+msgstr "دن جب سب کی چھٹی ہے"
+
+#, python-format
+msgid "%(days)s working days"
+msgstr "%(days)s کام کے دن"
+
+msgid "Who is off, and why"
+msgstr "کس کی چھٹی ہے، اور کیوں"
+
+msgid "Off"
+msgstr "چھٹی"
+
 msgid ""
 "Every plan has the full product: company calendars, iCal feeds, digests and "
 "webhooks. Plans only differ in how much you call the API."
@@ -1140,6 +1253,46 @@ msgstr ""
 "ایپ، ای میلز اور تعطیلات کے نام انگریزی، اردو اور عربی میں ہیں، دائیں سے "
 "بائیں ترتیب کے ساتھ۔"
 
+msgid "Each country on its own local date. Updated every hour."
+msgstr "ہر ملک اپنی مقامی تاریخ پر۔ ہر گھنٹے تازہ۔"
+
+#
+#
+msgid "On a public holiday"
+msgstr "عام تعطیل پر"
+
+#
+msgid "No country is on a public holiday right now."
+msgstr "اس وقت کسی ملک میں عام تعطیل نہیں۔"
+
+#
+msgid "On their weekend"
+msgstr "ہفتہ وار چھٹی پر"
+
+#
+msgid "At work today"
+msgstr "آج کام پر"
+
+#
+msgid "Need this in your own software?"
+msgstr "کیا یہ اپنے سافٹ ویئر میں چاہیے؟"
+
+msgid ""
+"The same answer is one API call away, for any date and any of 250 countries."
+msgstr ""
+"یہی جواب ایک API کال کی دوری پر ہے، کسی بھی تاریخ اور 250 میں سے کسی بھی ملک "
+"کے لیے۔"
+
+msgid "Get an API key"
+msgstr "API کلید حاصل کریں"
+
+#
+msgid "Working day"
+msgstr "کام کا دن"
+
+msgid "Day off"
+msgstr "چھٹی"
+
 msgid "Public holidays"
 msgstr "عام تعطیلات"
 
@@ -1169,8 +1322,53 @@ msgstr ""
 "HolidayOps API کے ذریعے کام کے دن جانچیں، کاروباری دن جمع کریں اور ممالک کو "
 "اپنی کمپنی کی چھٹیوں کے ساتھ ملائیں۔"
 
-msgid "Get an API key"
-msgstr "API کلید حاصل کریں"
+#
+msgid "Who is off today?"
+msgstr "آج کس کی چھٹی ہے؟"
+
+#
+msgid "Public holidays today around the world"
+msgstr "آج دنیا بھر میں عام تعطیلات"
+
+msgid ""
+"Countries on a public holiday or their weekend right now, each on its own "
+"local date, updated every hour."
+msgstr ""
+"وہ ممالک جہاں اس وقت عام تعطیل یا ہفتہ وار چھٹی ہے، ہر ایک اپنی مقامی تاریخ "
+"پر، ہر گھنٹے تازہ۔"
+
+#, python-format
+msgid "Is today a working day in %(country)s?"
+msgstr "کیا آج %(country)s میں کام کا دن ہے؟"
+
+#, python-format
+msgid "Is today a holiday in %(country)s?"
+msgstr "کیا آج %(country)s میں چھٹی ہے؟"
+
+#, python-format
+msgid "%(country)s today"
+msgstr "%(country)s آج"
+
+#, python-format
+msgid ""
+"Today in %(country)s: working day or day off, the reason, this week at a "
+"glance and the next public holiday."
+msgstr ""
+"آج %(country)s میں: کام کا دن یا چھٹی، اس کی وجہ، اس ہفتے کا خلاصہ اور اگلی "
+"عام تعطیل۔"
+
+msgid "When do our offices all work?"
+msgstr "ہمارے تمام دفاتر کب کام کرتے ہیں؟"
+
+msgid "Working-day overlap between countries"
+msgstr "ممالک کے درمیان مشترکہ کام کے دن"
+
+msgid ""
+"Compare up to four countries and see which days everyone works, and who is "
+"off on the others, holidays and weekends included."
+msgstr ""
+"چار ممالک تک کا موازنہ کریں اور دیکھیں کن دنوں سب کام کرتے ہیں، اور باقی "
+"دنوں کس کی چھٹی ہے، تعطیلات اور ہفتہ وار چھٹیوں سمیت۔"
 
 msgid "Too many requests. Wait a minute and try again."
 msgstr "بہت زیادہ درخواستیں۔ ایک منٹ رکیں اور دوبارہ کوشش کریں۔"

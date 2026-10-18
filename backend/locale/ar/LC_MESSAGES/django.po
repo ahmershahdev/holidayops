@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:01+0000\n"
+"POT-Creation-Date: 2026-10-18 14:18+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -373,6 +373,21 @@ msgstr ""
 "هل هو يوم عمل؟ العطلات الرسمية وعطلات نهاية الأسبوع المحلية وأيام إغلاقك "
 "لـ250 دولة، عبر واجهة برمجية واحدة واشتراكات iCal وخطافات الويب."
 
+#
+msgid "Pick a valid month."
+msgstr "اختر شهرًا صحيحًا."
+
+#
+msgid "Pick a month within five years."
+msgstr "اختر شهرًا ضمن خمس سنوات."
+
+#
+msgid "Pick countries from the list."
+msgstr "اختر الدول من القائمة."
+
+msgid "Pick at least two countries to compare."
+msgstr "اختر دولتين على الأقل للمقارنة."
+
 msgid "About"
 msgstr "من نحن"
 
@@ -462,6 +477,14 @@ msgstr "العطلات"
 msgid "Pricing"
 msgstr "الأسعار"
 
+#
+msgid "Who is off today"
+msgstr "من في إجازة اليوم"
+
+#
+msgid "Working-day overlap"
+msgstr "أيام العمل المشتركة"
+
 msgid "Playground"
 msgstr "ساحة التجربة"
 
@@ -501,6 +524,9 @@ msgstr "العودة للأعلى"
 
 msgid "Main"
 msgstr "الرئيسية"
+
+msgid "Today"
+msgstr "اليوم"
 
 msgid "Menu"
 msgstr "القائمة"
@@ -692,6 +718,62 @@ msgstr "افتح بلاغًا"
 msgid "The maker of HolidayOps. More work and other ways to get in touch:"
 msgstr "مطوّر HolidayOps. مزيد من الأعمال وطرق أخرى للتواصل:"
 
+msgid "Yes"
+msgstr "نعم"
+
+msgid "No"
+msgstr "لا"
+
+#, python-format
+msgid "Today is a working day in %(country)s."
+msgstr "اليوم يوم عمل في %(country)s."
+
+#, python-format
+msgid "Today is a day off in %(country)s."
+msgstr "اليوم عطلة في %(country)s."
+
+#, python-format
+msgid "Local date in %(zone)s."
+msgstr "التاريخ المحلي في %(zone)s."
+
+msgid "The next seven days"
+msgstr "الأيام السبعة القادمة"
+
+#
+msgid "Working"
+msgstr "عمل"
+
+msgid "Weekend"
+msgstr "عطلة نهاية الأسبوع"
+
+#
+msgid "Next public holiday"
+msgstr "العطلة الرسمية القادمة"
+
+#
+msgid "Next working day"
+msgstr "يوم العمل التالي"
+
+#, python-format
+msgid "All holidays in %(country)s %(year)s"
+msgstr "كل عطلات %(country)s لعام %(year)s"
+
+#
+msgid "Compare with other countries"
+msgstr "قارن مع دول أخرى"
+
+msgid "Put this on your site"
+msgstr "ضعه على موقعك"
+
+msgid ""
+"Copy this snippet into any page. The widget updates itself, needs no script "
+"and follows the language you choose: add ?lang=ur or ?lang=ar, and ?"
+"theme=dark for dark pages."
+msgstr ""
+"انسخ هذا المقطع إلى أي صفحة. تتحدث الأداة تلقائيًا، ولا تحتاج إلى نصوص "
+"برمجية، وتتبع اللغة التي تختارها: أضف ?lang=ur أو ?lang=ar، و?theme=dark "
+"للصفحات الداكنة."
+
 #, python-format
 msgid "%(counter)s country is on a public holiday today"
 msgid_plural "%(counter)s countries are on a public holiday today"
@@ -718,12 +800,6 @@ msgstr "لغات، جاهزة للكتابة من اليمين"
 #, python-format
 msgid "Public holidays in %(country)s this month"
 msgstr "العطلات الرسمية في %(country)s هذا الشهر"
-
-msgid "Weekend"
-msgstr "عطلة نهاية الأسبوع"
-
-msgid "Today"
-msgstr "اليوم"
 
 msgid "Live"
 msgstr "مباشر"
@@ -970,6 +1046,43 @@ msgstr "عرض الأسعار"
 msgid "Try again"
 msgstr "حاول مرة أخرى"
 
+msgid "Tool"
+msgstr "أداة"
+
+#, python-format
+msgid "Country %(n)s"
+msgstr "الدولة %(n)s"
+
+msgid "None"
+msgstr "لا شيء"
+
+msgid "Month"
+msgstr "الشهر"
+
+#
+#
+msgid "Compare"
+msgstr "قارن"
+
+msgid "days everyone works"
+msgstr "أيام يعمل فيها الجميع"
+
+msgid "days someone is off"
+msgstr "أيام يكون فيها أحدهم في إجازة"
+
+msgid "days everyone is off"
+msgstr "أيام يكون فيها الجميع في إجازة"
+
+#, python-format
+msgid "%(days)s working days"
+msgstr "%(days)s يوم عمل"
+
+msgid "Who is off, and why"
+msgstr "من في إجازة، ولماذا"
+
+msgid "Off"
+msgstr "إجازة"
+
 msgid ""
 "Every plan has the full product: company calendars, iCal feeds, digests and "
 "webhooks. Plans only differ in how much you call the API."
@@ -1110,6 +1223,46 @@ msgstr ""
 "يتوفر التطبيق والرسائل وأسماء العطلات بالإنجليزية والأردية والعربية، مع "
 "تخطيط من اليمين إلى اليسار."
 
+msgid "Each country on its own local date. Updated every hour."
+msgstr "كل دولة بتاريخها المحلي. يُحدَّث كل ساعة."
+
+#
+#
+msgid "On a public holiday"
+msgstr "في عطلة رسمية"
+
+#
+msgid "No country is on a public holiday right now."
+msgstr "لا توجد دولة في عطلة رسمية الآن."
+
+#
+msgid "On their weekend"
+msgstr "في عطلة نهاية الأسبوع"
+
+#
+msgid "At work today"
+msgstr "في العمل اليوم"
+
+#
+msgid "Need this in your own software?"
+msgstr "تحتاج هذا في برنامجك؟"
+
+msgid ""
+"The same answer is one API call away, for any date and any of 250 countries."
+msgstr ""
+"الإجابة نفسها على بُعد طلب واحد من الواجهة البرمجية، لأي تاريخ وأي دولة من "
+"250 دولة."
+
+msgid "Get an API key"
+msgstr "احصل على مفتاح API"
+
+#
+msgid "Working day"
+msgstr "يوم عمل"
+
+msgid "Day off"
+msgstr "إجازة"
+
 msgid "Public holidays"
 msgstr "العطلات الرسمية"
 
@@ -1139,8 +1292,53 @@ msgstr ""
 "تحقق من أيام العمل وأضف أيام العمل وادمج الدول مع أيام إغلاق شركتك عبر واجهة "
 "HolidayOps."
 
-msgid "Get an API key"
-msgstr "احصل على مفتاح API"
+#
+msgid "Who is off today?"
+msgstr "من في إجازة اليوم؟"
+
+#
+msgid "Public holidays today around the world"
+msgstr "العطلات الرسمية اليوم حول العالم"
+
+msgid ""
+"Countries on a public holiday or their weekend right now, each on its own "
+"local date, updated every hour."
+msgstr ""
+"الدول التي في عطلة رسمية أو عطلة نهاية الأسبوع الآن، كل منها بتاريخها "
+"المحلي، تُحدَّث كل ساعة."
+
+#, python-format
+msgid "Is today a working day in %(country)s?"
+msgstr "هل اليوم يوم عمل في %(country)s؟"
+
+#, python-format
+msgid "Is today a holiday in %(country)s?"
+msgstr "هل اليوم عطلة في %(country)s؟"
+
+#, python-format
+msgid "%(country)s today"
+msgstr "%(country)s اليوم"
+
+#, python-format
+msgid ""
+"Today in %(country)s: working day or day off, the reason, this week at a "
+"glance and the next public holiday."
+msgstr ""
+"اليوم في %(country)s: يوم عمل أم عطلة، والسبب، ونظرة على هذا الأسبوع، "
+"والعطلة الرسمية القادمة."
+
+msgid "When do our offices all work?"
+msgstr "متى تعمل كل مكاتبنا؟"
+
+msgid "Working-day overlap between countries"
+msgstr "أيام العمل المشتركة بين الدول"
+
+msgid ""
+"Compare up to four countries and see which days everyone works, and who is "
+"off on the others, holidays and weekends included."
+msgstr ""
+"قارن حتى أربع دول واعرف الأيام التي يعمل فيها الجميع، ومن في إجازة في الأيام "
+"الأخرى، مع العطلات وعطلات نهاية الأسبوع."
 
 msgid "Too many requests. Wait a minute and try again."
 msgstr "طلبات كثيرة جدًا. انتظر دقيقة ثم حاول مرة أخرى."

@@ -1,0 +1,18 @@
+{% load i18n static flags text %}<!doctype html>
+<html lang="{{ lang }}" dir="{{ dir }}" data-theme="{{ theme }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{ page.name }} · HolidayOps</title>
+<link rel="stylesheet" href="{% static 'public/widget.css' %}">
+</head>
+<body>
+<a class="widget {% if page.today.working %}yes{% else %}no{% endif %}" href="{{ link }}" target="_blank" rel="noopener">
+  <span class="widget-top">{% flag page.code 24 %}<span>{{ page.name }}</span><time datetime="{{ page.today.day|date:'Y-m-d' }}">{{ page.today.day|cldr:"EEE d MMM" }}</time></span>
+  <span class="widget-verdict">{% if page.today.working %}{% translate "Working day" %}{% else %}{% translate "Day off" %}{% endif %}</span>
+  <span class="widget-why">{% if page.today.names %}{{ page.today.names|as_list }}{% else %}{{ reason|capfirst }}{% endif %}</span>
+  <span class="widget-brand" dir="ltr">Holiday<b>Ops</b></span>
+</a>
+</body>
+</html>
