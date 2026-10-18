@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-18 (through #42). Update at the end of every work session.
+Last updated: 2026-10-18 (through #44). Update at the end of every work session.
 
 ## Run it
 
@@ -23,6 +23,54 @@ Recent work:
 | #40 | Two-factor sign-in, Google and Microsoft sign-in, data export, account deletion, account settings page |
 | #41 | Who-is-off-today pages, embeddable widget, working-day overlap tool |
 | #42 | Status page, changelog, Python and TypeScript SDKs |
+| #43 | `manifest-src 'self'` in the public CSP (console error), select arrows kept in every form, CSS banner comments removed, stricter comment rule |
+| #44 | Signed-in visitors get "My calendars" in the public header and footer (page cache keyed signed in / out); CSRF on anonymous auth endpoints (login CSRF); per-account login lock (10 failures / 15 min); signup race returns 400; no inline styles on public pages; `Permissions-Policy`; square `og:image`, Twitter tags, founder `sameAs` |
+
+Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
+project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article
+(`/blogs/the-weekend-is-not-a-constant`), pushed 2026-10-18.
+
+## Next session, in this order
+
+The code is feature-complete. Stop adding features; finish these, then host and close.
+
+1. **Email verification at signup** (the biggest security gap): today anyone can register with
+   someone else's address. Send a one-time code or link (reuse the reset-code design in
+   `apps/accounts/resets.py`), keep the account unverified until it's used, and block org
+   creation, invites and digests until then.
+2. **Signup must not reveal registered emails**: "An account with this email already exists" is
+   an enumeration oracle. With verification in place, answer "check your email" either way and
+   email the existing owner instead.
+3. **Encrypt authenticator secrets at rest** (`TwoFactor.secret` is plaintext): a key from the
+   environment, not `SECRET_KEY`, so rotating one doesn't break the other.
+4. **Bot check on signup** (Cloudflare Turnstile or reCAPTCHA v3), only on signup and forgot
+   password; keep it out of the API.
+5. **Sessions screen**: list signed-in devices in account settings and sign out the others.
+6. **Simulated-users test** on the production image (`docker compose -f docker-compose.prod.yml
+   up --build`): script 10 to 17 users (owner, admin, member, viewer, API-key client, anonymous
+   visitor) through every action, including attackers trying cross-org access (IDOR), CSRF,
+   stored XSS in names, webhooks to internal addresses (SSRF), password guessing, racing the
+   count limits, replaying 2FA and reset codes, and API-key and quota abuse. Watch the
+   `holidayops.security` log and `/status/`; fix what breaks, add a test for each fix.
+7. **Hosting** (free): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
+   worker, beat, MySQL, Redis), Cloudflare for DNS and TLS on `holidayops.ahmershah.dev`, Resend
+   free tier for email, UptimeRobot and Sentry free plans, nightly MySQL backups. Then the 5.4
+   docs: live URL in the README and the portfolio card.
+
+Not needed before closing: paid plans, Slack/Teams bot, publishing the SDKs to PyPI/npm, data-change
+alerts. Add them only if real users ask.
+
+## Security baseline (2026-10-18)
+
+In place: Argon2; TOTP two-factor with hashed single-use recovery codes and replay protection;
+Google/Microsoft OIDC with PKCE, state and nonce, no email-based takeover; hashed API keys, feed
+tokens, invite and reset codes; CSRF on every session write including anonymous auth; strict CSP
+(no script and no inline style on public pages, `script-src 'self'` in the app); ORM-only SQL;
+row locks, named locks and unique keys against races; rate limits per IP, per key, per account
+and per organization; tenant isolation tested on every endpoint (404, never 403); SSRF guard with
+pinned IPs for webhooks; HSTS (preload), secure HttpOnly cookies, `Permissions-Policy`,
+clickjacking and open-redirect protection; mypy strict and TypeScript strict; CodeQL, pip-audit,
+npm audit and Dependabot in CI. Details: [security.md](security.md).
 
 ## Open items
 
@@ -34,7 +82,7 @@ Recent work:
   need adding to it.
 - [ ] Legal review of `/privacy/` and `/terms/` before launch.
 - [ ] Update local Node.js to 22.22 or newer (jsdom warns on 22.19).
-- [ ] At launch: hosting per [deployment.md](deployment.md).
+- [ ] Items 1 to 7 of "Next session" above.
 
 ## Gotchas
 
