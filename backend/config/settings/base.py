@@ -197,6 +197,7 @@ CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     },
     "webhook-retries": {"task": "webhooks.retry_due", "schedule": 60.0},
     "prune-usage": {"task": "api.prune_usage", "schedule": crontab(minute="0", hour="3")},
+    "heartbeat": {"task": "public.heartbeat", "schedule": 60.0},
 }
 
 APP_URL = env("APP_URL", "http://localhost:5173").rstrip("/")

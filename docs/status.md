@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-18 (through #37). Update at the end of every work session.
+Last updated: 2026-10-18 (through #42). Update at the end of every work session.
 
 ## Run it
 
@@ -18,6 +18,11 @@ Recent work:
 |---|---|
 | #36 | Landing redesign with live data (who is off today, weekend patterns, upcoming holidays, FAQ); about, contact, privacy, terms, offline pages; breadcrumbs; titles ≤ 60 and descriptions ≤ 150 (tested); JSON-LD graph; llms.txt, llms-full.txt; manifest and service worker; owner and support email in the footer |
 | #37 | README with screenshots, architecture and ERD; CONTRIBUTING, SECURITY; shorter AGENTS.md, roadmap and status |
+| #38 | Branded 404 for browsers on missing API URLs; landing "today" in the featured country's zone, hourly cache key |
+| #39 | Password reset by emailed code (Resend backend), WebGL globe on auth pages |
+| #40 | Two-factor sign-in, Google and Microsoft sign-in, data export, account deletion, account settings page |
+| #41 | Who-is-off-today pages, embeddable widget, working-day overlap tool |
+| #42 | Status page, changelog, Python and TypeScript SDKs |
 
 ## Open items
 
@@ -44,4 +49,7 @@ Recent work:
   add a throwaway query string to see template changes.
 - Class names on the landing page share one stylesheet with the calendars: `.today` is a calendar
   cell, so the live section is `.now`.
+- The status page's job heartbeat needs a shared cache: with the local-memory cache in development
+  the worker and the web process can't see each other, so it shows "No heartbeat yet".
+- New migrations: restart `npm run dev` (it migrates on start) or run `manage.py migrate`.
 - Headless Chrome has a 504 px minimum window width; it still hits the phone breakpoint (36rem).

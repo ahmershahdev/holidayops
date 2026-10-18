@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:18+0000\n"
+"POT-Creation-Date: 2026-10-18 14:40+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -422,6 +422,19 @@ msgstr "أنت غير متصل"
 msgid "This page needs a connection. Check your network and try again."
 msgstr "تحتاج هذه الصفحة إلى اتصال. تحقق من الشبكة وحاول مرة أخرى."
 
+msgid "Status"
+msgstr "حالة النظام"
+
+msgid "System status"
+msgstr "حالة النظام"
+
+msgid ""
+"Live health of the HolidayOps API, website, database, background jobs and "
+"holiday data, checked on every visit."
+msgstr ""
+"الحالة المباشرة لواجهة HolidayOps البرمجية والموقع وقاعدة البيانات والمهام "
+"الخلفية وبيانات العطلات، تُفحص عند كل زيارة."
+
 msgid "Home"
 msgstr "الرئيسية"
 
@@ -431,6 +444,43 @@ msgstr "مجانية"
 #, python-format
 msgid "%(quota)s API requests a month"
 msgstr "%(quota)s طلب شهريًا للواجهة البرمجية"
+
+msgid "API and website"
+msgstr "الواجهة البرمجية والموقع"
+
+msgid "Answering requests"
+msgstr "يستجيب للطلبات"
+
+msgid "Database"
+msgstr "قاعدة البيانات"
+
+msgid "Connected"
+msgstr "متصل"
+
+msgid "Not answering"
+msgstr "لا يستجيب"
+
+msgid "Cache and rate limits"
+msgstr "التخزين المؤقت وحدود الطلبات"
+
+#
+msgid "Feeds, digests and webhooks"
+msgstr "الاشتراكات والملخصات وخطافات الويب"
+
+#, python-format
+msgid "Last heartbeat %(seconds)s s ago"
+msgstr "آخر نبضة قبل %(seconds)s ث"
+
+msgid "No heartbeat yet"
+msgstr "لا توجد نبضة بعد"
+
+#
+msgid "Holiday data"
+msgstr "بيانات العطلات"
+
+#, python-format
+msgid "holidays %(version)s, %(count)s countries"
+msgstr "holidays %(version)s، %(count)s دولة"
 
 msgid "This flight went off course"
 msgstr "هذه الرحلة ضلّت طريقها"
@@ -499,6 +549,9 @@ msgstr "المطوّرون"
 
 msgid "OpenAPI schema"
 msgstr "مخطط OpenAPI"
+
+msgid "Changelog"
+msgstr "سجل التغييرات"
 
 msgid "Sitemap"
 msgstr "خريطة الموقع"
@@ -1222,6 +1275,30 @@ msgid ""
 msgstr ""
 "يتوفر التطبيق والرسائل وأسماء العطلات بالإنجليزية والأردية والعربية، مع "
 "تخطيط من اليمين إلى اليسار."
+
+msgid "Everything is running."
+msgstr "كل شيء يعمل."
+
+msgid "Some parts need attention."
+msgstr "بعض الأجزاء تحتاج إلى انتباه."
+
+#, python-format
+msgid "Checked just now, at %(time)s UTC. Reload to check again."
+msgstr "فُحص الآن، الساعة %(time)s بتوقيت UTC. أعد التحميل للفحص مجددًا."
+
+msgid "Operational"
+msgstr "يعمل"
+
+msgid "Down"
+msgstr "متوقف"
+
+#, python-format
+msgid ""
+"Something wrong that this page doesn't show? Write to <a href=\"mailto:"
+"%(support_email)s\">%(support_email)s</a>."
+msgstr ""
+"هل هناك خلل لا تظهره هذه الصفحة؟ راسلنا على <a href=\"mailto:"
+"%(support_email)s\">%(support_email)s</a>."
 
 msgid "Each country on its own local date. Updated every hour."
 msgstr "كل دولة بتاريخها المحلي. يُحدَّث كل ساعة."

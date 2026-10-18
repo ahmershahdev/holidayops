@@ -11,7 +11,8 @@
     "dev:beat": "cd backend && uv run --env-file ../.env celery -A config beat --loglevel=info --schedule=.celerybeat-schedule",
     "test": "cd backend && uv run --env-file ../.env pytest && cd ../frontend && npm test",
     "seed": "cd backend && uv run --env-file ../.env python manage.py seed_demo",
-    "messages": "docker compose run --rm --no-deps -u root backend sh -c \"apt-get update -qq && apt-get install -y -qq gettext && python manage.py makemessages -l ur -l ar --ignore=.venv --ignore=tests --no-obsolete --no-location && python manage.py compilemessages --ignore=.venv\""
+    "messages": "docker compose run --rm --no-deps -u root backend sh -c \"apt-get update -qq && apt-get install -y -qq gettext && python manage.py makemessages -l ur -l ar --ignore=.venv --ignore=tests --no-obsolete --no-location && python manage.py compilemessages --ignore=.venv\"",
+    "sdks": "cd backend && uv run python ../sdks/extract_public.py && cd ../sdks && uvx --from openapi-python-client==0.27.1 openapi-python-client generate --path public-schema.yml --output-path python --meta uv --config python-config.yml --overwrite && cd typescript && npx --yes openapi-typescript@7.13.0 ../public-schema.yml -o src/schema.d.ts"
   },
   "devDependencies": {
     "concurrently": "10.0.6"

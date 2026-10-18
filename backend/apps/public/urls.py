@@ -36,6 +36,7 @@ _pages = [
     path("today/", tools.today_index),
     path("tools/overlap/", tools.overlap_view),
     path("about/", pages.about),
+    path("status/", pages.status),
     path("contact/", pages.contact),
     path("style/", views.style_guide),
 ]
@@ -44,6 +45,7 @@ urlpatterns = [
     *_pages,
     *[path(f"<lang:lang>/{p.pattern}", p.callback) for p in _pages],
     path("widget/<slug:country>/", tools.widget, name="widget"),
+    path("changelog/", pages.changelog),
     path("privacy/", pages.privacy),
     path("terms/", pages.terms),
     path("offline/", pages.offline),

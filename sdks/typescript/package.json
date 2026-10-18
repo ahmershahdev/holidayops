@@ -1,0 +1,19 @@
+{
+  "name": "@holidayops/sdk",
+  "version": "1.0.0",
+  "description": "Typed client for the HolidayOps public API: holidays and business days for 250 countries.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}

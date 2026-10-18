@@ -1,0 +1,494 @@
+openapi: 3.0.3
+info:
+  title: HolidayOps public API
+  version: 1.0.0
+  description: Holidays and business-day maths for every country supported by `holidays`.
+paths:
+  /api/v1/business-days/add/:
+    get:
+      operationId: business_days_add_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: days
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: -1000
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddResult'
+          description: ''
+  /api/v1/business-days/between/:
+    get:
+      operationId: business_days_between_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BetweenResult'
+          description: ''
+  /api/v1/business-days/check/:
+    get:
+      operationId: business_days_check_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResult'
+          description: ''
+  /api/v1/business-days/range/:
+    get:
+      operationId: business_days_range_list
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: end
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: start
+        schema:
+          type: string
+          format: date
+        required: true
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      tags:
+      - business-days
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CheckResult'
+          description: ''
+  /api/v1/countries/:
+    get:
+      operationId: countries_list
+      tags:
+      - countries
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+          description: ''
+  /api/v1/holidays/:
+    get:
+      operationId: holidays_retrieve
+      parameters:
+      - in: query
+        name: calendar
+        schema:
+          type: string
+          format: uuid
+        description: A company calendar id, instead of country.
+      - in: query
+        name: categories
+        schema:
+          type: string
+          maxLength: 200
+        description: 'Comma-separated. Default: public.'
+      - in: query
+        name: country
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 3
+        description: ISO 3166-1 alpha-2 code, e.g. PK.
+      - in: query
+        name: language
+        schema:
+          type: string
+          maxLength: 10
+        description: Defaults to the country's language.
+      - in: query
+        name: subdiv
+        schema:
+          type: string
+          maxLength: 10
+      - in: query
+        name: year
+        schema:
+          type: integer
+          maximum: 2100
+          minimum: 1970
+        required: true
+      tags:
+      - holidays
+      security:
+      - apiKey: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HolidayList'
+          description: ''
+components:
+  schemas:
+    AddResult:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        days:
+          type: integer
+        result:
+          type: string
+          format: date
+      required:
+      - days
+      - result
+      - start
+    BetweenResult:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+        business_days:
+          type: integer
+          description: Inclusive of both start and end.
+      required:
+      - business_days
+      - end
+      - start
+    CheckResult:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        is_business_day:
+          type: boolean
+        reason:
+          $ref: '#/components/schemas/ReasonEnum'
+        holidays:
+          type: array
+          items:
+            type: string
+        half_day:
+          type: boolean
+      required:
+      - date
+      - half_day
+      - holidays
+      - is_business_day
+      - reason
+    Country:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        subdivisions:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        default_language:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+        weekend:
+          type: array
+          items:
+            type: integer
+          description: Weekday numbers, Monday = 0.
+      required:
+      - categories
+      - code
+      - default_language
+      - languages
+      - name
+      - subdivisions
+      - weekend
+    Holiday:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+        kind:
+          $ref: '#/components/schemas/HolidayKindEnum'
+        sources:
+          type: array
+          items:
+            type: string
+          description: Source countries (with subdivision) that contribute this holiday.
+      required:
+      - date
+      - kind
+      - name
+      - sources
+    HolidayKindEnum:
+      enum:
+      - holiday
+      - closure
+      - half_day
+      type: string
+      description: '* `holiday` - holiday
+
+        * `closure` - closure
+
+        * `half_day` - half_day'
+    HolidayList:
+      type: object
+      properties:
+        country:
+          type: string
+          nullable: true
+        calendar:
+          type: string
+          format: uuid
+          nullable: true
+        subdiv:
+          type: string
+          nullable: true
+        year:
+          type: integer
+        language:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: string
+        holidays:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holiday'
+      required:
+      - calendar
+      - categories
+      - country
+      - holidays
+      - language
+      - subdiv
+      - year
+    ReasonEnum:
+      enum:
+      - working_day
+      - weekend
+      - holiday
+      - weekend_workday
+      - closure
+      - half_day
+      - custom_working_day
+      type: string
+      description: '* `working_day` - working_day
+
+        * `weekend` - weekend
+
+        * `holiday` - holiday
+
+        * `weekend_workday` - weekend_workday
+
+        * `closure` - closure
+
+        * `half_day` - half_day
+
+        * `custom_working_day` - custom_working_day'
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: hops_<prefix>_<secret>

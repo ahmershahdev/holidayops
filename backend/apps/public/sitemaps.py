@@ -27,6 +27,7 @@ class PagesSitemap(_Localized):
             "/pricing/",
             "/about/",
             "/contact/",
+            "/status/",
         ]
 
     def location(self, item: str) -> str:
@@ -34,12 +35,12 @@ class PagesSitemap(_Localized):
 
 
 class LegalSitemap(Sitemap):  # type: ignore[type-arg]
-    """English only: see apps/public/pages.py."""
+    """English-only pages (legal, changelog): see apps/public/pages.py."""
 
     changefreq = "yearly"
 
     def items(self) -> list[str]:
-        return ["/privacy/", "/terms/"]
+        return ["/changelog/", "/privacy/", "/terms/"]
 
     def location(self, item: str) -> str:
         return item

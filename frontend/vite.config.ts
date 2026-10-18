@@ -10,6 +10,8 @@ const DJANGO_PATHS = [
   "/holidays",
   "/pricing",
   "/today",
+  "/status",
+  "/changelog",
   "/tools",
   "/widget",
   "/about",

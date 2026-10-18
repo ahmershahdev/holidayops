@@ -6,11 +6,13 @@ from datetime import date
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.core import list_countries
 from apps.public.content import PREFIX
 from apps.public.seo import breadcrumbs, fit_title
+from apps.public.status import checks, releases
 from apps.public.views import _meta, public_page
 
 LEGAL_UPDATED = date(2026, 10, 18)
@@ -91,3 +93,36 @@ def offline(request: HttpRequest, lang: str) -> HttpResponse:
         "canonical": None,
     }
     return render(request, "public/offline.html", context)
+
+
+@public_page
+def status(request: HttpRequest, lang: str) -> HttpResponse:
+    results = checks()
+    context = {
+        **_meta(request, lang, lambda code: f"{PREFIX[code]}/status/"),
+        **breadcrumbs(request, lang, [(_("Status"), f"{PREFIX[lang]}/status/")]),
+        "title": _("System status"),
+        "head_title": fit_title(_("System status")),
+        "description": _(
+            "Live health of the HolidayOps API, website, database, background jobs and holiday "
+            "data, checked on every visit."
+        ),
+        "checks": results,
+        "all_ok": all(c.ok for c in results),
+        "checked_at": timezone.now(),
+    }
+    response = render(request, "public/status.html", context)
+    response.live = True  # type: ignore[attr-defined]
+    return response
+
+
+@public_page
+def changelog(request: HttpRequest, lang: str) -> HttpResponse:
+    context = {
+        **_legal(request, lang, "/changelog/", "Changelog"),
+        "title": "Changelog",
+        "description": "Every notable change to HolidayOps, newest first: features, fixes and "
+        "security improvements.",
+        "releases": releases(),
+    }
+    return render(request, "public/changelog.html", context)

@@ -91,6 +91,8 @@ export function SiteFooter() {
             <a href={REPO_URL} rel="noopener">
               GitHub
             </a>
+            <a href={`${prefix}/status/`}>{t("footer.status")}</a>
+            <a href="/changelog/">{t("footer.changelog")}</a>
             <a href="/sitemap.xml">{t("footer.sitemap")}</a>
           </nav>
           <nav className="footer-col" aria-label={t("footer.company")}>

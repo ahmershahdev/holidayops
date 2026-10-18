@@ -111,7 +111,8 @@ def public_page(view: View) -> View:
         response["Cache-Control"] = "no-cache"
         patch_vary_headers(response, ["Cookie"])
         # Query strings (the landing demo) aren't cached: arbitrary keys would flood the cache.
-        if response.status_code == 200 and not request.GET:
+        # Live pages (status) opt out with `response.live = True`.
+        if response.status_code == 200 and not request.GET and not getattr(response, "live", False):
             cache.set(key, response, CACHE_SECONDS)
         return response
 

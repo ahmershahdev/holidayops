@@ -307,7 +307,9 @@
     "terms": "Terms",
     "builtBy": "Built by",
     "today": "Who is off today",
-    "overlap": "Working-day overlap"
+    "overlap": "Working-day overlap",
+    "status": "Status",
+    "changelog": "Changelog"
   },
   "notFound": {
     "title": "This flight went off course",
