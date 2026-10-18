@@ -20,7 +20,8 @@ each milestone are in [design/](design/).
 
 | Item | Notes |
 |---|---|
-| Hosting | Deferred by the owner to launch (around GSoC 2027); Azure likely. Follow [deployment.md](deployment.md) |
+| Before hosting | Email verification, no email enumeration, encrypted TOTP secrets, signup bot check, sessions screen, simulated-users attack test: see [status.md](status.md), "Next session" |
+| Hosting | Free: Oracle Cloud Always Free VM + Cloudflare; see [status.md](status.md) and [deployment.md](deployment.md) |
 | Lighthouse re-run | On Linux against the production image, after #31 to #36 |
 | Translation review | Native-speaker pass over every ur/ar string |
 | Legal review | Privacy policy and terms were drafted from what the code does; have them reviewed before launch |
