@@ -22,9 +22,12 @@ Versioned under `/api/v1/`. OpenAPI at `/api/v1/schema/`, Swagger UI at `/api/v1
 | `GET /business-days/check/?country=SA&date=2027-04-02` | Working day or not, and why |
 | `GET /business-days/add/?country=PK&date=2027-03-20&days=5` | Add or subtract N working days |
 | `GET /business-days/between/?country=AE&start=…&end=…` | Working days, inclusive of both ends |
+| `GET /business-days/range/?country=PK&start=…&end=…` | Every day in a range with its status (calendar views) |
 
 Outside `/api/v1/`: `GET /feeds/<token>.ics`, a private iCal feed of a company calendar, and the
-server-rendered public pages, sitemaps and robots.txt ([seo.md](seo.md)).
+server-rendered public site with its sitemaps, robots.txt, llms.txt, manifest and service worker
+([seo.md](seo.md)). The landing page's live data (who is off today, weekend patterns, upcoming
+holidays) comes from `apps/public/world.py`, cached per day and language.
 
 From Milestone 2 the same endpoints accept `calendar=<id>` instead of `country`. They also accept
 `Authorization: Bearer hops_…` API keys (Milestone 5.1): [design/m5-api-keys.md](design/m5-api-keys.md).

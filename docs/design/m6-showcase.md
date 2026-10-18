@@ -110,7 +110,7 @@ paths, in the URL's language; the web app has the same page for unknown client r
 and `/feeds/` keep JSON 404s. The 500 page is a static template with no database or request
 context, so it renders even when those fail.
 
-## 6.2 Landing page (next)
+## 6.2 Landing page (done; live sections added in #36)
 
 `/` (and `/ur/`, `/ar/`): hero with the flight-path animation, a no-JS "is it a working day?"
 demo (a GET form answered by the server), product story (countries, company calendars, feeds,
