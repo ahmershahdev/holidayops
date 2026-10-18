@@ -4,6 +4,136 @@ info:
   version: 1.0.0
   description: Holidays and business-day maths for every country supported by `holidays`.
 paths:
+  /api/v1/auth/2fa/:
+    get:
+      operationId: auth_2fa_retrieve
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorStatus'
+          description: ''
+  /api/v1/auth/2fa/confirm/:
+    post:
+      operationId: auth_2fa_confirm_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryCodes'
+          description: ''
+  /api/v1/auth/2fa/disable/:
+    post:
+      operationId: auth_2fa_disable_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisableTwoFactorRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DisableTwoFactorRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DisableTwoFactorRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/2fa/recovery-codes/:
+    post:
+      operationId: auth_2fa_recovery_codes_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryCodes'
+          description: ''
+  /api/v1/auth/2fa/setup/:
+    post:
+      operationId: auth_2fa_setup_create
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorSetup'
+          description: ''
+  /api/v1/auth/2fa/verify/:
+    post:
+      operationId: auth_2fa_verify_create
+      description: The second step of a login that needs a code.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CodeRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
   /api/v1/auth/csrf/:
     get:
       operationId: auth_csrf_retrieve
@@ -19,6 +149,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/Csrf'
           description: ''
+  /api/v1/auth/identities/:
+    get:
+      operationId: auth_identities_list
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Identity'
+          description: ''
+  /api/v1/auth/identities/{provider}/:
+    delete:
+      operationId: auth_identities_destroy
+      parameters:
+      - in: path
+        name: provider
+        schema:
+          type: string
+        required: true
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/v1/auth/login/:
     post:
       operationId: auth_login_create
@@ -45,6 +207,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorRequired'
           description: ''
   /api/v1/auth/logout/:
     post:
@@ -94,6 +262,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/me/delete/:
+    post:
+      operationId: auth_me_delete_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/me/export/:
+    get:
+      operationId: auth_me_export_retrieve
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
           description: ''
   /api/v1/auth/password/forgot/:
     post:
@@ -149,6 +354,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorRequired'
+          description: ''
   /api/v1/auth/signup/:
     post:
       operationId: auth_signup_create
@@ -175,6 +386,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/sso/:
+    get:
+      operationId: auth_sso_list
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Provider'
           description: ''
   /api/v1/business-days/add/:
     get:
@@ -2083,6 +2311,15 @@ components:
       - holidays
       - is_business_day
       - reason
+    CodeRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 20
+      required:
+      - code
     Country:
       type: object
       properties:
@@ -2170,6 +2407,21 @@ components:
       - date
       - kind
       - name
+    DeleteAccountRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          default: ''
+          maxLength: 128
+        confirm:
+          type: string
+          minLength: 1
+          maxLength: 254
+      required:
+      - confirm
     Delivery:
       type: object
       properties:
@@ -2236,6 +2488,21 @@ components:
       required:
       - last_sent_on
       - subscribed
+    DisableTwoFactorRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 20
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          default: ''
+          maxLength: 128
+      required:
+      - code
     EventsEnum:
       enum:
       - calendar.updated
@@ -2398,6 +2665,21 @@ components:
       - language
       - subdiv
       - year
+    Identity:
+      type: object
+      properties:
+        provider:
+          type: string
+        email:
+          type: string
+          format: email
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - created_at
+      - email
+      - provider
     Invite:
       type: object
       properties:
@@ -2739,6 +3021,16 @@ components:
           minItems: 1
         is_active:
           type: boolean
+    Provider:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     ReasonEnum:
       enum:
       - working_day
@@ -2757,6 +3049,15 @@ components:
         * `closure` - closure
         * `half_day` - half_day
         * `custom_working_day` - custom_working_day
+    RecoveryCodes:
+      type: object
+      properties:
+        recovery_codes:
+          type: array
+          items:
+            type: string
+      required:
+      - recovery_codes
     ResetPasswordRequest:
       type: object
       properties:
@@ -2854,6 +3155,36 @@ components:
         * `pending` - Pending
         * `success` - Success
         * `failed` - Failed
+    TwoFactorRequired:
+      type: object
+      properties:
+        two_factor_required:
+          type: boolean
+      required:
+      - two_factor_required
+    TwoFactorSetup:
+      type: object
+      properties:
+        secret:
+          type: string
+        uri:
+          type: string
+        qr:
+          type: string
+      required:
+      - qr
+      - secret
+      - uri
+    TwoFactorStatus:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        recovery_codes_left:
+          type: integer
+      required:
+      - enabled
+      - recovery_codes_left
     UnsubscribeRequest:
       type: object
       properties:
@@ -2916,9 +3247,17 @@ components:
           maxLength: 150
         language:
           $ref: '#/components/schemas/LanguageEnum'
+        two_factor:
+          type: boolean
+          readOnly: true
+        has_password:
+          type: boolean
+          readOnly: true
       required:
       - email
+      - has_password
       - id
+      - two_factor
     UserRequest:
       type: object
       properties:

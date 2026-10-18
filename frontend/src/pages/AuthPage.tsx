@@ -2,8 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { api, unwrap } from "../api/client";
+import { api, type Schemas, unwrap } from "../api/client";
 import { AuthField, AuthLayout, EyeToggle, SubmitButton } from "../components/auth/AuthShell";
+import {
+  OrDivider,
+  SsoButtons,
+  TwoFactorForm,
+  useSsoProviders,
+} from "../components/auth/TwoFactorForm";
 import { ErrorText } from "../components/ui";
 import { safeNext } from "../lib/navigation";
 
@@ -18,17 +24,25 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const client = useQueryClient();
   const navigate = useNavigate();
   const login = mode === "login";
+  const [twoFactor, setTwoFactor] = useState(search.get("two_factor") === "1");
+  const ssoError = search.get("sso_error");
+  const hasSso = (useSsoProviders().data ?? []).length > 0;
+
+  async function finish(user: Schemas["User"]) {
+    client.setQueryData(["me"], user);
+    // Django rotates the CSRF token on login, so fetch the fresh one.
+    await client.invalidateQueries({ queryKey: ["csrf"] });
+    navigate(next);
+  }
 
   const submit = useMutation({
     mutationFn: () =>
       login
         ? unwrap(api.POST("/api/v1/auth/login/", { body: { email, password } }))
         : unwrap(api.POST("/api/v1/auth/signup/", { body: { email, password, name } })),
-    onSuccess: async (user) => {
-      client.setQueryData(["me"], user);
-      // Django rotates the CSRF token on login, so fetch the fresh one.
-      await client.invalidateQueries({ queryKey: ["csrf"] });
-      navigate(next);
+    onSuccess: async (result) => {
+      if ("two_factor_required" in result) setTwoFactor(true);
+      else await finish(result);
     },
   });
 
@@ -37,11 +51,39 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
     submit.mutate();
   }
 
+  if (twoFactor) {
+    return (
+      <AuthLayout title={t("twoFactor.title")} lead={t("twoFactor.lead")}>
+        <TwoFactorForm onDone={finish} />
+        <p className="text-sm text-muted">
+          <button
+            type="button"
+            onClick={() => setTwoFactor(false)}
+            className="font-semibold text-accent underline-offset-4 hover:underline"
+          >
+            {t("twoFactor.back")}
+          </button>
+        </p>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout
       title={login ? t("auth.loginTitle") : t("auth.signupTitle")}
       lead={login ? t("auth.loginLead") : t("auth.signupLead")}
     >
+      {ssoError && (
+        <p role="alert" className="rounded-2xl bg-holiday-soft px-4 py-3 text-sm text-holiday">
+          {t(`sso.errors.${ssoError}`, { defaultValue: t("sso.errors.failed") })}
+        </p>
+      )}
+      {hasSso && (
+        <>
+          <SsoButtons next={next} />
+          <OrDivider />
+        </>
+      )}
       <form onSubmit={onSubmit} className="flex flex-col gap-5">
         {!login && (
           <AuthField

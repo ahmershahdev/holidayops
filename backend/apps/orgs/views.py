@@ -20,6 +20,9 @@ from apps.orgs.serializers import (
     OrgSerializer,
 )
 
+# /app/<org> shares its URL space with the web app's own pages.
+APP_PATHS = frozenset({"account"})
+
 
 class OrgViewSet(viewsets.GenericViewSet[Organization]):
     permission_classes = [IsAuthenticated]
@@ -50,7 +53,7 @@ class OrgViewSet(viewsets.GenericViewSet[Organization]):
         name = serializer.validated_data["name"]
         with transaction.atomic():
             org = Organization.objects.create(
-                name=name, slug=unique_slug(name, Organization.objects.all())
+                name=name, slug=unique_slug(name, Organization.objects.all(), reserved=APP_PATHS)
             )
             membership = Membership.objects.create(
                 user=current_user(request), org=org, role=Role.OWNER

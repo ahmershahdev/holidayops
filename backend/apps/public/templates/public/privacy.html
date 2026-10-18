@@ -19,6 +19,8 @@
 <p>When you sign up and use the app, we store:</p>
 <ul>
   <li><strong>Your account:</strong> email address, an optional name, your language, and your password as a one-way Argon2 hash. We never see or store the password itself.</li>
+  <li><strong>Sign-in with Google or Microsoft</strong>, if you use it: the provider's id for your account and the email it shares. We never see your password there.</li>
+  <li><strong>Two-factor sign-in</strong>, if you turn it on: the authenticator secret and one-way hashes of your recovery codes.</li>
   <li><strong>Your organizations:</strong> their names, members and roles, calendars, the days you add, and invitations (including the invited email address).</li>
   <li><strong>API keys and feed links:</strong> only a hash and a short prefix, so we can recognise them. The full key is shown once, when you create it.</li>
   <li><strong>API usage:</strong> for each request made with a key, the endpoint, the response status and the time. This powers your quota and usage chart.</li>
@@ -43,18 +45,19 @@
   <li><strong>Our hosting provider</strong> runs the servers and database.</li>
   <li><strong>Our email provider</strong> delivers invitations and digests.</li>
   <li><strong>jsDelivr</strong> serves the files for the interactive API docs page, so it sees the IP address of people who open that page.</li>
+  <li><strong>Google and Microsoft</strong>, only if you choose to sign in with them.</li>
   <li><strong>Webhook endpoints</strong> you configure receive the events you subscribe them to.</li>
 </ul>
 <p>We share data with anyone else only if the law requires it.</p>
 
 <h2 id="keep">How long we keep it</h2>
-<p>Account and organization data stay until you ask us to delete them. API usage records are deleted after 90 days. Revoked keys and feed links stop working at once.</p>
+<p>Account and organization data stay until you delete them. Deleting your account removes it at once, together with every organization where you were the only member. API usage records are deleted after 90 days. Revoked keys and feed links stop working at once.</p>
 
 <h2 id="security">Security</h2>
 <p>Traffic is encrypted with HTTPS. Passwords, API keys and feed links are stored hashed, every organization's data is kept apart from every other's, and webhook requests are signed. If you find a weakness, please <a href="/contact/">report it privately</a>.</p>
 
 <h2 id="rights">Your rights</h2>
-<p>You can ask for a copy of your data, ask us to correct it, or ask us to delete your account and everything in it. Email <a href="mailto:{{ support_email }}">{{ support_email }}</a> from the address on your account and we'll do it within 30 days. HolidayOps isn't meant for children under 16.</p>
+<p>In <a href="/app/account">Account settings</a> you can download a copy of your data as a JSON file, correct your profile, and delete your account with everything in it, at any time. If you can't log in, email <a href="mailto:{{ support_email }}">{{ support_email }}</a> from the address on your account and we'll do it within 30 days. HolidayOps isn't meant for children under 16.</p>
 
 <h2 id="changes">Changes</h2>
 <p>If this policy changes, we'll update the date at the top. If the change is significant, we'll email account holders first.</p>

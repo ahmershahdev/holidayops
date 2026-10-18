@@ -13,6 +13,7 @@ dependencies = [
     "gunicorn==26.2.0",
     "holidays==0.106",
     "mysqlclient==2.3.0",
+    "segno==1.6.6",
     "whitenoise==6.12.0",
 ]
 

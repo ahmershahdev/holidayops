@@ -10,6 +10,9 @@ import { applyTheme, readTheme } from "./lib/theme";
 import { PlaygroundPage } from "./pages/PlaygroundPage";
 
 // One chunk per page: the playground doesn't download the org settings screens.
+const AccountPage = lazy(() =>
+  import("./pages/AccountPage").then((m) => ({ default: m.AccountPage })),
+);
 const AuthPage = lazy(() => import("./pages/AuthPage").then((m) => ({ default: m.AuthPage })));
 const CalendarPage = lazy(() =>
   import("./pages/CalendarPage").then((m) => ({ default: m.CalendarPage })),
@@ -65,6 +68,7 @@ createRoot(root).render(
             <Route path="unsubscribe" element={<UnsubscribePage />} />
             <Route path="invite" element={<InvitePage />} />
             <Route path="app" element={<OrgsPage />} />
+            <Route path="app/account" element={<AccountPage />} />
             <Route path="app/:org" element={<OrgPage />} />
             <Route path="app/:org/settings" element={<OrgSettingsPage />} />
             <Route path="app/:org/calendars/:id" element={<CalendarPage />} />

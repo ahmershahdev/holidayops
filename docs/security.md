@@ -27,6 +27,41 @@ Reporting a vulnerability: see [SECURITY.md](../SECURITY.md).
   password hash changes, signs out every other session.
 - Emails are sent inside the request, so the code never sits in the Celery broker.
 
+## Two-factor sign-in
+
+`apps/accounts/totp.py` (RFC 6238 on RFC 4226, standard library only) and `twofactor.py`.
+
+- Authenticator-app codes: SHA-1, 6 digits, 30 s steps, ±1 step of drift. The last accepted step
+  is stored, so a code can't be replayed. The secret has to stay readable to check codes.
+- 10 recovery codes (`xxxxx-xxxxx`, no ambiguous characters), stored as HMAC hashes, single use,
+  shown once, regenerated with a valid code.
+- Login with two-factor on answers `202 {"two_factor_required": true}` and keeps only
+  `{user, time, tries}` in the session for 5 minutes and 5 tries; `/auth/2fa/verify/` finishes it.
+- Neither a password reset nor a Google or Microsoft sign-in skips the code step.
+- Turning it off needs the password (if the account has one) and a current code.
+
+## Single sign-on
+
+`apps/accounts/sso.py` and `sso_views.py`: Google and Microsoft over OpenID Connect, authorization
+code flow with PKCE (S256), `state` and `nonce`, `prompt=select_account`, no SDK.
+
+- The ID token is read from the token endpoint's TLS response (OIDC Core 3.1.3.7), so its signature
+  isn't checked; `iss` (Google, or a Microsoft tenant URL), `aud`, `exp`, `iat` and `nonce` are.
+- Accounts are matched by the provider's subject id (`SocialIdentity`). An existing password
+  account is joined automatically only when Google says it verified the address; Microsoft's email
+  claim is never trusted for that ("nOAuth"), so the user logs in and connects it from settings.
+- A password reset removes identities linked on an unverified address.
+- `next` must stay on this site. The last way into an account can't be unlinked.
+- Providers appear only when `GOOGLE_CLIENT_ID/SECRET` or `MICROSOFT_CLIENT_ID/SECRET` are set.
+
+## Account data
+
+`GET /auth/me/export/` returns everything stored about the account and its organizations as JSON,
+without passwords, hashes or secrets. `POST /auth/me/delete/` needs the email typed out and the
+password, refuses while the user is the only owner of an organization with other members, deletes
+organizations where the user was the only member, and keeps other organizations' history with the
+actor set to null. Both share the `account_data` throttle (10/hour).
+
 ## Email delivery
 
 `EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend` sends every email (reset codes,

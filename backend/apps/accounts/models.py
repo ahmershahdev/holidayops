@@ -50,3 +50,44 @@ class PasswordResetCode(models.Model):
 
     def __str__(self) -> str:
         return f"reset for user {self.user_id}"
+
+
+class TwoFactor(models.Model):
+    """An authenticator-app secret. It has to stay readable to check codes, so it is stored as
+    is; `confirmed_at` is set once the user proves their app produces matching codes."""
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="two_factor")
+    secret = models.CharField(max_length=64)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
+    last_step = models.BigIntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"2FA for user {self.user_id}"
+
+
+class RecoveryCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recovery_codes")
+    code_hash = models.CharField(max_length=64)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"recovery code for user {self.user_id}"
+
+
+class SocialIdentity(models.Model):
+    """A Google or Microsoft account linked by its stable subject id, never by email."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="identities")
+    provider = models.CharField(max_length=20)
+    subject = models.CharField(max_length=255)
+    email = models.EmailField(blank=True)
+    email_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints: ClassVar = [
+            models.UniqueConstraint(fields=["provider", "subject"], name="unique_identity")
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.provider} identity of user {self.user_id}"

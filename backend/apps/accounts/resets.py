@@ -100,5 +100,8 @@ def reset_password(email: str, code: str, password: str) -> User | None:
         # matches).
         user.set_password(password)
         user.save(update_fields=["password"])
+        # A provider account linked on an address nobody checked could belong to whoever made
+        # it; proving the mailbox here cuts it loose (see sso.Provider.trusts_email).
+        user.identities.filter(email_verified=False).delete()
     _send(user, "password_changed", CHANGED_SUBJECT, {"support": SUPPORT_EMAIL})
     return user

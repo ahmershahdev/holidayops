@@ -68,6 +68,9 @@ export function AccountMenu({ email, onLogout }: { email: string; onLogout: () =
             <Link role="menuitem" to="/app" className={item} onClick={() => setOpen(false)}>
               {t("nav.calendars")}
             </Link>
+            <Link role="menuitem" to="/app/account" className={item} onClick={() => setOpen(false)}>
+              {t("account.title")}
+            </Link>
             <button role="menuitem" type="button" className={item} onClick={onLogout}>
               {t("auth.logout")}
             </button>

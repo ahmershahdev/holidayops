@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 13:37+0000\n"
+"POT-Creation-Date: 2026-10-18 14:01+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -62,6 +62,36 @@ msgstr "اگر اس ای میل سے کوئی اکاؤنٹ ہے تو ہم نے �
 
 msgid "That code is wrong or has expired. Ask for a new one."
 msgstr "یہ کوڈ غلط ہے یا ختم ہو چکا ہے۔ نیا کوڈ منگوائیں۔"
+
+msgid "That code didn't work. Check your app's clock, or log in again."
+msgstr "یہ کوڈ کام نہیں کیا۔ اپنی ایپ کا وقت چیک کریں یا دوبارہ لاگ اِن کریں۔"
+
+msgid "Two-factor sign-in is already on."
+msgstr "دو مرحلہ لاگ اِن پہلے سے فعال ہے۔"
+
+#
+msgid "That code didn't match. Wait for a new one and try again."
+msgstr "کوڈ مطابقت نہیں رکھتا۔ نئے کوڈ کا انتظار کریں اور دوبارہ کوشش کریں۔"
+
+msgid "The password or the code is wrong."
+msgstr "پاس ورڈ یا کوڈ غلط ہے۔"
+
+msgid "Set a password first, or this account would have no way to log in."
+msgstr ""
+"پہلے پاس ورڈ بنائیں، ورنہ اس اکاؤنٹ میں لاگ اِن کا کوئی راستہ نہیں رہے گا۔"
+
+msgid "Type your email address exactly to confirm."
+msgstr "تصدیق کے لیے اپنا ای میل پتہ بالکل درست لکھیں۔"
+
+#
+msgid "That password is wrong."
+msgstr "یہ پاس ورڈ غلط ہے۔"
+
+#, python-format
+msgid ""
+"Make someone else an owner of %(orgs)s first: they would be left without one."
+msgstr ""
+"پہلے کسی اور کو %(orgs)s کا مالک بنائیں، ورنہ ان کا کوئی مالک نہیں رہے گا۔"
 
 msgid "Invalid or revoked API key."
 msgstr "API کلید غلط ہے یا منسوخ کی جا چکی ہے۔"

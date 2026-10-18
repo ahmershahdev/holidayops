@@ -11,10 +11,12 @@ from rest_framework.request import Request
 from apps.orgs.models import AuditLog, Membership, Organization, Role
 
 
-def unique_slug(name: str, taken: QuerySet[Any], field: str = "slug") -> str:
+def unique_slug(
+    name: str, taken: QuerySet[Any], field: str = "slug", reserved: frozenset[str] = frozenset()
+) -> str:
     base = slugify(name)[:50] or "item"
     slug, n = base, 2
-    while taken.filter(**{field: slug}).exists():
+    while slug in reserved or taken.filter(**{field: slug}).exists():
         slug, n = f"{base}-{n}", n + 1
     return slug
 

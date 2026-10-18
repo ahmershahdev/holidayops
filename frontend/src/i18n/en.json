@@ -312,5 +312,60 @@
     "body": "The page you asked for doesn't exist, or it moved. Pick a destination below.",
     "home": "Go home",
     "holidays": "Browse holidays by country"
+  },
+  "twoFactor": {
+    "title": "Enter your code",
+    "lead": "Open your authenticator app and type the 6-digit code for HolidayOps.",
+    "back": "Back to log in",
+    "codeLabel": "Code",
+    "codeHint": "Lost your phone? Use one of your recovery codes instead.",
+    "verify": "Verify",
+    "cardTitle": "Two-factor sign-in",
+    "on": "On",
+    "off": "Off",
+    "explain": "Ask for a code from an authenticator app (Google Authenticator, 1Password, Authy and others) every time you log in.",
+    "turnOn": "Turn on",
+    "qrAlt": "QR code for your authenticator app",
+    "scan": "Scan this code with your authenticator app, then type the 6-digit code it shows.",
+    "manual": "Can't scan? Enter this key by hand:",
+    "confirm": "Confirm and turn on",
+    "saveCodes": "Save these recovery codes somewhere safe. Each works once if you lose your phone; they won't be shown again.",
+    "downloadCodes": "Download as a text file",
+    "codesLeft_one": "{{count}} recovery code left.",
+    "codesLeft_other": "{{count}} recovery codes left.",
+    "newCodes": "Make new recovery codes",
+    "turnOff": "Turn off"
+  },
+  "sso": {
+    "continue": "Continue with {{provider}}",
+    "connect": "Connect {{provider}}",
+    "or": "or",
+    "cardTitle": "Sign in with",
+    "disconnect": "Disconnect",
+    "errors": {
+      "expired": "That sign-in took too long or was opened twice. Try again.",
+      "cancelled": "Sign-in was cancelled.",
+      "failed": "We couldn't confirm that sign-in. Try again, or use your password.",
+      "taken": "An account already uses this email. Log in with your password, then connect it from your account settings.",
+      "no_email": "That account didn't share an email address with us.",
+      "inactive": "This account is switched off. Write to support@ahmershah.dev."
+    }
+  },
+  "account": {
+    "title": "Account settings",
+    "subtitle": "Your profile, sign-in security and your data.",
+    "profile": "Profile",
+    "emailLanguage": "Email language",
+    "save": "Save",
+    "saved": "Saved",
+    "changePassword": "Change password",
+    "setPassword": "Set a password",
+    "data": "Your data",
+    "exportExplain": "Download everything stored about your account and organizations as a JSON file. Secrets such as API keys are never included.",
+    "export": "Download my data",
+    "delete": "Delete your account",
+    "deleteExplain": "This removes your account and every organization where you are the only member, with their calendars, keys and feeds. It can't be undone.",
+    "typeEmail": "Type {{email}} to confirm",
+    "deleteButton": "Delete my account"
   }
 }
