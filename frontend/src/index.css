@@ -782,27 +782,38 @@ html[lang="ar"] .footer-col h2 {
   animation: draw-route-in 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
 }
 
-/* Sign-in art panel: the logo's route draws itself once. */
-.auth-route path {
-  fill: none;
-  stroke: #00d1c1;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  opacity: 0.55;
-  vector-effect: non-scaling-stroke;
-  animation: draw-route-in 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards;
+/* Sign-in art panel: a glow behind the WebGL globe, which fades in once three.js has loaded. */
+.auth-art {
+  background-image:
+    radial-gradient(30rem 22rem at 80% 20%, rgb(0 209 193 / 0.2), transparent 70%),
+    radial-gradient(20rem 16rem at 10% 100%, rgb(45 212 196 / 0.12), transparent 70%);
 }
 
-.auth-art {
-  background-image: radial-gradient(28rem 20rem at 85% 10%, rgb(0 209 193 / 0.16), transparent 70%);
+.auth-globe {
+  animation: globe-in 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes globe-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* Six cells behind the one-time code field. In a monospace face each digit advances
+   0.6em + 0.92em of tracking, so the cells repeat every 1.52em. */
+.code-input {
+  inline-size: calc(6 * 1.52em + 0.5em);
+  background-image: linear-gradient(90deg, var(--color-paper) 0 1.16em, transparent 0);
+  background-size: 1.52em 64%;
+  background-position: calc(1.1rem - 0.28em) center;
+  background-repeat: repeat-x;
+  background-clip: content-box;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-route path {
+  .auth-globe {
     animation: none;
-    stroke-dashoffset: 0;
   }
 }
 

@@ -17,6 +17,9 @@ const CalendarPage = lazy(() =>
 const CalendarSettingsPage = lazy(() =>
   import("./pages/CalendarSettingsPage").then((m) => ({ default: m.CalendarSettingsPage })),
 );
+const ForgotPasswordPage = lazy(() =>
+  import("./pages/ForgotPasswordPage").then((m) => ({ default: m.ForgotPasswordPage })),
+);
 const InvitePage = lazy(() =>
   import("./pages/InvitePage").then((m) => ({ default: m.InvitePage })),
 );
@@ -58,6 +61,7 @@ createRoot(root).render(
             <Route path="playground" element={<PlaygroundPage />} />
             <Route path="login" element={<AuthPage mode="login" />} />
             <Route path="signup" element={<AuthPage mode="signup" />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
             <Route path="unsubscribe" element={<UnsubscribePage />} />
             <Route path="invite" element={<InvitePage />} />
             <Route path="app" element={<OrgsPage />} />

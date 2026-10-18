@@ -1,0 +1,6 @@
+{% load i18n %}{% include "accounts/_email_top.html" %}
+<h1 style="margin:0 0 12px;font-size:22px;letter-spacing:-0.02em;">{% translate "Reset your password" %}</h1>
+<p style="margin:0 0 24px;color:#4a5874;font-size:15px;line-height:1.6;">{% translate "Enter this code on the reset page to choose a new password." %}</p>
+<p dir="ltr" style="margin:0 0 24px;padding:18px;background:#e0f5f3;border-radius:14px;text-align:center;font-family:ui-monospace,Consolas,monospace;font-size:34px;font-weight:700;letter-spacing:0.35em;color:#0b6b66;">{{ code }}</p>
+<p style="margin:0;color:#4a5874;font-size:13px;line-height:1.6;">{% blocktranslate %}The code works once and expires in {{ minutes }} minutes. If you didn't ask for it, ignore this email: your password stays the same.{% endblocktranslate %}</p>
+{% include "accounts/_email_bottom.html" %}

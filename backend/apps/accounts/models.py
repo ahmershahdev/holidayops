@@ -33,3 +33,20 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
+
+
+class PasswordResetCode(models.Model):
+    """A one-time code emailed for a password reset. Only an HMAC of the code is stored."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reset_codes")
+    code_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    attempts = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        indexes: ClassVar = [models.Index(fields=["user", "created_at"])]
+
+    def __str__(self) -> str:
+        return f"reset for user {self.user_id}"

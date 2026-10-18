@@ -68,6 +68,38 @@ export interface paths {
         patch: operations["auth_me_partial_update"];
         trace?: never;
     };
+    "/api/v1/auth/password/forgot/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_password_forgot_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password/reset/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_password_reset_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/signup/": {
         parameters: {
             query?: never;
@@ -828,6 +860,13 @@ export interface components {
         FeedTokenRequest: {
             label?: string;
         };
+        ForgotPassword: {
+            detail: string;
+        };
+        ForgotPasswordRequest: {
+            /** Format: email */
+            email: string;
+        };
         Holiday: {
             /** Format: date */
             date: string;
@@ -1026,6 +1065,12 @@ export interface components {
          * @enum {string}
          */
         ReasonEnum: "working_day" | "weekend" | "holiday" | "weekend_workday" | "closure" | "half_day" | "custom_working_day";
+        ResetPasswordRequest: {
+            /** Format: email */
+            email: string;
+            code: string;
+            password: string;
+        };
         /**
          * @description * `owner` - Owner
          *     * `admin` - Admin
@@ -1220,6 +1265,56 @@ export interface operations {
                 "application/json": components["schemas"]["PatchedUserRequest"];
                 "application/x-www-form-urlencoded": components["schemas"]["PatchedUserRequest"];
                 "multipart/form-data": components["schemas"]["PatchedUserRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    auth_password_forgot_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ForgotPasswordRequest"];
+                "multipart/form-data": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ForgotPassword"];
+                };
+            };
+        };
+    };
+    auth_password_reset_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ResetPasswordRequest"];
+                "multipart/form-data": components["schemas"]["ResetPasswordRequest"];
             };
         };
         responses: {

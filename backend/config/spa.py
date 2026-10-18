@@ -13,7 +13,7 @@ SPA_POLICY = (
 
 
 # Signed-in screens and one-off links stay out of search; the playground and sign-up are public.
-PRIVATE_PREFIXES = ("/app", "/invite", "/unsubscribe")
+PRIVATE_PREFIXES = ("/app", "/invite", "/unsubscribe", "/forgot-password")
 
 
 def spa(request: HttpRequest) -> HttpResponse:
