@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import Any
 
@@ -22,10 +23,18 @@ def test_development_404s_get_the_branded_page(settings: Any) -> None:
     assert "This flight went off course" in response.content.decode()
 
 
-def test_api_404s_stay_json_in_development(settings: Any) -> None:
+def test_api_404s_stay_json_for_api_clients(settings: Any) -> None:
     settings.DEBUG = True
-    response = BrandedNotFoundMiddleware(technical_404)(RequestFactory().get("/api/v1/nope/"))
-    assert response.content.decode() == "<h1>Page not found at /x/</h1>"
+    request = RequestFactory().get("/api/v1/nope/", HTTP_ACCEPT="application/json")
+    response = BrandedNotFoundMiddleware(technical_404)(request)
+    assert json.loads(response.content) == {"detail": "Not found."}
+
+
+def test_browsers_get_the_branded_page_on_missing_api_urls(settings: Any) -> None:
+    settings.DEBUG = True
+    request = RequestFactory().get("/api/v1/docs/2", HTTP_ACCEPT="text/html,application/xhtml+xml")
+    response = BrandedNotFoundMiddleware(technical_404)(request)
+    assert "This flight went off course" in response.content.decode()
 
 
 def test_page_cache_key_changes_with_each_static_build(tmp_path: Path, settings: Any) -> None:

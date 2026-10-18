@@ -13,9 +13,17 @@ from apps.public.views import PUBLIC_POLICY
 JSON_PREFIXES = ("/api/", "/feeds/")
 
 
+def wants_json(request: HttpRequest) -> bool:
+    """API clients get JSON; a browser that opens a missing /api/ URL gets the branded page.
+    Browsers send text/html in Accept, fetch() and curl don't."""
+    return request.path.startswith(JSON_PREFIXES) and "text/html" not in request.headers.get(
+        "Accept", ""
+    )
+
+
 def not_found(request: HttpRequest, exception: Exception | None = None) -> HttpResponse:
-    """Branded 404 for pages, JSON for the API. The language follows the URL prefix."""
-    if request.path.startswith(JSON_PREFIXES):
+    """Branded 404 for pages, JSON for API clients. The language follows the URL prefix."""
+    if wants_json(request):
         return JsonResponse({"detail": "Not found."}, status=404)
     lang = next(
         (
@@ -41,14 +49,14 @@ def not_found(request: HttpRequest, exception: Exception | None = None) -> HttpR
 
 def server_error(request: HttpRequest) -> HttpResponse:
     """Plain template with no database or request context, so it renders even when those fail."""
-    if request.path.startswith(JSON_PREFIXES):
+    if wants_json(request):
         return JsonResponse({"detail": "Server error."}, status=500)
     return HttpResponse(loader.get_template("public/500.html").render(), status=500)
 
 
 class BrandedNotFoundMiddleware:
     """With DEBUG on, Django answers 404s with its technical page instead of handler404;
-    development should show the same page visitors get."""
+    development should give the same page or JSON that production does."""
 
     def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
         self.get_response = get_response
@@ -58,7 +66,6 @@ class BrandedNotFoundMiddleware:
         if (
             settings.DEBUG
             and response.status_code == 404
-            and not request.path.startswith(JSON_PREFIXES)
             and response.get("Content-Type", "").startswith("text/html")
         ):
             return not_found(request)
