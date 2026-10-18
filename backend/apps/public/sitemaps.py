@@ -19,7 +19,15 @@ class PagesSitemap(_Localized):
     changefreq = "monthly"
 
     def items(self) -> list[str]:
-        return ["/", "/holidays/", "/pricing/", "/about/", "/contact/"]
+        return [
+            "/",
+            "/today/",
+            "/tools/overlap/",
+            "/holidays/",
+            "/pricing/",
+            "/about/",
+            "/contact/",
+        ]
 
     def location(self, item: str) -> str:
         return f"{PREFIX[translation.get_language()]}{item}"
@@ -43,14 +51,18 @@ class CountrySitemap(_Localized):
     def __init__(self, code: str) -> None:
         self.code = code
 
-    def items(self) -> list[tuple[int, str | None]]:
+    def items(self) -> list[tuple[int, str | None] | str]:
         this_year = timezone.now().year
         places: list[str | None] = [None, *list_countries()[self.code].subdivisions]
-        return [(this_year + offset, place) for offset in SITEMAP_YEARS for place in places]
+        years = [(this_year + offset, place) for offset in SITEMAP_YEARS for place in places]
+        return ["today", *years]
 
-    def location(self, item: tuple[int, str | None]) -> str:
+    def location(self, item: tuple[int, str | None] | str) -> str:
+        lang = translation.get_language()
+        if isinstance(item, str):
+            return f"{PREFIX[lang]}/holidays/{self.code.lower()}/today/"
         year, subdiv = item
-        return page_path(translation.get_language(), self.code, year, subdiv)
+        return page_path(lang, self.code, year, subdiv)
 
 
 def sitemaps() -> "dict[str, Sitemap[Any]]":

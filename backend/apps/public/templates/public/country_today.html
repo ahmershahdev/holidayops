@@ -1,0 +1,44 @@
+{% extends "public/base.html" %}{% load i18n static flags text %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/tools.css' %}">{% endblock %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Today" %} · <time datetime="{{ page.today.day|date:'Y-m-d' }}">{{ page.today.day|cldr:"EEEE d MMMM y" }}</time></p>
+  <h1 class="title-flag">{% flag page.code 48 lazy=False %}<span>{{ title }}</span></h1>
+</header>
+
+<section class="verdict-card {% if page.today.working %}yes{% else %}no{% endif %}" aria-live="polite">
+  <p class="verdict-word">{% if page.today.working %}{% translate "Yes" %}{% else %}{% translate "No" %}{% endif %}</p>
+  <div>
+    <p class="verdict-line">{% if page.today.working %}{% blocktranslate with country=page.name %}Today is a working day in {{ country }}.{% endblocktranslate %}{% else %}{% blocktranslate with country=page.name %}Today is a day off in {{ country }}.{% endblocktranslate %}{% endif %}</p>
+    <p class="verdict-why">{{ reason|capfirst }}{% if page.today.names %}: <strong>{{ page.today.names|as_list }}</strong>{% endif %}</p>
+    <p class="verdict-zone">{% blocktranslate with zone=page.zone %}Local date in {{ zone }}.{% endblocktranslate %}</p>
+  </div>
+</section>
+
+<section aria-labelledby="week-title">
+  <h2 id="week-title" class="section-title">{% translate "The next seven days" %}</h2>
+  <ol class="week-strip">
+    {% for day in page.week %}<li class="{% if day.working %}work{% elif day.names %}holiday{% else %}weekend{% endif %}">
+      <span class="week-name">{{ day.day|cldr:"EEE" }}</span>
+      <span class="week-date">{{ day.day|date:"j" }}</span>
+      <span class="week-state">{% if day.names %}{{ day.names|as_list }}{% elif day.working %}{% translate "Working" %}{% else %}{% translate "Weekend" %}{% endif %}</span>
+    </li>{% endfor %}
+  </ol>
+</section>
+
+<ul class="stats">
+  {% if page.next_holiday %}<li><strong>{{ page.next_holiday.day|cldr:"d MMMM" }}</strong><span>{% translate "Next public holiday" %}: {{ page.next_holiday.names|as_list }}</span></li>{% endif %}
+  <li><strong>{{ page.next_working|cldr:"EEEE d MMMM" }}</strong><span>{% translate "Next working day" %}</span></li>
+</ul>
+
+<p class="tool-links"><a href="{{ page.path }}">{% blocktranslate with country=page.name year=page.today.day.year %}All holidays in {{ country }} {{ year }}{% endblocktranslate %}</a> · <a href="{{ prefix }}/today/">{% translate "Who is off today" %}</a> · <a href="{{ prefix }}/tools/overlap/?c={{ page.code }}">{% translate "Compare with other countries" %}</a></p>
+
+<section class="embed" aria-labelledby="embed-title">
+  <div>
+    <h2 id="embed-title">{% translate "Put this on your site" %}</h2>
+    <p>{% translate "Copy this snippet into any page. The widget updates itself, needs no script and follows the language you choose: add ?lang=ur or ?lang=ar, and ?theme=dark for dark pages." %}</p>
+    <pre class="ltr"><code>{{ embed }}</code></pre>
+  </div>
+  <iframe class="embed-preview" src="{{ widget_url }}" title="{{ page.name }}" width="320" height="150" loading="lazy"></iframe>
+</section>
+{% endblock %}

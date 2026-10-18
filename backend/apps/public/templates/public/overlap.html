@@ -1,0 +1,52 @@
+{% extends "public/base.html" %}{% load i18n static flags text %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/tools.css' %}">{% endblock %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Tool" %}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{{ description }}</p>
+</header>
+
+<form class="overlap-form" method="get" action="{{ prefix }}/tools/overlap/#result">
+  {% for code in slots %}
+  <label><span>{% blocktranslate with n=forloop.counter %}Country {{ n }}{% endblocktranslate %}</span>
+    <select name="c">
+      <option value="">{% translate "None" %}</option>
+      {% for value, name in choices %}<option value="{{ value }}"{% if value == code %} selected{% endif %}>{{ name }}</option>{% endfor %}
+    </select>
+  </label>
+  {% endfor %}
+  <label><span>{% translate "Month" %}</span><input type="month" name="month" value="{{ month_value }}" required></label>
+  <button class="button" type="submit">{% translate "Compare" %}</button>
+</form>
+{% if error %}<p class="demo-answer error" role="alert">{{ error }}</p>{% endif %}
+
+{% if result %}
+<section id="result" class="overlap-result" aria-labelledby="result-title">
+  <h2 id="result-title" class="section-title">{{ result.month|cldr:"LLLL y" }}</h2>
+  <ul class="tally">
+    <li class="tally-work"><strong>{{ result.shared }}</strong><span>{% translate "days everyone works" %}</span></li>
+    <li class="tally-holiday"><strong>{{ result.partial }}</strong><span>{% translate "days someone is off" %}</span></li>
+    <li class="tally-weekend"><strong>{{ result.closed }}</strong><span>{% translate "days everyone is off" %}</span></li>
+  </ul>
+  <ul class="overlap-legend">{% for code, name, days in result.countries %}<li>{% flag code 18 %}<span>{{ name }}</span><span class="muted">{% blocktranslate %}{{ days }} working days{% endblocktranslate %}</span></li>{% endfor %}</ul>
+
+  <div class="overlap-grid" role="table" aria-label="{{ result.month|cldr:'LLLL y' }}">
+    {% for week in result.weeks %}<div class="overlap-week" role="row">{% for cell in week %}
+      <div role="cell" class="overlap-day {{ cell.kind }}">{% if cell.day %}
+        <span class="overlap-date">{{ cell.day|cldr:"EEE d" }}</span>
+        {% for off in cell.off %}<span class="overlap-off" title="{{ off.name }}{% if off.names %}: {{ off.names|as_list }}{% endif %}">{% flag off.code 16 %}<span class="sr-only">{{ off.name }}</span></span>{% endfor %}
+      {% endif %}</div>{% endfor %}
+    </div>{% endfor %}
+  </div>
+
+  <h3>{% translate "Who is off, and why" %}</h3>
+  <table>
+    <thead><tr><th scope="col">{% translate "Date" %}</th><th scope="col">{% translate "Off" %}</th></tr></thead>
+    <tbody>
+    {% for week in result.weeks %}{% for cell in week %}{% if cell.off and cell.kind != "pad" %}<tr><td class="date"><time datetime="{{ cell.day|date:'Y-m-d' }}">{{ cell.day|cldr:"EEEE d MMMM" }}</time></td><td>{% for off in cell.off %}<span class="off-line">{% flag off.code 16 %} {{ off.name }}{% if off.names %}: {{ off.names|as_list }}{% endif %}</span>{% endfor %}</td></tr>{% endif %}{% endfor %}{% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

@@ -13,6 +13,7 @@ each milestone are in [design/](design/).
 | 4. Subscriptions | Celery and Beat, iCal feeds, monthly digests, signed webhooks | [m4-subscriptions](design/m4-subscriptions.md) |
 | 5. Plans and launch prep | API keys, quotas, usage chart, public SEO pages, production image, CD pipeline | [m5-api-keys](design/m5-api-keys.md) |
 | 6. Showcase site | Art direction, site frame, landing page, country pages, performance pass | [m6-showcase](design/m6-showcase.md) |
+| 7. Accounts and tools (#38 to #41) | Branded API 404s for browsers, password reset by email code (Resend), WebGL auth pages, two-factor, Google and Microsoft sign-in, data export and deletion, who-is-off-today pages, widget, overlap tool | [security](security.md), [seo](seo.md) |
 | 6.5 Site upgrade (#36) | Live landing sections, about, contact, legal pages, breadcrumbs, JSON-LD, llms.txt, PWA | [seo](seo.md) |
 
 ## Open
@@ -28,11 +29,7 @@ each milestone are in [design/](design/).
 
 | Idea | Why |
 |---|---|
-| Self-serve account and data deletion, data export | The privacy policy promises it by email today |
 | Billing for Pro (Stripe or Paddle) | Pro is arranged by email |
-| Embeddable widget and a "today" page per country | Shareable, link-earning pages |
 | Official SDKs (Python, TypeScript) generated from `schema.yml` | Faster integration |
 | Public status page and changelog | Trust for API users |
-| Two-factor authentication and SSO for organizations | Expected by larger teams |
 | Error monitoring and uptime alerts | Needed once hosted |
-| Calendar-to-calendar comparison ("overlap of working days in PK and SA") | A question teams ask often |

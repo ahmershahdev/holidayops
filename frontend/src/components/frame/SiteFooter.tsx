@@ -71,6 +71,8 @@ export function SiteFooter() {
             <h2>{t("footer.product")}</h2>
             <a href={`${prefix}/holidays/`}>{t("nav.holidays")}</a>
             <a href={`${prefix}/pricing/`}>{t("nav.pricing")}</a>
+            <a href={`${prefix}/today/`}>{t("footer.today")}</a>
+            <a href={`${prefix}/tools/overlap/`}>{t("footer.overlap")}</a>
             <Link to="/playground">{t("nav.playground")}</Link>
             <Link to="/app">{t("footer.calendars")}</Link>
           </nav>

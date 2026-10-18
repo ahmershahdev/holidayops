@@ -1,0 +1,105 @@
+/* The embeddable widget (/widget/<cc>/): tiny on purpose, it loads inside other sites. */
+:root {
+  --bg: #ffffff;
+  --ink: #0b1b3f;
+  --muted: #4a5874;
+  --line: #d5dde8;
+  --yes: #23704a;
+  --no: #b23c22;
+  --accent: #0e7c76;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #111d36;
+  --ink: #e6edf7;
+  --muted: #a3b3c9;
+  --line: #24375c;
+  --yes: #72d69d;
+  --no: #ff8f75;
+  --accent: #2dd4c4;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  font: 15px/1.4 system-ui, "Segoe UI", Tahoma, sans-serif;
+}
+
+.widget {
+  display: grid;
+  align-content: space-between;
+  gap: 0.2rem;
+  height: 100%;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.widget:hover {
+  border-color: var(--accent);
+}
+
+.widget-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.widget-top time {
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.flag {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  height: auto;
+  object-fit: cover;
+}
+
+.widget-verdict {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.yes .widget-verdict {
+  color: var(--yes);
+}
+
+.no .widget-verdict {
+  color: var(--no);
+}
+
+.widget-why {
+  color: var(--muted);
+  font-size: 0.88rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.widget-brand {
+  justify-self: end;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.widget-brand b {
+  color: var(--accent);
+}

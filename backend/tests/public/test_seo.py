@@ -13,7 +13,17 @@ from apps.public.seo import DESCRIPTION_MAX, TITLE_MAX, fit_title
 from apps.public.views import year_meta
 
 YEAR = timezone.now().year
-PAGES = ["/", "/holidays/", f"/holidays/pk/{YEAR}/", "/pricing/", "/about/", "/contact/"]
+PAGES = [
+    "/",
+    "/holidays/",
+    f"/holidays/pk/{YEAR}/",
+    "/holidays/pk/today/",
+    "/today/",
+    "/tools/overlap/",
+    "/pricing/",
+    "/about/",
+    "/contact/",
+]
 ENGLISH_ONLY = ["/privacy/", "/terms/"]
 
 
