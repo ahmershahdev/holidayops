@@ -1,5 +1,4 @@
 import hashlib
-import json
 from collections.abc import Callable
 from functools import cache as memoize
 from functools import wraps
@@ -12,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
-from django.utils.safestring import SafeString, mark_safe
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 from rest_framework.throttling import SimpleRateThrottle
 
@@ -33,6 +32,7 @@ from apps.public.content import (
 from apps.public.frame import frame_context
 from apps.public.palette import swatches
 from apps.public.patterns import pattern
+from apps.public.seo import breadcrumbs, fit_title, ld_json
 from apps.public.theme import get_theme
 from config.security_log import security_event
 
@@ -45,8 +45,6 @@ PUBLIC_POLICY = (
     "script-src 'none'; connect-src 'self'; base-uri 'none'; form-action 'none'; "
     "frame-ancestors 'none'"
 )
-# Same escapes as Django's json_script, so a holiday name can never close the <script> element.
-_JSON_ESCAPES = {ord("<"): "\\u003C", ord(">"): "\\u003E", ord("&"): "\\u0026"}
 
 View = Callable[..., HttpResponse]
 
@@ -116,13 +114,13 @@ def public_page(view: View) -> View:
     return wrapper
 
 
-def ld_json(data: Any) -> SafeString:
-    text = json.dumps(data, ensure_ascii=False, separators=(",", ":")).translate(_JSON_ESCAPES)
-    return mark_safe(f'<script type="application/ld+json">{text}</script>')  # noqa: S308
-
-
-def _meta(request: HttpRequest, lang: str, path_for: Callable[[str], str]) -> dict[str, Any]:
-    alternates = [(code, request.build_absolute_uri(path_for(code))) for code in LANGUAGES]
+def _meta(
+    request: HttpRequest,
+    lang: str,
+    path_for: Callable[[str], str],
+    languages: tuple[str, ...] = LANGUAGES,
+) -> dict[str, Any]:
+    alternates = [(code, request.build_absolute_uri(path_for(code))) for code in languages]
     return {
         "lang": lang,
         "dir": "rtl" if lang in {"ur", "ar"} else "ltr",
@@ -133,30 +131,13 @@ def _meta(request: HttpRequest, lang: str, path_for: Callable[[str], str]) -> di
     }
 
 
-def _breadcrumbs(request: HttpRequest, items: list[tuple[str, str]]) -> SafeString:
-    return ld_json(
-        {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": n,
-                    "name": name,
-                    "item": request.build_absolute_uri(path),
-                }
-                for n, (name, path) in enumerate(items, start=1)
-            ],
-        }
-    )
-
-
 @public_page
 def country_index(request: HttpRequest, lang: str) -> HttpResponse:
     year = timezone.now().year
     countries = sorted(list_countries(), key=lambda c: country_name(c, lang))
     context = {
         **_meta(request, lang, lambda code: f"{PREFIX[code]}/holidays/"),
+        **breadcrumbs(request, lang, [(_("Holidays"), f"{PREFIX[lang]}/holidays/")]),
         "title": _("Public holidays by country"),
         "description": _(
             "Public holidays and working days for %(count)s countries, with the dates for "
@@ -176,6 +157,21 @@ def country_latest(request: HttpRequest, country: str, lang: str = "en") -> Http
     return redirect(page_path(lang, info.code, timezone.now().year))
 
 
+def year_meta(place: str, year: int, count: int, working: int) -> tuple[str, str, str]:
+    """The heading, the <title> and the meta description of a year page."""
+    title = _("Public holidays in %(place)s %(year)s") % {"place": place, "year": year}
+    head_title = fit_title(
+        title,
+        _("%(place)s holidays %(year)s") % {"place": place, "year": year},
+        f"{place} {year}",
+    )
+    description = _(
+        "All %(count)s public holidays in %(place)s in %(year)s, with dates, weekdays and "
+        "%(working)s working days."
+    ) % {"count": count, "place": place, "year": year, "working": working}
+    return title, head_title, description
+
+
 @public_page
 def year_view(
     request: HttpRequest, country: str, year: int, lang: str, subdiv: str | None = None
@@ -187,11 +183,7 @@ def year_view(
     page = year_page(info, code, year, lang, timezone.now().date())
     name = country_name(info.code, lang)
     place = f"{name} ({code})" if code else name
-    title = _("Public holidays in %(place)s %(year)s") % {"place": place, "year": year}
-    description = _(
-        "All %(count)s public holidays in %(place)s in %(year)s, with dates, weekdays and "
-        "%(working)s working days."
-    ) % {"count": len(page.holidays), "place": place, "year": year, "working": page.working_days}
+    title, head_title, description = year_meta(place, year, len(page.holidays), page.working_days)
     crumbs = [
         (_("Holidays"), f"{PREFIX[lang]}/holidays/"),
         (name, page_path(lang, info.code, year)),
@@ -202,6 +194,7 @@ def year_view(
     context = {
         **_meta(request, lang, lambda c: page_path(c, info.code, year, code)),
         "title": title,
+        "head_title": head_title,
         "description": description,
         "page": page,
         "place": place,
@@ -214,8 +207,7 @@ def year_view(
         "next": page_path(lang, info.code, year + 1, code) if year + 1 in window else None,
         "country_path": page_path(lang, info.code, year) if code else None,
         "subdivisions": [(s, page_path(lang, info.code, year, s)) for s in info.subdivisions],
-        "breadcrumbs": crumbs,
-        "ld_breadcrumbs": _breadcrumbs(request, crumbs),
+        **breadcrumbs(request, lang, crumbs),
         "ld_events": _events(page, place),
         "api_example": request.build_absolute_uri(
             f"/api/v1/holidays/?country={info.code}{f'&subdiv={code}' if code else ''}&year={year}"
@@ -259,8 +251,13 @@ def plan_card(code: str, limits: dict[str, str | int]) -> dict[str, object]:
 def pricing(request: HttpRequest, lang: str) -> HttpResponse:
     context = {
         **_meta(request, lang, lambda code: f"{PREFIX[code]}/pricing/"),
+        **breadcrumbs(request, lang, [(_("Pricing"), f"{PREFIX[lang]}/pricing/")]),
         "title": _("Pricing"),
-        "description": _("API plans for HolidayOps: requests per minute, per month and API keys."),
+        "head_title": fit_title(_("Pricing: free and Pro API plans")),
+        "description": _(
+            "Start free with 10,000 API requests a month. Every plan includes company calendars, "
+            "iCal feeds, digests and webhooks."
+        ),
         "plans": [plan_card(code, limits) for code, limits in settings.PLANS.items()],
         "included": [
             _("Company calendars"),
@@ -291,17 +288,3 @@ def style_guide(request: HttpRequest, lang: str) -> HttpResponse:
         "style-src 'self'", "style-src 'self' 'unsafe-inline'"
     )
     return response
-
-
-def robots(request: HttpRequest) -> HttpResponse:
-    lines = [
-        "User-agent: *",
-        "Disallow: /app/",
-        "Disallow: /api/",
-        "Disallow: /feeds/",
-        "Disallow: /invite",
-        "Disallow: /unsubscribe",
-        "Disallow: /theme/",
-        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
-    ]
-    return HttpResponse("\n".join(lines) + "\n", content_type="text/plain; charset=utf-8")

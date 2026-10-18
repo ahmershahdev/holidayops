@@ -1,0 +1,16 @@
+{% extends "public/base.html" %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">Legal</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{{ description }}</p>
+  <p class="legal-updated">Last updated <time datetime="{{ updated|date:'Y-m-d' }}">{{ updated|date:"j F Y" }}</time></p>
+</header>
+<div class="legal">
+  <nav class="legal-toc" aria-label="On this page">
+    <p>On this page</p>
+    <ol>{% block toc %}{% endblock %}</ol>
+  </nav>
+  <article class="prose">{% block legal %}{% endblock %}</article>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "About" %}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{% translate "A small, open-source project that answers one question well: is this date a working day, here and in our other offices?" %}</p>
+</header>
+
+<section class="split" aria-labelledby="why-title">
+  <h2 id="why-title">{% translate "Why it exists" %}</h2>
+  <div class="prose">
+    <p>{% translate "Counting working days sounds simple until a team spans countries. Weekends differ: Friday and Saturday in Saudi Arabia, Saturday and Sunday in Pakistan. Some holidays follow the moon and move every year. Governments swap a weekend day for a working day to make a long break. And every company has closures of its own." %}</p>
+    <p>{% translate "Most tools get one of these wrong, and the mistake shows up later as a late payment, a wrong leave balance or a missed delivery. HolidayOps puts all of them behind one answer, through an API, calendar feeds and webhooks." %}</p>
+  </div>
+</section>
+
+<ul class="stats stats-big">
+  <li><strong>{{ country_count }}</strong><span>{% translate "countries" %}</span></li>
+  <li><strong>{{ region_count }}</strong><span>{% translate "regions" %}</span></li>
+  <li><strong>3</strong><span>{% translate "languages" %}</span></li>
+  <li><strong>MIT</strong><span>{% translate "open-source licence" %}</span></li>
+</ul>
+
+<section aria-labelledby="principles-title">
+  <h2 id="principles-title" class="section-title">{% translate "What we hold to" %}</h2>
+  <div class="cards">
+    <article class="card reveal">
+      <h3>{% translate "Open data, open code" %}</h3>
+      <p>{% blocktranslate %}Holiday dates come from <a href="https://github.com/vacanza/holidays" rel="noopener">holidays</a>, a Python library kept up to date by a large community. The code of HolidayOps itself is on <a href="{{ repo_url }}" rel="noopener">GitHub</a> under the MIT licence.{% endblocktranslate %}</p>
+    </article>
+    <article class="card reveal">
+      <h3>{% translate "Private by default" %}</h3>
+      <p>{% translate "No ads, no trackers, no analytics scripts. API keys and feed links are stored hashed and can be revoked at any time." %}</p>
+    </article>
+    <article class="card reveal">
+      <h3>{% translate "Works for everyone" %}</h3>
+      <p>{% translate "Public pages load without JavaScript, follow your light or dark setting and read right to left in Urdu and Arabic." %}</p>
+    </article>
+    <article class="card reveal">
+      <h3>{% translate "Honest about limits" %}</h3>
+      <p>{% translate "Holiday data can change at short notice when a government announces a new day off. For dates that matter, check the official source too." %}</p>
+    </article>
+  </div>
+</section>
+
+<section class="maker reveal" aria-labelledby="maker-title">
+  <div>
+    <p class="kicker">{% translate "Who builds it" %}</p>
+    <h2 id="maker-title">{{ owner }}</h2>
+    <p>{% translate "HolidayOps is designed and built by Syed Ahmer Shah. Questions about the project, or about working together, are always welcome." %}</p>
+  </div>
+  <div class="maker-links">
+    <a class="button button-arrow" href="{{ owner_url }}" rel="author">ahmershah.dev<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+    <a class="button button-ghost" href="mailto:{{ support_email }}">{{ support_email }}</a>
+  </div>
+</section>
+{% endblock %}

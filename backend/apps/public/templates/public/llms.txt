@@ -1,0 +1,26 @@
+{% autoescape off %}# HolidayOps
+
+> HolidayOps answers "is this date a working day?" for {{ country_count }} countries and {{ region_count }} regions. It combines public holidays, each country's own weekend and a company's own closures, and serves the answer through a REST API, iCal feeds, email digests and signed webhooks. The web app and public pages are in English, Urdu and Arabic.
+
+Holiday data comes from the open-source Python library `holidays` (https://github.com/vacanza/holidays). HolidayOps is open source under the MIT License and built by {{ owner }} ({{ owner_url }}). Support: {{ support_email }}.
+
+## Pages
+
+- [Home]({{ root }}): what HolidayOps does, a live "is it a working day?" check, who is off today
+- [Public holidays by country]({{ root }}holidays/): every supported country, one page per country and year
+- [Pricing]({{ root }}pricing/): the free and Pro API plans and how requests are counted
+- [About]({{ root }}about/): why the project exists and who builds it
+- [Contact]({{ root }}contact/): support, Pro plans, wrong dates and security reports
+
+## API
+
+- [Interactive API docs]({{ root }}api/v1/docs/): Swagger UI for every endpoint
+- [OpenAPI schema]({{ root }}api/v1/schema/): machine-readable OpenAPI 3 description
+- [Full reference for language models]({{ root }}llms-full.txt): endpoints, parameters, limits and every country code in one text file
+
+## Optional
+
+- [Source code]({{ repo_url }}): Django, Django REST Framework, React and TypeScript
+- [Privacy policy]({{ root }}privacy/)
+- [Terms of service]({{ root }}terms/)
+{% endautoescape %}

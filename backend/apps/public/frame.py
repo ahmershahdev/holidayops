@@ -8,10 +8,10 @@ from django.http import HttpRequest
 from django.utils import timezone
 
 from apps.public.content import LANGUAGES, PREFIX, country_name, page_path
+from apps.public.seo import OWNER, OWNER_URL, REPO_URL, SUPPORT_EMAIL
 from apps.public.theme import get_theme
 
 POPULAR = ("PK", "SA", "AE", "US", "GB", "IN")
-REPO_URL = "https://github.com/ahmershahdev/holidayops"
 
 
 def frame_context(
@@ -32,4 +32,7 @@ def frame_context(
         "year": year,
         "popular": [(country_name(c, lang), page_path(lang, c, year)) for c in POPULAR],
         "repo_url": REPO_URL,
+        "owner": OWNER,
+        "owner_url": OWNER_URL,
+        "support_email": SUPPORT_EMAIL,
     }

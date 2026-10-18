@@ -1,10 +1,6 @@
 {% extends "public/base.html" %}{% load i18n flags text %}
-{% block head %}{{ ld_breadcrumbs }}
-{{ ld_events }}{% endblock %}
+{% block head %}{{ ld_events }}{% endblock %}
 {% block content %}
-<ol class="crumbs">
-{% for name, path in breadcrumbs %}<li>{% if forloop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>
-{% endfor %}</ol>
 <header class="country-hero">
   {% include "public/_pattern.html" %}
   <div class="country-hero-copy">

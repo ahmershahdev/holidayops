@@ -1,5 +1,6 @@
-{% extends "public/base.html" %}{% load i18n static text %}
-{% block head %}<link rel="stylesheet" href="{% static 'public/landing.css' %}">{% endblock %}
+{% extends "public/base.html" %}{% load i18n static text flags %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/landing.css' %}">
+{{ ld_site }}{% endblock %}
 {% block content %}
 <section class="hero">
   <svg class="hero-route flight" viewBox="0 0 1200 520" preserveAspectRatio="none" aria-hidden="true">
@@ -8,12 +9,12 @@
     <path class="plane" style="offset-path: path('M560 530 C 700 520, 760 380, 880 300 S 1080 120, 1230 30')" d="M-14 -4 L8 -4 L16 0 L8 4 L-14 4 L-8 0 Z M-3 -4 L3 -14 L7 -14 L4 -4 Z M-3 4 L3 14 L7 14 L4 4 Z"/>
   </svg>
   <div class="hero-copy">
-    <p class="eyebrow">{% blocktranslate with countries=country_count %}{{ countries }} countries · 3 languages · one API{% endblocktranslate %}</p>
+    <a class="eyebrow live" href="#today"><i class="pulse" aria-hidden="true"></i>{% blocktranslate count counter=world.holiday_today|length %}{{ counter }} country is on a public holiday today{% plural %}{{ counter }} countries are on a public holiday today{% endblocktranslate %}</a>
     <h1 class="hero-title"><span>{% translate "Every working day," %}</span> <span class="accent-line">{% translate "in every country." %}</span></h1>
     <p class="lead">{% translate "Public holidays, weekends and your own company closures, merged into one answer: is this a working day? For payroll, HR, logistics and finance teams." %}</p>
     <div class="hero-ctas">
-      <a class="button" href="/signup">{% translate "Start free" %}</a>
-      <a class="button button-ghost" href="{{ prefix }}/holidays/">{% translate "Explore holidays" %}</a>
+      <a class="button button-arrow" href="/signup">{% translate "Start free" %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+      <a class="button button-ghost" href="#demo">{% translate "Try it without an account" %}</a>
     </div>
     <ul class="hero-stats">
       <li><strong>{{ country_count }}</strong><span>{% translate "countries" %}</span></li>
@@ -28,11 +29,30 @@
       {% for week in weeks %}{% for cell in week %}<span class="cal-cell {{ cell.kind }}"{% if cell.names %} title="{{ cell.names|as_list }}"{% endif %}>{% if cell.day %}{{ cell.day|date:"j" }}{% endif %}</span>{% endfor %}{% endfor %}
     </div>
     <p class="cal-legend"><i class="dot holiday"></i>{% translate "Holiday" %} <i class="dot weekend"></i>{% translate "Weekend" %} <i class="dot today"></i>{% translate "Today" %}</p>
+    <p class="hero-verdict {% if home_today.is_business_day %}yes{% else %}no{% endif %}"><span>{% translate "Today" %}</span><strong>{{ home_reason|capfirst }}</strong></p>
   </figure>
+</section>
+
+<section class="now night" id="today" aria-labelledby="today-title">
+  <div class="today-head">
+    <p class="kicker">{% translate "Live" %} · <time datetime="{{ world.today|date:'Y-m-d' }}">{{ world.today|cldr:"EEEE d MMMM y" }}</time></p>
+    <h2 id="today-title">{% translate "Right now, around the world" %}</h2>
+  </div>
+  <ul class="today-numbers">
+    <li class="holiday"><strong>{{ world.holiday_today|length }}</strong><span>{% translate "on a public holiday" %}</span></li>
+    <li class="weekend"><strong>{{ world.weekend_today }}</strong><span>{% translate "on their weekend" %}</span></li>
+    <li class="work"><strong>{{ working_today }}</strong><span>{% translate "at work" %}</span></li>
+  </ul>
+  {% if world.holiday_today %}
+  <ul class="today-flags" aria-label="{% translate 'Countries on a public holiday today' %}">
+    {% for place in world.holiday_today %}<li><a href="{{ place.path }}">{% flag place.code 28 %}<span>{{ place.name }}</span></a></li>{% endfor %}
+  </ul>
+  {% endif %}
 </section>
 
 <section class="demo reveal" id="demo" aria-labelledby="demo-title">
   <div class="demo-copy">
+    <p class="kicker">{% translate "Try it" %}</p>
     <h2 id="demo-title">{% translate "Is it a working day?" %}</h2>
     <p>{% translate "Ask the same engine the API uses. No account needed." %}</p>
   </div>
@@ -53,6 +73,7 @@
 </section>
 
 <section class="story" aria-labelledby="story-title">
+  <p class="kicker">01 · {% translate "Product" %}</p>
   <h2 id="story-title" class="section-title slide-in">{% translate "Everything a calendar of working days needs" %}</h2>
   <div class="bento">
     <article class="tile tile-wide reveal">
@@ -88,7 +109,28 @@
   </div>
 </section>
 
+<section class="weekends" aria-labelledby="weekends-title">
+  <p class="kicker">02 · {% translate "Weekends" %}</p>
+  <h2 id="weekends-title" class="section-title slide-in">{% translate "The weekend isn't the same everywhere" %}</h2>
+  <p class="section-lead">{% translate "A tool that assumes Saturday and Sunday gets payroll wrong in a dozen countries. HolidayOps uses each country's own weekend, from the library's rules." %}</p>
+  <div class="weekend-table" role="table" aria-label="{% translate 'Weekend patterns by number of countries' %}">
+    <div class="weekend-row weekend-head" role="row">
+      <span role="columnheader">{% translate "Countries" %}</span>
+      <span class="weekend-days" role="columnheader"><span class="sr-only">{% translate "Weekend days" %}</span>{% for d in week %}<span aria-hidden="true">{{ d|cldr:"EEE" }}</span>{% endfor %}</span>
+      <span role="columnheader">{% translate "For example" %}</span>
+    </div>
+    {% for group in world.weekends %}
+    <div class="weekend-row reveal" role="row">
+      <strong role="cell" class="weekend-count">{{ group.count }}</strong>
+      <span role="cell" class="weekend-days"><span class="sr-only">{% for d in week %}{% if forloop.counter0 in group.days %}{{ d|cldr:"EEEE" }} {% endif %}{% endfor %}</span>{% for d in week %}<i aria-hidden="true"{% if forloop.counter0 in group.days %} class="off"{% endif %}></i>{% endfor %}</span>
+      <span role="cell" class="weekend-examples">{% for place in group.examples %}<a href="{{ place.path }}">{% flag place.code 20 %}<span>{{ place.name }}</span></a>{% endfor %}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
 <section class="uses" aria-labelledby="uses-title">
+  <p class="kicker">03 · {% translate "Who it's for" %}</p>
   <h2 id="uses-title" class="section-title slide-in">{% translate "Built for the teams that count days" %}</h2>
   <ul class="uses-grid">
     <li class="reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg><h3>{% translate "Payroll" %}</h3><p>{% translate "Count the working days in a pay period for every country you pay in." %}</p></li>
@@ -100,6 +142,7 @@
 
 <section class="how" aria-labelledby="how-title">
   <div class="how-pin">
+    <p class="kicker">04 · {% translate "How it works" %}</p>
     <h2 id="how-title" class="section-title">{% translate "From sign-up to answers in three steps" %}</h2>
     <div class="how-progress" aria-hidden="true"><i></i></div>
   </div>
@@ -110,8 +153,25 @@
   </ol>
 </section>
 
+{% if world.upcoming %}
+<section class="upcoming" aria-labelledby="upcoming-title">
+  <p class="kicker">05 · {% translate "Coming up" %}</p>
+  <h2 id="upcoming-title" class="section-title slide-in">{% translate "The next days off, around the world" %}</h2>
+  <ol class="rail">
+    {% for item in world.upcoming %}<li class="ticket">
+      <time class="ticket-date" datetime="{{ item.day|date:'Y-m-d' }}"><strong>{{ item.day|date:"j" }}</strong><span>{{ item.day|cldr:"LLL" }}</span><span>{{ item.day|cldr:"EEE" }}</span></time>
+      <div class="ticket-body">
+        <a href="{{ item.place.path }}">{% flag item.place.code 24 %}<span>{{ item.place.name }}</span></a>
+        <p>{{ item.names|as_list }}</p>
+      </div>
+    </li>{% endfor %}
+  </ol>
+</section>
+{% endif %}
+
 <section class="code night reveal" aria-labelledby="code-title">
   <div>
+    <p class="kicker">06 · API</p>
     <h2 id="code-title">{% translate "One request, one clear answer" %}</h2>
     <p>{% translate "JSON over HTTPS, documented with OpenAPI. Holiday names come back in the language you ask for." %}</p>
     <a class="button" href="/api/v1/docs/">{% translate "Read the API docs" %}</a>
@@ -122,20 +182,34 @@
   </div>
 </section>
 
+<section class="faq" aria-labelledby="faq-title">
+  <div class="faq-head">
+    <p class="kicker">07 · {% translate "Questions" %}</p>
+    <h2 id="faq-title" class="section-title">{% translate "Good questions, short answers" %}</h2>
+    <p class="section-lead">{% blocktranslate %}Something else? Write to <a href="mailto:{{ support_email }}">{{ support_email }}</a>.{% endblocktranslate %}</p>
+  </div>
+  <div class="faq-list">
+    {% for question, answer in faq %}<details{% if forloop.first %} open{% endif %}>
+      <summary>{{ question }}</summary>
+      <p>{{ answer }}</p>
+    </details>{% endfor %}
+  </div>
+</section>
+
 <section class="marquee-section" aria-labelledby="marquee-title">
   <h2 id="marquee-title" class="section-title">{% translate "Holidays for every country, every year" %}</h2>
   <div class="marquee">
-    <ul class="marquee-track">{% for name, path in marquee %}<li><a href="{{ path }}">{{ name }}</a></li>{% endfor %}</ul>
-    <ul class="marquee-track" aria-hidden="true">{% for name, path in marquee %}<li><a href="{{ path }}" tabindex="-1">{{ name }}</a></li>{% endfor %}</ul>
+    <ul class="marquee-track">{% for code, name, path in marquee %}<li><a href="{{ path }}">{% flag code 20 %}<span>{{ name }}</span></a></li>{% endfor %}</ul>
+    <ul class="marquee-track" aria-hidden="true">{% for code, name, path in marquee %}<li><a href="{{ path }}" tabindex="-1">{% flag code 20 %}<span>{{ name }}</span></a></li>{% endfor %}</ul>
   </div>
-  <p><a href="{{ prefix }}/holidays/">{% blocktranslate with countries=country_count %}See all {{ countries }} countries →{% endblocktranslate %}</a></p>
+  <p><a class="text-link" href="{{ prefix }}/holidays/">{% blocktranslate with countries=country_count %}See all {{ countries }} countries →{% endblocktranslate %}</a></p>
 </section>
 
 <section class="finale reveal">
   <h2>{% translate "Start free. Upgrade when you grow." %}</h2>
   <p>{% translate "The free plan includes company calendars, feeds, digests, webhooks and 10,000 API requests a month." %}</p>
   <div class="hero-ctas">
-    <a class="button" href="/signup">{% translate "Start free" %}</a>
+    <a class="button button-arrow" href="/signup">{% translate "Start free" %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
     <a class="button button-ghost" href="{{ prefix }}/pricing/">{% translate "See pricing" %}</a>
   </div>
 </section>

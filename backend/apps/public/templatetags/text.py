@@ -6,6 +6,7 @@ from django import template
 from django.utils import translation
 
 from apps.public.content import join_list
+from apps.public.seo import fit_title
 
 register = template.Library()
 
@@ -20,3 +21,8 @@ def cldr(day: date, pattern: str) -> str:
 @register.filter
 def as_list(items: Iterable[str]) -> str:
     return join_list(items, translation.get_language() or "en")
+
+
+@register.filter
+def page_title(title: str) -> str:
+    return fit_title(title)

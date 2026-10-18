@@ -566,6 +566,483 @@
   color: var(--muted);
 }
 
+.text-link {
+  font-weight: 600;
+}
+
+/* ---- Live eyebrow and the hero card's verdict ---- */
+.eyebrow.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.eyebrow.live:hover {
+  border-color: var(--accent);
+}
+
+.pulse {
+  position: relative;
+  inline-size: 0.55rem;
+  block-size: 0.55rem;
+  border-radius: 50%;
+  background: var(--holiday);
+}
+
+.pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--holiday);
+  animation: pulse 2s var(--ease-out) infinite;
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.hero-calendar {
+  position: relative;
+}
+
+.hero-verdict {
+  position: absolute;
+  inset-block-end: -1.25rem;
+  inset-inline-end: -1rem;
+  display: grid;
+  gap: 0.1rem;
+  margin: 0;
+  padding: 0.65rem 1.1rem;
+  border-radius: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 48px -24px color-mix(in srgb, var(--ink) 45%, transparent);
+  rotate: calc(var(--dir) * -4deg);
+  animation: card-in 1.1s var(--ease-out) 700ms both;
+}
+
+.hero-verdict span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.hero-verdict strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.hero-verdict.yes strong {
+  color: var(--workday);
+}
+
+.hero-verdict.no strong {
+  color: var(--holiday);
+}
+
+/* ---- Right now around the world: fixed night colours, like the code panel ---- */
+.now {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  margin-block: clamp(2rem, 6vw, 4rem);
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border-radius: 2rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.now::before {
+  content: "";
+  position: absolute;
+  inset: -40% -10% auto auto;
+  inline-size: 36rem;
+  block-size: 36rem;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 209 193 / 0.22), transparent);
+  z-index: -1;
+}
+
+.now .kicker {
+  color: #5eead4;
+}
+
+.now h2 {
+  margin: 0;
+  color: #e6edf7;
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.today-numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.today-numbers li {
+  display: grid;
+  gap: 0.25rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid #24375c;
+}
+
+.today-numbers strong {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.today-numbers span {
+  color: #a3b3c9;
+}
+
+.today-numbers .holiday strong {
+  color: #ff8f75;
+}
+
+.today-numbers .weekend strong {
+  color: #9fb3c8;
+}
+
+.today-numbers .work strong {
+  color: #72d69d;
+}
+
+.today-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.today-flags a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-block-size: 2.75rem;
+  padding-block: 0.4rem;
+  padding-inline: 0.5rem 1rem;
+  border: 1px solid #24375c;
+  border-radius: 999px;
+  background: #111d36;
+  color: #e6edf7;
+  text-decoration: none;
+  font-weight: 600;
+  transition: border-color var(--dur-fast) var(--ease-out), translate var(--dur) var(--ease-out);
+}
+
+.today-flags a:hover {
+  border-color: #2dd4c4;
+  translate: 0 -2px;
+}
+
+/* Round flags in chips: the 4:3 image cropped to a circle. */
+.today-flags .flag,
+.weekend-examples .flag,
+.ticket .flag,
+.marquee-track .flag {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  height: auto;
+}
+
+/* ---- Weekend patterns ---- */
+.weekends {
+  margin-block: clamp(4rem, 10vw, 7rem);
+}
+
+.weekend-table {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.weekend-row {
+  display: grid;
+  grid-template-columns: 7rem auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.weekend-row + .weekend-row {
+  border-block-start: 1px solid var(--line);
+}
+
+.weekend-head {
+  padding-block: 0.75rem;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.weekend-count {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.weekend-days {
+  display: grid;
+  grid-template-columns: repeat(7, 2.25rem);
+  gap: 0.3rem;
+  justify-items: center;
+}
+
+.weekend-days i {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 0.6rem;
+  background: var(--weekend);
+}
+
+.weekend-days i.off {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--glow) 0 4px,
+    color-mix(in srgb, var(--glow) 70%, var(--surface)) 4px 8px
+  );
+  box-shadow: 0 6px 16px -8px var(--glow);
+}
+
+.weekend-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+.weekend-examples a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.weekend-examples a:hover {
+  color: var(--accent);
+}
+
+/* ---- Upcoming holidays: a rail of tickets ---- */
+.upcoming {
+  margin-block: clamp(4rem, 10vw, 7rem);
+}
+
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(17rem, 20rem);
+  gap: 1rem;
+  margin: 0;
+  padding: 0.9rem 0.25rem 1.25rem;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+}
+
+.ticket {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  scroll-snap-align: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  transition: border-color var(--dur-fast) var(--ease-out), translate var(--dur) var(--ease-out);
+}
+
+.ticket:hover {
+  border-color: var(--accent);
+  translate: 0 -4px;
+}
+
+/* The stub: a dashed tear line with a punched notch at each end. */
+.ticket-date {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 1rem 0.5rem;
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-inline-end: 2px dashed color-mix(in srgb, var(--accent) 35%, transparent);
+  text-align: center;
+}
+
+.ticket-date strong {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ticket-date span {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ticket::before,
+.ticket::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(5rem - 0.6rem);
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  clip-path: inset(50% 0 0 0);
+}
+
+.ticket::before {
+  top: -0.65rem;
+}
+
+.ticket::after {
+  bottom: -0.65rem;
+  clip-path: inset(0 0 50% 0);
+}
+
+.ticket-body {
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  padding: 1rem 1.1rem;
+  min-inline-size: 0;
+}
+
+.ticket-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.ticket-body a:hover {
+  color: var(--accent);
+}
+
+.ticket-body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ---- FAQ ---- */
+.faq {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-block: clamp(4rem, 10vw, 7rem);
+}
+
+.faq-head {
+  position: sticky;
+  top: calc(var(--header-h) + 2rem);
+  align-self: start;
+}
+
+.faq-head .section-lead {
+  margin: 0;
+}
+
+.faq-list {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.faq details {
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--surface);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.faq details[open] {
+  border-color: var(--accent);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 650;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A plus that turns into a cross. */
+.faq summary::after {
+  content: "";
+  flex: none;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: 50%;
+  background:
+    linear-gradient(currentColor, currentColor) center / 0.75rem 2px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 2px 0.75rem no-repeat,
+    var(--accent-soft);
+  color: var(--accent-strong);
+  transition: rotate var(--dur) var(--ease-out);
+}
+
+.faq details[open] summary::after {
+  rotate: 45deg;
+}
+
+.faq details p {
+  margin: 0;
+  padding: 0 1.35rem 1.25rem;
+  color: var(--muted);
+}
+
+/* ---- Marquee chips with flags ---- */
+.marquee-track a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 56rem) {
   .hero,
@@ -596,6 +1073,27 @@
     grid-template-columns: 1fr 1fr;
   }
 
+  .faq {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-head {
+    position: static;
+  }
+
+  .weekend-row {
+    grid-template-columns: 5rem 1fr;
+    gap: 0.75rem 1rem;
+  }
+
+  .weekend-examples {
+    grid-column: 2;
+  }
+
+  .weekend-head > :last-child {
+    display: none;
+  }
+
   .demo-form {
     grid-template-columns: 1fr 1fr;
   }
@@ -621,10 +1119,49 @@
   .hero-stats {
     gap: 1.25rem;
   }
+
+  .today-numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .today-numbers li {
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .weekend-row {
+    grid-template-columns: 1fr;
+    padding-inline: 1rem;
+  }
+
+  .weekend-examples {
+    grid-column: auto;
+  }
+
+  .weekend-head {
+    display: none;
+  }
+
+  .weekend-days {
+    grid-template-columns: repeat(7, minmax(0, 2.25rem));
+    justify-content: start;
+  }
+
+  .weekend-days i {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1;
+  }
+
+  .hero-verdict {
+    inset-inline-end: 0.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-calendar {
+  .hero-calendar,
+  .hero-verdict {
     rotate: none;
   }
 

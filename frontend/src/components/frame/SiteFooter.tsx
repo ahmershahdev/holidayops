@@ -9,6 +9,9 @@ import { Mark, Wordmark } from "./Brand";
 // one block shared by both stylesheets.
 const POPULAR = ["PK", "SA", "AE", "US", "GB", "IN"];
 const REPO_URL = "https://github.com/ahmershahdev/holidayops";
+const OWNER = "Syed Ahmer Shah";
+const OWNER_URL = "https://ahmershah.dev";
+const SUPPORT_EMAIL = "support@ahmershah.dev";
 
 export function sitePrefix(): string {
   const language = currentLanguage();
@@ -88,10 +91,24 @@ export function SiteFooter() {
             </a>
             <a href="/sitemap.xml">{t("footer.sitemap")}</a>
           </nav>
+          <nav className="footer-col" aria-label={t("footer.company")}>
+            <h2>{t("footer.company")}</h2>
+            <a href={`${prefix}/about/`}>{t("footer.about")}</a>
+            <a href={`${prefix}/contact/`}>{t("footer.contact")}</a>
+            <a href="/privacy/">{t("footer.privacy")}</a>
+            <a href="/terms/">{t("footer.terms")}</a>
+          </nav>
         </div>
         <div className="footer-bottom">
-          <p>© {year} HolidayOps</p>
-          <p>{t("footer.credit")}</p>
+          <p>
+            © {year} HolidayOps · {t("footer.builtBy")}{" "}
+            <a href={OWNER_URL} rel="author">
+              {OWNER}
+            </a>
+          </p>
+          <p>
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> · {t("footer.credit")}
+          </p>
         </div>
       </div>
       <p className="footer-word" aria-hidden="true" dir="ltr">

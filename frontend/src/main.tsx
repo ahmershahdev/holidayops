@@ -38,6 +38,11 @@ const queryClient = new QueryClient({
 
 applyTheme(readTheme());
 
+// Django serves /sw.js; its scope covers the public pages too, which have no script of their own.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  void navigator.serviceWorker.register("/sw.js");
+}
+
 const root = document.getElementById("root");
 if (!root) throw new Error("Missing #root element");
 

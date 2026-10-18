@@ -1,0 +1,5 @@
+{% load i18n %}<nav class="crumbs" aria-label="{% translate 'Breadcrumb' %}">
+  <ol>{% for name, path in breadcrumbs %}
+    <li>{% if forloop.last %}<span aria-current="page">{{ name }}</span>{% elif forloop.first %}<a href="{{ path }}" class="crumb-home"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 9.5 10 4l7 5.5V16a1 1 0 0 1-1 1h-3.5v-4.5h-5V17H4a1 1 0 0 1-1-1z"/></svg><span>{{ name }}</span></a>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>{% endfor %}
+  </ol>
+</nav>

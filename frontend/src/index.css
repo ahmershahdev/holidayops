@@ -458,7 +458,7 @@ html[lang="ur"] .footer-cta-title {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr repeat(3, 1fr);
+  grid-template-columns: 1.4fr repeat(4, 1fr);
   gap: 2.5rem 2rem;
 }
 
@@ -562,6 +562,19 @@ html[lang="ar"] .footer-col h2 {
 .footer-bottom p {
   margin: 0;
   color: var(--f-quiet);
+}
+
+.footer-bottom a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--f-line);
+  text-underline-offset: 0.25em;
+  transition: color 150ms ease-out, text-decoration-color 150ms ease-out;
+}
+
+.footer-bottom a:hover {
+  color: var(--f-glow);
+  text-decoration-color: currentColor;
 }
 
 /* Floating back-to-top: appears after the first screen; the ring fills as you read. Pure CSS,
@@ -715,7 +728,7 @@ html[lang="ar"] .footer-col h2 {
 
 @media (max-width: 56rem) {
   .footer-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .footer-brand {

@@ -1,0 +1,61 @@
+{% extends "public/_legal.html" %}
+{% block toc %}
+<li><a href="#who">Who we are</a></li>
+<li><a href="#collect">What we store</a></li>
+<li><a href="#cookies">Cookies</a></li>
+<li><a href="#use">How we use it</a></li>
+<li><a href="#share">Who else sees it</a></li>
+<li><a href="#keep">How long we keep it</a></li>
+<li><a href="#security">Security</a></li>
+<li><a href="#rights">Your rights</a></li>
+<li><a href="#changes">Changes</a></li>
+{% endblock %}
+{% block legal %}
+<h2 id="who">Who we are</h2>
+<p>HolidayOps is run by {{ owner }}. If you have a question about your data, write to <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+
+<h2 id="collect">What we store</h2>
+<p>You can read the public pages and use the playground without an account. We store nothing about you for that, beyond the short-lived server logs described below.</p>
+<p>When you sign up and use the app, we store:</p>
+<ul>
+  <li><strong>Your account:</strong> email address, an optional name, your language, and your password as a one-way Argon2 hash. We never see or store the password itself.</li>
+  <li><strong>Your organizations:</strong> their names, members and roles, calendars, the days you add, and invitations (including the invited email address).</li>
+  <li><strong>API keys and feed links:</strong> only a hash and a short prefix, so we can recognise them. The full key is shown once, when you create it.</li>
+  <li><strong>API usage:</strong> for each request made with a key, the endpoint, the response status and the time. This powers your quota and usage chart.</li>
+  <li><strong>Webhooks:</strong> the address you give us, its signing secret, and a log of deliveries with the response status.</li>
+  <li><strong>An audit log</strong> of changes made inside an organization, visible to its owners.</li>
+</ul>
+<p>For security, our server logs failed logins, rejected API keys and rate limits with the IP address and the page requested. Email addresses in those logs are replaced by a one-way hash.</p>
+
+<h2 id="cookies">Cookies</h2>
+<p>We use three cookies, all first-party and none for advertising or analytics:</p>
+<ul>
+  <li><code>sessionid</code> keeps you logged in.</li>
+  <li><code>csrftoken</code> protects forms against cross-site requests.</li>
+  <li><code>theme</code> remembers whether you chose light or dark.</li>
+</ul>
+
+<h2 id="use">How we use it</h2>
+<p>Only to run HolidayOps: to log you in, answer your requests, enforce plan limits, send the emails you ask for (invitations and the monthly digest, which you can turn off at any time), and keep the service secure. We don't sell data, show ads, or build profiles.</p>
+
+<h2 id="share">Who else sees it</h2>
+<ul>
+  <li><strong>Our hosting provider</strong> runs the servers and database.</li>
+  <li><strong>Our email provider</strong> delivers invitations and digests.</li>
+  <li><strong>jsDelivr</strong> serves the files for the interactive API docs page, so it sees the IP address of people who open that page.</li>
+  <li><strong>Webhook endpoints</strong> you configure receive the events you subscribe them to.</li>
+</ul>
+<p>We share data with anyone else only if the law requires it.</p>
+
+<h2 id="keep">How long we keep it</h2>
+<p>Account and organization data stay until you ask us to delete them. API usage records are deleted after 90 days. Revoked keys and feed links stop working at once.</p>
+
+<h2 id="security">Security</h2>
+<p>Traffic is encrypted with HTTPS. Passwords, API keys and feed links are stored hashed, every organization's data is kept apart from every other's, and webhook requests are signed. If you find a weakness, please <a href="/contact/">report it privately</a>.</p>
+
+<h2 id="rights">Your rights</h2>
+<p>You can ask for a copy of your data, ask us to correct it, or ask us to delete your account and everything in it. Email <a href="mailto:{{ support_email }}">{{ support_email }}</a> from the address on your account and we'll do it within 30 days. HolidayOps isn't meant for children under 16.</p>
+
+<h2 id="changes">Changes</h2>
+<p>If this policy changes, we'll update the date at the top. If the change is significant, we'll email account holders first.</p>
+{% endblock %}

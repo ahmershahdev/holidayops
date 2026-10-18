@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 20:14+0000\n"
+"POT-Creation-Date: 2026-10-18 09:01+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -223,16 +223,139 @@ msgstr "آج سے پانچ سال کے اندر کی تاریخ چنیں۔"
 msgid "That date can't be checked."
 msgstr "اس تاریخ کی جانچ نہیں ہو سکتی۔"
 
+msgid "Where does the holiday data come from?"
+msgstr "تعطیلات کا ڈیٹا کہاں سے آتا ہے؟"
+
+#
+msgid ""
+"From holidays, an open-source Python library kept up to date by a large "
+"community. HolidayOps adds each country's weekend, moved working days and "
+"your own closures on top."
+msgstr ""
+"holidays سے، جو ایک اوپن سورس Python لائبریری ہے اور جسے ایک بڑی کمیونٹی "
+"تازہ رکھتی ہے۔ HolidayOps اس پر ہر ملک کی ہفتہ وار چھٹی، منتقل شدہ کام کے دن "
+"اور آپ کی اپنی بندشیں شامل کرتا ہے۔"
+
+msgid "Does it know that weekends differ between countries?"
+msgstr "کیا اسے معلوم ہے کہ ہفتہ وار چھٹی ہر ملک میں مختلف ہوتی ہے؟"
+
+msgid ""
+"Yes. Saudi Arabia rests on Friday and Saturday, Iran on Friday, Brunei on "
+"Friday and Sunday. Every answer uses the country's own weekend, including "
+"the years before a country changed it."
+msgstr ""
+"جی ہاں۔ سعودی عرب میں جمعہ اور ہفتہ کو چھٹی ہوتی ہے، ایران میں جمعہ کو، "
+"برونائی میں جمعہ اور اتوار کو۔ ہر جواب اسی ملک کی ہفتہ وار چھٹی کے مطابق "
+"ہوتا ہے، ان برسوں سمیت جب کسی ملک نے اسے بدلا نہیں تھا۔"
+
+msgid "Can I add my company's own days off?"
+msgstr "کیا میں اپنی کمپنی کی چھٹیاں خود شامل کر سکتا ہوں؟"
+
+#
+msgid ""
+"Yes. A company calendar merges any countries and regions with your closures, "
+"half days and extra working days, and the API, feeds and webhooks answer "
+"from it."
+msgstr ""
+"جی ہاں۔ کمپنی کیلنڈر کسی بھی ملک اور علاقے کو آپ کی بندشوں، آدھے دنوں اور "
+"اضافی کام کے دنوں کے ساتھ ملاتا ہے، اور API، فیڈز اور ویب ہُکس اسی سے جواب "
+"دیتے ہیں۔"
+
+msgid "Is there a free plan?"
+msgstr "کیا کوئی مفت پلان ہے؟"
+
+msgid ""
+"Yes, free for good: 10,000 API requests a month, company calendars, iCal "
+"feeds, digests and webhooks. Pro raises the limits."
+msgstr ""
+"جی ہاں، ہمیشہ کے لیے مفت: ماہانہ 10,000 API درخواستیں، کمپنی کیلنڈر، iCal "
+"فیڈز، خلاصے اور ویب ہُکس۔ Pro میں حدیں زیادہ ہیں۔"
+
+#
+msgid "Which languages does it speak?"
+msgstr "یہ کون سی زبانیں بولتا ہے؟"
+
+msgid ""
+"The site and the app are in English, Urdu and Arabic, laid out right to left "
+"where needed. Holiday names come in the country's own language when the "
+"library has it."
+msgstr ""
+"ویب سائٹ اور ایپ انگریزی، اردو اور عربی میں ہیں، اور جہاں ضرورت ہو دائیں سے "
+"بائیں ترتیب میں۔ جب لائبریری میں موجود ہوں تو تعطیلات کے نام ملک کی اپنی "
+"زبان میں آتے ہیں۔"
+
+msgid "What if a date is wrong?"
+msgstr "اگر کوئی تاریخ غلط ہو تو؟"
+
+#, python-format
+msgid ""
+"Write to %(email)s. Most fixes belong in the holidays library, and a fix "
+"there corrects the date for everyone who uses it."
+msgstr ""
+"%(email)s پر لکھیں۔ زیادہ تر درستیاں holidays لائبریری میں ہوتی ہیں، اور "
+"وہاں کی گئی درستی ہر استعمال کرنے والے کے لیے تاریخ ٹھیک کر دیتی ہے۔"
+
 msgid "Holidays and working days for every country"
 msgstr "ہر ملک کی تعطیلات اور کام کے دن"
 
+#
+msgid "Public holidays and working days API"
+msgstr "عام تعطیلات اور کام کے دنوں کا API"
+
+#
 msgid ""
-"HolidayOps answers “is it a working day?” for 250 countries and their "
-"regions, merged with your own company closures, through a fast API, iCal "
-"feeds and webhooks."
+"Is it a working day? Public holidays, local weekends and your own closures "
+"for 250 countries, through one API, iCal feeds and webhooks."
 msgstr ""
-"HolidayOps تیز API، iCal فیڈز اور ویب ہُکس کے ذریعے 250 ممالک اور ان کے "
-"علاقوں کے لیے، آپ کی کمپنی کی چھٹیوں سمیت، بتاتا ہے کہ ”کیا آج کام کا دن ہے؟“"
+"کیا آج کام کا دن ہے؟ 250 ممالک کی عام تعطیلات، مقامی ہفتہ وار چھٹیاں اور آپ "
+"کی اپنی بندشیں، ایک API، iCal فیڈز اور ویب ہُکس کے ذریعے۔"
+
+msgid "About"
+msgstr "تعارف"
+
+#
+msgid "About HolidayOps"
+msgstr "HolidayOps کا تعارف"
+
+msgid "About HolidayOps and who builds it"
+msgstr "HolidayOps کا تعارف اور اسے کون بناتا ہے"
+
+msgid ""
+"Why HolidayOps exists, where its holiday data comes from, and the person who "
+"builds it."
+msgstr ""
+"HolidayOps کیوں بنا، اس کی تعطیلات کا ڈیٹا کہاں سے آتا ہے، اور اسے کون بناتا "
+"ہے۔"
+
+msgid "Contact"
+msgstr "رابطہ"
+
+msgid "Contact and support"
+msgstr "رابطہ اور مدد"
+
+msgid ""
+"Questions, Pro plans, wrong dates or a security report: how to reach the "
+"people behind HolidayOps."
+msgstr ""
+"سوالات، Pro پلان، غلط تاریخیں یا سکیورٹی رپورٹ: HolidayOps بنانے والوں سے "
+"رابطے کا طریقہ۔"
+
+msgid "You're offline"
+msgstr "آپ آف لائن ہیں"
+
+msgid "This page needs a connection. Check your network and try again."
+msgstr ""
+"اس صفحے کے لیے انٹرنیٹ درکار ہے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔"
+
+msgid "Home"
+msgstr "ہوم"
+
+msgid "Free"
+msgstr "مفت"
+
+#, python-format
+msgid "%(quota)s API requests a month"
+msgstr "ماہانہ %(quota)s API درخواستیں"
 
 msgid "This flight went off course"
 msgstr "یہ پرواز راستہ بھٹک گئی"
@@ -250,6 +373,9 @@ msgstr "ملک کے لحاظ سے تعطیلات دیکھیں"
 
 msgid "API docs"
 msgstr "API دستاویزات"
+
+msgid "Breadcrumb"
+msgstr "راستہ"
 
 msgid "Every working day,"
 msgstr "ہر کام کا دن،"
@@ -296,6 +422,19 @@ msgstr "OpenAPI اسکیما"
 msgid "Sitemap"
 msgstr "سائٹ میپ"
 
+#
+msgid "Company"
+msgstr "کمپنی"
+
+msgid "Privacy"
+msgstr "رازداری"
+
+msgid "Terms"
+msgstr "شرائط"
+
+msgid "Built by"
+msgstr "تیار کنندہ"
+
 msgid "Holiday data: the open-source holidays library."
 msgstr "تعطیلات کا ڈیٹا: اوپن سورس holidays لائبریری۔"
 
@@ -323,12 +462,189 @@ msgstr "ڈیوائس کے مطابق"
 msgid "Dark"
 msgstr "تاریک"
 
+msgid ""
+"A small, open-source project that answers one question well: is this date a "
+"working day, here and in our other offices?"
+msgstr ""
+"ایک چھوٹا، اوپن سورس منصوبہ جو ایک سوال کا اچھا جواب دیتا ہے: کیا یہ تاریخ "
+"یہاں اور ہمارے دوسرے دفاتر میں کام کا دن ہے؟"
+
+msgid "Why it exists"
+msgstr "یہ کیوں ہے"
+
+msgid ""
+"Counting working days sounds simple until a team spans countries. Weekends "
+"differ: Friday and Saturday in Saudi Arabia, Saturday and Sunday in "
+"Pakistan. Some holidays follow the moon and move every year. Governments "
+"swap a weekend day for a working day to make a long break. And every company "
+"has closures of its own."
+msgstr ""
+"کام کے دن گننا آسان لگتا ہے، جب تک ٹیم کئی ملکوں میں نہ ہو۔ ہفتہ وار چھٹیاں "
+"مختلف ہیں: سعودی عرب میں جمعہ اور ہفتہ، پاکستان میں ہفتہ اور اتوار۔ کچھ "
+"تعطیلات چاند کے حساب سے ہر سال بدلتی ہیں۔ حکومتیں لمبی چھٹی کے لیے ہفتہ وار "
+"چھٹی کو کام کے دن سے بدل دیتی ہیں۔ اور ہر کمپنی کی اپنی بندشیں بھی ہوتی ہیں۔"
+
+msgid ""
+"Most tools get one of these wrong, and the mistake shows up later as a late "
+"payment, a wrong leave balance or a missed delivery. HolidayOps puts all of "
+"them behind one answer, through an API, calendar feeds and webhooks."
+msgstr ""
+"زیادہ تر ٹولز ان میں سے کسی ایک میں غلطی کرتے ہیں، اور یہ غلطی بعد میں تاخیر "
+"سے ادائیگی، غلط چھٹیوں کے حساب یا چھوٹی ہوئی ڈیلیوری کی صورت میں سامنے آتی "
+"ہے۔ HolidayOps یہ سب ایک جواب میں سمیٹ دیتا ہے، API، کیلنڈر فیڈز اور ویب ہُکس "
+"کے ذریعے۔"
+
+msgid "countries"
+msgstr "ممالک"
+
+msgid "regions"
+msgstr "علاقے"
+
+#
+msgid "languages"
+msgstr "زبانیں"
+
+msgid "open-source licence"
+msgstr "اوپن سورس لائسنس"
+
+msgid "What we hold to"
+msgstr "ہمارے اصول"
+
+msgid "Open data, open code"
+msgstr "کھلا ڈیٹا، کھلا کوڈ"
+
+#, python-format
+msgid ""
+"Holiday dates come from <a href=\"https://github.com/vacanza/holidays\" "
+"rel=\"noopener\">holidays</a>, a Python library kept up to date by a large "
+"community. The code of HolidayOps itself is on <a href=\"%(repo_url)s\" "
+"rel=\"noopener\">GitHub</a> under the MIT licence."
+msgstr ""
+"تعطیلات کی تاریخیں <a href=\"https://github.com/vacanza/holidays\" "
+"rel=\"noopener\">holidays</a> سے آتی ہیں، جو ایک Python لائبریری ہے اور جسے "
+"ایک بڑی کمیونٹی تازہ رکھتی ہے۔ HolidayOps کا اپنا کوڈ MIT لائسنس کے تحت <a "
+"href=\"%(repo_url)s\" rel=\"noopener\">GitHub</a> پر ہے۔"
+
+msgid "Private by default"
+msgstr "رازداری پہلے سے"
+
+msgid ""
+"No ads, no trackers, no analytics scripts. API keys and feed links are "
+"stored hashed and can be revoked at any time."
+msgstr ""
+"نہ اشتہار، نہ ٹریکر، نہ اینالیٹکس اسکرپٹ۔ API کیز اور فیڈ لنکس ہیش کی صورت "
+"میں محفوظ ہوتے ہیں اور کسی بھی وقت منسوخ کیے جا سکتے ہیں۔"
+
+#
+msgid "Works for everyone"
+msgstr "سب کے لیے"
+
+msgid ""
+"Public pages load without JavaScript, follow your light or dark setting and "
+"read right to left in Urdu and Arabic."
+msgstr ""
+"عوامی صفحات JavaScript کے بغیر کھلتے ہیں، آپ کی روشن یا تاریک ترتیب کے مطابق "
+"چلتے ہیں اور اردو اور عربی میں دائیں سے بائیں پڑھے جاتے ہیں۔"
+
+msgid "Honest about limits"
+msgstr "حدود کے بارے میں صاف گوئی"
+
+msgid ""
+"Holiday data can change at short notice when a government announces a new "
+"day off. For dates that matter, check the official source too."
+msgstr ""
+"جب حکومت کسی نئی چھٹی کا اعلان کرتی ہے تو تعطیلات کا ڈیٹا اچانک بدل سکتا ہے۔ "
+"اہم تاریخوں کے لیے سرکاری ذریعہ بھی دیکھ لیں۔"
+
+msgid "Who builds it"
+msgstr "اسے کون بناتا ہے"
+
+msgid ""
+"HolidayOps is designed and built by Syed Ahmer Shah. Questions about the "
+"project, or about working together, are always welcome."
+msgstr ""
+"HolidayOps کو Syed Ahmer Shah نے ڈیزائن کیا اور بنایا ہے۔ منصوبے کے بارے میں "
+"یا مل کر کام کرنے کے بارے میں سوالات کا ہمیشہ خیرمقدم ہے۔"
+
 msgid "Skip to content"
 msgstr "مواد پر جائیں"
 
+msgid ""
+"One inbox, read by the person who builds HolidayOps. Tell us what you were "
+"trying to do, and we'll take it from there."
+msgstr ""
+"ایک ہی ان باکس، جسے HolidayOps بنانے والا خود پڑھتا ہے۔ ہمیں بتائیں آپ کیا "
+"کرنا چاہ رہے تھے، باقی ہم دیکھ لیں گے۔"
+
+#
+msgid "Questions and support"
+msgstr "سوالات اور مدد"
+
+msgid ""
+"Something not working, or not sure HolidayOps fits your case? Write to us."
+msgstr ""
+"کچھ کام نہیں کر رہا، یا یقین نہیں کہ HolidayOps آپ کے کام کا ہے؟ ہمیں لکھیں۔"
+
+msgid "Email support"
+msgstr "مدد کے لیے ای میل کریں"
+
+msgid "Pro plan and higher limits"
+msgstr "Pro پلان اور زیادہ حدیں"
+
+msgid ""
+"Tell us roughly how many requests you expect a month and we'll set up Pro "
+"for your organization."
+msgstr ""
+"ہمیں اندازاً بتائیں کہ ماہانہ کتنی درخواستیں متوقع ہیں، ہم آپ کی تنظیم کے لیے "
+"Pro ترتیب دے دیں گے۔"
+
+msgid "Ask about Pro"
+msgstr "Pro کے بارے میں پوچھیں"
+
+msgid "A wrong holiday date"
+msgstr "تعطیل کی غلط تاریخ"
+
+msgid ""
+"Dates come from the holidays library. Reporting it there fixes it for "
+"everyone; we're happy to pass it on for you."
+msgstr ""
+"تاریخیں holidays لائبریری سے آتی ہیں۔ وہاں رپورٹ کرنے سے سب کے لیے درست ہو "
+"جاتی ہے؛ چاہیں تو ہم آپ کی طرف سے آگے بھیج دیں گے۔"
+
+#
+msgid "Report it to holidays"
+msgstr "holidays کو رپورٹ کریں"
+
+msgid "A security issue"
+msgstr "سکیورٹی کا مسئلہ"
+
+msgid ""
+"Please don't post it publicly. Report it privately on GitHub and we'll reply "
+"within 7 days."
+msgstr ""
+"براہِ کرم اسے عوامی طور پر شائع نہ کریں۔ GitHub پر نجی طور پر رپورٹ کریں، ہم "
+"7 دن کے اندر جواب دیں گے۔"
+
+msgid "Report privately"
+msgstr "نجی طور پر رپورٹ کریں"
+
+msgid "Bugs and ideas"
+msgstr "خرابیاں اور تجاویز"
+
+msgid "HolidayOps is open source. Open an issue, or send a pull request."
+msgstr "HolidayOps اوپن سورس ہے۔ ایشو کھولیں یا پل ریکوئسٹ بھیجیں۔"
+
+msgid "Open an issue"
+msgstr "ایشو کھولیں"
+
+msgid "The maker of HolidayOps. More work and other ways to get in touch:"
+msgstr "HolidayOps کے بانی۔ مزید کام اور رابطے کے دوسرے طریقے:"
+
 #, python-format
-msgid "%(countries)s countries · 3 languages · one API"
-msgstr "%(countries)s ممالک · 3 زبانیں · ایک API"
+msgid "%(counter)s country is on a public holiday today"
+msgid_plural "%(counter)s countries are on a public holiday today"
+msgstr[0] "آج %(counter)s ملک میں عام تعطیل ہے"
+msgstr[1] "آج %(counter)s ممالک میں عام تعطیل ہے"
 
 msgid ""
 "Public holidays, weekends and your own company closures, merged into one "
@@ -337,14 +653,8 @@ msgstr ""
 "عام تعطیلات، ہفتہ وار چھٹیاں اور آپ کی کمپنی کی بندشیں، ایک جواب میں: کیا یہ "
 "کام کا دن ہے؟ پے رول، ایچ آر، لاجسٹکس اور فنانس ٹیموں کے لیے۔"
 
-msgid "Explore holidays"
-msgstr "تعطیلات دیکھیں"
-
-msgid "countries"
-msgstr "ممالک"
-
-msgid "regions"
-msgstr "علاقے"
+msgid "Try it without an account"
+msgstr "اکاؤنٹ کے بغیر آزمائیں"
 
 msgid "languages, RTL ready"
 msgstr "زبانیں، دائیں سے بائیں کے لیے تیار"
@@ -358,6 +668,30 @@ msgstr "ہفتہ وار چھٹی"
 
 msgid "Today"
 msgstr "آج"
+
+msgid "Live"
+msgstr "براہِ راست"
+
+msgid "Right now, around the world"
+msgstr "اس وقت، دنیا بھر میں"
+
+#
+msgid "on a public holiday"
+msgstr "عام تعطیل پر"
+
+msgid "on their weekend"
+msgstr "ہفتہ وار چھٹی پر"
+
+#
+msgid "at work"
+msgstr "کام پر"
+
+#
+msgid "Countries on a public holiday today"
+msgstr "آج عام تعطیل والے ممالک"
+
+msgid "Try it"
+msgstr "آزمائیں"
 
 msgid "Is it a working day?"
 msgstr "کیا یہ کام کا دن ہے؟"
@@ -443,6 +777,39 @@ msgstr ""
 "ہر کلید کی شرح کی حد، ماہانہ کوٹا اور استعمال کا چارٹ، تاکہ آپ ہمیشہ اپنی "
 "صورتحال جانیں۔"
 
+#
+msgid "Weekends"
+msgstr "ہفتہ وار چھٹیاں"
+
+msgid "The weekend isn't the same everywhere"
+msgstr "ہفتہ وار چھٹی ہر جگہ ایک جیسی نہیں"
+
+msgid ""
+"A tool that assumes Saturday and Sunday gets payroll wrong in a dozen "
+"countries. HolidayOps uses each country's own weekend, from the library's "
+"rules."
+msgstr ""
+"جو ٹول ہفتہ اور اتوار فرض کر لے، وہ درجن بھر ملکوں میں تنخواہ کا حساب غلط کر "
+"دیتا ہے۔ HolidayOps لائبریری کے اصولوں سے ہر ملک کی اپنی ہفتہ وار چھٹی "
+"استعمال کرتا ہے۔"
+
+msgid "Weekend patterns by number of countries"
+msgstr "ممالک کی تعداد کے لحاظ سے ہفتہ وار چھٹی کے انداز"
+
+#
+msgid "Countries"
+msgstr "ممالک"
+
+#
+msgid "Weekend days"
+msgstr "ہفتہ وار چھٹی کے دن"
+
+msgid "For example"
+msgstr "مثلاً"
+
+msgid "Who it's for"
+msgstr "کس کے لیے"
+
 msgid "Built for the teams that count days"
 msgstr "ان ٹیموں کے لیے جو دن گنتی ہیں"
 
@@ -472,6 +839,9 @@ msgstr "مالیات"
 msgid "Settle on the next business day in the right market, every time."
 msgstr "ہر بار درست مارکیٹ کے اگلے کاروباری دن پر ادائیگی طے کریں۔"
 
+msgid "How it works"
+msgstr "یہ کیسے کام کرتا ہے"
+
 msgid "From sign-up to answers in three steps"
 msgstr "سائن اپ سے جواب تک تین مراحل میں"
 
@@ -500,6 +870,12 @@ msgid ""
 msgstr ""
 "کلید کے ساتھ API بلائیں، فیڈ سبسکرائب کریں، یا کچھ بدلنے پر ویب ہُک پائیں۔"
 
+msgid "Coming up"
+msgstr "آنے والی"
+
+msgid "The next days off, around the world"
+msgstr "دنیا بھر میں اگلی چھٹیاں"
+
 msgid "One request, one clear answer"
 msgstr "ایک درخواست، ایک واضح جواب"
 
@@ -512,6 +888,19 @@ msgstr ""
 
 msgid "Read the API docs"
 msgstr "API دستاویزات پڑھیں"
+
+msgid "Questions"
+msgstr "سوالات"
+
+msgid "Good questions, short answers"
+msgstr "اچھے سوال، مختصر جواب"
+
+#, python-format
+msgid ""
+"Something else? Write to <a href=\"mailto:"
+"%(support_email)s\">%(support_email)s</a>."
+msgstr ""
+"کچھ اور؟ <a href=\"mailto:%(support_email)s\">%(support_email)s</a> پر لکھیں۔"
 
 msgid "Holidays for every country, every year"
 msgstr "ہر ملک کی، ہر سال کی تعطیلات"
@@ -533,6 +922,9 @@ msgstr ""
 msgid "See pricing"
 msgstr "قیمتیں دیکھیں"
 
+msgid "Try again"
+msgstr "دوبارہ کوشش کریں"
+
 msgid ""
 "Every plan has the full product: company calendars, iCal feeds, digests and "
 "webhooks. Plans only differ in how much you call the API."
@@ -542,9 +934,6 @@ msgstr ""
 
 msgid "Pro"
 msgstr "پرو"
-
-msgid "Free"
-msgstr "مفت"
 
 msgid "For production"
 msgstr "پروڈکشن کے لیے"
@@ -643,9 +1032,6 @@ msgstr "ماہانہ درخواستیں"
 msgid "Included"
 msgstr "شامل"
 
-msgid "Questions"
-msgstr "سوالات"
-
 msgid "Do the public holiday pages count against my quota?"
 msgstr "کیا عوامی تعطیلات کے صفحات میرے کوٹے میں گنے جاتے ہیں؟"
 
@@ -655,9 +1041,6 @@ msgid ""
 msgstr ""
 "نہیں۔ صرف آپ کی کسی کلید سے کی گئی API کالز گنی جاتی ہیں۔ تعطیلات دیکھنا، "
 "پلے گراؤنڈ اور کیلنڈر فیڈز مفت ہیں۔"
-
-msgid "Where does the holiday data come from?"
-msgstr "تعطیلات کا ڈیٹا کہاں سے آتا ہے؟"
 
 msgid ""
 "From the open-source holidays library, kept up to date by its community. "
@@ -734,6 +1117,10 @@ msgid "Public holidays in %(place)s %(year)s"
 msgstr "%(place)s میں %(year)s کی عام تعطیلات"
 
 #, python-format
+msgid "%(place)s holidays %(year)s"
+msgstr "%(place)s کی تعطیلات %(year)s"
+
+#, python-format
 msgid ""
 "All %(count)s public holidays in %(place)s in %(year)s, with dates, weekdays "
 "and %(working)s working days."
@@ -741,8 +1128,15 @@ msgstr ""
 "%(place)s میں %(year)s کی تمام %(count)s عام تعطیلات، تاریخوں، دنوں اور "
 "%(working)s کام کے دنوں کے ساتھ۔"
 
-msgid "API plans for HolidayOps: requests per minute, per month and API keys."
-msgstr "HolidayOps کے API پلان: فی منٹ اور ماہانہ درخواستیں اور API کلیدیں۔"
+msgid "Pricing: free and Pro API plans"
+msgstr "قیمتیں: مفت اور Pro API پلان"
+
+msgid ""
+"Start free with 10,000 API requests a month. Every plan includes company "
+"calendars, iCal feeds, digests and webhooks."
+msgstr ""
+"ماہانہ 10,000 API درخواستوں کے ساتھ مفت شروع کریں۔ ہر پلان میں کمپنی کیلنڈر، "
+"iCal فیڈز، خلاصے اور ویب ہُکس شامل ہیں۔"
 
 msgid "Usage chart"
 msgstr "استعمال کا چارٹ"
