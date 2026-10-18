@@ -34,3 +34,18 @@ class SignupSerializer(serializers.Serializer[Any]):
 class LoginSerializer(serializers.Serializer[Any]):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, max_length=128)
+
+
+class ForgotPasswordSerializer(serializers.Serializer[Any]):
+    email = serializers.EmailField()
+
+
+class ResetPasswordSerializer(serializers.Serializer[Any]):
+    email = serializers.EmailField()
+    code = serializers.RegexField(r"^\d{6}$", max_length=6)
+    password = serializers.CharField(write_only=True, max_length=128)
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        candidate = User(email=attrs["email"])
+        password_validation.validate_password(attrs["password"], candidate)
+        return attrs

@@ -11,6 +11,36 @@ Reporting a vulnerability: see [SECURITY.md](../SECURITY.md).
   session-only. A key reaches its own org's private calendars and nothing else.
 - Passwords use Argon2.
 
+## Password reset
+
+`apps/accounts/resets.py`, `POST /api/v1/auth/password/forgot/` and `/reset/`.
+
+- A 6-digit code from `secrets.randbelow`, stored only as `HMAC-SHA256(SECRET_KEY, user id + code)`
+  and compared in constant time. A database leak alone gives no live codes.
+- Valid for 10 minutes and once: the row is locked (`select_for_update`) while it is checked and
+  marked used, so two parallel requests can't both use it. Asking for a new code retires the old
+  one. Five wrong guesses retire it too.
+- "Forgot" answers `202` with the same text whether or not the account exists. At most 3 codes per
+  address per hour (inbox flooding), `password_reset` throttle 5/hour per IP, and `auth` 10/minute
+  per IP on the reset step.
+- A successful reset logs the user in, emails a "password changed" notice and, because the
+  password hash changes, signs out every other session.
+- Emails are sent inside the request, so the code never sits in the Celery broker.
+
+## Email delivery
+
+`EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend` sends every email (reset codes,
+invites, digests) through Resend's HTTPS API with `RESEND_API_KEY`; failures log the status code
+only, never the address. `DEFAULT_FROM_EMAIL` must be on a domain verified in Resend (SPF, DKIM).
+
+## Injection and XSS
+
+- SQL: only the Django ORM, which sends parameters separately from the query (the role PDO
+  prepared statements play in PHP). No raw SQL with string formatting.
+- HTML: Django templates (pages and emails) autoescape; React escapes text; JSON-LD is escaped
+  like `json_script`; third-party SVGs pass an allowlist sanitiser.
+- CSP blocks inline script everywhere and all script on public pages, so an injected tag can't run.
+
 ## Tenant isolation
 
 - No query on org data without the org filter.

@@ -1,0 +1,7 @@
+{% load i18n %}{% translate "Reset your password" %}
+
+{% translate "Enter this code on the reset page to choose a new password." %}
+
+{{ code }}
+
+{% blocktranslate %}The code works once and expires in {{ minutes }} minutes. If you didn't ask for it, ignore this email: your password stays the same.{% endblocktranslate %}

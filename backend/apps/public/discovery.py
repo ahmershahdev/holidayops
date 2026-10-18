@@ -29,6 +29,7 @@ def robots(request: HttpRequest) -> HttpResponse:
         "Disallow: /feeds/",
         "Disallow: /invite",
         "Disallow: /unsubscribe",
+        "Disallow: /forgot-password",
         "Disallow: /theme/",
         "Disallow: /offline/",
         # The docs and schema are meant to be read; the rest of /api/ is data.

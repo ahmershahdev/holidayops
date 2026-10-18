@@ -41,7 +41,21 @@
     "hidePassword": "Hide password",
     "point1": "250 countries and their regions",
     "point2": "Your own closures and half days",
-    "point3": "iCal feeds, digests and webhooks"
+    "point3": "iCal feeds, digests and webhooks",
+    "forgot": "Forgot password?",
+    "forgotTitle": "Reset your password",
+    "forgotLead": "Enter the email you signed up with. We'll send a 6-digit code that works for 10 minutes.",
+    "sendCode": "Send code",
+    "codeTitle": "Check your email",
+    "codeLead": "If an account uses this address, a code is on its way to",
+    "code": "6-digit code",
+    "newPassword": "New password",
+    "resetPassword": "Reset password",
+    "codeExpires": "The code works once and expires in 10 minutes.",
+    "resend": "Send a new code",
+    "resendIn": "Send again in {{seconds}} s",
+    "otherEmail": "Use another email",
+    "remembered": "Remembered it?"
   },
   "status": {
     "businessDay": "Business day",

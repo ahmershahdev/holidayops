@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 09:01+0000\n"
+"POT-Creation-Date: 2026-10-18 13:37+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -14,11 +14,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Your HolidayOps password reset code"
+msgstr "آپ کا HolidayOps پاس ورڈ ری سیٹ کوڈ"
+
+msgid "Your HolidayOps password was changed"
+msgstr "آپ کا HolidayOps پاس ورڈ بدل دیا گیا"
+
 msgid "An account with this email already exists."
 msgstr "اس ای میل سے پہلے ہی ایک اکاؤنٹ موجود ہے۔"
 
+msgid "Your password was changed"
+msgstr "آپ کا پاس ورڈ بدل دیا گیا"
+
+msgid ""
+"The password for your HolidayOps account was just changed, and every other "
+"session was signed out."
+msgstr ""
+"آپ کے HolidayOps اکاؤنٹ کا پاس ورڈ ابھی بدلا گیا ہے، اور باقی تمام سیشن سائن "
+"آؤٹ کر دیے گئے ہیں۔"
+
+#, python-format
+msgid "If this wasn't you, reset your password now and write to %(support)s."
+msgstr ""
+"اگر یہ آپ نے نہیں کیا تو ابھی اپنا پاس ورڈ ری سیٹ کریں اور %(support)s پر "
+"لکھیں۔"
+
+msgid "Reset your password"
+msgstr "اپنا پاس ورڈ ری سیٹ کریں"
+
+msgid "Enter this code on the reset page to choose a new password."
+msgstr "نیا پاس ورڈ چننے کے لیے یہ کوڈ ری سیٹ والے صفحے پر درج کریں۔"
+
+#, python-format
+msgid ""
+"The code works once and expires in %(minutes)s minutes. If you didn't ask "
+"for it, ignore this email: your password stays the same."
+msgstr ""
+"یہ کوڈ ایک بار کام کرتا ہے اور %(minutes)s منٹ میں ختم ہو جاتا ہے۔ اگر آپ نے "
+"یہ نہیں مانگا تو اس ای میل کو نظرانداز کریں: آپ کا پاس ورڈ وہی رہے گا۔"
+
 msgid "Invalid email or password."
 msgstr "ای میل یا پاس ورڈ درست نہیں۔"
+
+#
+msgid "If an account uses this email, we sent it a code."
+msgstr "اگر اس ای میل سے کوئی اکاؤنٹ ہے تو ہم نے اسے کوڈ بھیج دیا ہے۔"
+
+msgid "That code is wrong or has expired. Ask for a new one."
+msgstr "یہ کوڈ غلط ہے یا ختم ہو چکا ہے۔ نیا کوڈ منگوائیں۔"
 
 msgid "Invalid or revoked API key."
 msgstr "API کلید غلط ہے یا منسوخ کی جا چکی ہے۔"

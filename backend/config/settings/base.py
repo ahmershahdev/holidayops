@@ -136,6 +136,7 @@ REST_FRAMEWORK = {
         "anon": env("API_ANON_RATE", "60/minute"),
         "user": env("API_USER_RATE", "600/minute"),
         "auth": env("API_AUTH_RATE", "10/minute"),
+        "password_reset": env("API_PASSWORD_RESET_RATE", "5/hour"),
         "invite": env("API_INVITE_RATE", "30/hour"),
         "public": env("PUBLIC_PAGE_RATE", "120/minute"),
     },
@@ -207,6 +208,9 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = env("EMAIL_USE_TLS", "true").lower() == "true"
 EMAIL_TIMEOUT = 10
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "HolidayOps <no-reply@holidayops.test>")
+# EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend sends through Resend's HTTP API;
+# DEFAULT_FROM_EMAIL must then be on a domain verified in Resend.
+RESEND_API_KEY = env("RESEND_API_KEY", "")
 
 LOGGING = {
     "version": 1,
