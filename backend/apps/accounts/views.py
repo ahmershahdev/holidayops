@@ -2,6 +2,8 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+from django.core.cache import cache
+from django.db import IntegrityError
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
@@ -15,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.accounts import data, sso, twofactor
-from apps.accounts.auth import current_user
+from apps.accounts.auth import CsrfProtected, current_user
 from apps.accounts.models import SocialIdentity, User
 from apps.accounts.resets import request_reset, reset_password
 from apps.accounts.serializers import (
@@ -37,6 +39,8 @@ from apps.accounts.serializers import (
 from config.security_log import email_ref, security_event
 
 MODEL_BACKEND = "django.contrib.auth.backends.ModelBackend"
+ACCOUNT_LOGIN_FAILURES = 10
+ACCOUNT_LOGIN_WINDOW = 15 * 60
 
 
 def finish_login(request: Request, user: User, event: str) -> Response:
@@ -60,7 +64,7 @@ class CsrfView(APIView):
 
 
 class SignupView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "auth"
 
     @extend_schema(request=SignupSerializer, responses={201: UserSerializer})
@@ -71,16 +75,23 @@ class SignupView(APIView):
         language = (
             request.LANGUAGE_CODE if request.LANGUAGE_CODE in dict(settings.LANGUAGES) else "en"
         )
-        user = User.objects.create_user(
-            data["email"], data["password"], name=data.get("name", ""), language=language
-        )
+        try:
+            user = User.objects.create_user(
+                data["email"], data["password"], name=data.get("name", ""), language=language
+            )
+        except IntegrityError:
+            # Two sign-ups with one address at the same moment: the unique index decides.
+            return Response(
+                {"email": [_("An account with this email already exists.")]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         login(request._request, user, backend="django.contrib.auth.backends.ModelBackend")
         security_event("auth.signup", request, logging.INFO, user=user.pk)
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
 
 class LoginView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "auth"
 
     @extend_schema(
@@ -90,15 +101,31 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"].lower()
+        # Per account as well as per IP: a botnet spreads guesses over many addresses.
+        failures = f"login-failures:{email_ref(email)}"
+        if (cache.get(failures) or 0) >= ACCOUNT_LOGIN_FAILURES:
+            security_event("rate_limited", request, scope="account", account=email_ref(email))
+            return Response(
+                {
+                    "detail": _(
+                        "Too many attempts for this account. Wait 15 minutes, or reset the "
+                        "password."
+                    )
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
         user = authenticate(
             request._request, email=email, password=serializer.validated_data["password"]
         )
         if user is None:
+            cache.add(failures, 0, timeout=ACCOUNT_LOGIN_WINDOW)
+            cache.incr(failures)
             security_event("auth.login_failed", request, account=email_ref(email))
             return Response(
                 {"non_field_errors": [_("Invalid email or password.")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        cache.delete(failures)
         return finish_login(request, user, "auth.login")
 
 
@@ -127,7 +154,7 @@ class MeView(APIView):
 
 
 class ForgotPasswordView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "password_reset"
 
     @extend_schema(
@@ -149,7 +176,7 @@ class ForgotPasswordView(APIView):
 
 
 class ResetPasswordView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "auth"
 
     @extend_schema(
@@ -174,7 +201,7 @@ class ResetPasswordView(APIView):
 class TwoFactorVerifyView(APIView):
     """The second step of a login that needs a code."""
 
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "auth"
 
     @extend_schema(request=CodeSerializer, responses=UserSerializer)

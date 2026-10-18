@@ -19,6 +19,11 @@ OWNER = "Syed Ahmer Shah"
 OWNER_URL = "https://ahmershah.dev"
 SUPPORT_EMAIL = "support@ahmershah.dev"
 REPO_URL = "https://github.com/ahmershahdev/holidayops"
+OWNER_PROFILES = [
+    OWNER_URL,
+    "https://github.com/ahmershahdev",
+    "https://linkedin.com/in/syedahmershah",
+]
 # Same escapes as Django's json_script, so a holiday name can never close the <script> element.
 _JSON_ESCAPES = {ord("<"): "\\u003C", ord(">"): "\\u003E", ord("&"): "\\u0026"}
 
@@ -73,7 +78,12 @@ def site_graph(request: HttpRequest, lang: str, faq: list[tuple[str, str]]) -> S
             "logo": request.build_absolute_uri(static("public/icon-512.png")),
             "email": SUPPORT_EMAIL,
             "sameAs": [REPO_URL],
-            "founder": {"@type": "Person", "name": OWNER, "url": OWNER_URL},
+            "founder": {
+                "@type": "Person",
+                "name": OWNER,
+                "url": OWNER_URL,
+                "sameAs": OWNER_PROFILES,
+            },
             "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "customer support",

@@ -68,6 +68,16 @@ actor set to null. Both share the `account_data` throttle (10/hour).
 invites, digests) through Resend's HTTPS API with `RESEND_API_KEY`; failures log the status code
 only, never the address. `DEFAULT_FROM_EMAIL` must be on a domain verified in Resend (SPF, DKIM).
 
+## CSRF and brute force
+
+- Session writes need a CSRF token. DRF only checks it for signed-in users, so the anonymous
+  auth endpoints (signup, login, forgot, reset, two-factor verify) add `CsrfProtected`: without it
+  another site could sign a browser into the attacker's account (login CSRF).
+- Logins are limited per IP (`auth`, 10/minute) and per account: 10 failures in 15 minutes lock
+  that address for the rest of the window, so guesses spread over many IPs still stop.
+- Two sign-ups with one address at the same moment: the unique index decides and the loser gets a
+  normal 400, not a 500.
+
 ## Injection and XSS
 
 - SQL: only the Django ORM, which sends parameters separately from the query (the role PDO
@@ -75,6 +85,9 @@ only, never the address. `DEFAULT_FROM_EMAIL` must be on a domain verified in Re
 - HTML: Django templates (pages and emails) autoescape; React escapes text; JSON-LD is escaped
   like `json_script`; third-party SVGs pass an allowlist sanitiser.
 - CSP blocks inline script everywhere and all script on public pages, so an injected tag can't run.
+  Public pages also allow no inline styles (only the internal `/style/` guide does), so a nonce
+  isn't needed: there is nothing inline to allow.
+- `Permissions-Policy` turns off camera, microphone, location, payment and USB for every page.
 
 ## Tenant isolation
 

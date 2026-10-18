@@ -41,9 +41,7 @@ def not_found(request: HttpRequest, exception: Exception | None = None) -> HttpR
             "noindex": True,
         }
         response = render(request, "public/404.html", context, status=404)
-    response["Content-Security-Policy"] = PUBLIC_POLICY.replace(
-        "style-src 'self'", "style-src 'self' 'unsafe-inline'"
-    )
+    response["Content-Security-Policy"] = PUBLIC_POLICY
     return response
 
 

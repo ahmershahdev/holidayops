@@ -19,10 +19,20 @@
 {% if canonical %}<meta property="og:url" content="{{ canonical }}">{% endif %}
 <meta property="og:locale" content="{% if lang == 'ur' %}ur_PK{% elif lang == 'ar' %}ar_AR{% else %}en_US{% endif %}">
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'public/og-image.png' %}">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="HolidayOps: every working day, in every country.">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'public/og-square.jpg' %}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="HolidayOps: every working day, in every country.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{% if head_title %}{{ head_title }}{% else %}{{ title|page_title }}{% endif %}">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'public/og-image.png' %}">
+<meta name="twitter:image:alt" content="HolidayOps: every working day, in every country.">
 <meta name="author" content="Syed Ahmer Shah">
 <link rel="icon" href="{% static 'public/icon.svg' %}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{% static 'public/apple-touch-icon.png' %}">

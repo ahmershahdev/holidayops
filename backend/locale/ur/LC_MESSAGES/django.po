@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:40+0000\n"
+"POT-Creation-Date: 2026-10-18 15:34+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -52,6 +52,12 @@ msgid ""
 msgstr ""
 "یہ کوڈ ایک بار کام کرتا ہے اور %(minutes)s منٹ میں ختم ہو جاتا ہے۔ اگر آپ نے "
 "یہ نہیں مانگا تو اس ای میل کو نظرانداز کریں: آپ کا پاس ورڈ وہی رہے گا۔"
+
+msgid ""
+"Too many attempts for this account. Wait 15 minutes, or reset the password."
+msgstr ""
+"اس اکاؤنٹ پر بہت زیادہ کوششیں ہو چکی ہیں۔ 15 منٹ انتظار کریں یا پاس ورڈ ری "
+"سیٹ کریں۔"
 
 msgid "Invalid email or password."
 msgstr "ای میل یا پاس ورڈ درست نہیں۔"
@@ -520,6 +526,10 @@ msgstr "ہر کام کا دن،"
 
 msgid "in every country."
 msgstr "ہر ملک میں۔"
+
+#
+msgid "My calendars"
+msgstr "میرے کیلنڈر"
 
 msgid "Log in"
 msgstr "لاگ اِن"

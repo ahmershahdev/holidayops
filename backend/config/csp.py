@@ -15,6 +15,10 @@ DOCS_POLICY = (
     "frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
 )
 DOCS_PATH = "/api/v1/docs/"
+# Nothing here uses a camera, microphone, location or payment API, so no page or embed may ask.
+PERMISSIONS_POLICY = (
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+)
 # WhiteNoise answers before this middleware runs. An SVG opened directly is a document that
 # could run script, so static SVGs get their own policy even though the flags are sanitised.
 STATIC_SVG_POLICY = "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'"
@@ -31,6 +35,7 @@ class ContentSecurityPolicyMiddleware:
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
         response = self.get_response(request)
+        response.setdefault("Permissions-Policy", PERMISSIONS_POLICY)
         if "Content-Security-Policy" not in response:
             policy = DOCS_POLICY if request.path == DOCS_PATH else API_POLICY
             response["Content-Security-Policy"] = policy

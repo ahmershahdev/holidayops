@@ -63,9 +63,7 @@ MARQUEE = (
     "CN",
 )
 # The demo form posts back here; everything else on the page stays as strict as other pages.
-LANDING_POLICY = PUBLIC_POLICY.replace("form-action 'none'", "form-action 'self'").replace(
-    "style-src 'self'", "style-src 'self' 'unsafe-inline'"
-)
+LANDING_POLICY = PUBLIC_POLICY.replace("form-action 'none'", "form-action 'self'")
 
 
 @dataclass(frozen=True)

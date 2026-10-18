@@ -1945,6 +1945,10 @@ html[lang="ar"] .kicker {
   -webkit-text-stroke: 2px var(--accent);
 }
 
+.error-page .plane {
+  offset-path: path("M10 120 C 150 120, 220 40, 330 60");
+}
+
 .error-page .flight {
   max-width: 40rem;
 }

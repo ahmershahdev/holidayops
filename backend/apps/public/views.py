@@ -29,7 +29,7 @@ from apps.public.content import (
     year_page,
     year_window,
 )
-from apps.public.frame import frame_context
+from apps.public.frame import frame_context, signed_in
 from apps.public.palette import swatches
 from apps.public.patterns import pattern
 from apps.public.seo import breadcrumbs, fit_title, ld_json
@@ -93,8 +93,11 @@ def public_page(view: View) -> View:
         # The hour keeps "today" on the landing and the year calendars current: a page cached
         # before midnight would otherwise ring yesterday until the cache expired.
         hour = timezone.now().strftime("%Y%m%d%H")
+        # Signed-in visitors see "My calendars" instead of log in / start free: one cached copy
+        # each way, never anything about the person.
+        who = "in" if signed_in(request) else "out"
         key = (
-            f"page:{build_id()}:{hour}:{get_theme(request)}:{request.get_host()}:"
+            f"page:{build_id()}:{hour}:{who}:{get_theme(request)}:{request.get_host()}:"
             f"{request.get_full_path()}"
         )
         cached: HttpResponse | None = cache.get(key)

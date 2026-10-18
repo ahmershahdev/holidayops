@@ -1,9 +1,11 @@
 from typing import Any
 
 import pytest
+from django.core.cache import cache
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
+from config.security_log import email_ref
 from config.settings import base as base_settings
 from tests.factories import PASSWORD, UserFactory
 
@@ -47,12 +49,37 @@ def test_login_logout_cycle(client: APIClient) -> None:
 def test_session_writes_require_csrf() -> None:
     UserFactory.create(email="csrf@example.com")
     client = APIClient(enforce_csrf_checks=True)
-    login = client.post("/api/v1/auth/login/", {"email": "csrf@example.com", "password": PASSWORD})
-    assert login.status_code == 200
+    body = {"email": "csrf@example.com", "password": PASSWORD}
+    # Login CSRF: without a token another site could sign the browser into its own account.
+    assert client.post("/api/v1/auth/login/", body).status_code == 403
+    token = client.get("/api/v1/auth/csrf/").json()["csrf_token"]
+    assert client.post("/api/v1/auth/login/", body, HTTP_X_CSRFTOKEN=token).status_code == 200
     assert client.post("/api/v1/orgs/", {"name": "Acme"}).status_code == 403
     token = client.get("/api/v1/auth/csrf/").json()["csrf_token"]
     response = client.post("/api/v1/orgs/", {"name": "Acme"}, HTTP_X_CSRFTOKEN=token)
     assert response.status_code == 201
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/api/v1/auth/signup/",
+        "/api/v1/auth/password/forgot/",
+        "/api/v1/auth/password/reset/",
+        "/api/v1/auth/2fa/verify/",
+    ],
+)
+def test_anonymous_auth_posts_need_a_csrf_token(path: str) -> None:
+    assert APIClient(enforce_csrf_checks=True).post(path, {}).status_code == 403
+
+
+def test_one_account_locks_after_ten_failed_logins(client: APIClient) -> None:
+    UserFactory.create(email="target@example.com")
+    cache.set(f"login-failures:{email_ref('target@example.com')}", 10)
+    body = {"email": "target@example.com", "password": PASSWORD}
+    assert client.post("/api/v1/auth/login/", body).status_code == 429
+    cache.delete(f"login-failures:{email_ref('target@example.com')}")
+    assert client.post("/api/v1/auth/login/", body).status_code == 200
 
 
 def test_login_is_throttled(client: APIClient) -> None:

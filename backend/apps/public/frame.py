@@ -14,6 +14,11 @@ from apps.public.theme import get_theme
 POPULAR = ("PK", "SA", "AE", "US", "GB", "IN")
 
 
+def signed_in(request: HttpRequest) -> bool:
+    user = getattr(request, "user", None)
+    return bool(user and user.is_authenticated)
+
+
 def frame_context(
     request: HttpRequest, lang: str, path_for: Callable[[str], str] | None = None
 ) -> dict[str, Any]:
@@ -35,4 +40,5 @@ def frame_context(
         "owner": OWNER,
         "owner_url": OWNER_URL,
         "support_email": SUPPORT_EMAIL,
+        "signed_in": signed_in(request),
     }
