@@ -1,0 +1,27 @@
+{% extends "public/base.html" %}{% load i18n static %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/tools.css' %}">{% endblock %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Status" %}</p>
+  <h1>{{ title }}</h1>
+</header>
+
+<section class="status-banner {% if all_ok %}ok{% else %}down{% endif %}" role="status">
+  <span class="status-dot" aria-hidden="true"></span>
+  <div>
+    <p class="status-headline">{% if all_ok %}{% translate "Everything is running." %}{% else %}{% translate "Some parts need attention." %}{% endif %}</p>
+    <p class="muted">{% blocktranslate with time=checked_at|time:"H:i" %}Checked just now, at {{ time }} UTC. Reload to check again.{% endblocktranslate %}</p>
+  </div>
+</section>
+
+<ul class="status-list">
+  {% for check in checks %}<li class="{% if check.ok %}ok{% else %}down{% endif %}">
+    <span class="status-dot" aria-hidden="true"></span>
+    <strong>{{ check.name }}</strong>
+    <span class="muted">{{ check.detail }}{% if check.ms is not None %} · {{ check.ms }} ms{% endif %}</span>
+    <span class="status-word">{% if check.ok %}{% translate "Operational" %}{% else %}{% translate "Down" %}{% endif %}</span>
+  </li>{% endfor %}
+</ul>
+
+<p class="tool-links">{% blocktranslate %}Something wrong that this page doesn't show? Write to <a href="mailto:{{ support_email }}">{{ support_email }}</a>.{% endblocktranslate %} · <a href="/changelog/">{% translate "Changelog" %}</a></p>
+{% endblock %}

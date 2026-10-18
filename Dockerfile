@@ -30,6 +30,7 @@ RUN apt-get update \
 WORKDIR /app
 COPY --from=deps /opt/venv /opt/venv
 COPY backend/ ./
+COPY CHANGELOG.md ./CHANGELOG.md
 COPY --from=web /web/dist ./spa
 RUN DJANGO_SECRET_KEY=collectstatic-only REDIS_URL=redis://unused python manage.py collectstatic --noinput
 USER app

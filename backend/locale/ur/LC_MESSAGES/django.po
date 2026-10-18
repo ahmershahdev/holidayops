@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:18+0000\n"
+"POT-Creation-Date: 2026-10-18 14:40+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -435,6 +435,19 @@ msgid "This page needs a connection. Check your network and try again."
 msgstr ""
 "اس صفحے کے لیے انٹرنیٹ درکار ہے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔"
 
+msgid "Status"
+msgstr "سسٹم کی حالت"
+
+msgid "System status"
+msgstr "سسٹم کی حالت"
+
+msgid ""
+"Live health of the HolidayOps API, website, database, background jobs and "
+"holiday data, checked on every visit."
+msgstr ""
+"HolidayOps کے API، ویب سائٹ، ڈیٹا بیس، پس منظر کے کاموں اور تعطیلات کے ڈیٹا "
+"کی براہِ راست حالت، ہر بار کھولنے پر جانچی جاتی ہے۔"
+
 msgid "Home"
 msgstr "ہوم"
 
@@ -444,6 +457,43 @@ msgstr "مفت"
 #, python-format
 msgid "%(quota)s API requests a month"
 msgstr "ماہانہ %(quota)s API درخواستیں"
+
+msgid "API and website"
+msgstr "API اور ویب سائٹ"
+
+msgid "Answering requests"
+msgstr "درخواستوں کا جواب دے رہا ہے"
+
+msgid "Database"
+msgstr "ڈیٹا بیس"
+
+msgid "Connected"
+msgstr "منسلک"
+
+msgid "Not answering"
+msgstr "جواب نہیں دے رہا"
+
+msgid "Cache and rate limits"
+msgstr "کیش اور درخواستوں کی حدیں"
+
+#
+msgid "Feeds, digests and webhooks"
+msgstr "فیڈز، خلاصے اور ویب ہُکس"
+
+#, python-format
+msgid "Last heartbeat %(seconds)s s ago"
+msgstr "آخری دھڑکن %(seconds)s سیکنڈ پہلے"
+
+msgid "No heartbeat yet"
+msgstr "ابھی تک کوئی دھڑکن نہیں"
+
+#
+msgid "Holiday data"
+msgstr "تعطیلات کا ڈیٹا"
+
+#, python-format
+msgid "holidays %(version)s, %(count)s countries"
+msgstr "holidays %(version)s، %(count)s ممالک"
 
 msgid "This flight went off course"
 msgstr "یہ پرواز راستہ بھٹک گئی"
@@ -514,6 +564,9 @@ msgstr "ڈویلپرز"
 
 msgid "OpenAPI schema"
 msgstr "OpenAPI اسکیما"
+
+msgid "Changelog"
+msgstr "تبدیلیوں کی فہرست"
 
 msgid "Sitemap"
 msgstr "سائٹ میپ"
@@ -1252,6 +1305,30 @@ msgid ""
 msgstr ""
 "ایپ، ای میلز اور تعطیلات کے نام انگریزی، اردو اور عربی میں ہیں، دائیں سے "
 "بائیں ترتیب کے ساتھ۔"
+
+msgid "Everything is running."
+msgstr "سب کچھ ٹھیک چل رہا ہے۔"
+
+msgid "Some parts need attention."
+msgstr "کچھ حصوں پر توجہ درکار ہے۔"
+
+#, python-format
+msgid "Checked just now, at %(time)s UTC. Reload to check again."
+msgstr "ابھی %(time)s UTC پر جانچا گیا۔ دوبارہ جانچنے کے لیے صفحہ تازہ کریں۔"
+
+msgid "Operational"
+msgstr "فعال"
+
+msgid "Down"
+msgstr "بند"
+
+#, python-format
+msgid ""
+"Something wrong that this page doesn't show? Write to <a href=\"mailto:"
+"%(support_email)s\">%(support_email)s</a>."
+msgstr ""
+"کوئی خرابی جو یہ صفحہ نہیں دکھا رہا؟ <a href=\"mailto:"
+"%(support_email)s\">%(support_email)s</a> پر لکھیں۔"
 
 msgid "Each country on its own local date. Updated every hour."
 msgstr "ہر ملک اپنی مقامی تاریخ پر۔ ہر گھنٹے تازہ۔"

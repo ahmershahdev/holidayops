@@ -1,0 +1,19 @@
+{% extends "public/base.html" %}{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'public/tools.css' %}">{% endblock %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">Changelog</p>
+  <h1>What's new</h1>
+  <p class="lead">{{ description }}</p>
+</header>
+
+<ol class="timeline">
+  {% for release in releases %}<li class="reveal">
+    <time datetime="{{ release.day|date:'Y-m-d' }}">{{ release.day|date:"j F Y" }}</time>
+    <h2>{{ release.title }}</h2>
+    <ul>{% for item in release.items %}<li>{{ item }}</li>{% endfor %}</ul>
+  </li>{% endfor %}
+</ol>
+
+<p class="tool-links"><a href="/status/">System status</a> · <a href="{{ repo_url }}/commits/main" rel="noopener">Full history on GitHub</a></p>
+{% endblock %}

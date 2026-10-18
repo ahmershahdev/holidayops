@@ -75,6 +75,18 @@ around it.
   flag-coloured patterns and full-year calendars, pricing, about and contact pages.
 - English, Urdu and Arabic, with right-to-left layouts and CLDR names for countries, days and months.
 - Installable as a PWA, with an offline fallback page.
+- "Who is off today" for every country on its local date, an embeddable widget, and a
+  working-day overlap tool for up to four countries.
+- Public status page and changelog.
+
+**Accounts and security**
+
+- Two-factor sign-in (authenticator app, recovery codes), sign in with Google or Microsoft.
+- Password reset by a one-time emailed code (Resend), self-serve data export and account deletion.
+
+**SDKs**
+
+- Python and TypeScript clients generated from the OpenAPI schema: [sdks/](sdks/).
 
 ## Screenshots
 
