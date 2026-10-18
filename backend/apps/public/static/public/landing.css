@@ -24,6 +24,7 @@
 }
 
 .hero-route .plane {
+  offset-path: path("M560 530 C 700 520, 760 380, 880 300 S 1080 120, 1230 30");
   animation-duration: 3.2s;
 }
 

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 14:40+0000\n"
+"POT-Creation-Date: 2026-10-18 15:34+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Arabic\n"
@@ -51,6 +51,11 @@ msgid ""
 msgstr ""
 "يعمل الرمز مرة واحدة وينتهي بعد %(minutes)s دقائق. إن لم تطلبه، فتجاهل هذه "
 "الرسالة: ستبقى كلمة مرورك كما هي."
+
+msgid ""
+"Too many attempts for this account. Wait 15 minutes, or reset the password."
+msgstr ""
+"محاولات كثيرة جدًا لهذا الحساب. انتظر 15 دقيقة أو أعد تعيين كلمة المرور."
 
 msgid "Invalid email or password."
 msgstr "البريد الإلكتروني أو كلمة المرور غير صحيحة."
@@ -506,6 +511,10 @@ msgstr "كل يوم عمل،"
 
 msgid "in every country."
 msgstr "في كل دولة."
+
+#
+msgid "My calendars"
+msgstr "تقويماتي"
 
 msgid "Log in"
 msgstr "تسجيل الدخول"

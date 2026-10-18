@@ -11,6 +11,7 @@ from apps.core import list_countries
 from apps.public.content import country_name
 from apps.public.seo import DESCRIPTION_MAX, TITLE_MAX, fit_title
 from apps.public.views import year_meta
+from tests.factories import UserFactory
 
 YEAR = timezone.now().year
 PAGES = [
@@ -120,3 +121,23 @@ def test_footer_credits_the_owner() -> None:
     assert 'href="mailto:support@ahmershah.dev"' in page
     for path in ("/about/", "/contact/", "/privacy/", "/terms/"):
         assert f'href="{path}"' in page
+
+
+@pytest.mark.django_db
+def test_signed_in_visitors_get_their_own_header() -> None:
+    out = Client().get("/about/").content.decode()
+    assert 'href="/signup"' in out
+    client = Client()
+    client.force_login(UserFactory.create())
+    page = client.get("/about/").content.decode()
+    assert 'href="/signup"' not in page
+    assert 'href="/app">' in page
+    assert 'href="/signup"' in Client().get("/about/").content.decode()
+
+
+def test_no_inline_styles_on_public_pages() -> None:
+    for path in ("/", "/about/", "/nope-404/"):
+        response = Client().get(path)
+        assert "unsafe-inline" not in response["Content-Security-Policy"]
+        assert "manifest-src 'self'" in response["Content-Security-Policy"]
+        assert "camera=()" in response["Permissions-Policy"]
