@@ -69,8 +69,13 @@ export function ForgotPasswordPage() {
   const reset = useMutation({
     mutationFn: () =>
       unwrap(api.POST("/api/v1/auth/password/reset/", { body: { email, code, password } })),
-    onSuccess: async (user) => {
-      client.setQueryData(["me"], user);
+    onSuccess: async (result) => {
+      // With two-factor on, the new password only gets as far as the code step.
+      if ("two_factor_required" in result) {
+        navigate("/login?two_factor=1&next=/app");
+        return;
+      }
+      client.setQueryData(["me"], result);
       await client.invalidateQueries({ queryKey: ["csrf"] });
       navigate("/app");
     },

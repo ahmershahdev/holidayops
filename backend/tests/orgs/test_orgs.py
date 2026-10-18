@@ -4,7 +4,9 @@ import pytest
 from rest_framework.test import APIClient
 
 from apps.accounts.models import User
-from apps.orgs.models import AuditLog, Membership, Role
+from apps.orgs.models import AuditLog, Membership, Organization, Role
+from apps.orgs.scoping import unique_slug
+from apps.orgs.views import APP_PATHS
 from tests.factories import MembershipFactory, UserFactory
 
 pytestmark = pytest.mark.django_db
@@ -103,3 +105,7 @@ def test_viewer_reads_but_cannot_write_and_audit_log_is_admin_only(
     assert client.get(f"/api/v1/orgs/{slug}/members/").status_code == 200
     assert client.post(f"/api/v1/orgs/{slug}/members/", {}).status_code == 403
     assert client.get(f"/api/v1/orgs/{slug}/audit-log/").status_code == 403
+
+
+def test_org_slug_never_shadows_an_app_page() -> None:
+    assert unique_slug("Account", Organization.objects.none(), reserved=APP_PATHS) == "account-2"

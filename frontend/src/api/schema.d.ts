@@ -4,6 +4,103 @@
  */
 
 export interface paths {
+    "/api/v1/auth/2fa/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_2fa_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/2fa/confirm/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_2fa_confirm_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/2fa/disable/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_2fa_disable_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/2fa/recovery-codes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_2fa_recovery_codes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/2fa/setup/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_2fa_setup_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/2fa/verify/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description The second step of a login that needs a code. */
+        post: operations["auth_2fa_verify_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/csrf/": {
         parameters: {
             query?: never;
@@ -15,6 +112,38 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/identities/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_identities_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/identities/{provider}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["auth_identities_destroy"];
         options?: never;
         head?: never;
         patch?: never;
@@ -68,6 +197,38 @@ export interface paths {
         patch: operations["auth_me_partial_update"];
         trace?: never;
     };
+    "/api/v1/auth/me/delete/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_me_delete_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/me/export/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_me_export_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/password/forgot/": {
         parameters: {
             query?: never;
@@ -110,6 +271,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["auth_signup_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/sso/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_sso_list"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -769,6 +946,9 @@ export interface components {
             holidays: string[];
             half_day: boolean;
         };
+        CodeRequest: {
+            code: string;
+        };
         Country: {
             code: string;
             name: string;
@@ -802,6 +982,11 @@ export interface components {
             name: string;
             kind: components["schemas"]["CustomDayKindEnum"];
         };
+        DeleteAccountRequest: {
+            /** @default  */
+            password: string;
+            confirm: string;
+        };
         Delivery: {
             /** Format: uuid */
             readonly id: string;
@@ -822,6 +1007,11 @@ export interface components {
             subscribed: boolean;
             /** Format: date */
             last_sent_on: string | null;
+        };
+        DisableTwoFactorRequest: {
+            code: string;
+            /** @default  */
+            password: string;
         };
         /**
          * @description * `calendar.updated` - calendar.updated
@@ -891,6 +1081,13 @@ export interface components {
             language: string | null;
             categories: string[];
             holidays: components["schemas"]["Holiday"][];
+        };
+        Identity: {
+            provider: string;
+            /** Format: email */
+            email: string;
+            /** Format: date-time */
+            created_at: string;
         };
         Invite: {
             readonly id: number;
@@ -1054,6 +1251,10 @@ export interface components {
             events?: components["schemas"]["EventsEnum"][];
             is_active?: boolean;
         };
+        Provider: {
+            id: string;
+            name: string;
+        };
         /**
          * @description * `working_day` - working_day
          *     * `weekend` - weekend
@@ -1065,6 +1266,9 @@ export interface components {
          * @enum {string}
          */
         ReasonEnum: "working_day" | "weekend" | "holiday" | "weekend_workday" | "closure" | "half_day" | "custom_working_day";
+        RecoveryCodes: {
+            recovery_codes: string[];
+        };
         ResetPasswordRequest: {
             /** Format: email */
             email: string;
@@ -1102,6 +1306,18 @@ export interface components {
          * @enum {string}
          */
         StatusEnum: "pending" | "success" | "failed";
+        TwoFactorRequired: {
+            two_factor_required: boolean;
+        };
+        TwoFactorSetup: {
+            secret: string;
+            uri: string;
+            qr: string;
+        };
+        TwoFactorStatus: {
+            enabled: boolean;
+            recovery_codes_left: number;
+        };
         UnsubscribeRequest: {
             token: string;
         };
@@ -1126,6 +1342,8 @@ export interface components {
             readonly email: string;
             name?: string;
             language?: components["schemas"]["LanguageEnum"];
+            readonly two_factor: boolean;
+            readonly has_password: boolean;
         };
         UserRequest: {
             name?: string;
@@ -1172,6 +1390,143 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    auth_2fa_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorStatus"];
+                };
+            };
+        };
+    };
+    auth_2fa_confirm_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CodeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CodeRequest"];
+                "multipart/form-data": components["schemas"]["CodeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodes"];
+                };
+            };
+        };
+    };
+    auth_2fa_disable_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DisableTwoFactorRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["DisableTwoFactorRequest"];
+                "multipart/form-data": components["schemas"]["DisableTwoFactorRequest"];
+            };
+        };
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    auth_2fa_recovery_codes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CodeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CodeRequest"];
+                "multipart/form-data": components["schemas"]["CodeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecoveryCodes"];
+                };
+            };
+        };
+    };
+    auth_2fa_setup_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorSetup"];
+                };
+            };
+        };
+    };
+    auth_2fa_verify_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CodeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CodeRequest"];
+                "multipart/form-data": components["schemas"]["CodeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
     auth_csrf_retrieve: {
         parameters: {
             query?: never;
@@ -1188,6 +1543,45 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Csrf"];
                 };
+            };
+        };
+    };
+    auth_identities_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Identity"][];
+                };
+            };
+        };
+    };
+    auth_identities_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1212,6 +1606,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["User"];
+                };
+            };
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorRequired"];
                 };
             };
         };
@@ -1278,6 +1680,51 @@ export interface operations {
             };
         };
     };
+    auth_me_delete_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["DeleteAccountRequest"];
+                "multipart/form-data": components["schemas"]["DeleteAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    auth_me_export_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     auth_password_forgot_create: {
         parameters: {
             query?: never;
@@ -1326,6 +1773,14 @@ export interface operations {
                     "application/json": components["schemas"]["User"];
                 };
             };
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorRequired"];
+                };
+            };
         };
     };
     auth_signup_create: {
@@ -1349,6 +1804,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    auth_sso_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Provider"][];
                 };
             };
         };

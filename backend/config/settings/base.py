@@ -137,6 +137,7 @@ REST_FRAMEWORK = {
         "user": env("API_USER_RATE", "600/minute"),
         "auth": env("API_AUTH_RATE", "10/minute"),
         "password_reset": env("API_PASSWORD_RESET_RATE", "5/hour"),
+        "account_data": env("API_ACCOUNT_DATA_RATE", "10/hour"),
         "invite": env("API_INVITE_RATE", "30/hour"),
         "public": env("PUBLIC_PAGE_RATE", "120/minute"),
     },
@@ -211,6 +212,13 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "HolidayOps <no-reply@holidayops.
 # EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend sends through Resend's HTTP API;
 # DEFAULT_FROM_EMAIL must then be on a domain verified in Resend.
 RESEND_API_KEY = env("RESEND_API_KEY", "")
+
+# Sign in with Google / Microsoft; a provider is offered only when both values are set.
+# Redirect URI to register with each: {APP_URL}/sso/<google|microsoft>/callback/
+SSO_CLIENTS = {
+    "google": (env("GOOGLE_CLIENT_ID", ""), env("GOOGLE_CLIENT_SECRET", "")),
+    "microsoft": (env("MICROSOFT_CLIENT_ID", ""), env("MICROSOFT_CLIENT_SECRET", "")),
+}
 
 LOGGING = {
     "version": 1,

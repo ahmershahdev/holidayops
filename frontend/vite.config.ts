@@ -6,6 +6,7 @@ import { defineConfig } from "vitest/config";
 const DJANGO_PATHS = [
   "/api",
   "/feeds",
+  "/sso",
   "/holidays",
   "/pricing",
   "/about",
