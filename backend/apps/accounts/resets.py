@@ -17,6 +17,7 @@ from django.utils.translation import gettext as _
 from django.utils.translation import gettext_noop
 
 from apps.accounts.models import PasswordResetCode, User
+from apps.public.seo import SUPPORT_EMAIL
 
 CODE_TTL = timedelta(minutes=10)
 MAX_ATTEMPTS = 5
@@ -99,5 +100,5 @@ def reset_password(email: str, code: str, password: str) -> User | None:
         # matches).
         user.set_password(password)
         user.save(update_fields=["password"])
-    _send(user, "password_changed", CHANGED_SUBJECT, {})
+    _send(user, "password_changed", CHANGED_SUBJECT, {"support": SUPPORT_EMAIL})
     return user
