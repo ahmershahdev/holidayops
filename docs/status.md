@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-24 (through #48). Update at the end of every work session.
+Last updated: 2026-10-24 (through #50). Update at the end of every work session.
 
 ## Run it
 
@@ -27,6 +27,7 @@ Recent work:
 | #44 | Signed-in visitors get "My calendars" in the public header and footer (page cache keyed signed in / out); CSRF on anonymous auth endpoints (login CSRF); per-account login lock (10 failures / 15 min); signup race returns 400; no inline styles on public pages; `Permissions-Policy`; square `og:image`, Twitter tags, founder `sameAs` |
 | #46 | Email verification by code at sign-up (no account enumeration, squatting-proof, unconfirmed accounts pruned after 7 days); security notice emails via Resend; honeypot + reCAPTCHA v3 with v2 fallback on sign-up/reset; nonce CSP with `'strict-dynamic'` for the web app; 413 on bodies over 512 KB, Gunicorn limits; themed searchable dropdowns (CSS-only `base-select` on public pages); `/guide/` for beginners; Pro priced at US$19 (`PLAN_PRO_PRICE`); signed-out `auth/me` is 204, not 403 |
 | #48 | Authenticator and webhook secrets encrypted at rest (`FIELD_ENCRYPTION_KEYS`, `manage.py reencrypt`); signed-in devices screen with sign-out; `scripts/attack_simulation.py` against the production image (all checks pass); `.env` values stripped, quoted sender address |
+| #50 | Status page heartbeat works in development (`shared` cache alias on Redis); unused screenshots removed; AGENTS.md lists the account, crypto and session helpers and the new rules |
 
 Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
 project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article
@@ -85,8 +86,12 @@ npm audit and Dependabot in CI. Details: [security.md](security.md).
   add a throwaway query string to see template changes.
 - Class names on the landing page share one stylesheet with the calendars: `.today` is a calendar
   cell, so the live section is `.now`.
-- The status page's job heartbeat needs a shared cache: with the local-memory cache in development
-  the worker and the web process can't see each other, so it shows "No heartbeat yet".
+- The worker's heartbeat goes through `caches["shared"]` (Redis in development and production), so
+  `/status/` shows background jobs as running about a minute after `npm run dev` starts Beat. "No
+  heartbeat yet" means the worker or Beat isn't running, or was started before the last settings
+  change: restart `npm run dev`.
+- Run the attack simulation over `127.0.0.1`, not `localhost`: on Windows `localhost` tries IPv6
+  first and adds about 2 s to every request, which makes the rate-limit checks fail.
 - New migrations: restart `npm run dev` (it migrates on start) or run `manage.py migrate`.
 - Sign-up codes in development are printed in the `api`/`worker` terminal (console email backend).
 - To try the reCAPTCHA checkbox locally, use Google's public v2 test keys from <https://developers.google.com/recaptcha/docs/faq> (they always pass and show a warning); never in production.

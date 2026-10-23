@@ -107,10 +107,11 @@ DATABASES: dict[str, dict[str, Any]] = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# "shared" holds what other processes must see (the worker's heartbeat on /status/). It is a
+# separate alias so development can share it through Redis while page caches stay per process.
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-    }
+    "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+    "shared": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache", "LOCATION": "shared"},
 }
 
 LANGUAGE_CODE = "en"

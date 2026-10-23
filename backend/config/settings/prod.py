@@ -17,12 +17,8 @@ if not FIELD_ENCRYPTION_KEYS:
 # New objects rather than in-place edits: base's lists and dicts are shared with every module
 # that star-imports it.
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL"),
-    }
-}
+_redis = {"BACKEND": "django_redis.cache.RedisCache", "LOCATION": env("REDIS_URL")}
+CACHES = {"default": _redis, "shared": _redis}
 
 CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
 

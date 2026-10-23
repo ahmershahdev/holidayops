@@ -1,7 +1,7 @@
 import time
 
 import pytest
-from django.core.cache import cache
+from django.core.cache import caches
 from django.test import Client
 
 from apps.public.status import HEARTBEAT_KEY, checks, releases
@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_checks_report_each_part() -> None:
-    cache.delete(HEARTBEAT_KEY)
+    caches["shared"].delete(HEARTBEAT_KEY)
     results = {c.name: c for c in checks()}
     assert results["Database"].ok
     assert results["Cache and rate limits"].ok
@@ -21,7 +21,7 @@ def test_checks_report_each_part() -> None:
 
 
 def test_status_page_is_never_cached() -> None:
-    cache.set(HEARTBEAT_KEY, time.time() - 3600)
+    caches["shared"].set(HEARTBEAT_KEY, time.time() - 3600)
     first = Client().get("/status/").content.decode()
     assert "Some parts need attention." in first
     heartbeat()
