@@ -4,6 +4,8 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
+from config.crypto import EncryptedCharField
+
 
 class UserManager(BaseUserManager["User"]):
     use_in_migrations = True
@@ -65,11 +67,12 @@ class EmailCode(models.Model):
 
 
 class TwoFactor(models.Model):
-    """An authenticator-app secret. It has to stay readable to check codes, so it is stored as
-    is; `confirmed_at` is set once the user proves their app produces matching codes."""
+    """An authenticator-app secret. It has to stay readable to check codes, so it is encrypted
+    rather than hashed; `confirmed_at` is set once the user proves their app produces matching
+    codes."""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="two_factor")
-    secret = models.CharField(max_length=64)
+    secret = EncryptedCharField(max_length=255)
     confirmed_at = models.DateTimeField(null=True, blank=True)
     last_step = models.BigIntegerField(default=0)
 
@@ -103,3 +106,17 @@ class SocialIdentity(models.Model):
 
     def __str__(self) -> str:
         return f"{self.provider} identity of user {self.user_id}"
+
+
+class UserSession(models.Model):
+    """Where a user is signed in (apps/accounts/sessions.py)."""
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sessions")
+    session_key = models.CharField(max_length=40, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_seen_at = models.DateTimeField()
+    ip = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=300, blank=True)
+
+    def __str__(self) -> str:
+        return f"session of user {self.user_id}"

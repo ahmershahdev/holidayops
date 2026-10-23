@@ -131,6 +131,16 @@ class IdentitySerializer(serializers.Serializer[Any]):
     created_at = serializers.DateTimeField()
 
 
+class SessionSerializer(serializers.Serializer[Any]):
+    id = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+    last_seen_at = serializers.DateTimeField()
+    ip = serializers.CharField(allow_null=True)
+    browser = serializers.CharField()
+    system = serializers.CharField()
+    current = serializers.BooleanField()
+
+
 class DeleteAccountSerializer(serializers.Serializer[Any]):
     password = serializers.CharField(write_only=True, max_length=128, required=False, default="")
     confirm = serializers.CharField(max_length=254)

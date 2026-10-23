@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView
 
-from apps.accounts import captcha, codes, data, emails, sso, twofactor
+from apps.accounts import captcha, codes, data, emails, sessions, sso, twofactor
 from apps.accounts.auth import CsrfProtected, current_user
 from apps.accounts.models import SocialIdentity, User
 from apps.accounts.serializers import (
@@ -32,6 +32,7 @@ from apps.accounts.serializers import (
     ProviderSerializer,
     RecoveryCodesSerializer,
     ResetPasswordSerializer,
+    SessionSerializer,
     SignupSerializer,
     TwoFactorRequiredSerializer,
     TwoFactorSetupSerializer,
@@ -451,6 +452,58 @@ class IdentityView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         security_event("auth.sso_unlinked", request, logging.INFO, user=user.pk, provider=provider)
         emails.notify(user, "sso_unlinked")
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SessionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(responses=SessionSerializer(many=True))
+    def get(self, request: Request) -> Response:
+        current = request.session.session_key
+        rows = []
+        for row in sessions.active(current_user(request)):
+            browser, system = sessions.describe(row.user_agent)
+            rows.append(
+                {
+                    "id": row.pk,
+                    "created_at": row.created_at,
+                    "last_seen_at": row.last_seen_at,
+                    "ip": row.ip,
+                    "browser": browser,
+                    "system": system,
+                    "current": row.session_key == current,
+                }
+            )
+        return Response(SessionSerializer(rows, many=True).data)
+
+
+class EndOtherSessionsView(APIView):
+    """Sign out every device but this one."""
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        request=None,
+        responses=inline_serializer("EndedSessions", {"ended": serializers.IntegerField()}),
+    )
+    def post(self, request: Request) -> Response:
+        user = current_user(request)
+        ended = sessions.end(user, keep=request.session.session_key)
+        security_event("auth.sessions_ended", request, logging.INFO, user=user.pk, ended=ended)
+        return Response({"ended": ended})
+
+
+class SessionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(request=None, responses={204: None})
+    def delete(self, request: Request, session_id: int) -> Response:
+        user = current_user(request)
+        # The current session ends through logout, which also clears its cookie.
+        if not sessions.end(user, keep=request.session.session_key, only=session_id):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        security_event("auth.session_ended", request, logging.INFO, user=user.pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

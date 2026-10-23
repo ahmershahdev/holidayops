@@ -41,6 +41,7 @@ backend/apps/public/   server-rendered site: views, landing, pages, world (live 
                        discovery (robots, llms, manifest, sw), sitemaps, templates, static
 backend/tests/         mirrors apps/
 frontend/src/          api/ (generated), components/, pages/, i18n/, lib/
+scripts/               attack_simulation.py (stdlib only, run against the production image)
 docs/                  architecture, security, seo, deployment, roadmap, status, design/
 ```
 
@@ -110,6 +111,8 @@ npm run seed                 # demo user, org and calendar (needs DEMO_PASSWORD)
 npm run messages             # refresh and compile ur/ar catalogs (in the backend container)
 docker compose up -d         # everything in containers
 docker compose -f docker-compose.prod.yml up --build     # production image on :8080
+docker compose -f docker-compose.prod.yml -f docker/simulation.yml up --build -d
+python scripts/attack_simulation.py                     # attack test on that image
 cd backend
 uv run --env-file ../.env pytest
 uv run pytest tests/core --cov=apps/core --cov-branch --cov-fail-under=100

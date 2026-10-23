@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-24 (through #46). Update at the end of every work session.
+Last updated: 2026-10-24 (through #48). Update at the end of every work session.
 
 ## Run it
 
@@ -26,6 +26,7 @@ Recent work:
 | #43 | `manifest-src 'self'` in the public CSP (console error), select arrows kept in every form, CSS banner comments removed, stricter comment rule |
 | #44 | Signed-in visitors get "My calendars" in the public header and footer (page cache keyed signed in / out); CSRF on anonymous auth endpoints (login CSRF); per-account login lock (10 failures / 15 min); signup race returns 400; no inline styles on public pages; `Permissions-Policy`; square `og:image`, Twitter tags, founder `sameAs` |
 | #46 | Email verification by code at sign-up (no account enumeration, squatting-proof, unconfirmed accounts pruned after 7 days); security notice emails via Resend; honeypot + reCAPTCHA v3 with v2 fallback on sign-up/reset; nonce CSP with `'strict-dynamic'` for the web app; 413 on bodies over 512 KB, Gunicorn limits; themed searchable dropdowns (CSS-only `base-select` on public pages); `/guide/` for beginners; Pro priced at US$19 (`PLAN_PRO_PRICE`); signed-out `auth/me` is 204, not 403 |
+| #48 | Authenticator and webhook secrets encrypted at rest (`FIELD_ENCRYPTION_KEYS`, `manage.py reencrypt`); signed-in devices screen with sign-out; `scripts/attack_simulation.py` against the production image (all checks pass); `.env` values stripped, quoted sender address |
 
 Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
 project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article
@@ -35,18 +36,9 @@ project card plus a case study (`/blogs/holidayops-case-study-working-days-api`)
 
 The code is feature-complete. Stop adding features; finish these, then host and close.
 
-Done in #46: email verification, signup without enumeration, bot check (old items 1, 2 and 4).
+Done: email verification, signup without enumeration, bot check (#46); encrypted secrets, sessions screen, attack simulation (#48). Only hosting is left.
 
-1. **Encrypt authenticator secrets at rest** (`TwoFactor.secret` is plaintext): a key from the
-   environment, not `SECRET_KEY`, so rotating one doesn't break the other.
-2. **Sessions screen**: list signed-in devices in account settings and sign out the others.
-3. **Simulated-users test** on the production image (`docker compose -f docker-compose.prod.yml
-   up --build`): script 10 to 17 users (owner, admin, member, viewer, API-key client, anonymous
-   visitor) through every action, including attackers trying cross-org access (IDOR), CSRF,
-   stored XSS in names, webhooks to internal addresses (SSRF), password guessing, racing the
-   count limits, replaying 2FA and reset codes, and API-key and quota abuse. Watch the
-   `holidayops.security` log and `/status/`; fix what breaks, add a test for each fix.
-4. **Hosting** (free; owner plans February): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
+1. **Hosting** (free; owner plans February): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
    worker, beat, MySQL, Redis), Cloudflare for DNS and TLS on `holidayops.ahmershah.dev`, Resend
    free tier for email, UptimeRobot and Sentry free plans, nightly MySQL backups. Then the 5.4
    docs: live URL in the README and the portfolio card.
@@ -76,7 +68,7 @@ npm audit and Dependabot in CI. Details: [security.md](security.md).
   need adding to it.
 - [ ] Legal review of `/privacy/` and `/terms/` before launch.
 - [ ] Update local Node.js to 22.22 or newer (jsdom warns on 22.19).
-- [ ] Items 1 to 4 of "Next session" above.
+- [ ] Hosting ("Next session" above). Set `FIELD_ENCRYPTION_KEYS` on the server and keep a copy of it outside the server.
 - [ ] Before launch: create reCAPTCHA v3 and v2 keys for the live domain, verify the sending domain in Resend, set `PLAN_PRO_PRICE` if not 19.
 - [ ] Strings added in #46 (guide, emails, bot check) need the native-speaker review too.
 

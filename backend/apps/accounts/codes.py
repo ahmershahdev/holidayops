@@ -14,7 +14,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.utils import timezone
 
-from apps.accounts import emails
+from apps.accounts import emails, sessions
 from apps.accounts.models import EmailCode, User
 
 Purpose = EmailCode.Purpose
@@ -118,6 +118,7 @@ def reset_password(email: str, code: str, password: str) -> User | None:
         # A provider account linked on an address nobody checked could belong to whoever made
         # it; proving the mailbox here cuts it loose (see sso.Provider.trusts_email).
         user.identities.filter(email_verified=False).delete()
+    sessions.end(user)
     emails.queue(user, "password_changed", emails.CHANGED_SUBJECT)
     return user
 

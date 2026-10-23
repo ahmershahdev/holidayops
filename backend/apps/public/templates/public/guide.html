@@ -42,8 +42,8 @@
       <h2>{% translate "Make an organization" %}</h2>
       <p>{% translate "An organization is your company's shared space. Give it a name; you become its owner. Later, invite colleagues by email and choose what each may do:" %}</p>
       <ul>
-        <li>{% translate "Owner: everything, including deleting the organization." %}</li>
-        <li>{% translate "Admin: manages people, API keys and webhooks." %}</li>
+        <li>{% translate "Owner: everything, including API keys and deleting the organization." %}</li>
+        <li>{% translate "Admin: manages people and webhooks, and can see API keys." %}</li>
         <li>{% translate "Member: edits calendars and their days off." %}</li>
         <li>{% translate "Viewer: can look, not change." %}</li>
       </ul>
@@ -81,7 +81,7 @@
     <span class="guide-num" aria-hidden="true">7</span>
     <div class="prose">
       <h2>{% translate "Connect your software (optional)" %}</h2>
-      <p>{% translate "Developers can ask the same questions through the API. In the organization's settings, create an API key and copy it: it is shown once. Then:" %}</p>
+      <p>{% translate "Developers can ask the same questions through the API. The owner creates an API key in the organization's settings; copy it: it is shown once. Then:" %}</p>
       <pre class="ltr" dir="ltr"><code>curl -H "Authorization: Bearer hops_..." \
   "{{ origin }}/api/v1/business-days/check/?country=PK&amp;date=2027-03-23"</code></pre>
       <p>{% blocktranslate %}Every endpoint is described in the <a href="{{ docs }}">API docs</a>, where you can try it in the browser. Webhooks tell your system when a calendar changes.{% endblocktranslate %}</p>

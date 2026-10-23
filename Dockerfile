@@ -32,7 +32,7 @@ COPY --from=deps /opt/venv /opt/venv
 COPY backend/ ./
 COPY CHANGELOG.md ./CHANGELOG.md
 COPY --from=web /web/dist ./spa
-RUN DJANGO_SECRET_KEY=collectstatic-only REDIS_URL=redis://unused python manage.py collectstatic --noinput
+RUN DJANGO_SECRET_KEY=collectstatic-only FIELD_ENCRYPTION_KEYS=collectstatic-only REDIS_URL=redis://unused python manage.py collectstatic --noinput
 USER app
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \

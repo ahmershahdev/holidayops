@@ -389,5 +389,17 @@
   "dropdown": {
     "search": "Search",
     "empty": "No matches"
+  },
+  "sessions": {
+    "title": "Signed-in devices",
+    "lead": "Every browser where this account is signed in. Don't recognise one? Sign it out and change your password.",
+    "device": "{{browser}} on {{system}}",
+    "unknownBrowser": "A browser",
+    "unknownSystem": "an unknown system",
+    "unknownDevice": "Unknown device",
+    "thisDevice": "This device",
+    "lastSeen": "Last active {{when}}",
+    "signOut": "Sign out",
+    "signOutOthers": "Sign out all other devices"
   }
 }

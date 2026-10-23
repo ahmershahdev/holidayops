@@ -417,5 +417,17 @@
   "dropdown": {
     "search": "بحث",
     "empty": "لا توجد نتائج"
+  },
+  "sessions": {
+    "title": "الأجهزة المسجّل دخولها",
+    "lead": "كل متصفح سُجّل فيه الدخول إلى هذا الحساب. لا تعرف أحدها؟ سجّل خروجه وغيّر كلمة المرور.",
+    "device": "{{browser}} على {{system}}",
+    "unknownBrowser": "متصفح",
+    "unknownSystem": "نظام غير معروف",
+    "unknownDevice": "جهاز غير معروف",
+    "thisDevice": "هذا الجهاز",
+    "lastSeen": "آخر نشاط {{when}}",
+    "signOut": "تسجيل الخروج",
+    "signOutOthers": "تسجيل الخروج من كل الأجهزة الأخرى"
   }
 }

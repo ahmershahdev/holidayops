@@ -86,6 +86,7 @@ around it.
   registered.
 - Two-factor sign-in (authenticator app, recovery codes), sign in with Google or Microsoft.
 - Password reset by a one-time emailed code, self-serve data export and account deletion.
+- A list of signed-in devices with "sign out other devices".
 - Email notices for every security change, sent through [Resend](https://resend.com).
 - Google reCAPTCHA v3 with a v2 checkbox fallback, plus a honeypot, on sign-up and reset forms.
 
@@ -374,7 +375,10 @@ docs/                architecture, security, SEO, deployment, roadmap, design no
 ## Security
 
 - Passwords hashed with Argon2; API keys, feed links, invite tokens and emailed codes stored only
-  as hashes.
+  as hashes; authenticator and webhook secrets encrypted (Fernet, a key separate from
+  `SECRET_KEY`).
+- An attack simulation against the production image (`scripts/attack_simulation.py`): roles,
+  cross-org access, SSRF, races, replayed 2FA codes, key abuse, rate limits, enumeration.
 - Email confirmation before an account can sign in; sign-up and reset never reveal whether an
   address is registered, in the answer or in its timing.
 - Honeypot plus Google reCAPTCHA v3 (v2 checkbox fallback) on sign-up and the forms that send email.

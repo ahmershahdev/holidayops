@@ -22,6 +22,9 @@ urlpatterns = [
     path("auth/sso/", views.SsoProvidersView.as_view(), name="auth-sso"),
     path("auth/identities/", views.IdentitiesView.as_view(), name="auth-identities"),
     path("auth/identities/<str:provider>/", views.IdentityView.as_view(), name="auth-identity"),
+    path("auth/sessions/", views.SessionsView.as_view(), name="auth-sessions"),
+    path("auth/sessions/others/", views.EndOtherSessionsView.as_view(), name="auth-sessions-end"),
+    path("auth/sessions/<int:session_id>/", views.SessionView.as_view(), name="auth-session"),
     path("auth/me/export/", views.ExportView.as_view(), name="auth-export"),
     path("auth/me/delete/", views.DeleteAccountView.as_view(), name="auth-delete"),
 ]

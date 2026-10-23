@@ -3,6 +3,12 @@
 What changed in HolidayOps, newest first. The site renders this file at `/changelog/`: keep the
 format (`## YYYY-MM-DD: Title`, then `- ` items) when you add an entry.
 
+## 2026-10-24: Signed-in devices and encrypted secrets
+
+- Account settings list every device you're signed in on, and can sign any of them out.
+- Authenticator-app and webhook secrets are encrypted in the database.
+- Resetting your password signs out every other device straight away.
+
 ## 2026-10-24: Email confirmation, bot protection and a guide for beginners
 
 - New accounts confirm their email with a 6-digit code before they can sign in.

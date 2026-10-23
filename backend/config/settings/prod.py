@@ -2,7 +2,17 @@ from typing import Any
 
 from config.csp import static_headers
 from config.settings.base import *  # noqa: F403
-from config.settings.base import DATABASES, MIDDLEWARE, SPA_DIR, env, env_list
+from config.settings.base import (
+    DATABASES,
+    FIELD_ENCRYPTION_KEYS,
+    MIDDLEWARE,
+    SPA_DIR,
+    env,
+    env_list,
+)
+
+if not FIELD_ENCRYPTION_KEYS:
+    raise RuntimeError("Environment variable FIELD_ENCRYPTION_KEYS is required.")
 
 # New objects rather than in-place edits: base's lists and dicts are shared with every module
 # that star-imports it.

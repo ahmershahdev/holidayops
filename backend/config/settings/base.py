@@ -11,7 +11,8 @@ def env(name: str, default: str | None = None) -> str:
     value = os.environ.get(name, default)
     if value is None:
         raise RuntimeError(f"Environment variable {name} is required.")
-    return value
+    # A stray space after a value in .env would otherwise end up in a class path or a key.
+    return value.strip()
 
 
 def env_list(name: str, default: str = "") -> list[str]:
@@ -19,6 +20,8 @@ def env_list(name: str, default: str = "") -> list[str]:
 
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
+# Encrypts secrets stored in the database (config/crypto.py); never derived from SECRET_KEY.
+FIELD_ENCRYPTION_KEYS = env_list("FIELD_ENCRYPTION_KEYS")
 DEBUG = False
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
 
@@ -67,6 +70,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.accounts.sessions.TouchSessionMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 

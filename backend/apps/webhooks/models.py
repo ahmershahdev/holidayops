@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 
 from apps.orgs.models import Organization
+from config.crypto import EncryptedCharField
 
 EVENTS = [
     "calendar.updated",
@@ -23,7 +24,8 @@ def new_secret() -> str:
 class Webhook(models.Model):
     org = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="webhooks")
     url = models.URLField(max_length=500)
-    secret = models.CharField(max_length=80, default=new_secret)
+    # Encrypted, not hashed: every delivery signs with it.
+    secret = EncryptedCharField(max_length=255, default=new_secret)
     events = models.JSONField(default=list)
     is_active = models.BooleanField(default=True)
     failure_count = models.PositiveIntegerField(default=0)
