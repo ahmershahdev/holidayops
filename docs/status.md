@@ -97,5 +97,5 @@ npm audit and Dependabot in CI. Details: [security.md](security.md).
   the worker and the web process can't see each other, so it shows "No heartbeat yet".
 - New migrations: restart `npm run dev` (it migrates on start) or run `manage.py migrate`.
 - Sign-up codes in development are printed in the `api`/`worker` terminal (console email backend).
-- Google's reCAPTCHA v2 test site key is `6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI` (secret `6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe`): always passes, shows a warning; never in production.
+- To try the reCAPTCHA checkbox locally, use Google's public v2 test keys from <https://developers.google.com/recaptcha/docs/faq> (they always pass and show a warning); never in production.
 - Headless Chrome has a 504 px minimum window width; it still hits the phone breakpoint (36rem).
