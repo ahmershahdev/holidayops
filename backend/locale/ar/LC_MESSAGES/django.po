@@ -1102,7 +1102,9 @@ msgstr "اربط برنامجك (اختياري)"
 msgid ""
 "Developers can ask the same questions through the API. The owner creates an "
 "API key in the organization's settings; copy it: it is shown once. Then:"
-msgstr "يمكن للمطورين طرح الأسئلة نفسها عبر الواجهة البرمجية. ينشئ مالك المؤسسة مفتاحًا من إعداداتها؛ انسخه: يظهر مرة واحدة فقط. ثم:"
+msgstr ""
+"يمكن للمطورين طرح الأسئلة نفسها عبر الواجهة البرمجية. ينشئ مالك المؤسسة "
+"مفتاحًا من إعداداتها؛ انسخه: يظهر مرة واحدة فقط. ثم:"
 
 #, python-format
 msgid ""

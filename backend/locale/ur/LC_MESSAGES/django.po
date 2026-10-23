@@ -1134,7 +1134,9 @@ msgstr "اپنا سافٹ ویئر جوڑیں (اختیاری)"
 msgid ""
 "Developers can ask the same questions through the API. The owner creates an "
 "API key in the organization's settings; copy it: it is shown once. Then:"
-msgstr "ڈویلپر یہی سوالات API سے پوچھ سکتے ہیں۔ تنظیم کا مالک اس کی سیٹنگز میں API کی بناتا ہے؛ اسے کاپی کریں: یہ ایک ہی بار دکھائی جاتی ہے۔ پھر:"
+msgstr ""
+"ڈویلپر یہی سوالات API سے پوچھ سکتے ہیں۔ تنظیم کا مالک اس کی سیٹنگز میں API "
+"کی بناتا ہے؛ اسے کاپی کریں: یہ ایک ہی بار دکھائی جاتی ہے۔ پھر:"
 
 #, python-format
 msgid ""
