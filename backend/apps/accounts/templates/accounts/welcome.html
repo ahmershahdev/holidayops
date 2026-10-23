@@ -1,0 +1,6 @@
+{% load i18n %}{% include "accounts/_email_top.html" %}
+<h1 style="margin:0 0 12px;font-size:22px;letter-spacing:-0.02em;">{% translate "Your email is confirmed" %}</h1>
+<p style="margin:0 0 24px;color:#4a5874;font-size:15px;line-height:1.6;">{% translate "Welcome to HolidayOps. Three steps get you going: create an organization, add a calendar for your country, then mark your own closures on it." %}</p>
+<a href="{{ app_url }}/app" style="display:inline-block;margin:0 0 24px;padding:12px 22px;background:#0e7c76;color:#ffffff;border-radius:999px;font-weight:600;text-decoration:none;">{% translate "Open HolidayOps" %}</a>
+<p style="margin:0;color:#4a5874;font-size:13px;line-height:1.6;">{% blocktranslate %}New here? The guide walks through every step: {{ app_url }}/guide/. Questions: {{ support }}.{% endblocktranslate %}</p>
+{% include "accounts/_email_bottom.html" %}

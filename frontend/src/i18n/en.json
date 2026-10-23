@@ -9,7 +9,8 @@
     "holidays": "Holidays",
     "pricing": "Pricing",
     "menu": "Menu",
-    "account": "Account"
+    "account": "Account",
+    "guide": "Guide"
   },
   "common": {
     "add": "Add",
@@ -55,7 +56,16 @@
     "resend": "Send a new code",
     "resendIn": "Send again in {{seconds}} s",
     "otherEmail": "Use another email",
-    "remembered": "Remembered it?"
+    "remembered": "Remembered it?",
+    "verifyLead": "We sent a 6-digit code to",
+    "verify": "Confirm email",
+    "verifyExpires": "The code works once and expires in 1 hour.",
+    "spamHint": "No email after a minute? Check spam, or send a new code.",
+    "captchaPrompt": "One more step: tick the box to show you're not a robot.",
+    "captchaFailed": "The check couldn't load. Turn off blockers for this page, or try again.",
+    "captchaNotice": "This form is protected by reCAPTCHA; Google's terms apply.",
+    "googlePrivacy": "Privacy",
+    "googleTerms": "Terms"
   },
   "status": {
     "businessDay": "Business day",
@@ -371,5 +381,13 @@
     "deleteExplain": "This removes your account and every organization where you are the only member, with their calendars, keys and feeds. It can't be undone.",
     "typeEmail": "Type {{email}} to confirm",
     "deleteButton": "Delete my account"
+  },
+  "verify": {
+    "title": "Confirm your email",
+    "lead": "Organizations, invites and digests open once you confirm"
+  },
+  "dropdown": {
+    "search": "Search",
+    "empty": "No matches"
   }
 }

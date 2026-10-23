@@ -5,6 +5,9 @@ from apps.accounts import views
 urlpatterns = [
     path("auth/csrf/", views.CsrfView.as_view(), name="auth-csrf"),
     path("auth/signup/", views.SignupView.as_view(), name="auth-signup"),
+    path("auth/verify/", views.VerifyEmailView.as_view(), name="auth-verify"),
+    path("auth/verify/resend/", views.ResendVerificationView.as_view(), name="auth-verify-resend"),
+    path("auth/captcha/", views.CaptchaKeysView.as_view(), name="auth-captcha"),
     path("auth/login/", views.LoginView.as_view(), name="auth-login"),
     path("auth/logout/", views.LogoutView.as_view(), name="auth-logout"),
     path("auth/me/", views.MeView.as_view(), name="auth-me"),

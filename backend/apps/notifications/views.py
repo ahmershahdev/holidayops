@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.accounts.auth import verified_user
 from apps.calendars.models import Calendar
 from apps.notifications.digests import subscription_id_from
 from apps.notifications.models import DigestSubscription
@@ -48,6 +49,7 @@ class DigestView(OrgScopedMixin, APIView):
 
     @extend_schema(request=None, responses=DigestSerializer)
     def put(self, request: Request, **kwargs: Any) -> Response:
+        verified_user(request)
         DigestSubscription.objects.get_or_create(
             user=self.membership.user, calendar=self.calendar, defaults={"org": self.org}
         )

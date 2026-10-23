@@ -55,7 +55,8 @@ def _about(request: HttpRequest) -> dict[str, object]:
 
 @cache_page(DAY)
 def llms(request: HttpRequest) -> HttpResponse:
-    return render(request, "public/llms.txt", _about(request), content_type=TEXT)
+    context = {**_about(request), "pro_price": settings.PLANS["pro"]["price"]}
+    return render(request, "public/llms.txt", context, content_type=TEXT)
 
 
 @cache_page(DAY)

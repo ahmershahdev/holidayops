@@ -19,7 +19,8 @@
   <a href="#features">Features</a> ·
   <a href="#screenshots">Screenshots</a> ·
   <a href="#architecture">Architecture</a> ·
-  <a href="#getting-started">Getting started</a> ·
+  <a href="#using-holidayops">Using it</a> ·
+  <a href="#getting-started-developers">Getting started</a> ·
   <a href="#api">API</a> ·
   <a href="docs/">Docs</a> ·
   <a href="https://ahmershah.dev">Author</a>
@@ -81,8 +82,17 @@ around it.
 
 **Accounts and security**
 
+- Email confirmation at sign-up by a 6-digit code; sign-up never reveals which addresses are
+  registered.
 - Two-factor sign-in (authenticator app, recovery codes), sign in with Google or Microsoft.
-- Password reset by a one-time emailed code (Resend), self-serve data export and account deletion.
+- Password reset by a one-time emailed code, self-serve data export and account deletion.
+- Email notices for every security change, sent through [Resend](https://resend.com).
+- Google reCAPTCHA v3 with a v2 checkbox fallback, plus a honeypot, on sign-up and reset forms.
+
+**Plans**
+
+- Free: 120 requests a minute per key, 10,000 a month, 3 keys. Pro: US$19 a month, 1,200 a
+  minute, 1,000,000 a month, 20 keys. Every plan has every feature; see `/pricing/`.
 
 **SDKs**
 
@@ -260,7 +270,24 @@ erDiagram
 
 Field-level detail: [docs/architecture.md](docs/architecture.md).
 
-## Getting started
+## Using HolidayOps
+
+New to it? The site has a step-by-step guide at `/guide/` (in English, Urdu and Arabic). In short:
+
+1. **Check a date.** Open the playground, choose a country (type to search the list) and click a
+   day. No account needed.
+2. **Sign up.** Enter your name, email and a password of 10 or more characters, then type the
+   6-digit code we email you.
+3. **Make an organization.** It's your company's shared space; invite colleagues as owner, admin,
+   member or viewer.
+4. **Add a calendar.** Pick the country and region; the weekend comes from the country.
+5. **Mark your own days.** Click a day to add a closure, a half day or an extra working day.
+6. **Share it.** Copy the private iCal link into Google Calendar or Outlook, or turn on the
+   monthly digest email.
+7. **Connect software (optional).** Create an API key in the organization's settings and call the
+   API below.
+
+## Getting started (developers)
 
 Requirements: [uv](https://docs.astral.sh/uv/), Node.js 22.22 or newer, and Docker Desktop
 (running).
@@ -278,10 +305,19 @@ npm run seed            # optional: demo user, organization and calendar
 Open <http://localhost:5173>. The landing page and country pages come from Django; the playground
 and the web app from Vite. API docs: <http://localhost:5173/api/v1/docs/>.
 
+In development emails (including sign-up codes) are printed in the `api` and `worker` terminal
+output. To send real email, set `EMAIL_BACKEND`, `RESEND_API_KEY` and `DEFAULT_FROM_EMAIL` as
+described in `.env.example`; to turn on the bot check, add the four `RECAPTCHA_*` keys.
+
 To run everything in containers instead: `docker compose up -d`. To try the production image:
 `docker compose -f docker-compose.prod.yml up --build` (serves on port 8080).
 
 ## API
+
+```bash
+curl -H "Authorization: Bearer hops_<prefix>_<secret>" \
+  "https://<your-host>/api/v1/business-days/check/?country=PK&date=2027-03-23"
+```
 
 ```http
 GET /api/v1/countries/
@@ -323,7 +359,7 @@ backend/
   config/            settings (base, dev, test, prod), URLs, CSP, Celery, health check
   apps/core/         pure date logic: calendars, business days, merging, iCal
   apps/api/          public API: views, serializers, throttles, API keys, usage
-  apps/accounts/     users and session auth
+  apps/accounts/     users, sessions, email codes, bot check, two-factor, SSO, account emails
   apps/orgs/         organizations, roles, invites, audit log, limits
   apps/calendars/    company calendars, sources and custom days
   apps/feeds/        private iCal feeds
@@ -337,12 +373,21 @@ docs/                architecture, security, SEO, deployment, roadmap, design no
 
 ## Security
 
-- Passwords hashed with Argon2; API keys, feed links and invite tokens stored only as hashes.
+- Passwords hashed with Argon2; API keys, feed links, invite tokens and emailed codes stored only
+  as hashes.
+- Email confirmation before an account can sign in; sign-up and reset never reveal whether an
+  address is registered, in the answer or in its timing.
+- Honeypot plus Google reCAPTCHA v3 (v2 checkbox fallback) on sign-up and the forms that send email.
+- CSRF tokens on every session write, including anonymous login and sign-up (login CSRF).
 - Strict tenant isolation, tested on every organization endpoint.
 - Rate limits per IP, per key and per organization, with correct client IPs behind proxies.
 - Count-then-create limits taken under a database lock, so parallel requests can't exceed them.
 - Webhooks: HMAC-SHA256 signatures, HTTPS only, SSRF guard that pins the vetted IP address.
-- Content Security Policy on every response; the public pages allow no script at all.
+- Content Security Policy on every response: the public pages allow no script at all, and the web
+  app runs only scripts carrying a per-response nonce (`'strict-dynamic'`).
+- SQL only through the Django ORM (parameterised); templates and React escape output.
+- Request bodies over 512 KB refused before parsing; Gunicorn limits on headers and slow workers;
+  login locks per account as well as per IP.
 - Security events logged without secrets; exact-pinned dependencies, Dependabot, CodeQL.
 
 Details: [docs/security.md](docs/security.md). To report a vulnerability, see

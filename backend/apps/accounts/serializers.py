@@ -1,7 +1,6 @@
 from typing import Any
 
 from django.contrib.auth import password_validation
-from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 from apps.accounts.models import TwoFactor, User
@@ -10,10 +9,11 @@ from apps.accounts.models import TwoFactor, User
 class UserSerializer(serializers.ModelSerializer[User]):
     two_factor = serializers.SerializerMethodField()
     has_password = serializers.SerializerMethodField()
+    email_verified = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = User
-        fields = ["id", "email", "name", "language", "two_factor", "has_password"]
+        fields = ["id", "email", "name", "language", "two_factor", "has_password", "email_verified"]
         read_only_fields = ["email"]
 
     def get_two_factor(self, user: User) -> bool:
@@ -23,16 +23,31 @@ class UserSerializer(serializers.ModelSerializer[User]):
         return user.has_usable_password()
 
 
-class SignupSerializer(serializers.Serializer[Any]):
+class BotCheckSerializer(serializers.Serializer[Any]):
+    """Read by apps/accounts/captcha.py; declared so the API schema and client know them."""
+
+    captcha_v3 = serializers.CharField(
+        required=False, allow_blank=True, write_only=True, max_length=4096
+    )
+    captcha_v2 = serializers.CharField(
+        required=False, allow_blank=True, write_only=True, max_length=4096
+    )
+    website = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        write_only=True,
+        max_length=200,
+        help_text="Leave empty. A honeypot: forms filled by scripts fill it.",
+    )
+
+
+class SignupSerializer(BotCheckSerializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, max_length=128)
     name = serializers.CharField(required=False, allow_blank=True, max_length=150)
 
     def validate_email(self, value: str) -> str:
-        email = User.objects.normalize_email(value).lower()
-        if User.objects.filter(email__iexact=email).exists():
-            raise serializers.ValidationError(_("An account with this email already exists."))
-        return email
+        return User.objects.normalize_email(value).lower()
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         candidate = User(email=attrs["email"], name=attrs.get("name", ""))
@@ -40,12 +55,30 @@ class SignupSerializer(serializers.Serializer[Any]):
         return attrs
 
 
+class VerifyEmailSerializer(serializers.Serializer[Any]):
+    email = serializers.EmailField()
+    code = serializers.RegexField(r"^\d{6}$", max_length=6)
+
+
+class CheckEmailSerializer(serializers.Serializer[Any]):
+    """The answer to sign-up and to a code request: the same whether or not the address has an
+    account."""
+
+    detail = serializers.CharField()
+    verification_required = serializers.BooleanField()
+
+
+class CaptchaKeysSerializer(serializers.Serializer[Any]):
+    v3 = serializers.CharField(allow_null=True)
+    v2 = serializers.CharField(allow_null=True)
+
+
 class LoginSerializer(serializers.Serializer[Any]):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, max_length=128)
 
 
-class ForgotPasswordSerializer(serializers.Serializer[Any]):
+class ForgotPasswordSerializer(BotCheckSerializer):
     email = serializers.EmailField()
 
 

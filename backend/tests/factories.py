@@ -1,6 +1,7 @@
 import datetime
 
 import factory
+from django.utils import timezone
 
 from apps.accounts.models import User
 from apps.calendars.models import Calendar, CalendarSource, CustomDay
@@ -16,6 +17,7 @@ class UserFactory(factory.django.DjangoModelFactory[User]):
     email = factory.Sequence(lambda n: f"user{n}@example.com")
     name = factory.Faker("name")
     password = factory.django.Password(PASSWORD)
+    email_verified_at = factory.LazyFunction(timezone.now)
 
 
 class OrgFactory(factory.django.DjangoModelFactory[Organization]):

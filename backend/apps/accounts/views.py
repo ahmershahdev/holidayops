@@ -1,26 +1,28 @@
 import logging
+from typing import Any
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
-from django.db import IntegrityError
 from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema, inline_serializer
+from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema, inline_serializer
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView
 
-from apps.accounts import data, sso, twofactor
+from apps.accounts import captcha, codes, data, emails, sso, twofactor
 from apps.accounts.auth import CsrfProtected, current_user
 from apps.accounts.models import SocialIdentity, User
-from apps.accounts.resets import request_reset, reset_password
 from apps.accounts.serializers import (
+    CaptchaKeysSerializer,
+    CheckEmailSerializer,
     CodeSerializer,
     DeleteAccountSerializer,
     DisableTwoFactorSerializer,
@@ -35,12 +37,40 @@ from apps.accounts.serializers import (
     TwoFactorSetupSerializer,
     TwoFactorStatusSerializer,
     UserSerializer,
+    VerifyEmailSerializer,
 )
 from config.security_log import email_ref, security_event
 
 MODEL_BACKEND = "django.contrib.auth.backends.ModelBackend"
 ACCOUNT_LOGIN_FAILURES = 10
 ACCOUNT_LOGIN_WINDOW = 15 * 60
+
+
+def check_email_response() -> Response:
+    return Response(
+        {
+            "detail": _("Check your email: if the address can be used, we sent it a code."),
+            "verification_required": True,
+        },
+        status=status.HTTP_202_ACCEPTED,
+    )
+
+
+def bot_check(request: Request, action: str) -> Response | None:
+    """None when the request may go on; otherwise the answer to send. A 400 with
+    `captcha: "v2"` tells the page to show the checkbox."""
+    result = captcha.check(request.data, action, BaseThrottle().get_ident(request))
+    if result == "ok":
+        return None
+    security_event(f"auth.captcha_{result}", request, action=action)
+    if captcha.site_keys()["v2"]:
+        body = {
+            "detail": _("Tick the box to show you're not a robot, then try again."),
+            "captcha": "v2",
+        }
+    else:
+        body = {"detail": _("We couldn't check that you're a person. Try again in a minute.")}
+    return Response(body, status=status.HTTP_400_BAD_REQUEST)
 
 
 def finish_login(request: Request, user: User, event: str) -> Response:
@@ -63,31 +93,86 @@ class CsrfView(APIView):
         return Response({"csrf_token": get_token(request)})
 
 
+class CaptchaKeysView(APIView):
+    permission_classes = [AllowAny]
+
+    @extend_schema(responses=CaptchaKeysSerializer)
+    def get(self, request: Request) -> Response:
+        return Response(captcha.site_keys())
+
+
 class SignupView(APIView):
+    """Never signs in and never says whether the address is taken: the account starts once the
+    emailed code comes back to VerifyEmailView."""
+
     permission_classes = [AllowAny, CsrfProtected]
     throttle_scope = "auth"
 
-    @extend_schema(request=SignupSerializer, responses={201: UserSerializer})
+    @extend_schema(request=SignupSerializer, responses={202: CheckEmailSerializer})
     def post(self, request: Request) -> Response:
+        if captcha.is_bot(request.data):
+            security_event("auth.honeypot", request, action="signup")
+            return check_email_response()
         serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
+        if blocked := bot_check(request, "signup"):
+            return blocked
+        values = serializer.validated_data
         language = (
             request.LANGUAGE_CODE if request.LANGUAGE_CODE in dict(settings.LANGUAGES) else "en"
         )
-        try:
-            user = User.objects.create_user(
-                data["email"], data["password"], name=data.get("name", ""), language=language
-            )
-        except IntegrityError:
-            # Two sign-ups with one address at the same moment: the unique index decides.
+        outcome = codes.register(
+            values["email"], values["password"], values.get("name", ""), language
+        )
+        account = email_ref(values["email"])
+        security_event("auth.signup", request, logging.INFO, account=account, outcome=outcome)
+        return check_email_response()
+
+
+class VerifyEmailView(APIView):
+    permission_classes = [AllowAny, CsrfProtected]
+    throttle_scope = "auth"
+
+    @extend_schema(
+        request=VerifyEmailSerializer,
+        responses={200: UserSerializer, 202: TwoFactorRequiredSerializer},
+    )
+    def post(self, request: Request) -> Response:
+        serializer = VerifyEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].lower()
+        user = codes.verify_email(email, serializer.validated_data["code"])
+        if user is None:
+            security_event("auth.verify_failed", request, account=email_ref(email))
             return Response(
-                {"email": [_("An account with this email already exists.")]},
+                {"code": [_("That code is wrong or has expired. Ask for a new one.")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        login(request._request, user, backend="django.contrib.auth.backends.ModelBackend")
-        security_event("auth.signup", request, logging.INFO, user=user.pk)
-        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return finish_login(request, user, "auth.verified")
+
+
+class ResendVerificationView(APIView):
+    permission_classes = [AllowAny, CsrfProtected]
+    throttle_scope = "password_reset"
+
+    @extend_schema(request=ForgotPasswordSerializer, responses={202: CheckEmailSerializer})
+    def post(self, request: Request) -> Response:
+        if captcha.is_bot(request.data):
+            security_event("auth.honeypot", request, action="verify")
+            return check_email_response()
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"].lower()
+        # A signed-in account asking for its own code has already passed a check to get here.
+        own = request.user.is_authenticated and request.user.email.lower() == email
+        if not own and (blocked := bot_check(request, "verify")):
+            return blocked
+        user = User.objects.filter(email__iexact=email, is_active=True).first()
+        sent = user is not None and codes.send_verification(user)
+        security_event(
+            "auth.verify_requested", request, logging.INFO, account=email_ref(email), sent=sent
+        )
+        return check_email_response()
 
 
 class LoginView(APIView):
@@ -95,7 +180,15 @@ class LoginView(APIView):
     throttle_scope = "auth"
 
     @extend_schema(
-        request=LoginSerializer, responses={200: UserSerializer, 202: TwoFactorRequiredSerializer}
+        request=LoginSerializer,
+        responses={
+            200: UserSerializer,
+            202: PolymorphicProxySerializer(
+                "LoginPending",
+                [TwoFactorRequiredSerializer, CheckEmailSerializer],
+                resource_type_field_name=None,
+            ),
+        },
     )
     def post(self, request: Request) -> Response:
         serializer = LoginSerializer(data=request.data)
@@ -126,6 +219,11 @@ class LoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         cache.delete(failures)
+        if not user.email_verified:
+            # The password is right, so this is whoever signed up: send them a code.
+            sent = codes.send_verification(user)
+            security_event("auth.login_unverified", request, user=user.pk, sent=sent)
+            return check_email_response()
         return finish_login(request, user, "auth.login")
 
 
@@ -139,10 +237,14 @@ class LogoutView(APIView):
 
 
 class MeView(APIView):
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self) -> list[Any]:
+        # Asking "who am I?" while signed out is normal, not an error for the browser to log.
+        return [AllowAny()] if self.request.method == "GET" else [IsAuthenticated()]
 
-    @extend_schema(responses=UserSerializer)
+    @extend_schema(responses={200: UserSerializer, 204: None})
     def get(self, request: Request) -> Response:
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(UserSerializer(current_user(request)).data)
 
     @extend_schema(request=UserSerializer, responses=UserSerializer)
@@ -162,17 +264,23 @@ class ForgotPasswordView(APIView):
         responses={202: inline_serializer("ForgotPassword", {"detail": serializers.CharField()})},
     )
     def post(self, request: Request) -> Response:
-        serializer = ForgotPasswordSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data["email"].lower()
-        sent = request_reset(email)
-        security_event(
-            "auth.reset_requested", request, logging.INFO, account=email_ref(email), sent=sent
-        )
-        return Response(
+        sent_answer = Response(
             {"detail": _("If an account uses this email, we sent it a code.")},
             status=status.HTTP_202_ACCEPTED,
         )
+        if captcha.is_bot(request.data):
+            security_event("auth.honeypot", request, action="reset")
+            return sent_answer
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if blocked := bot_check(request, "reset"):
+            return blocked
+        email = serializer.validated_data["email"].lower()
+        sent = codes.request_reset(email)
+        security_event(
+            "auth.reset_requested", request, logging.INFO, account=email_ref(email), sent=sent
+        )
+        return sent_answer
 
 
 class ResetPasswordView(APIView):
@@ -188,7 +296,7 @@ class ResetPasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         email = data["email"].lower()
-        user = reset_password(email, data["code"], data["password"])
+        user = codes.reset_password(email, data["code"], data["password"])
         if user is None:
             security_event("auth.reset_failed", request, account=email_ref(email))
             return Response(
@@ -265,6 +373,7 @@ class TwoFactorConfirmView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         security_event("auth.two_factor_on", request, logging.INFO, user=user.pk)
+        emails.notify(user, "two_factor_on")
         return Response({"recovery_codes": codes})
 
 
@@ -285,6 +394,7 @@ class TwoFactorDisableView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         security_event("auth.two_factor_off", request, logging.WARNING, user=user.pk)
+        emails.notify(user, "two_factor_off")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -302,7 +412,9 @@ class RecoveryCodesView(APIView):
                 {"code": [_("That code didn't match. Wait for a new one and try again.")]},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        return Response({"recovery_codes": twofactor.new_recovery_codes(user)})
+        recovery = twofactor.new_recovery_codes(user)
+        emails.notify(user, "recovery_codes")
+        return Response({"recovery_codes": recovery})
 
 
 class SsoProvidersView(APIView):
@@ -338,6 +450,7 @@ class IdentityView(APIView):
         if not deleted:
             return Response(status=status.HTTP_404_NOT_FOUND)
         security_event("auth.sso_unlinked", request, logging.INFO, user=user.pk, provider=provider)
+        emails.notify(user, "sso_unlinked")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -387,5 +500,6 @@ class DeleteAccountView(APIView):
             )
         security_event("account.deleted", request, logging.WARNING, user=user.pk)
         logout(request._request)
+        emails.notify_now(user, "account_deleted")
         data.delete_account(user)
         return Response(status=status.HTTP_204_NO_CONTENT)

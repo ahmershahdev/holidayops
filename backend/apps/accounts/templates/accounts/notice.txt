@@ -1,0 +1,5 @@
+{% load i18n %}{% translate "A change to your account" %}
+
+{{ notice }}
+
+{% blocktranslate %}If this was you, there is nothing to do. If it wasn't, reset your password now and write to {{ support }}.{% endblocktranslate %}

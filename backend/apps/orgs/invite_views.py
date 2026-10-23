@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import BaseThrottle
 from rest_framework.views import APIView
 
-from apps.accounts.auth import current_user
+from apps.accounts.auth import verified_user
 from apps.orgs import invites
 from apps.orgs.limits import within_limit
 from apps.orgs.models import Invite, Role
@@ -60,6 +60,7 @@ class InviteViewSet(
 
     @extend_schema(request=MemberCreateSerializer, responses={201: InviteSerializer})
     def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        verified_user(request)
         serializer = MemberCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data["email"].lower()
@@ -125,7 +126,7 @@ class InviteAcceptView(APIView):
 
     @extend_schema(request=None, responses=OrgSerializer)
     def post(self, request: Request, token: str) -> Response:
-        user = current_user(request)
+        user = verified_user(request)
         with transaction.atomic():
             invite = _pending_or_404(token)
             if invite.email.lower() != user.email.lower():

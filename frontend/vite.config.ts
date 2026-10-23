@@ -9,6 +9,7 @@ const DJANGO_PATHS = [
   "/sso",
   "/holidays",
   "/pricing",
+  "/guide",
   "/today",
   "/status",
   "/changelog",
@@ -41,6 +42,8 @@ const django = {
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // Django swaps the placeholder for a fresh nonce on every page (backend/config/spa.py).
+  html: { cspNonce: "CSP_NONCE_PLACEHOLDER" },
   build: {
     // The CSP has no data: fonts, so small font files must stay files instead of inlined URIs.
     assetsInlineLimit: 0,

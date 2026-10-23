@@ -107,14 +107,17 @@ def site_graph(request: HttpRequest, lang: str, faq: list[tuple[str, str]]) -> S
             "operatingSystem": "Any",
             "browserRequirements": "Requires a modern web browser",
             "publisher": {"@id": org},
-            "offers": {
-                "@type": "Offer",
-                "name": _("Free"),
-                "price": "0",
-                "priceCurrency": "USD",
-                "description": _("%(quota)s API requests a month")
-                % {"quota": f"{int(free['monthly_quota']):,}"},
-            },
+            "offers": [
+                {
+                    "@type": "Offer",
+                    "name": name,
+                    "price": str(plan["price"]),
+                    "priceCurrency": "USD",
+                    "description": _("%(quota)s API requests a month")
+                    % {"quota": f"{int(plan['monthly_quota']):,}"},
+                }
+                for name, plan in ((_("Free"), free), (_("Pro"), settings.PLANS["pro"]))
+            ],
         },
     ]
     if faq:

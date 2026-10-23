@@ -101,6 +101,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/captcha/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_captcha_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/csrf/": {
         parameters: {
             query?: never;
@@ -270,6 +286,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /**
+         * @description Never signs in and never says whether the address is taken: the account starts once the
+         *     emailed code comes back to VerifyEmailView.
+         */
         post: operations["auth_signup_create"];
         delete?: never;
         options?: never;
@@ -287,6 +307,38 @@ export interface paths {
         get: operations["auth_sso_list"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/verify/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_verify_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/verify/resend/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["auth_verify_resend_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -938,6 +990,18 @@ export interface components {
             weekend?: number[] | null;
             sources: components["schemas"]["SourceRequest"][];
         };
+        CaptchaKeys: {
+            v3: string | null;
+            v2: string | null;
+        };
+        /**
+         * @description The answer to sign-up and to a code request: the same whether or not the address has an
+         *     account.
+         */
+        CheckEmail: {
+            detail: string;
+            verification_required: boolean;
+        };
         CheckResult: {
             /** Format: date */
             date: string;
@@ -1053,7 +1117,12 @@ export interface components {
         ForgotPassword: {
             detail: string;
         };
+        /** @description Read by apps/accounts/captcha.py; declared so the API schema and client know them. */
         ForgotPasswordRequest: {
+            captcha_v3?: string;
+            captcha_v2?: string;
+            /** @description Leave empty. A honeypot: forms filled by scripts fill it. */
+            website?: string;
             /** Format: email */
             email: string;
         };
@@ -1118,6 +1187,7 @@ export interface components {
          * @enum {string}
          */
         LanguageEnum: "en" | "ur" | "ar";
+        LoginPending: components["schemas"]["TwoFactorRequired"] | components["schemas"]["CheckEmail"];
         LoginRequest: {
             /** Format: email */
             email: string;
@@ -1283,7 +1353,12 @@ export interface components {
          * @enum {string}
          */
         RoleEnum: "owner" | "admin" | "member" | "viewer";
+        /** @description Read by apps/accounts/captcha.py; declared so the API schema and client know them. */
         SignupRequest: {
+            captcha_v3?: string;
+            captcha_v2?: string;
+            /** @description Leave empty. A honeypot: forms filled by scripts fill it. */
+            website?: string;
             /** Format: email */
             email: string;
             password: string;
@@ -1344,10 +1419,16 @@ export interface components {
             language?: components["schemas"]["LanguageEnum"];
             readonly two_factor: boolean;
             readonly has_password: boolean;
+            readonly email_verified: boolean;
         };
         UserRequest: {
             name?: string;
             language?: components["schemas"]["LanguageEnum"];
+        };
+        VerifyEmailRequest: {
+            /** Format: email */
+            email: string;
+            code: string;
         };
         Webhook: {
             readonly id: number;
@@ -1527,6 +1608,25 @@ export interface operations {
             };
         };
     };
+    auth_captcha_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CaptchaKeys"];
+                };
+            };
+        };
+    };
     auth_csrf_retrieve: {
         parameters: {
             query?: never;
@@ -1613,7 +1713,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TwoFactorRequired"];
+                    "application/json": components["schemas"]["LoginPending"];
                 };
             };
         };
@@ -1652,6 +1752,13 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["User"];
                 };
+            };
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1798,12 +1905,12 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            202: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["User"];
+                    "application/json": components["schemas"]["CheckEmail"];
                 };
             };
         };
@@ -1823,6 +1930,64 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Provider"][];
+                };
+            };
+        };
+    };
+    auth_verify_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["VerifyEmailRequest"];
+                "multipart/form-data": components["schemas"]["VerifyEmailRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorRequired"];
+                };
+            };
+        };
+    };
+    auth_verify_resend_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotPasswordRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ForgotPasswordRequest"];
+                "multipart/form-data": components["schemas"]["ForgotPasswordRequest"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckEmail"];
                 };
             };
         };

@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
-from django.http import HttpRequest, HttpResponse
+from django.conf import settings
+from django.http import HttpRequest, HttpResponse, JsonResponse
 
 SWAGGER_CDN = "https://cdn.jsdelivr.net"
 
@@ -40,3 +41,21 @@ class ContentSecurityPolicyMiddleware:
             policy = DOCS_POLICY if request.path == DOCS_PATH else API_POLICY
             response["Content-Security-Policy"] = policy
         return response
+
+
+class BodySizeLimitMiddleware:
+    """DRF reads JSON straight from the input stream, past Django's DATA_UPLOAD_MAX_MEMORY_SIZE
+    check on request.body, so an oversized body would be read whole into memory. Refused here
+    by its declared length."""
+
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        try:
+            length = int(request.META.get("CONTENT_LENGTH") or 0)
+        except ValueError:
+            length = 0
+        if length > settings.DATA_UPLOAD_MAX_MEMORY_SIZE:
+            return JsonResponse({"detail": "Request body too large."}, status=413)
+        return self.get_response(request)

@@ -25,6 +25,8 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150, blank=True)
     language = models.CharField(max_length=5, choices=settings.LANGUAGES, default="en")
+    # Set once the owner proves the mailbox (a code, a reset, or a provider that vouches for it).
+    email_verified_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS: ClassVar[list[str]] = []
@@ -34,11 +36,21 @@ class User(AbstractUser):
     def __str__(self) -> str:
         return self.email
 
+    @property
+    def email_verified(self) -> bool:
+        return self.email_verified_at is not None
 
-class PasswordResetCode(models.Model):
-    """A one-time code emailed for a password reset. Only an HMAC of the code is stored."""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reset_codes")
+class EmailCode(models.Model):
+    """A one-time code emailed to prove the mailbox, for a password reset or to verify the
+    address. Only an HMAC of the code is stored."""
+
+    class Purpose(models.TextChoices):
+        RESET = "reset"
+        VERIFY = "verify"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="email_codes")
+    purpose = models.CharField(max_length=10, choices=Purpose.choices, default=Purpose.RESET)
     code_hash = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
@@ -49,7 +61,7 @@ class PasswordResetCode(models.Model):
         indexes: ClassVar = [models.Index(fields=["user", "created_at"])]
 
     def __str__(self) -> str:
-        return f"reset for user {self.user_id}"
+        return f"{self.purpose} code for user {self.user_id}"
 
 
 class TwoFactor(models.Model):

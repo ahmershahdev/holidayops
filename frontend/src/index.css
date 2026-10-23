@@ -196,6 +196,27 @@ option {
   color: var(--color-ink);
 }
 
+/* Off-screen rather than display: none, which some bots check before filling a field. */
+.honeypot {
+  position: absolute;
+  inset-inline-start: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Room for the checkbox before Google draws it, so the form doesn't jump. */
+.captcha-box {
+  min-height: 78px;
+  max-width: 100%;
+}
+
+/* Hidden only because every form that loads reCAPTCHA shows Google's notice in text, which
+   Google's terms allow; the floating badge covered the page corner on phones. */
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 /* ---- Site frame: the same header and footer as the server-rendered pages
    (backend/apps/public/static/public/site.css). CSS-only motion, off under reduced motion. */
 @layer components {

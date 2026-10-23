@@ -1,0 +1,107 @@
+{% extends "public/base.html" %}{% load i18n %}
+{% block content %}
+<header class="page-head">
+  <p class="kicker">{% translate "Guide" %}</p>
+  <h1>{{ title }}</h1>
+  <p class="lead">{% translate "No technical knowledge needed. Follow the steps in order; each one takes a minute or two." %}</p>
+</header>
+
+<nav class="guide-toc" aria-labelledby="toc-title">
+  <h2 id="toc-title" class="skip">{% translate "On this page" %}</h2>
+  <ol>
+    <li><a href="#check">{% translate "Check a date" %}</a></li>
+    <li><a href="#account">{% translate "Create your account" %}</a></li>
+    <li><a href="#organization">{% translate "Make an organization" %}</a></li>
+    <li><a href="#calendar">{% translate "Add a company calendar" %}</a></li>
+    <li><a href="#closures">{% translate "Mark your own days off" %}</a></li>
+    <li><a href="#share">{% translate "Share it with your team" %}</a></li>
+    <li><a href="#api">{% translate "Connect your software" %}</a></li>
+  </ol>
+</nav>
+
+<ol class="guide-steps">
+  <li id="check">
+    <span class="guide-num" aria-hidden="true">1</span>
+    <div class="prose">
+      <h2>{% translate "Check a date, no account needed" %}</h2>
+      <p>{% blocktranslate %}Open the <a href="/playground">playground</a>, choose a country from the list (type to search), and click any day. You see whether it is a working day and why: a weekend, a public holiday, or a normal day.{% endblocktranslate %}</p>
+      <p>{% blocktranslate %}For a whole year at a glance, open <a href="{{ prefix }}/holidays/">Holidays</a> and pick your country.{% endblocktranslate %}</p>
+    </div>
+  </li>
+  <li id="account">
+    <span class="guide-num" aria-hidden="true">2</span>
+    <div class="prose">
+      <h2>{% translate "Create your account" %}</h2>
+      <p>{% blocktranslate %}Click <a href="/signup">Start free</a>, enter your name, email and a password of at least 10 characters. We email you a 6-digit code: type it in to confirm the address is yours. No code after a minute? Look in spam, or ask for a new one.{% endblocktranslate %}</p>
+      <p>{% translate "You can also sign in with Google or Microsoft. For extra safety, turn on two-factor sign-in under Account settings." %}</p>
+    </div>
+  </li>
+  <li id="organization">
+    <span class="guide-num" aria-hidden="true">3</span>
+    <div class="prose">
+      <h2>{% translate "Make an organization" %}</h2>
+      <p>{% translate "An organization is your company's shared space. Give it a name; you become its owner. Later, invite colleagues by email and choose what each may do:" %}</p>
+      <ul>
+        <li>{% translate "Owner: everything, including deleting the organization." %}</li>
+        <li>{% translate "Admin: manages people, API keys and webhooks." %}</li>
+        <li>{% translate "Member: edits calendars and their days off." %}</li>
+        <li>{% translate "Viewer: can look, not change." %}</li>
+      </ul>
+    </div>
+  </li>
+  <li id="calendar">
+    <span class="guide-num" aria-hidden="true">4</span>
+    <div class="prose">
+      <h2>{% translate "Add a company calendar" %}</h2>
+      <p>{% translate "Inside the organization, create a calendar, for example “Karachi office”. Choose its country, and a region if holidays differ there. The weekend comes from the country on its own; change it only if your office works different days." %}</p>
+      <p>{% translate "An office in two countries? Add both as sources: a day is off if either country says so." %}</p>
+    </div>
+  </li>
+  <li id="closures">
+    <span class="guide-num" aria-hidden="true">5</span>
+    <div class="prose">
+      <h2>{% translate "Mark your own days off" %}</h2>
+      <p>{% translate "Click a day on the calendar and choose what it is:" %}</p>
+      <ul>
+        <li>{% translate "Closure: the office is shut, such as a company anniversary." %}</li>
+        <li>{% translate "Half day: open in the morning only." %}</li>
+        <li>{% translate "Working day: open on a day that would normally be off, such as a swapped Saturday." %}</li>
+      </ul>
+    </div>
+  </li>
+  <li id="share">
+    <span class="guide-num" aria-hidden="true">6</span>
+    <div class="prose">
+      <h2>{% translate "Share it with your team" %}</h2>
+      <p>{% translate "In the calendar's settings, copy the private iCal link and add it to Google Calendar (Other calendars, From URL) or Outlook (Add calendar, Subscribe from web). Changes show up there on their own." %}</p>
+      <p>{% translate "Turn on the monthly digest to get the next month's days off by email on the 1st." %}</p>
+    </div>
+  </li>
+  <li id="api">
+    <span class="guide-num" aria-hidden="true">7</span>
+    <div class="prose">
+      <h2>{% translate "Connect your software (optional)" %}</h2>
+      <p>{% translate "Developers can ask the same questions through the API. In the organization's settings, create an API key and copy it: it is shown once. Then:" %}</p>
+      <pre class="ltr" dir="ltr"><code>curl -H "Authorization: Bearer hops_..." \
+  "{{ origin }}/api/v1/business-days/check/?country=PK&amp;date=2027-03-23"</code></pre>
+      <p>{% blocktranslate %}Every endpoint is described in the <a href="{{ docs }}">API docs</a>, where you can try it in the browser. Webhooks tell your system when a calendar changes.{% endblocktranslate %}</p>
+    </div>
+  </li>
+</ol>
+
+<section aria-labelledby="words-title">
+  <h2 id="words-title" class="section-title">{% translate "Words you will see" %}</h2>
+  <dl class="guide-words">
+    <div><dt>{% translate "Business day" %}</dt><dd>{% translate "A day the office is open: not a weekend, not a holiday, not a closure." %}</dd></div>
+    <div><dt>{% translate "Weekend" %}</dt><dd>{% translate "The country's regular days off. Not always Saturday and Sunday." %}</dd></div>
+    <div><dt>{% translate "Region" %}</dt><dd>{% translate "A state or province with holidays of its own." %}</dd></div>
+    <div><dt>{% translate "iCal feed" %}</dt><dd>{% translate "A private link that calendar apps read to show your days off." %}</dd></div>
+  </dl>
+</section>
+
+<section class="guide-help" aria-labelledby="help-title">
+  <h2 id="help-title">{% translate "Stuck?" %}</h2>
+  <p>{% blocktranslate %}Write to <a href="mailto:{{ support }}">{{ support }}</a> with what you tried; a person answers, usually within a working day.{% endblocktranslate %}</p>
+  <a class="button button-arrow" href="/signup">{% translate "Start free" %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+</section>
+{% endblock %}

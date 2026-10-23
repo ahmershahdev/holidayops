@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { api, unwrap } from "../api/client";
 import { AuthField, AuthLayout, EyeToggle, SubmitButton } from "../components/auth/AuthShell";
+import { useBotCheck } from "../components/auth/BotCheck";
 import { ErrorText } from "../components/ui";
 
 const RESEND_AFTER = 60;
@@ -51,6 +52,7 @@ export function ForgotPasswordPage() {
   const [wait, setWait] = useState(0);
   const client = useQueryClient();
   const navigate = useNavigate();
+  const bot = useBotCheck("reset");
 
   useEffect(() => {
     if (wait <= 0) return;
@@ -59,11 +61,15 @@ export function ForgotPasswordPage() {
   }, [wait]);
 
   const send = useMutation({
-    mutationFn: () => unwrap(api.POST("/api/v1/auth/password/forgot/", { body: { email } })),
+    mutationFn: async () =>
+      unwrap(
+        api.POST("/api/v1/auth/password/forgot/", { body: { email, ...(await bot.fields()) } }),
+      ),
     onSuccess: () => {
       setStep("code");
       setWait(RESEND_AFTER);
     },
+    onError: bot.onError,
   });
 
   const reset = useMutation({
@@ -120,8 +126,11 @@ export function ForgotPasswordPage() {
             autoComplete="email"
             placeholder="you@company.com"
           />
+          {bot.widget}
           <ErrorText error={send.error} />
-          <SubmitButton pending={send.isPending}>{t("auth.sendCode")}</SubmitButton>
+          <SubmitButton pending={send.isPending} disabled={bot.waiting}>
+            {t("auth.sendCode")}
+          </SubmitButton>
         </form>
       ) : (
         <form onSubmit={onReset} className="flex flex-col gap-5">

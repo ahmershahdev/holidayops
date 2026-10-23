@@ -77,6 +77,18 @@
   letter-spacing: -0.03em;
 }
 
+.plan-per {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.plan-pro .plan-per {
+  color: var(--plan-muted);
+}
+
 .plan-for {
   margin: 0;
   color: var(--muted);

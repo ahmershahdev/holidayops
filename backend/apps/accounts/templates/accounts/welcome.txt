@@ -1,0 +1,7 @@
+{% load i18n %}{% translate "Your email is confirmed" %}
+
+{% translate "Welcome to HolidayOps. Three steps get you going: create an organization, add a calendar for your country, then mark your own closures on it." %}
+
+{% translate "Open HolidayOps" %}: {{ app_url }}/app
+
+{% blocktranslate %}New here? The guide walks through every step: {{ app_url }}/guide/. Questions: {{ support }}.{% endblocktranslate %}

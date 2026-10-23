@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-18 (through #44). Update at the end of every work session.
+Last updated: 2026-10-24 (through #46). Update at the end of every work session.
 
 ## Run it
 
@@ -25,6 +25,7 @@ Recent work:
 | #42 | Status page, changelog, Python and TypeScript SDKs |
 | #43 | `manifest-src 'self'` in the public CSP (console error), select arrows kept in every form, CSS banner comments removed, stricter comment rule |
 | #44 | Signed-in visitors get "My calendars" in the public header and footer (page cache keyed signed in / out); CSRF on anonymous auth endpoints (login CSRF); per-account login lock (10 failures / 15 min); signup race returns 400; no inline styles on public pages; `Permissions-Policy`; square `og:image`, Twitter tags, founder `sameAs` |
+| #46 | Email verification by code at sign-up (no account enumeration, squatting-proof, unconfirmed accounts pruned after 7 days); security notice emails via Resend; honeypot + reCAPTCHA v3 with v2 fallback on sign-up/reset; nonce CSP with `'strict-dynamic'` for the web app; 413 on bodies over 512 KB, Gunicorn limits; themed searchable dropdowns (CSS-only `base-select` on public pages); `/guide/` for beginners; Pro priced at US$19 (`PLAN_PRO_PRICE`); signed-out `auth/me` is 204, not 403 |
 
 Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
 project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article
@@ -34,25 +35,18 @@ project card plus a case study (`/blogs/holidayops-case-study-working-days-api`)
 
 The code is feature-complete. Stop adding features; finish these, then host and close.
 
-1. **Email verification at signup** (the biggest security gap): today anyone can register with
-   someone else's address. Send a one-time code or link (reuse the reset-code design in
-   `apps/accounts/resets.py`), keep the account unverified until it's used, and block org
-   creation, invites and digests until then.
-2. **Signup must not reveal registered emails**: "An account with this email already exists" is
-   an enumeration oracle. With verification in place, answer "check your email" either way and
-   email the existing owner instead.
-3. **Encrypt authenticator secrets at rest** (`TwoFactor.secret` is plaintext): a key from the
+Done in #46: email verification, signup without enumeration, bot check (old items 1, 2 and 4).
+
+1. **Encrypt authenticator secrets at rest** (`TwoFactor.secret` is plaintext): a key from the
    environment, not `SECRET_KEY`, so rotating one doesn't break the other.
-4. **Bot check on signup** (Cloudflare Turnstile or reCAPTCHA v3), only on signup and forgot
-   password; keep it out of the API.
-5. **Sessions screen**: list signed-in devices in account settings and sign out the others.
-6. **Simulated-users test** on the production image (`docker compose -f docker-compose.prod.yml
+2. **Sessions screen**: list signed-in devices in account settings and sign out the others.
+3. **Simulated-users test** on the production image (`docker compose -f docker-compose.prod.yml
    up --build`): script 10 to 17 users (owner, admin, member, viewer, API-key client, anonymous
    visitor) through every action, including attackers trying cross-org access (IDOR), CSRF,
    stored XSS in names, webhooks to internal addresses (SSRF), password guessing, racing the
    count limits, replaying 2FA and reset codes, and API-key and quota abuse. Watch the
    `holidayops.security` log and `/status/`; fix what breaks, add a test for each fix.
-7. **Hosting** (free): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
+4. **Hosting** (free; owner plans February): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
    worker, beat, MySQL, Redis), Cloudflare for DNS and TLS on `holidayops.ahmershah.dev`, Resend
    free tier for email, UptimeRobot and Sentry free plans, nightly MySQL backups. Then the 5.4
    docs: live URL in the README and the portfolio card.
@@ -82,7 +76,9 @@ npm audit and Dependabot in CI. Details: [security.md](security.md).
   need adding to it.
 - [ ] Legal review of `/privacy/` and `/terms/` before launch.
 - [ ] Update local Node.js to 22.22 or newer (jsdom warns on 22.19).
-- [ ] Items 1 to 7 of "Next session" above.
+- [ ] Items 1 to 4 of "Next session" above.
+- [ ] Before launch: create reCAPTCHA v3 and v2 keys for the live domain, verify the sending domain in Resend, set `PLAN_PRO_PRICE` if not 19.
+- [ ] Strings added in #46 (guide, emails, bot check) need the native-speaker review too.
 
 ## Gotchas
 
@@ -100,4 +96,6 @@ npm audit and Dependabot in CI. Details: [security.md](security.md).
 - The status page's job heartbeat needs a shared cache: with the local-memory cache in development
   the worker and the web process can't see each other, so it shows "No heartbeat yet".
 - New migrations: restart `npm run dev` (it migrates on start) or run `manage.py migrate`.
+- Sign-up codes in development are printed in the `api`/`worker` terminal (console email backend).
+- Google's reCAPTCHA v2 test site key is `6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI` (secret `6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe`): always passes, shows a warning; never in production.
 - Headless Chrome has a 504 px minimum window width; it still hits the phone breakpoint (36rem).
