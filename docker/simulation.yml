@@ -1,0 +1,19 @@
+# Overrides for scripts/attack_simulation.py on the production image:
+#   docker compose -f docker-compose.prod.yml -f docker/simulation.yml up --build -d
+# Mail goes to the container log, the bot check is off (the script can't solve it), and the
+# per-IP login limit is raised because every simulated user shares one IP. Every other limit is
+# the production value, so the script can test them.
+x-sim: &sim
+  ALLOW_SIMULATION: "1"
+  EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+  RECAPTCHA_V3_SECRET_KEY: ""
+  RECAPTCHA_V2_SECRET_KEY: ""
+  RECAPTCHA_V3_SITE_KEY: ""
+  RECAPTCHA_V2_SITE_KEY: ""
+  API_AUTH_RATE: 300/minute
+
+services:
+  web:
+    environment: *sim
+  worker:
+    environment: *sim

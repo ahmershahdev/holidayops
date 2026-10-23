@@ -378,6 +378,53 @@ paths:
               schema:
                 $ref: '#/components/schemas/TwoFactorRequired'
           description: ''
+  /api/v1/auth/sessions/:
+    get:
+      operationId: auth_sessions_list
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+          description: ''
+  /api/v1/auth/sessions/{session_id}/:
+    delete:
+      operationId: auth_sessions_destroy
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/auth/sessions/others/:
+    post:
+      operationId: auth_sessions_others_create
+      description: Sign out every device but this one.
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndedSessions'
+          description: ''
   /api/v1/auth/signup/:
     post:
       operationId: auth_signup_create
@@ -2609,6 +2656,13 @@ components:
           maxLength: 128
       required:
       - code
+    EndedSessions:
+      type: object
+      properties:
+        ended:
+          type: integer
+      required:
+      - ended
     EventsEnum:
       enum:
       - calendar.updated
@@ -3216,6 +3270,34 @@ components:
         * `admin` - Admin
         * `member` - Member
         * `viewer` - Viewer
+    Session:
+      type: object
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        last_seen_at:
+          type: string
+          format: date-time
+        ip:
+          type: string
+          nullable: true
+        browser:
+          type: string
+        system:
+          type: string
+        current:
+          type: boolean
+      required:
+      - browser
+      - created_at
+      - current
+      - id
+      - ip
+      - last_seen_at
+      - system
     SignupRequest:
       type: object
       description: Read by apps/accounts/captcha.py; declared so the API schema and

@@ -101,6 +101,40 @@ API and login are not behind it (login has per-account limits instead).
 - Keys come from `RECAPTCHA_V3_SITE_KEY`, `RECAPTCHA_V3_SECRET_KEY`, `RECAPTCHA_V2_SITE_KEY` and
   `RECAPTCHA_V2_SECRET_KEY`; with none set (development, tests) only the honeypot runs.
 
+## Encryption at rest
+
+`config/crypto.py`. Authenticator-app secrets and webhook signing secrets have to be read back
+(to check codes, to sign deliveries), so they can't be hashed; they are stored as Fernet tokens
+(AES-128-CBC + HMAC-SHA256) through `EncryptedCharField`. The key comes from
+`FIELD_ENCRYPTION_KEYS`, never from `SECRET_KEY`, so rotating one doesn't break the other.
+Production refuses to start without it. Rotation: put a new key first in the comma-separated
+list, run `manage.py reencrypt`, then remove the old key. Migrations 0006 (accounts) and 0002
+(webhooks) encrypted the rows that existed before. A database dump alone gives no usable second
+factor or webhook secret.
+
+## Signed-in devices
+
+`apps/accounts/sessions.py`, `GET /api/v1/auth/sessions/`, `POST /auth/sessions/others/`,
+`DELETE /auth/sessions/<id>/`. A `UserSession` row per login (Django's session table can't be
+searched by user) keeps the IP and User-Agent, shown as "Chrome on Windows"; `last_seen_at` is
+written at most every 5 minutes. Signing a device out deletes its Django session. A password reset
+signs out every device at once, rather than on their next request. Another user's session id is
+404.
+
+## Attack simulation
+
+`scripts/attack_simulation.py` runs against the production image started with
+`docker/simulation.yml` (console email, no reCAPTCHA, a higher per-IP login limit because every
+simulated user shares one IP; all other limits as in production). Six accounts plus anonymous and
+API-key clients check, among others: security headers and the per-response nonce; login CSRF;
+roles (viewer, member, admin, owner); cross-organization reads and writes (404); webhooks to
+loopback, link-local, private and Docker-internal addresses; 8 parallel API-key creations against
+the 3-key limit; foreign, made-up and revoked keys; the per-key rate limit; two-factor code
+replay; signing out another user's device; hostile query strings; a 600 KB body; sign-up
+enumeration; password guessing (account lock); the anonymous rate limit and a forged
+`X-Forwarded-For`. Exit code = number of failures. The accounts come from
+`manage.py simulation_users`, which refuses to run without `ALLOW_SIMULATION=1`.
+
 ## Account notices
 
 `apps/accounts/emails.py`. The owner is emailed when two-factor sign-in is turned on or off, new

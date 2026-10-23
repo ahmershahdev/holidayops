@@ -40,6 +40,7 @@ production.
 |---|---|
 | `DJANGO_SETTINGS_MODULE` | `config.settings.prod` (the image's default) |
 | `DJANGO_SECRET_KEY` | long random string (secret) |
+| `FIELD_ENCRYPTION_KEYS` | Fernet key(s), comma-separated, newest first (secret; required: the app won't start without it). Back it up: without it, two-factor and webhook secrets can't be read |
 | `DJANGO_ALLOWED_HOSTS` | `holidayops.ahmershah.dev` |
 | `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://holidayops.ahmershah.dev` |
 | `APP_URL` | `https://holidayops.ahmershah.dev` |
@@ -47,7 +48,9 @@ production.
 | `MYSQL_SSL_MODE` | `REQUIRED` (Azure MySQL rejects plain connections) |
 | `MYSQL_SSL_CA` | optional CA bundle path, e.g. `/etc/ssl/certs/ca-certificates.crt`, for `VERIFY_IDENTITY` |
 | `REDIS_URL` | `redis://…` (or `rediss://` for TLS) |
-| `EMAIL_BACKEND`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL` | an SMTP provider; backend `django.core.mail.backends.smtp.EmailBackend` |
+| `EMAIL_BACKEND`, `RESEND_API_KEY`, `DEFAULT_FROM_EMAIL` | `apps.notifications.resend.ResendEmailBackend`, the Resend key (secret), and a sender on the verified domain, quoted: `"HolidayOps <support@ahmershah.dev>"` |
+| `RECAPTCHA_V3_SITE_KEY`, `RECAPTCHA_V3_SECRET_KEY`, `RECAPTCHA_V2_SITE_KEY`, `RECAPTCHA_V2_SECRET_KEY` | Google reCAPTCHA keys registered for the live domain (secret keys are secrets) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional "Sign in with Google"; redirect URI `{APP_URL}/sso/google/callback/` |
 | `PLAN_*`, `API_*_RATE` | optional overrides (`.env.example`) |
 | `LOG_LEVEL` | optional, default `INFO`; security events log on `holidayops.security` |
 | `NUM_PROXIES` | proxies in front of Django: `1` behind Container Apps ingress. Throttles and security logs read the client IP from `X-Forwarded-For` only this many hops deep; `0` (default) uses the socket address |

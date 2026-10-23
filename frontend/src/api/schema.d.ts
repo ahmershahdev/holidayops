@@ -277,6 +277,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/sessions/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_sessions_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/sessions/{session_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["auth_sessions_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/sessions/others/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Sign out every device but this one. */
+        post: operations["auth_sessions_others_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/signup/": {
         parameters: {
             query?: never;
@@ -1077,6 +1126,9 @@ export interface components {
             /** @default  */
             password: string;
         };
+        EndedSessions: {
+            ended: number;
+        };
         /**
          * @description * `calendar.updated` - calendar.updated
          *     * `calendar.deleted` - calendar.deleted
@@ -1353,6 +1405,17 @@ export interface components {
          * @enum {string}
          */
         RoleEnum: "owner" | "admin" | "member" | "viewer";
+        Session: {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            last_seen_at: string;
+            ip: string | null;
+            browser: string;
+            system: string;
+            current: boolean;
+        };
         /** @description Read by apps/accounts/captcha.py; declared so the API schema and client know them. */
         SignupRequest: {
             captcha_v3?: string;
@@ -1886,6 +1949,64 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TwoFactorRequired"];
+                };
+            };
+        };
+    };
+    auth_sessions_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Session"][];
+                };
+            };
+        };
+    };
+    auth_sessions_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                session_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    auth_sessions_others_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EndedSessions"];
                 };
             };
         };

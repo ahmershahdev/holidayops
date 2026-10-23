@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router";
 import { api, type Schemas, unwrap } from "../api/client";
 import { SsoButtons, useSsoProviders } from "../components/auth/TwoFactorForm";
+import { SessionsCard } from "../components/SessionsCard";
 import { Badge, Button, Card, ErrorText, Field, Input, PageHeader, Select } from "../components/ui";
 import { useMe } from "../lib/auth";
 
@@ -381,6 +382,7 @@ export function AccountPage() {
       <Profile me={me.data} />
       <TwoFactorCard me={me.data} />
       <ConnectedCard />
+      <SessionsCard />
       <DataCard me={me.data} />
     </div>
   );
