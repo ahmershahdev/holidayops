@@ -86,12 +86,21 @@ export function EyeToggle({ shown, onToggle }: { shown: boolean; onToggle: () =>
   );
 }
 
-export function SubmitButton({ pending, children }: { pending: boolean; children: ReactNode }) {
+export function SubmitButton({
+  pending,
+  disabled = false,
+  children,
+}: {
+  pending: boolean;
+  disabled?: boolean;
+  children: ReactNode;
+}) {
   return (
     <button
       type="submit"
-      disabled={pending}
-      className="group mt-1 flex h-12 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-on-accent shadow-[0_12px_30px_-12px] shadow-accent/60 transition-[background-color,transform] hover:bg-accent-strong active:scale-[0.98] disabled:cursor-wait disabled:opacity-70"
+      disabled={pending || disabled}
+      aria-busy={pending}
+      className="group mt-1 flex h-12 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-on-accent shadow-[0_12px_30px_-12px] shadow-accent/60 transition-[background-color,transform] hover:bg-accent-strong active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 aria-busy:cursor-wait"
     >
       {children}
       <svg

@@ -1,0 +1,7 @@
+{% load i18n %}{% translate "You already have an account" %}
+
+{% translate "Someone just tried to sign up for HolidayOps with this email address. Your account is unchanged." %}
+
+{% translate "Log in" %}: {{ app_url }}/login
+
+{% blocktranslate %}Forgot your password? Use "Forgot password" on the login page. If this wasn't you, you don't need to do anything; write to {{ support }} if it keeps happening.{% endblocktranslate %}

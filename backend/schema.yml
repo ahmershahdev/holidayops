@@ -134,6 +134,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+  /api/v1/auth/captcha/:
+    get:
+      operationId: auth_captcha_retrieve
+      tags:
+      - auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaptchaKeys'
+          description: ''
   /api/v1/auth/csrf/:
     get:
       operationId: auth_csrf_retrieve
@@ -212,7 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TwoFactorRequired'
+                $ref: '#/components/schemas/LoginPending'
           description: ''
   /api/v1/auth/logout/:
     post:
@@ -232,6 +247,7 @@ paths:
       - auth
       security:
       - cookieAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -239,6 +255,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
+        '204':
+          description: No response body
     patch:
       operationId: auth_me_partial_update
       tags:
@@ -363,6 +381,9 @@ paths:
   /api/v1/auth/signup/:
     post:
       operationId: auth_signup_create
+      description: |-
+        Never signs in and never says whether the address is taken: the account starts once the
+        emailed code comes back to VerifyEmailView.
       tags:
       - auth
       requestBody:
@@ -381,11 +402,11 @@ paths:
       - cookieAuth: []
       - {}
       responses:
-        '201':
+        '202':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/CheckEmail'
           description: ''
   /api/v1/auth/sso/:
     get:
@@ -403,6 +424,66 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Provider'
+          description: ''
+  /api/v1/auth/verify/:
+    post:
+      operationId: auth_verify_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TwoFactorRequired'
+          description: ''
+  /api/v1/auth/verify/resend/:
+    post:
+      operationId: auth_verify_resend_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckEmail'
           description: ''
   /api/v1/business-days/add/:
     get:
@@ -2289,6 +2370,31 @@ components:
       required:
       - name
       - sources
+    CaptchaKeys:
+      type: object
+      properties:
+        v3:
+          type: string
+          nullable: true
+        v2:
+          type: string
+          nullable: true
+      required:
+      - v2
+      - v3
+    CheckEmail:
+      type: object
+      description: |-
+        The answer to sign-up and to a code request: the same whether or not the address has an
+        account.
+      properties:
+        detail:
+          type: string
+        verification_required:
+          type: boolean
+      required:
+      - detail
+      - verification_required
     CheckResult:
       type: object
       properties:
@@ -2594,7 +2700,22 @@ components:
       - detail
     ForgotPasswordRequest:
       type: object
+      description: Read by apps/accounts/captcha.py; declared so the API schema and
+        client know them.
       properties:
+        captcha_v3:
+          type: string
+          writeOnly: true
+          maxLength: 4096
+        captcha_v2:
+          type: string
+          writeOnly: true
+          maxLength: 4096
+        website:
+          type: string
+          writeOnly: true
+          description: 'Leave empty. A honeypot: forms filled by scripts fill it.'
+          maxLength: 200
         email:
           type: string
           format: email
@@ -2748,6 +2869,10 @@ components:
         * `en` - English
         * `ur` - Urdu
         * `ar` - Arabic
+    LoginPending:
+      oneOf:
+      - $ref: '#/components/schemas/TwoFactorRequired'
+      - $ref: '#/components/schemas/CheckEmail'
     LoginRequest:
       type: object
       properties:
@@ -3093,7 +3218,22 @@ components:
         * `viewer` - Viewer
     SignupRequest:
       type: object
+      description: Read by apps/accounts/captcha.py; declared so the API schema and
+        client know them.
       properties:
+        captcha_v3:
+          type: string
+          writeOnly: true
+          maxLength: 4096
+        captcha_v2:
+          type: string
+          writeOnly: true
+          maxLength: 4096
+        website:
+          type: string
+          writeOnly: true
+          description: 'Leave empty. A honeypot: forms filled by scripts fill it.'
+          maxLength: 200
         email:
           type: string
           format: email
@@ -3253,8 +3393,12 @@ components:
         has_password:
           type: boolean
           readOnly: true
+        email_verified:
+          type: boolean
+          readOnly: true
       required:
       - email
+      - email_verified
       - has_password
       - id
       - two_factor
@@ -3266,6 +3410,21 @@ components:
           maxLength: 150
         language:
           $ref: '#/components/schemas/LanguageEnum'
+    VerifyEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        code:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: ^\d{6}$
+      required:
+      - code
+      - email
     Webhook:
       type: object
       properties:

@@ -5,6 +5,7 @@ import { Link, NavLink, Outlet } from "react-router";
 import { api, unwrap } from "../api/client";
 import { currentLanguage } from "../i18n";
 import { useEnsureCsrf, useLogout, useMe } from "../lib/auth";
+import { VerifyBanner } from "./auth/VerifyBanner";
 import { AccountMenu } from "./frame/AccountMenu";
 import { Mark, Wordmark } from "./frame/Brand";
 import { SiteFooter, sitePrefix } from "./frame/SiteFooter";
@@ -44,6 +45,9 @@ export function Layout() {
       </a>
       <a className={`${pill} nav-underline`} href={`${prefix}/pricing/`}>
         {t("nav.pricing")}
+      </a>
+      <a className={`${pill} nav-underline`} href={`${prefix}/guide/`}>
+        {t("nav.guide")}
       </a>
       <a className={`${pill} nav-underline`} href="/api/v1/docs/">
         {t("nav.apiDocs")}
@@ -140,6 +144,7 @@ export function Layout() {
         )}
       </header>
       <main id="main" className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8">
+        {me && !me.email_verified && <VerifyBanner me={me} />}
         <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
           <Outlet />
         </Suspense>

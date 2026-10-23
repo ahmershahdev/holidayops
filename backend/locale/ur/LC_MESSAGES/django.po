@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HolidayOps\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 15:34+0000\n"
+"POT-Creation-Date: 2026-10-23 19:12+0000\n"
 "PO-Revision-Date: 2026-10-16 22:30+0500\n"
 "Last-Translator: HolidayOps maintainers\n"
 "Language-Team: Urdu\n"
@@ -14,14 +14,79 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Confirm your email address first."
+msgstr "پہلے اپنا ای میل پتہ کنفرم کریں۔"
+
 msgid "Your HolidayOps password reset code"
 msgstr "آپ کا HolidayOps پاس ورڈ ری سیٹ کوڈ"
+
+msgid "Confirm your HolidayOps email"
+msgstr "اپنی HolidayOps ای میل کنفرم کریں"
 
 msgid "Your HolidayOps password was changed"
 msgstr "آپ کا HolidayOps پاس ورڈ بدل دیا گیا"
 
-msgid "An account with this email already exists."
-msgstr "اس ای میل سے پہلے ہی ایک اکاؤنٹ موجود ہے۔"
+msgid "Someone tried to sign up with your email"
+msgstr "کسی نے آپ کی ای میل سے سائن اپ کرنے کی کوشش کی"
+
+#
+msgid "Welcome to HolidayOps"
+msgstr "HolidayOps میں خوش آمدید"
+
+msgid "Security alert for your HolidayOps account"
+msgstr "آپ کے HolidayOps اکاؤنٹ کے لیے سیکیورٹی الرٹ"
+
+msgid "Two-factor sign-in was turned on."
+msgstr "دو مرحلہ سائن اِن آن کر دیا گیا۔"
+
+msgid "Two-factor sign-in was turned off."
+msgstr "دو مرحلہ سائن اِن بند کر دیا گیا۔"
+
+msgid "New recovery codes were made; the old ones no longer work."
+msgstr "نئے ریکوری کوڈ بنائے گئے؛ پرانے اب کام نہیں کرتے۔"
+
+msgid "A Google or Microsoft account was linked for sign-in."
+msgstr "سائن اِن کے لیے ایک Google یا Microsoft اکاؤنٹ جوڑا گیا۔"
+
+msgid "A Google or Microsoft sign-in was removed."
+msgstr "ایک Google یا Microsoft سائن اِن ہٹا دیا گیا۔"
+
+msgid "Your account and its data were deleted."
+msgstr "آپ کا اکاؤنٹ اور اس کا ڈیٹا حذف کر دیا گیا۔"
+
+msgid "You already have an account"
+msgstr "آپ کا اکاؤنٹ پہلے سے موجود ہے"
+
+msgid ""
+"Someone just tried to sign up for HolidayOps with this email address. Your "
+"account is unchanged."
+msgstr ""
+"ابھی کسی نے اس ای میل پتے سے HolidayOps پر سائن اپ کرنے کی کوشش کی۔ آپ کا "
+"اکاؤنٹ ویسا ہی ہے۔"
+
+msgid "Log in"
+msgstr "لاگ اِن"
+
+#, python-format
+msgid ""
+"Forgot your password? Use \"Forgot password\" on the login page. If this "
+"wasn't you, you don't need to do anything; write to %(support)s if it keeps "
+"happening."
+msgstr ""
+"پاس ورڈ بھول گئے؟ لاگ اِن صفحے پر \"پاس ورڈ بھول گئے\" استعمال کریں۔ اگر یہ "
+"آپ نہیں تھے تو کچھ کرنے کی ضرورت نہیں؛ اگر یہ بار بار ہو تو %(support)s پر "
+"لکھیں۔"
+
+msgid "A change to your account"
+msgstr "آپ کے اکاؤنٹ میں ایک تبدیلی"
+
+#, python-format
+msgid ""
+"If this was you, there is nothing to do. If it wasn't, reset your password "
+"now and write to %(support)s."
+msgstr ""
+"اگر یہ آپ تھے تو کچھ کرنے کی ضرورت نہیں۔ اگر نہیں، تو ابھی اپنا پاس ورڈ ری "
+"سیٹ کریں اور %(support)s پر لکھیں۔"
 
 msgid "Your password was changed"
 msgstr "آپ کا پاس ورڈ بدل دیا گیا"
@@ -53,6 +118,61 @@ msgstr ""
 "یہ کوڈ ایک بار کام کرتا ہے اور %(minutes)s منٹ میں ختم ہو جاتا ہے۔ اگر آپ نے "
 "یہ نہیں مانگا تو اس ای میل کو نظرانداز کریں: آپ کا پاس ورڈ وہی رہے گا۔"
 
+msgid "Confirm your email"
+msgstr "اپنی ای میل کنفرم کریں"
+
+msgid ""
+"Enter this code on the sign-up page to finish creating your HolidayOps "
+"account."
+msgstr ""
+"اپنا HolidayOps اکاؤنٹ مکمل کرنے کے لیے یہ کوڈ سائن اپ صفحے پر درج کریں۔"
+
+#, python-format
+msgid ""
+"The code works once and expires in %(minutes)s minutes. If you didn't sign "
+"up, ignore this email: no account is made without the code."
+msgstr ""
+"کوڈ ایک بار کام کرتا ہے اور %(minutes)s منٹ میں ختم ہو جاتا ہے۔ اگر آپ نے "
+"سائن اپ نہیں کیا تو یہ ای میل نظر انداز کریں: کوڈ کے بغیر کوئی اکاؤنٹ نہیں "
+"بنتا۔"
+
+msgid "Your email is confirmed"
+msgstr "آپ کی ای میل کنفرم ہو گئی"
+
+msgid ""
+"Welcome to HolidayOps. Three steps get you going: create an organization, "
+"add a calendar for your country, then mark your own closures on it."
+msgstr ""
+"HolidayOps میں خوش آمدید۔ تین قدم کافی ہیں: ایک تنظیم بنائیں، اپنے ملک کا "
+"کیلنڈر شامل کریں، پھر اس پر اپنی چھٹیاں لگائیں۔"
+
+#
+msgid "Open HolidayOps"
+msgstr "HolidayOps کھولیں"
+
+#, python-format
+msgid ""
+"New here? The guide walks through every step: %(app_url)s/guide/. Questions: "
+"%(support)s."
+msgstr ""
+"نئے ہیں؟ رہنمائی ہر قدم سمجھاتی ہے: %(app_url)s/guide/۔ سوالات: %(support)s۔"
+
+msgid "Check your email: if the address can be used, we sent it a code."
+msgstr ""
+"اپنی ای میل دیکھیں: اگر یہ پتہ استعمال ہو سکتا ہے تو ہم نے اس پر کوڈ بھیج "
+"دیا ہے۔"
+
+msgid "Tick the box to show you're not a robot, then try again."
+msgstr ""
+"یہ دکھانے کے لیے خانے پر نشان لگائیں کہ آپ روبوٹ نہیں ہیں، پھر دوبارہ کوشش "
+"کریں۔"
+
+msgid "We couldn't check that you're a person. Try again in a minute."
+msgstr "ہم جانچ نہیں سکے کہ آپ انسان ہیں۔ ایک منٹ بعد دوبارہ کوشش کریں۔"
+
+msgid "That code is wrong or has expired. Ask for a new one."
+msgstr "یہ کوڈ غلط ہے یا ختم ہو چکا ہے۔ نیا کوڈ منگوائیں۔"
+
 msgid ""
 "Too many attempts for this account. Wait 15 minutes, or reset the password."
 msgstr ""
@@ -65,9 +185,6 @@ msgstr "ای میل یا پاس ورڈ درست نہیں۔"
 #
 msgid "If an account uses this email, we sent it a code."
 msgstr "اگر اس ای میل سے کوئی اکاؤنٹ ہے تو ہم نے اسے کوڈ بھیج دیا ہے۔"
-
-msgid "That code is wrong or has expired. Ask for a new one."
-msgstr "یہ کوڈ غلط ہے یا ختم ہو چکا ہے۔ نیا کوڈ منگوائیں۔"
 
 msgid "That code didn't work. Check your app's clock, or log in again."
 msgstr "یہ کوڈ کام نہیں کیا۔ اپنی ایپ کا وقت چیک کریں یا دوبارہ لاگ اِن کریں۔"
@@ -421,6 +538,23 @@ msgstr ""
 "HolidayOps کیوں بنا، اس کی تعطیلات کا ڈیٹا کہاں سے آتا ہے، اور اسے کون بناتا "
 "ہے۔"
 
+msgid "Guide"
+msgstr "رہنمائی"
+
+#
+msgid "How to use HolidayOps"
+msgstr "HolidayOps کیسے استعمال کریں"
+
+msgid "How to use HolidayOps: a step-by-step guide"
+msgstr "HolidayOps کیسے استعمال کریں: قدم بہ قدم رہنمائی"
+
+msgid ""
+"From your first date check to a shared company calendar, iCal feeds and the "
+"API, one step at a time."
+msgstr ""
+"پہلی تاریخ جانچنے سے لے کر مشترکہ کمپنی کیلنڈر، iCal فیڈز اور API تک، ایک "
+"ایک قدم کر کے۔"
+
 msgid "Contact"
 msgstr "رابطہ"
 
@@ -457,12 +591,15 @@ msgstr ""
 msgid "Home"
 msgstr "ہوم"
 
-msgid "Free"
-msgstr "مفت"
-
 #, python-format
 msgid "%(quota)s API requests a month"
 msgstr "ماہانہ %(quota)s API درخواستیں"
+
+msgid "Free"
+msgstr "مفت"
+
+msgid "Pro"
+msgstr "پرو"
 
 msgid "API and website"
 msgstr "API اور ویب سائٹ"
@@ -530,9 +667,6 @@ msgstr "ہر ملک میں۔"
 #
 msgid "My calendars"
 msgstr "میرے کیلنڈر"
-
-msgid "Log in"
-msgstr "لاگ اِن"
 
 msgid "Start free"
 msgstr "مفت شروع کریں"
@@ -858,6 +992,197 @@ msgstr ""
 "نہیں اور آپ کی چنی زبان میں دکھتا ہے: ?lang=ur یا ?lang=ar لگائیں، اور تاریک "
 "صفحات کے لیے ?theme=dark۔"
 
+msgid ""
+"No technical knowledge needed. Follow the steps in order; each one takes a "
+"minute or two."
+msgstr ""
+"کسی تکنیکی علم کی ضرورت نہیں۔ قدم ترتیب سے کریں؛ ہر ایک میں ایک دو منٹ لگتے "
+"ہیں۔"
+
+msgid "On this page"
+msgstr "اس صفحے پر"
+
+msgid "Check a date"
+msgstr "تاریخ جانچیں"
+
+msgid "Create your account"
+msgstr "اپنا اکاؤنٹ بنائیں"
+
+msgid "Make an organization"
+msgstr "تنظیم بنائیں"
+
+msgid "Add a company calendar"
+msgstr "کمپنی کیلنڈر شامل کریں"
+
+msgid "Mark your own days off"
+msgstr "اپنی چھٹیاں لگائیں"
+
+msgid "Share it with your team"
+msgstr "اپنی ٹیم کے ساتھ شیئر کریں"
+
+#
+msgid "Connect your software"
+msgstr "اپنا سافٹ ویئر جوڑیں"
+
+msgid "Check a date, no account needed"
+msgstr "تاریخ جانچیں، اکاؤنٹ کی ضرورت نہیں"
+
+msgid ""
+"Open the <a href=\"/playground\">playground</a>, choose a country from the "
+"list (type to search), and click any day. You see whether it is a working "
+"day and why: a weekend, a public holiday, or a normal day."
+msgstr ""
+"<a href=\"/playground\">پلے گراؤنڈ</a> کھولیں، فہرست سے ملک چنیں (تلاش کے "
+"لیے لکھیں)، اور کسی بھی دن پر کلک کریں۔ آپ دیکھیں گے کہ یہ کام کا دن ہے یا "
+"نہیں اور کیوں: ویک اینڈ، عام تعطیل، یا عام دن۔"
+
+#, python-format
+msgid ""
+"For a whole year at a glance, open <a href=\"%(prefix)s/holidays/"
+"\">Holidays</a> and pick your country."
+msgstr ""
+"پورا سال ایک نظر میں دیکھنے کے لیے <a href=\"%(prefix)s/holidays/\">تعطیلات</"
+"a> کھولیں اور اپنا ملک چنیں۔"
+
+msgid ""
+"Click <a href=\"/signup\">Start free</a>, enter your name, email and a "
+"password of at least 10 characters. We email you a 6-digit code: type it in "
+"to confirm the address is yours. No code after a minute? Look in spam, or "
+"ask for a new one."
+msgstr ""
+"<a href=\"/signup\">مفت شروع کریں</a> پر کلک کریں، اپنا نام، ای میل اور کم "
+"از کم 10 حروف کا پاس ورڈ درج کریں۔ ہم آپ کو 6 ہندسوں کا کوڈ ای میل کرتے ہیں: "
+"پتہ آپ کا ہے یہ کنفرم کرنے کے لیے اسے لکھیں۔ ایک منٹ بعد بھی کوڈ نہیں آیا؟ "
+"اسپام دیکھیں، یا نیا کوڈ مانگیں۔"
+
+msgid ""
+"You can also sign in with Google or Microsoft. For extra safety, turn on two-"
+"factor sign-in under Account settings."
+msgstr ""
+"آپ Google یا Microsoft سے بھی سائن اِن کر سکتے ہیں۔ اضافی حفاظت کے لیے اکاؤنٹ "
+"سیٹنگز میں دو مرحلہ سائن اِن آن کریں۔"
+
+msgid ""
+"An organization is your company's shared space. Give it a name; you become "
+"its owner. Later, invite colleagues by email and choose what each may do:"
+msgstr ""
+"تنظیم آپ کی کمپنی کی مشترکہ جگہ ہے۔ اسے نام دیں؛ آپ اس کے مالک بن جاتے ہیں۔ "
+"بعد میں ساتھیوں کو ای میل سے بلائیں اور چنیں کہ ہر ایک کیا کر سکتا ہے:"
+
+msgid "Owner: everything, including deleting the organization."
+msgstr "مالک: سب کچھ، تنظیم حذف کرنے سمیت۔"
+
+msgid "Admin: manages people, API keys and webhooks."
+msgstr "ایڈمن: لوگوں، API کیز اور ویب ہُکس کا انتظام کرتا ہے۔"
+
+msgid "Member: edits calendars and their days off."
+msgstr "رکن: کیلنڈر اور ان کی چھٹیاں بدلتا ہے۔"
+
+msgid "Viewer: can look, not change."
+msgstr "ناظر: دیکھ سکتا ہے، بدل نہیں سکتا۔"
+
+msgid ""
+"Inside the organization, create a calendar, for example “Karachi office”. "
+"Choose its country, and a region if holidays differ there. The weekend comes "
+"from the country on its own; change it only if your office works different "
+"days."
+msgstr ""
+"تنظیم کے اندر ایک کیلنڈر بنائیں، مثلاً “کراچی دفتر”۔ اس کا ملک چنیں، اور اگر "
+"وہاں تعطیلات مختلف ہوں تو علاقہ بھی۔ ویک اینڈ خود ملک سے آتا ہے؛ اسے صرف تب "
+"بدلیں جب آپ کا دفتر دوسرے دنوں میں کام کرتا ہو۔"
+
+msgid ""
+"An office in two countries? Add both as sources: a day is off if either "
+"country says so."
+msgstr ""
+"دفتر دو ملکوں میں ہے؟ دونوں کو ذرائع کے طور پر شامل کریں: اگر کوئی بھی ملک "
+"چھٹی کہے تو وہ دن چھٹی ہے۔"
+
+msgid "Click a day on the calendar and choose what it is:"
+msgstr "کیلنڈر میں کسی دن پر کلک کریں اور چنیں کہ وہ کیا ہے:"
+
+msgid "Closure: the office is shut, such as a company anniversary."
+msgstr "بندش: دفتر بند ہے، جیسے کمپنی کی سالگرہ۔"
+
+msgid "Half day: open in the morning only."
+msgstr "آدھا دن: صرف صبح کھلا۔"
+
+msgid ""
+"Working day: open on a day that would normally be off, such as a swapped "
+"Saturday."
+msgstr "کام کا دن: ایسے دن کھلا جو عام طور پر چھٹی ہو، جیسے بدلا ہوا ہفتہ۔"
+
+msgid ""
+"In the calendar's settings, copy the private iCal link and add it to Google "
+"Calendar (Other calendars, From URL) or Outlook (Add calendar, Subscribe "
+"from web). Changes show up there on their own."
+msgstr ""
+"کیلنڈر کی سیٹنگز میں نجی iCal لنک کاپی کریں اور اسے Google Calendar (Other "
+"calendars، From URL) یا Outlook (Add calendar، Subscribe from web) میں شامل "
+"کریں۔ تبدیلیاں وہاں خود نظر آ جاتی ہیں۔"
+
+msgid ""
+"Turn on the monthly digest to get the next month's days off by email on the "
+"1st."
+msgstr ""
+"ہر مہینے کی 1 تاریخ کو اگلے مہینے کی چھٹیاں ای میل پر پانے کے لیے ماہانہ "
+"خلاصہ آن کریں۔"
+
+msgid "Connect your software (optional)"
+msgstr "اپنا سافٹ ویئر جوڑیں (اختیاری)"
+
+msgid ""
+"Developers can ask the same questions through the API. In the organization's "
+"settings, create an API key and copy it: it is shown once. Then:"
+msgstr ""
+"ڈویلپر یہی سوالات API سے پوچھ سکتے ہیں۔ تنظیم کی سیٹنگز میں API کی بنائیں "
+"اور کاپی کریں: یہ ایک ہی بار دکھائی جاتی ہے۔ پھر:"
+
+#, python-format
+msgid ""
+"Every endpoint is described in the <a href=\"%(docs)s\">API docs</a>, where "
+"you can try it in the browser. Webhooks tell your system when a calendar "
+"changes."
+msgstr ""
+"ہر اینڈ پوائنٹ <a href=\"%(docs)s\">API دستاویزات</a> میں بیان ہے، جہاں آپ "
+"اسے براؤزر میں آزما سکتے ہیں۔ ویب ہُکس آپ کے سسٹم کو بتاتے ہیں جب کیلنڈر "
+"بدلتا ہے۔"
+
+msgid "Words you will see"
+msgstr "الفاظ جو آپ دیکھیں گے"
+
+msgid "Business day"
+msgstr "کام کا دن"
+
+msgid "A day the office is open: not a weekend, not a holiday, not a closure."
+msgstr "وہ دن جب دفتر کھلا ہو: نہ ویک اینڈ، نہ تعطیل، نہ بندش۔"
+
+msgid "The country's regular days off. Not always Saturday and Sunday."
+msgstr "ملک کی باقاعدہ چھٹیاں۔ ہمیشہ ہفتہ اور اتوار نہیں۔"
+
+msgid "Region"
+msgstr "علاقہ"
+
+msgid "A state or province with holidays of its own."
+msgstr "ایک ریاست یا صوبہ جس کی اپنی تعطیلات ہوں۔"
+
+msgid "iCal feed"
+msgstr "iCal فیڈ"
+
+msgid "A private link that calendar apps read to show your days off."
+msgstr "ایک نجی لنک جسے کیلنڈر ایپس آپ کی چھٹیاں دکھانے کے لیے پڑھتی ہیں۔"
+
+msgid "Stuck?"
+msgstr "اٹک گئے؟"
+
+#, python-format
+msgid ""
+"Write to <a href=\"mailto:%(support)s\">%(support)s</a> with what you tried; "
+"a person answers, usually within a working day."
+msgstr ""
+"<a href=\"mailto:%(support)s\">%(support)s</a> پر لکھیں کہ آپ نے کیا آزمایا؛ "
+"ایک انسان جواب دیتا ہے، عام طور پر ایک کاروباری دن میں۔"
+
 #, python-format
 msgid "%(counter)s country is on a public holiday today"
 msgid_plural "%(counter)s countries are on a public holiday today"
@@ -1181,14 +1506,11 @@ msgstr ""
 "ہر پلان میں پوری پروڈکٹ شامل ہے: کمپنی کیلنڈر، iCal فیڈز، ڈائجسٹ اور ویب "
 "ہُکس۔ پلانز میں فرق صرف اتنا ہے کہ آپ API کتنا استعمال کرتے ہیں۔"
 
-msgid "Pro"
-msgstr "پرو"
-
 msgid "For production"
 msgstr "پروڈکشن کے لیے"
 
-msgid "Talk to us"
-msgstr "ہم سے بات کریں"
+msgid "per month"
+msgstr "فی مہینہ"
 
 msgid "Free forever"
 msgstr "ہمیشہ مفت"
@@ -1220,8 +1542,15 @@ msgstr "دوبارہ کوشش کے ساتھ دستخط شدہ ویب ہُکس"
 msgid "English, Urdu and Arabic"
 msgstr "انگریزی، اردو اور عربی"
 
-msgid "Contact us to upgrade."
-msgstr "اپ گریڈ کے لیے ہم سے رابطہ کریں۔"
+msgid "Upgrade to Pro"
+msgstr "Pro پر اپ گریڈ کریں"
+
+msgid ""
+"Email us from your account address with your organization's name; we switch "
+"it over within a working day. Cancel any time."
+msgstr ""
+"اپنے اکاؤنٹ والے پتے سے اپنی تنظیم کے نام کے ساتھ ہمیں ای میل کریں؛ ہم ایک "
+"کاروباری دن میں اسے بدل دیتے ہیں۔ کسی بھی وقت منسوخ کریں۔"
 
 msgid "How requests are counted"
 msgstr "درخواستیں کیسے گنی جاتی ہیں"
@@ -1272,6 +1601,9 @@ msgstr "پلانز کا موازنہ"
 msgid "Feature"
 msgstr "خصوصیت"
 
+msgid "Price"
+msgstr "قیمت"
+
 msgid "Requests per minute, per key"
 msgstr "فی کلید، فی منٹ درخواستیں"
 
@@ -1297,6 +1629,16 @@ msgid ""
 msgstr ""
 "اوپن سورس holidays لائبریری سے، جسے اس کی کمیونٹی تازہ رکھتی ہے۔ آپ کی کمپنی "
 "کی بندشیں آپ کے اپنے کیلنڈروں میں رہتی ہیں۔"
+
+msgid "How do I pay for Pro?"
+msgstr "Pro کی ادائیگی کیسے کروں؟"
+
+msgid ""
+"Write to us and we send an invoice; there is no card form on this site. The "
+"free plan never asks for payment details."
+msgstr ""
+"ہمیں لکھیں اور ہم انوائس بھیج دیتے ہیں؛ اس سائٹ پر کارڈ کا کوئی فارم نہیں۔ "
+"مفت پلان کبھی ادائیگی کی تفصیلات نہیں مانگتا۔"
 
 msgid "Can I change plans later?"
 msgstr "کیا میں بعد میں پلان بدل سکتا ہوں؟"

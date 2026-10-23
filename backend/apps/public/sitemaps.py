@@ -25,6 +25,7 @@ class PagesSitemap(_Localized):
             "/tools/overlap/",
             "/holidays/",
             "/pricing/",
+            "/guide/",
             "/about/",
             "/contact/",
             "/status/",

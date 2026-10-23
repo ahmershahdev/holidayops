@@ -1,0 +1,7 @@
+{% load i18n %}{% translate "Confirm your email" %}
+
+{% translate "Enter this code on the sign-up page to finish creating your HolidayOps account." %}
+
+{{ code }}
+
+{% blocktranslate %}The code works once and expires in {{ minutes }} minutes. If you didn't sign up, ignore this email: no account is made without the code.{% endblocktranslate %}

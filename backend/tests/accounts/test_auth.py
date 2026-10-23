@@ -12,25 +12,21 @@ from tests.factories import PASSWORD, UserFactory
 pytestmark = pytest.mark.django_db
 
 
-def test_signup_logs_in_and_hashes_with_argon2(client: APIClient, settings: Any) -> None:
+def test_signup_hashes_with_argon2_and_waits_for_the_code(client: APIClient, settings: Any) -> None:
     settings.PASSWORD_HASHERS = base_settings.PASSWORD_HASHERS
     response = client.post(
         "/api/v1/auth/signup/",
         {"email": "Ayesha@Example.com", "password": PASSWORD, "name": "Ayesha"},
     )
-    assert response.status_code == 201
-    assert response.json()["email"] == "ayesha@example.com"
+    assert response.status_code == 202
+    assert response.json()["verification_required"] is True
     user = User.objects.get(email="ayesha@example.com")
     assert user.password.startswith("argon2")
-    assert client.get("/api/v1/auth/me/").json()["email"] == "ayesha@example.com"
+    assert not user.email_verified
+    assert client.get("/api/v1/auth/me/").status_code == 204
 
 
-def test_signup_rejects_duplicate_email_and_weak_password(client: APIClient) -> None:
-    UserFactory.create(email="taken@example.com")
-    duplicate = client.post(
-        "/api/v1/auth/signup/", {"email": "TAKEN@example.com", "password": PASSWORD}
-    )
-    assert "email" in duplicate.json()
+def test_signup_rejects_a_weak_password(client: APIClient) -> None:
     weak = client.post("/api/v1/auth/signup/", {"email": "new@example.com", "password": "12345"})
     assert weak.status_code == 400
 
@@ -43,7 +39,7 @@ def test_login_logout_cycle(client: APIClient) -> None:
     assert ok.status_code == 200
     assert client.get("/api/v1/auth/me/").status_code == 200
     assert client.post("/api/v1/auth/logout/").status_code == 204
-    assert client.get("/api/v1/auth/me/").status_code == 403
+    assert client.get("/api/v1/auth/me/").status_code == 204
 
 
 def test_session_writes_require_csrf() -> None:
@@ -64,6 +60,8 @@ def test_session_writes_require_csrf() -> None:
     "path",
     [
         "/api/v1/auth/signup/",
+        "/api/v1/auth/verify/",
+        "/api/v1/auth/verify/resend/",
         "/api/v1/auth/password/forgot/",
         "/api/v1/auth/password/reset/",
         "/api/v1/auth/2fa/verify/",
@@ -91,17 +89,15 @@ def test_login_is_throttled(client: APIClient) -> None:
 
 def test_signup_records_the_ui_language(client: APIClient) -> None:
     body = {"email": "urdu@example.com", "password": PASSWORD}
-    response = client.post("/api/v1/auth/signup/", body, HTTP_ACCEPT_LANGUAGE="ur")
-    assert response.data["language"] == "ur"
+    client.post("/api/v1/auth/signup/", body, HTTP_ACCEPT_LANGUAGE="ur")
+    assert User.objects.get(email="urdu@example.com").language == "ur"
     other = {"email": "fr@example.com", "password": PASSWORD}
-    assert (
-        client.post("/api/v1/auth/signup/", other, HTTP_ACCEPT_LANGUAGE="fr").data["language"]
-        == "en"
-    )
+    client.post("/api/v1/auth/signup/", other, HTTP_ACCEPT_LANGUAGE="fr")
+    assert User.objects.get(email="fr@example.com").language == "en"
 
 
 def test_me_can_change_name_and_language_but_not_email(client: APIClient) -> None:
-    client.post("/api/v1/auth/signup/", {"email": "me@example.com", "password": PASSWORD})
+    client.force_login(UserFactory.create(email="me@example.com"))
     response = client.patch(
         "/api/v1/auth/me/",
         {"name": "Ahmer", "language": "ar", "email": "x@example.com"},

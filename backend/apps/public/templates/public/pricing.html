@@ -14,7 +14,7 @@
       <h2 id="plan-{{ plan.code }}">{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</h2>
       {% if plan.code == "pro" %}<span class="plan-tag">{% translate "For production" %}</span>{% endif %}
     </div>
-    <p class="plan-price">{% if plan.code == "pro" %}{% translate "Talk to us" %}{% else %}{% translate "Free forever" %}{% endif %}</p>
+    <p class="plan-price">{% if plan.price %}<span class="ltr">${{ plan.price }}</span> <span class="plan-per">{% translate "per month" %}</span>{% else %}{% translate "Free forever" %}{% endif %}</p>
     <p class="plan-for">{% if plan.code == "pro" %}{% translate "For products that check working days on every request." %}{% else %}{% translate "For trying the API and small internal tools." %}{% endif %}</p>
     <dl class="plan-limits">
       <div><dt>{% translate "per minute, per key" %}</dt><dd class="ltr">{{ plan.per_minute|floatformat:"0g" }}</dd></div>
@@ -30,7 +30,8 @@
     {% if plan.code == "free" %}
     <a class="button button-arrow" href="{{ signup }}">{% translate "Start free" %}<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
     {% else %}
-    <p class="plan-note">{% translate "Contact us to upgrade." %}</p>
+    <a class="button button-ghost" href="mailto:{{ support }}?subject=HolidayOps%20Pro">{% translate "Upgrade to Pro" %}</a>
+    <p class="plan-note">{% blocktranslate %}Email us from your account address with your organization's name; we switch it over within a working day. Cancel any time.{% endblocktranslate %}</p>
     {% endif %}
   </section>
 {% endfor %}
@@ -77,6 +78,7 @@
     <caption class="skip">{% translate "Compare plans" %}</caption>
     <thead><tr><th scope="col"><span class="skip">{% translate "Feature" %}</span></th>{% for plan in plans %}<th scope="col">{% if plan.code == "pro" %}{% translate "Pro" %}{% else %}{% translate "Free" %}{% endif %}</th>{% endfor %}</tr></thead>
     <tbody>
+      <tr><th scope="row">{% translate "Price" %}</th>{% for plan in plans %}<td>{% if plan.price %}<span class="ltr">${{ plan.price }}</span> {% translate "per month" %}{% else %}{% translate "Free" %}{% endif %}</td>{% endfor %}</tr>
       <tr><th scope="row">{% translate "Requests per minute, per key" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.per_minute|floatformat:"0g" }}</td>{% endfor %}</tr>
       <tr><th scope="row">{% translate "Requests a month" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.monthly_quota|floatformat:"0g" }}</td>{% endfor %}</tr>
       <tr><th scope="row">{% translate "API keys" %}</th>{% for plan in plans %}<td class="ltr">{{ plan.max_keys }}</td>{% endfor %}</tr>
@@ -91,6 +93,7 @@
   <h2 id="faq-title" class="section-title">{% translate "Questions" %}</h2>
   <details><summary>{% translate "Do the public holiday pages count against my quota?" %}</summary><p>{% translate "No. Only API calls made with one of your keys count. Browsing holidays, the playground and calendar feeds are free." %}</p></details>
   <details><summary>{% translate "Where does the holiday data come from?" %}</summary><p>{% translate "From the open-source holidays library, kept up to date by its community. Your company closures stay in your own calendars." %}</p></details>
+  <details><summary>{% translate "How do I pay for Pro?" %}</summary><p>{% translate "Write to us and we send an invoice; there is no card form on this site. The free plan never asks for payment details." %}</p></details>
   <details><summary>{% translate "Can I change plans later?" %}</summary><p>{% translate "Yes. Your calendars, feeds and keys stay as they are; only the limits change." %}</p></details>
   <details><summary>{% translate "Which languages are supported?" %}</summary><p>{% translate "The app, the emails and holiday names come in English, Urdu and Arabic, with right-to-left layouts." %}</p></details>
 </section>

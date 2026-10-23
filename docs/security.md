@@ -11,21 +11,43 @@ Reporting a vulnerability: see [SECURITY.md](../SECURITY.md).
   session-only. A key reaches its own org's private calendars and nothing else.
 - Passwords use Argon2.
 
+## Email verification
+
+`apps/accounts/codes.py`, `POST /api/v1/auth/signup/`, `/auth/verify/` and `/auth/verify/resend/`.
+
+- Sign-up never signs in and never says whether the address is taken: it always answers `202`
+  ("check your email"). A new address gets an unconfirmed account and a code (valid 1 hour, 5
+  guesses). An address with a confirmed account is left unchanged and its owner gets a "someone
+  tried to sign up" email with no code. Every branch hashes the password first and emails go
+  through Celery, so response times don't tell the cases apart either.
+- An unconfirmed account belongs to nobody yet: a later sign-up with the same address replaces
+  its password and gets a fresh code, so squatting someone's address gains nothing. Unconfirmed
+  accounts with no memberships or linked providers are deleted after 7 days
+  (`accounts.prune_unverified`, nightly).
+- Logging in to an unconfirmed account with the right password sends a new code instead of a
+  session. A password reset, or a Google/Microsoft sign-in whose provider vouches for the same
+  address, also confirms it.
+- `verified_user()` (`apps/accounts/auth.py`) gates everything that reaches other people:
+  creating an organization, sending or accepting invites, digests. Adding a member by email
+  ignores unconfirmed accounts. Existing accounts were marked confirmed by the migration.
+
 ## Password reset
 
-`apps/accounts/resets.py`, `POST /api/v1/auth/password/forgot/` and `/reset/`.
+`apps/accounts/codes.py`, `POST /api/v1/auth/password/forgot/` and `/reset/`.
 
-- A 6-digit code from `secrets.randbelow`, stored only as `HMAC-SHA256(SECRET_KEY, user id + code)`
-  and compared in constant time. A database leak alone gives no live codes.
+- A 6-digit code from `secrets.randbelow`, stored only as
+  `HMAC-SHA256(SECRET_KEY, purpose + user id + code)` and compared in constant time. A database
+  leak alone gives no live codes; a verification code can't be used as a reset code.
 - Valid for 10 minutes and once: the row is locked (`select_for_update`) while it is checked and
   marked used, so two parallel requests can't both use it. Asking for a new code retires the old
   one. Five wrong guesses retire it too.
-- "Forgot" answers `202` with the same text whether or not the account exists. At most 3 codes per
-  address per hour (inbox flooding), `password_reset` throttle 5/hour per IP, and `auth` 10/minute
-  per IP on the reset step.
+- "Forgot" answers `202` with the same text whether or not the account exists. At most 3 emails
+  per address per hour, counting every purpose (inbox flooding), `password_reset` throttle 5/hour
+  per IP, and `auth` 10/minute per IP on the reset step.
 - A successful reset logs the user in, emails a "password changed" notice and, because the
   password hash changes, signs out every other session.
-- Emails are sent inside the request, so the code never sits in the Celery broker.
+- Emails are queued to Celery (`accounts.send_email`) so every answer takes the same time; the code
+  sits in the Redis broker until the worker sends it, which is inside the private network.
 
 ## Two-factor sign-in
 
@@ -62,6 +84,29 @@ password, refuses while the user is the only owner of an organization with other
 organizations where the user was the only member, and keeps other organizations' history with the
 actor set to null. Both share the `account_data` throttle (10/hour).
 
+## Bot check
+
+`apps/accounts/captcha.py`, on sign-up, forgot password and new verification codes only. The data
+API and login are not behind it (login has per-account limits instead).
+
+- Honeypot: a `website` field moved off-screen, with `tabindex=-1` and `aria-hidden`. If it has
+  any value the view answers exactly as on success and does nothing (`auth.honeypot` is logged).
+- Google reCAPTCHA v3 scores the request invisibly; the server checks `success`, the expected
+  `action` and `RECAPTCHA_MIN_SCORE` (0.5). A low score, a missing token or Google being
+  unreachable answers `400` with `"captcha": "v2"`, and the page shows the v2 checkbox, which is
+  verified with its own secret key. No v2 keys: the request fails instead.
+- The checkbox is drawn in the page's theme (redrawn if it changes) and switches to Google's
+  compact size below 304 px. The floating v3 badge is hidden and each form shows Google's notice
+  in text instead, as Google's terms allow.
+- Keys come from `RECAPTCHA_V3_SITE_KEY`, `RECAPTCHA_V3_SECRET_KEY`, `RECAPTCHA_V2_SITE_KEY` and
+  `RECAPTCHA_V2_SECRET_KEY`; with none set (development, tests) only the honeypot runs.
+
+## Account notices
+
+`apps/accounts/emails.py`. The owner is emailed when two-factor sign-in is turned on or off, new
+recovery codes are made, a Google or Microsoft sign-in is linked to an existing account or
+removed, the password changes, and when the account is deleted (sent before the row goes).
+
 ## Email delivery
 
 `EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend` sends every email (reset codes,
@@ -75,8 +120,8 @@ only, never the address. `DEFAULT_FROM_EMAIL` must be on a domain verified in Re
   another site could sign a browser into the attacker's account (login CSRF).
 - Logins are limited per IP (`auth`, 10/minute) and per account: 10 failures in 15 minutes lock
   that address for the rest of the window, so guesses spread over many IPs still stop.
-- Two sign-ups with one address at the same moment: the unique index decides and the loser gets a
-  normal 400, not a 500.
+- Two sign-ups with one address at the same moment: the row lock in `codes.register` serialises
+  them and both get the same `202`.
 
 ## Injection and XSS
 
@@ -85,8 +130,12 @@ only, never the address. `DEFAULT_FROM_EMAIL` must be on a domain verified in Re
 - HTML: Django templates (pages and emails) autoescape; React escapes text; JSON-LD is escaped
   like `json_script`; third-party SVGs pass an allowlist sanitiser.
 - CSP blocks inline script everywhere and all script on public pages, so an injected tag can't run.
-  Public pages also allow no inline styles (only the internal `/style/` guide does), so a nonce
-  isn't needed: there is nothing inline to allow.
+  Public pages also allow no inline styles (only the internal `/style/` guide does), so they need
+  no nonce: there is nothing inline to allow.
+- The web app's page (`config/spa.py`) uses a nonce: Vite stamps a placeholder on every script and
+  module preload (`html.cspNonce`), and Django swaps in a fresh 144-bit value per response.
+  `script-src 'nonce-…' 'strict-dynamic'` then lets those scripts load the app's lazy chunks and
+  reCAPTCHA, while an injected `<script>` without the nonce never runs.
 - `Permissions-Policy` turns off camera, microphone, location, payment and USB for every page.
 
 ## Tenant isolation
@@ -112,6 +161,13 @@ for anonymous calls. Over the limit: `429` with `Retry-After`.
   dodge every per-IP limit by sending a new one per request (`tests/test_security.py`).
 
 ## Resource limits
+
+Request size: bodies over 512 KB are refused with `413` before anything reads them
+(`config.csp.BodySizeLimitMiddleware`; DRF reads JSON from the stream, past Django's own
+`DATA_UPLOAD_MAX_MEMORY_SIZE` check). Gunicorn caps the request line (4094 bytes), header count
+(60) and header size (8190 bytes), kills workers stuck for 30 s, and recycles each worker after
+about 2000 requests.
+
 
 Pending invites (50/org), webhooks (10/org), API keys (plan) and active feed links
 (10/calendar) are checked and created under a MySQL named lock per owner

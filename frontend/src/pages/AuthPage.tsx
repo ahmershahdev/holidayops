@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { api, type Schemas, unwrap } from "../api/client";
 import { AuthField, AuthLayout, EyeToggle, SubmitButton } from "../components/auth/AuthShell";
+import { useBotCheck } from "../components/auth/BotCheck";
 import {
   OrDivider,
   SsoButtons,
@@ -12,6 +13,9 @@ import {
 } from "../components/auth/TwoFactorForm";
 import { ErrorText } from "../components/ui";
 import { safeNext } from "../lib/navigation";
+import { CodeInput } from "./ForgotPasswordPage";
+
+const RESEND_AFTER = 60;
 
 export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const { t } = useTranslation();
@@ -25,6 +29,8 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   const navigate = useNavigate();
   const login = mode === "login";
   const [twoFactor, setTwoFactor] = useState(search.get("two_factor") === "1");
+  const [verifying, setVerifying] = useState(false);
+  const bot = useBotCheck("signup");
   const ssoError = search.get("sso_error");
   const hasSso = (useSsoProviders().data ?? []).length > 0;
 
@@ -36,19 +42,49 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
   }
 
   const submit = useMutation({
-    mutationFn: () =>
+    mutationFn: async () =>
       login
         ? unwrap(api.POST("/api/v1/auth/login/", { body: { email, password } }))
-        : unwrap(api.POST("/api/v1/auth/signup/", { body: { email, password, name } })),
+        : unwrap(
+            api.POST("/api/v1/auth/signup/", {
+              body: { email, password, name, ...(await bot.fields()) },
+            }),
+          ),
     onSuccess: async (result) => {
       if ("two_factor_required" in result) setTwoFactor(true);
+      else if ("verification_required" in result) setVerifying(true);
       else await finish(result);
     },
+    onError: bot.onError,
   });
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     submit.mutate();
+  }
+
+  if (verifying) {
+    return (
+      <AuthLayout
+        title={t("auth.codeTitle")}
+        lead={
+          <>
+            {t("auth.verifyLead")}{" "}
+            <strong className="font-semibold text-ink" dir="ltr">
+              {email}
+            </strong>
+          </>
+        }
+      >
+        <VerifyEmailForm
+          email={email}
+          onDone={(result) =>
+            "two_factor_required" in result ? setTwoFactor(true) : void finish(result)
+          }
+          onBack={() => setVerifying(false)}
+        />
+      </AuthLayout>
+    );
   }
 
   if (twoFactor) {
@@ -132,8 +168,9 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
             )
           }
         />
+        {!login && bot.widget}
         <ErrorText error={submit.error} />
-        <SubmitButton pending={submit.isPending}>
+        <SubmitButton pending={submit.isPending} disabled={!login && bot.waiting}>
           {login ? t("auth.login") : t("auth.signup")}
         </SubmitButton>
       </form>
@@ -147,5 +184,71 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
         </Link>
       </p>
     </AuthLayout>
+  );
+}
+
+function VerifyEmailForm({
+  email,
+  onDone,
+  onBack,
+}: {
+  email: string;
+  onDone: (result: Schemas["User"] | Schemas["TwoFactorRequired"]) => void;
+  onBack: () => void;
+}) {
+  const { t } = useTranslation();
+  const [code, setCode] = useState("");
+  const [wait, setWait] = useState(RESEND_AFTER);
+  const bot = useBotCheck("verify");
+
+  useEffect(() => {
+    if (wait <= 0) return;
+    const timer = setTimeout(() => setWait(wait - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [wait]);
+
+  const verify = useMutation({
+    mutationFn: () => unwrap(api.POST("/api/v1/auth/verify/", { body: { email, code } })),
+    onSuccess: onDone,
+  });
+
+  const resend = useMutation({
+    mutationFn: async () =>
+      unwrap(api.POST("/api/v1/auth/verify/resend/", { body: { email, ...(await bot.fields()) } })),
+    onSuccess: () => setWait(RESEND_AFTER),
+    onError: bot.onError,
+  });
+
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    verify.mutate();
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="flex flex-col gap-5">
+      <CodeInput value={code} onChange={setCode} />
+      {bot.widget}
+      <ErrorText error={verify.error ?? resend.error} />
+      <SubmitButton pending={verify.isPending}>{t("auth.verify")}</SubmitButton>
+      <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
+        <span>{t("auth.verifyExpires")}</span>
+        <button
+          type="button"
+          disabled={wait > 0 || resend.isPending || bot.waiting}
+          onClick={() => resend.mutate()}
+          className="font-semibold text-accent underline-offset-4 enabled:hover:underline disabled:text-muted"
+        >
+          {wait > 0 ? t("auth.resendIn", { seconds: wait }) : t("auth.resend")}
+        </button>
+        <button
+          type="button"
+          onClick={onBack}
+          className="font-semibold text-accent underline-offset-4 hover:underline"
+        >
+          {t("auth.otherEmail")}
+        </button>
+      </p>
+      <p className="text-xs text-muted">{t("auth.spamHint")}</p>
+    </form>
   );
 }

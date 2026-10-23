@@ -101,7 +101,7 @@ def test_landing_describes_the_site_owner_and_faq() -> None:
     org = types["Organization"]
     assert org["email"] == "support@ahmershah.dev"
     assert org["founder"]["url"] == "https://ahmershah.dev"
-    assert types["WebApplication"]["offers"]["price"] == "0"
+    assert [o["price"] for o in types["WebApplication"]["offers"]] == ["0", "19"]
     questions = types["FAQPage"]["mainEntity"]
     assert len(questions) == page.count("<summary>")
     assert all(q["acceptedAnswer"]["text"] for q in questions)

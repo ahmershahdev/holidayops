@@ -11,7 +11,7 @@ from django.test import Client
 from rest_framework.test import APIClient
 
 from apps.api import views as api_views
-from config.spa import SPA_POLICY
+from config.spa import NONCE_PLACEHOLDER, spa_policy
 from tests.factories import CalendarFactory, MembershipFactory, SourceFactory
 
 BACKEND = Path(__file__).resolve().parents[1]
@@ -43,7 +43,10 @@ def test_healthz_is_503_when_a_dependency_is_down() -> None:
 
 def test_spa_routes_serve_the_built_index(tmp_path: Path, settings: Any) -> None:
     settings.SPA_DIR = tmp_path
-    (tmp_path / "index.html").write_text("<!doctype html><title>HolidayOps</title>")
+    (tmp_path / "index.html").write_text(
+        f'<!doctype html><title>HolidayOps</title><script nonce="{NONCE_PLACEHOLDER}"></script>'
+    )
+    nonces = set()
     for path in (
         "/playground",
         "/login",
@@ -57,8 +60,20 @@ def test_spa_routes_serve_the_built_index(tmp_path: Path, settings: Any) -> None
         assert response.status_code == 200, path
         assert b"<title>HolidayOps</title>" in response.content
         assert response["Cache-Control"] == "no-cache"
-        assert response["Content-Security-Policy"] == SPA_POLICY
+        nonce = response.content.decode().split('nonce="')[1].split('"')[0]
+        assert len(nonce) >= 24
+        assert response["Content-Security-Policy"] == spa_policy(nonce)
+        assert f"'nonce-{nonce}' 'strict-dynamic'" in response["Content-Security-Policy"]
+        nonces.add(nonce)
+    assert len(nonces) == 7
     assert Client().get("/apps").status_code == 404
+
+
+@pytest.mark.django_db
+def test_oversized_bodies_are_refused_before_parsing(settings: Any) -> None:
+    body = "x" * (settings.DATA_UPLOAD_MAX_MEMORY_SIZE + 1)
+    response = APIClient().post("/api/v1/auth/login/", body, content_type="application/json")
+    assert response.status_code == 413
 
 
 def test_spa_routes_are_404_when_the_app_is_not_built(tmp_path: Path, settings: Any) -> None:

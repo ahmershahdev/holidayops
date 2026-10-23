@@ -45,7 +45,11 @@ def send_digest(subscription_id: int, run_date: str) -> bool:
             .filter(pk=subscription_id)
             .first()
         )
-        if subscription is None or _sent_this_month(subscription.last_sent_on, day):
+        if (
+            subscription is None
+            or _sent_this_month(subscription.last_sent_on, day)
+            or not subscription.user.email_verified
+        ):
             return False
         if not Membership.objects.filter(
             user=subscription.user, org=subscription.calendar.org

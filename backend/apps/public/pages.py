@@ -6,12 +6,13 @@ from datetime import date
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.core import list_countries
 from apps.public.content import PREFIX
-from apps.public.seo import breadcrumbs, fit_title
+from apps.public.seo import SUPPORT_EMAIL, breadcrumbs, fit_title
 from apps.public.status import checks, releases
 from apps.public.views import _meta, public_page
 
@@ -34,6 +35,24 @@ def about(request: HttpRequest, lang: str) -> HttpResponse:
         "region_count": sum(len(c.subdivisions) for c in countries.values()),
     }
     return render(request, "public/about.html", context)
+
+
+@public_page
+def guide(request: HttpRequest, lang: str) -> HttpResponse:
+    context = {
+        **_meta(request, lang, lambda code: f"{PREFIX[code]}/guide/"),
+        **breadcrumbs(request, lang, [(_("Guide"), f"{PREFIX[lang]}/guide/")]),
+        "title": _("How to use HolidayOps"),
+        "head_title": fit_title(_("How to use HolidayOps: a step-by-step guide")),
+        "description": _(
+            "From your first date check to a shared company calendar, iCal feeds and the API, "
+            "one step at a time."
+        ),
+        "origin": request.build_absolute_uri("/").rstrip("/"),
+        "docs": reverse("docs"),
+        "support": SUPPORT_EMAIL,
+    }
+    return render(request, "public/guide.html", context)
 
 
 @public_page

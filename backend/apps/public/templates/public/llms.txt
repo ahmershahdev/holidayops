@@ -8,7 +8,11 @@ Holiday data comes from the open-source Python library `holidays` (https://githu
 
 - [Home]({{ root }}): what HolidayOps does, a live "is it a working day?" check, who is off today
 - [Public holidays by country]({{ root }}holidays/): every supported country, one page per country and year
-- [Pricing]({{ root }}pricing/): the free and Pro API plans and how requests are counted
+- [Pricing]({{ root }}pricing/): Free (no card) and Pro (US${{ pro_price }} a month), and how requests are counted
+- [Guide]({{ root }}guide/): step-by-step instructions for beginners, from the first date check to the API
+- [Who is off today]({{ root }}today/): every country's holidays on its own local date
+- [Overlap tool]({{ root }}tools/overlap/): the shared working days of up to four countries
+- [Status]({{ root }}status/): live health of the API, database and background jobs
 - [About]({{ root }}about/): why the project exists and who builds it
 - [Contact]({{ root }}contact/): support, Pro plans, wrong dates and security reports
 
@@ -16,7 +20,12 @@ Holiday data comes from the open-source Python library `holidays` (https://githu
 
 - [Interactive API docs]({{ root }}api/v1/docs/): Swagger UI for every endpoint
 - [OpenAPI schema]({{ root }}api/v1/schema/): machine-readable OpenAPI 3 description
-- [Full reference for language models]({{ root }}llms-full.txt): endpoints, parameters, limits and every country code in one text file
+- [Full reference for language models]({{ root }}llms-full.txt): endpoints, parameters, limits, accounts and every country code in one text file
+
+## Web app
+
+- [Playground]({{ root }}playground): pick a country and click a day; no account needed
+- [Sign up]({{ root }}signup): free account, confirmed by a 6-digit code sent to the email address
 
 ## Optional
 

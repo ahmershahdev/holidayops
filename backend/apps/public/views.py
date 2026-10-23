@@ -32,7 +32,7 @@ from apps.public.content import (
 from apps.public.frame import frame_context, signed_in
 from apps.public.palette import swatches
 from apps.public.patterns import pattern
-from apps.public.seo import breadcrumbs, fit_title, ld_json
+from apps.public.seo import SUPPORT_EMAIL, breadcrumbs, fit_title, ld_json
 from apps.public.theme import get_theme
 from config.security_log import security_event
 
@@ -276,6 +276,7 @@ def pricing(request: HttpRequest, lang: str) -> HttpResponse:
         ],
         "signup": "/signup",
         "docs": reverse("docs"),
+        "support": SUPPORT_EMAIL,
     }
     return render(request, "public/pricing.html", context)
 

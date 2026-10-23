@@ -64,7 +64,7 @@ def test_delete_removes_solo_orgs_and_keeps_shared_history() -> None:
     assert not Organization.objects.filter(pk=solo.pk).exists()
     assert Organization.objects.filter(pk=shared.pk).exists()
     assert AuditLog.objects.get(org=shared).actor is None
-    assert client.get("/api/v1/auth/me/").status_code == 403
+    assert client.get("/api/v1/auth/me/").status_code == 204
 
 
 def test_sole_owner_of_a_shared_org_must_hand_it_over_first() -> None:

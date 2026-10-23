@@ -8,9 +8,10 @@ from urllib.parse import urlencode
 from django.contrib.auth import login
 from django.db import IntegrityError, transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from apps.accounts import sso, twofactor
+from apps.accounts import emails, sso, twofactor
 from apps.accounts.models import SocialIdentity, User
 from config.security_log import security_event
 
@@ -57,6 +58,7 @@ def _resolve(
     )
     if identity:
         return identity.user if identity.user.is_active else "inactive"
+    created = False
     if link is not None:
         user = User.objects.filter(pk=link, is_active=True).first()
         if user is None or request.user.pk != link:
@@ -68,6 +70,7 @@ def _resolve(
         # An existing account is only joined on an address the provider vouches for.
         if user is not None and not claims.email_verified:
             return "taken"
+        created = user is None
         if user is None:
             language = getattr(request, "LANGUAGE_CODE", "en")
             user = User.objects.create_user(
@@ -87,6 +90,12 @@ def _resolve(
             )
     except IntegrityError:
         return "expired"
+    vouched = claims.email_verified and claims.email.lower() == user.email.lower()
+    if vouched and not user.email_verified:
+        user.email_verified_at = timezone.now()
+        user.save(update_fields=["email_verified_at"])
+    if not created:
+        emails.notify(user, "sso_linked")
     security_event("auth.sso_linked", request, logging.INFO, user=user.pk, provider=provider.id)
     return user
 

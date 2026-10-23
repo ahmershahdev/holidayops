@@ -61,6 +61,7 @@ MIDDLEWARE = [
     "config.health.HealthCheckMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "config.csp.ContentSecurityPolicyMiddleware",
+    "config.csp.BodySizeLimitMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -148,13 +149,17 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "apps.api.exceptions.api_exception_handler",
 }
 
+# Prices are whole US dollars a month, shown on /pricing/; there is no checkout, upgrades are
+# done by hand after an email.
 PLANS: dict[str, dict[str, str | int]] = {
     "free": {
+        "price": 0,
         "rate": env("PLAN_FREE_RATE", "120/minute"),
         "monthly_quota": int(env("PLAN_FREE_QUOTA", "10000")),
         "max_keys": int(env("PLAN_FREE_KEYS", "3")),
     },
     "pro": {
+        "price": int(env("PLAN_PRO_PRICE", "19")),
         "rate": env("PLAN_PRO_RATE", "1200/minute"),
         "monthly_quota": int(env("PLAN_PRO_QUOTA", "1000000")),
         "max_keys": int(env("PLAN_PRO_KEYS", "20")),
@@ -198,6 +203,10 @@ CELERY_BEAT_SCHEDULE: dict[str, dict[str, object]] = {
     "webhook-retries": {"task": "webhooks.retry_due", "schedule": 60.0},
     "prune-usage": {"task": "api.prune_usage", "schedule": crontab(minute="0", hour="3")},
     "heartbeat": {"task": "public.heartbeat", "schedule": 60.0},
+    "prune-unverified": {
+        "task": "accounts.prune_unverified",
+        "schedule": crontab(minute="30", hour="3"),
+    },
 }
 
 APP_URL = env("APP_URL", "http://localhost:5173").rstrip("/")
@@ -220,6 +229,20 @@ SSO_CLIENTS = {
     "google": (env("GOOGLE_CLIENT_ID", ""), env("GOOGLE_CLIENT_SECRET", "")),
     "microsoft": (env("MICROSOFT_CLIENT_ID", ""), env("MICROSOFT_CLIENT_SECRET", "")),
 }
+
+# Google reCAPTCHA on sign-up and the forms that send email (apps/accounts/captcha.py). v3 runs
+# invisibly; below the score, the page shows the v2 checkbox. Empty keys turn it off.
+RECAPTCHA = {
+    "v3_site": env("RECAPTCHA_V3_SITE_KEY", ""),
+    "v3_secret": env("RECAPTCHA_V3_SECRET_KEY", ""),
+    "v2_site": env("RECAPTCHA_V2_SITE_KEY", ""),
+    "v2_secret": env("RECAPTCHA_V2_SECRET_KEY", ""),
+}
+RECAPTCHA_MIN_SCORE = float(env("RECAPTCHA_MIN_SCORE", "0.5"))
+
+# Nothing here takes uploads; the largest real body is a calendar with its custom days.
+DATA_UPLOAD_MAX_MEMORY_SIZE = 512 * 1024
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 200
 
 LOGGING = {
     "version": 1,

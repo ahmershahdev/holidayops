@@ -37,4 +37,4 @@ USER app
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
     CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4)"]
-CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--workers", "3", "--access-logfile", "-"]
+CMD ["gunicorn", "config.wsgi", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "30", "--graceful-timeout", "20", "--limit-request-line", "4094", "--limit-request-fields", "60", "--limit-request-field_size", "8190", "--max-requests", "2000", "--max-requests-jitter", "200", "--access-logfile", "-"]

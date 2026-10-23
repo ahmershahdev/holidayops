@@ -5,7 +5,7 @@ from django.core import mail
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
-from apps.accounts import resets, totp, twofactor
+from apps.accounts import codes, totp, twofactor
 from apps.accounts.models import TwoFactor
 from tests.factories import PASSWORD, UserFactory
 
@@ -61,7 +61,7 @@ def test_setup_confirm_and_login_with_a_code() -> None:
     step_one = client.post("/api/v1/auth/login/", {"email": user.email, "password": PASSWORD})
     assert step_one.status_code == 202
     assert step_one.json() == {"two_factor_required": True}
-    assert client.get("/api/v1/auth/me/").status_code == 403
+    assert client.get("/api/v1/auth/me/").status_code == 204
     TwoFactor.objects.filter(user=user).update(last_step=0)
     step_two = client.post("/api/v1/auth/2fa/verify/", {"code": current_code(secret)})
     assert step_two.status_code == 200
@@ -105,13 +105,13 @@ def test_password_reset_does_not_skip_the_second_factor() -> None:
     owner = APIClient()
     owner.force_login(user)
     enable(owner)
-    resets.request_reset(user.email)
+    codes.request_reset(user.email)
     code = next(w for w in str(mail.outbox[-1].body).split() if w.isdigit() and len(w) == 6)
     client = APIClient()
     body = {"email": user.email, "code": code, "password": "another-long-passphrase-9"}
     response = client.post("/api/v1/auth/password/reset/", body)
     assert response.status_code == 202
-    assert client.get("/api/v1/auth/me/").status_code == 403
+    assert client.get("/api/v1/auth/me/").status_code == 204
 
 
 def test_disable_needs_the_password_and_a_code() -> None:

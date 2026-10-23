@@ -3,6 +3,16 @@
 What changed in HolidayOps, newest first. The site renders this file at `/changelog/`: keep the
 format (`## YYYY-MM-DD: Title`, then `- ` items) when you add an entry.
 
+## 2026-10-24: Email confirmation, bot protection and a guide for beginners
+
+- New accounts confirm their email with a 6-digit code before they can sign in.
+- Signing up with an address that already has an account no longer says so; the owner gets an email instead.
+- Emails when two-factor sign-in, recovery codes or Google and Microsoft sign-ins change.
+- Sign-up and password reset are protected by Google reCAPTCHA and a hidden honeypot field.
+- Dropdowns, including the country list, now follow the light and dark theme, and long lists can be searched.
+- A step-by-step guide for first-time users, and a price for the Pro plan on the pricing page.
+- The browser console no longer shows an error on every page for signed-out visitors.
+
 ## 2026-10-18: Status page, changelog and SDKs
 
 - A public status page with live checks of the API, database, cache, background jobs and holiday data.

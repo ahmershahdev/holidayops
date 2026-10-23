@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.accounts.auth import current_user
+from apps.accounts.auth import current_user, verified_user
 from apps.accounts.models import User
 from apps.orgs.models import AuditLog, Membership, Organization, Role
 from apps.orgs.scoping import OrgScopedMixin, audit, get_membership, unique_slug
@@ -48,6 +48,7 @@ class OrgViewSet(viewsets.GenericViewSet[Organization]):
         return Response(data)
 
     def create(self, request: Request) -> Response:
+        verified_user(request)
         serializer = OrgSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         name = serializer.validated_data["name"]
@@ -56,7 +57,7 @@ class OrgViewSet(viewsets.GenericViewSet[Organization]):
                 name=name, slug=unique_slug(name, Organization.objects.all(), reserved=APP_PATHS)
             )
             membership = Membership.objects.create(
-                user=current_user(request), org=org, role=Role.OWNER
+                user=verified_user(request), org=org, role=Role.OWNER
             )
             audit(membership, "org.create", org)
         return Response(
@@ -113,7 +114,10 @@ class MemberViewSet(OrgScopedMixin, viewsets.GenericViewSet[Membership]):
         role = serializer.validated_data["role"]
         if role == Role.OWNER and not self.membership.has_role(Role.OWNER):
             raise PermissionDenied(_("Only owners can grant the owner role."))
-        user = User.objects.filter(email__iexact=serializer.validated_data["email"]).first()
+        # An unconfirmed account may not be the address owner's: treated as no account.
+        user = User.objects.filter(
+            email__iexact=serializer.validated_data["email"], email_verified_at__isnull=False
+        ).first()
         if user is None:
             raise ValidationError({"email": [_("No account uses this email yet.")]})
         if self.org.memberships.filter(user=user).exists():

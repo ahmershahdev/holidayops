@@ -1,17 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, ApiError, type Schemas, unwrap } from "../api/client";
+import { api, type Schemas, unwrap } from "../api/client";
 
 export function useMe() {
   return useQuery({
     queryKey: ["me"],
-    queryFn: async (): Promise<Schemas["User"] | null> => {
-      try {
-        return await unwrap(api.GET("/api/v1/auth/me/"));
-      } catch (error) {
-        if (error instanceof ApiError && error.status === 403) return null;
-        throw error;
-      }
-    },
+    // 204 when signed out.
+    queryFn: async (): Promise<Schemas["User"] | null> =>
+      (await unwrap(api.GET("/api/v1/auth/me/"))) ?? null,
     staleTime: 60_000,
   });
 }

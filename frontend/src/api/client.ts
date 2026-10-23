@@ -48,12 +48,16 @@ export function errorText(body: unknown): string {
   if (typeof body === "string") return body;
   if (Array.isArray(body)) return body.map(errorText).join(" ");
   if (body && typeof body === "object") {
-    return Object.entries(body)
-      .map(([field, value]) => {
-        const text = errorText(value);
-        return field === "detail" || field === "non_field_errors" ? text : `${field}: ${text}`;
-      })
-      .join(" ");
+    return (
+      Object.entries(body)
+        // `captcha` tells the form to show the checkbox; it isn't text for the reader.
+        .filter(([field]) => field !== "captcha")
+        .map(([field, value]) => {
+          const text = errorText(value);
+          return field === "detail" || field === "non_field_errors" ? text : `${field}: ${text}`;
+        })
+        .join(" ")
+    );
   }
   return "";
 }

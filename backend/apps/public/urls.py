@@ -36,6 +36,7 @@ _pages = [
     path("today/", tools.today_index),
     path("tools/overlap/", tools.overlap_view),
     path("about/", pages.about),
+    path("guide/", pages.guide),
     path("status/", pages.status),
     path("contact/", pages.contact),
     path("style/", views.style_guide),

@@ -64,13 +64,36 @@ Every day in a range with its status, for drawing calendars.
 
 ## Plans
 
-{% for plan in plans %}- {{ plan.name }}: {{ plan.rate }} per key, {{ plan.monthly_quota }} requests a month, up to {{ plan.max_keys }} API keys.
-{% endfor %}Every plan includes company calendars, iCal feeds, digests and webhooks. Public pages, the playground and iCal feeds do not count against the quota.
+{% for plan in plans %}- {{ plan.name }}: {% if plan.price %}US${{ plan.price }} a month{% else %}no card needed{% endif %}; {{ plan.rate }} per key, {{ plan.monthly_quota }} requests a month, up to {{ plan.max_keys }} API keys.
+{% endfor %}Every plan includes company calendars, iCal feeds, digests and webhooks. Public pages, the playground and iCal feeds do not count against the quota. Pro is switched on by hand after an email to {{ support_email }}; there is no card form on the site.
+
+## Accounts
+
+- Sign-up (`POST /api/v1/auth/signup/`) never says whether an address is already registered. It answers `202` with `verification_required: true` and emails a 6-digit code (valid 1 hour, 5 guesses). `POST /api/v1/auth/verify/` with the email and code confirms the address and signs in. An address that already has an account gets a notice instead of a code.
+- Logging in to an unconfirmed account sends a new code instead of signing in. Organizations, invites and digests need a confirmed address.
+- Password reset: `POST /api/v1/auth/password/forgot/`, then `POST /api/v1/auth/password/reset/` with the emailed code (valid 10 minutes).
+- At most 3 emails per address per hour. Security changes (two-factor on or off, new recovery codes, a linked or removed Google or Microsoft sign-in, account deletion) are emailed to the owner.
+- Sign-up, password reset and new codes are protected by a honeypot field and Google reCAPTCHA (v3 score, with a v2 checkbox when the score is low). The data API itself has no captcha.
+- Optional two-factor sign-in with an authenticator app, and sign in with Google or Microsoft.
+
+## Getting started (for people)
+
+1. Open {{ root }}playground, choose a country and click a day.
+2. Sign up at {{ root }}signup and type in the emailed code.
+3. Create an organization, then a calendar for your country and region.
+4. Click days to add closures, half days or extra working days.
+5. Copy the calendar's private iCal link into Google Calendar or Outlook, or turn on the monthly digest.
+6. Developers: create an API key in the organization's settings and call the endpoints above.
+
+The full walkthrough is at {{ root }}guide/.
 
 ## Public pages
 
 - {{ root }}holidays/<country>/<year>/ : holidays, working days and weekend for a country and year, for example {{ root }}holidays/pk/{{ year }}/
 - {{ root }}holidays/<country>/<region>/<year>/ : the same for a region
+- {{ root }}today/ : who is off today, per country, on its local date
+- {{ root }}tools/overlap/ : shared working days of up to four countries
+- {{ root }}pricing/ , {{ root }}guide/ , {{ root }}about/ , {{ root }}contact/ , {{ root }}status/
 - Every page also exists in Urdu under {{ root }}ur/ and in Arabic under {{ root }}ar/.
 
 ## Countries
