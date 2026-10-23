@@ -296,7 +296,7 @@ Requirements: [uv](https://docs.astral.sh/uv/), Node.js 22.22 or newer, and Dock
 ```bash
 git clone https://github.com/ahmershahdev/holidayops.git
 cd holidayops
-cp .env.example .env    # set DJANGO_SECRET_KEY, the MySQL passwords and DEMO_PASSWORD
+cp .env.example .env    # set DJANGO_SECRET_KEY, FIELD_ENCRYPTION_KEYS, MySQL passwords, DEMO_PASSWORD
 npm install             # root tools
 npm run setup           # frontend packages and Python packages
 npm run dev             # MySQL and Redis in Docker; Django :8000, Vite :5173, Celery
@@ -306,12 +306,63 @@ npm run seed            # optional: demo user, organization and calendar
 Open <http://localhost:5173>. The landing page and country pages come from Django; the playground
 and the web app from Vite. API docs: <http://localhost:5173/api/v1/docs/>.
 
-In development emails (including sign-up codes) are printed in the `api` and `worker` terminal
-output. To send real email, set `EMAIL_BACKEND`, `RESEND_API_KEY` and `DEFAULT_FROM_EMAIL` as
-described in `.env.example`; to turn on the bot check, add the four `RECAPTCHA_*` keys.
-
 To run everything in containers instead: `docker compose up -d`. To try the production image:
 `docker compose -f docker-compose.prod.yml up --build` (serves on port 8080).
+
+### Configuration and API keys
+
+Everything is read from `.env` (never committed; `.env.example` lists every variable). Only the
+first block is required; every service below is optional and stays off while its keys are empty.
+Restart `npm run dev` after changing `.env`. Values with spaces or `<` `>` need quotes.
+
+| Variable | Required | What it is |
+|---|---|---|
+| `DJANGO_SECRET_KEY` | yes | long random string |
+| `FIELD_ENCRYPTION_KEYS` | yes | encrypts two-factor and webhook secrets; make one with `uv run python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"` and keep a copy somewhere safe |
+| `MYSQL_*`, `REDIS_URL` | yes | database and cache (the Docker defaults work locally) |
+| `EMAIL_BACKEND`, `RESEND_API_KEY`, `DEFAULT_FROM_EMAIL` | no | real email through [Resend](https://resend.com); without them emails, including sign-up codes, are printed in the `api` and `worker` terminal output |
+| `RECAPTCHA_V3_*`, `RECAPTCHA_V2_*` | no | the bot check on sign-up and password reset; without them only the honeypot runs |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | no | "Continue with Google" |
+| `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET` | no | "Continue with Microsoft" (hidden while empty) |
+| `PLAN_PRO_PRICE` | no | the Pro price shown on `/pricing/` (default 19) |
+
+**Resend:** add your domain at resend.com/domains and create its DNS records (SPF, DKIM), then
+create an API key and set:
+
+```env
+EMAIL_BACKEND=apps.notifications.resend.ResendEmailBackend
+RESEND_API_KEY=re_...
+DEFAULT_FROM_EMAIL="HolidayOps <support@your-domain>"
+```
+
+**Google reCAPTCHA:** at <https://www.google.com/recaptcha/admin> create two keys, one
+"Score based (v3)" and one "Challenge (v2), I'm not a robot checkbox". Add `localhost` and your
+live domain to both. v3 is invisible (forms show a short Google notice instead of the badge); the
+v2 checkbox only appears when v3 isn't sure the visitor is a person.
+
+**Sign in with Google:** in [Google Cloud Console](https://console.cloud.google.com/apis/credentials),
+open (or create) an OAuth client of type "Web application" and add every address the app runs on
+under **Authorized redirect URIs**, exactly, with the trailing slash:
+
+```text
+http://localhost:5173/sso/google/callback/
+https://holidayops.ahmershah.dev/sso/google/callback/
+```
+
+The address is `APP_URL` + `/sso/google/callback/`. A missing or different one makes Google answer
+`redirect_uri_mismatch`. While the consent screen is in "Testing", add yourself under Test users.
+
+### Troubleshooting
+
+| You see | Cause and fix |
+|---|---|
+| `502 (Bad Gateway)` on `/api/...` or `manifest.webmanifest` at `localhost:5173` | Vite is up but Django on port 8000 isn't, usually while `npm run dev` is still starting or the database container is restarting. Check the `api` lines in the terminal for an error, make sure Docker Desktop is running, then restart `npm run dev`. `curl http://127.0.0.1:8000/healthz` should answer `"status": "ok"`. |
+| No "Continue with Google" button | `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET` is empty, or Django isn't running (see 502). |
+| Google says `redirect_uri_mismatch` | Add the redirect URI above in Google Cloud Console. |
+| No reCAPTCHA visible | Normal: v3 is invisible. The notice under the form confirms it's on. The checkbox appears only on a low score. |
+| `ERROR for site owner: Invalid domain` in the checkbox | Add the domain you're on (for example `localhost`) to the reCAPTCHA key. |
+| No sign-up code email | Without Resend, the code is in the terminal output; with Resend, check its dashboard logs. |
+| `Failed to parse environment file` | A value in `.env` with spaces or `<` `>` isn't quoted. |
 
 ## API
 
