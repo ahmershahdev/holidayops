@@ -11,11 +11,12 @@ library. Owner: Syed Ahmer Shah, <https://ahmershah.dev>, support@ahmershah.dev.
 
 | Task touches | Read |
 |---|---|
-| Starting a session | [docs/status.md](docs/status.md) |
+| Starting a session | [docs/status.md](docs/status.md) (only hosting is left) |
 | Endpoints, domain, data model, caching | [docs/architecture.md](docs/architecture.md) |
 | Auth, keys, tenancy, webhooks, headers | [docs/security.md](docs/security.md) |
 | Public pages, SEO, sitemaps, llms.txt, PWA | [docs/seo.md](docs/seo.md) |
-| Production image, Azure, CD | [docs/deployment.md](docs/deployment.md) |
+| Production image, hosting, environment variables | [docs/deployment.md](docs/deployment.md) |
+| Setting up keys (Resend, reCAPTCHA, Google), setup errors | README "Configuration and API keys", "Troubleshooting" |
 | What to build next | [docs/roadmap.md](docs/roadmap.md) |
 | API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
 | Orgs, roles, company calendars | [docs/design/m2-orgs.md](docs/design/m2-orgs.md) |
@@ -33,22 +34,32 @@ React Router, i18next. pytest, factory_boy, Vitest. Ruff, mypy (strict), ESLint,
 ## Layout
 
 ```
-backend/config/        settings/{base,dev,test,prod}.py, urls, csp, spa, celery, security_log
+backend/config/        settings/{base,dev,test,prod}.py, urls, csp (+ body size limit), spa (nonce
+                       CSP), crypto (encrypted fields), celery, security_log, health
 backend/apps/core/     pure date logic: no Django imports, 100% branch coverage
 backend/apps/api/      DRF views, serializers, throttles, API keys, usage
-backend/apps/{accounts,orgs,calendars,feeds,notifications,webhooks}/
+backend/apps/accounts/ users; codes (verify/reset), emails (Celery), captcha, sessions, sso, 2FA
+backend/apps/{orgs,calendars,feeds,notifications,webhooks}/
 backend/apps/public/   server-rendered site: views, landing, pages, world (live data), seo,
                        discovery (robots, llms, manifest, sw), sitemaps, templates, static
 backend/tests/         mirrors apps/
 frontend/src/          api/ (generated), components/, pages/, i18n/, lib/
 scripts/               attack_simulation.py (stdlib only, run against the production image)
-docs/                  architecture, security, seo, deployment, roadmap, status, design/
+docker/                mysql-init.sql, simulation.yml (overrides for the attack simulation)
+sdks/                  generated Python and TypeScript clients (`npm run sdks`)
+docs/                  architecture, security, seo, deployment, roadmap, status, design/, brand/
 ```
 
 Reuse, don't rebuild: `apps/orgs/limits.within_limit` (count-then-create),
 `config/security_log.security_event`, `apps/public/content` (`country_name`, `join_list`,
 `month_grid`), `apps/public/seo` (`fit_title`, `breadcrumbs`, `ld_json`), template tags `flag`,
 `cldr`, `as_list`, `page_title`, and `apps/public/flags.sanitize` for any third-party SVG.
+Accounts: `apps/accounts/auth.verified_user` (gate anything that reaches other people),
+`codes` (one-time emailed codes), `emails.queue`/`emails.notify` (account email and security
+notices), `captcha.check` and `views.bot_check`, `sessions.end`. Secrets the app must read back:
+`config.crypto.EncryptedCharField`. Values other processes must see: `caches["shared"]`.
+Frontend: `components/Dropdown` (`Select`) for every dropdown, `auth/BotCheck.useBotCheck` on
+forms that send email.
 
 ## Hard rules
 
@@ -59,7 +70,17 @@ Reuse, don't rebuild: `apps/orgs/limits.within_limit` (count-then-create),
 - Every org-owned query is filtered by the current org (`OrgScopedMixin`); cross-org access is
   `404`. Add every new org endpoint to `tests/test_isolation.py`.
 - Validate country, subdiv, language and category against the library; cap years and `days`.
-- Secrets only from environment variables. Never commit `.env`, dumps or personal data.
+- Secrets only from environment variables. Never commit `.env`, dumps, real keys (not even
+  Google's public test keys: link to them) or personal data. Quote `.env` values with spaces or
+  `<` `>`. Tests must not depend on a developer's real keys (`config/settings/test.py` blanks them).
+- Secrets the app has to read back (authenticator, webhook) use `EncryptedCharField`; anything it
+  only compares (passwords, API keys, tokens, codes) is hashed. `FIELD_ENCRYPTION_KEYS` is required
+  in production and is never derived from `SECRET_KEY`.
+- Auth answers never reveal whether an address has an account, in body or timing: same response,
+  email sent from the worker. New account-level actions that reach other people use
+  `verified_user`.
+- Bot check (honeypot + reCAPTCHA) only on forms that create accounts or send email, never on the
+  data API.
 - API changes update `schema.yml` and the frontend client in the same PR.
 - No new dependency without a reason in the PR. Pin exact versions.
 - The maintainer must be able to explain every line; keep core logic small.
@@ -69,6 +90,8 @@ Reuse, don't rebuild: `apps/orgs/limits.within_limit` (count-then-create),
   and nothing readable starts at `opacity: 0`.
 - Public page `<title>` ≤ 60 and meta description ≤ 150 characters (`tests/public/test_seo.py`).
 - No emojis in code, UI text or docs.
+- Security-relevant changes: add a check to `scripts/attack_simulation.py` when it can be tested
+  over HTTP, and run it against the production image before release.
 
 ## Comments
 

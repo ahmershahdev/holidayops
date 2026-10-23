@@ -10,7 +10,7 @@ from importlib.metadata import version
 from pathlib import Path
 
 from django.conf import settings
-from django.core.cache import cache
+from django.core.cache import cache, caches
 from django.db import connection
 from django.utils.translation import gettext as _
 
@@ -52,7 +52,7 @@ def _cache() -> bool:
 def checks() -> list[Check]:
     db_ok, db_ms = _timed(_database)
     cache_ok, cache_ms = _timed(_cache)
-    beat = cache.get(HEARTBEAT_KEY)
+    beat = caches["shared"].get(HEARTBEAT_KEY)
     age = time.time() - beat if beat else None
     jobs_ok = age is not None and age < HEARTBEAT_STALE
     return [
