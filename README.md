@@ -468,7 +468,9 @@ Details: [docs/seo.md](docs/seo.md).
 | [docs/architecture.md](docs/architecture.md) | Domain layer, endpoints, data model, caching |
 | [docs/security.md](docs/security.md) | Auth, tenancy, limits, webhooks, headers |
 | [docs/seo.md](docs/seo.md) | Public pages, structured data, discovery files |
-| [docs/deployment.md](docs/deployment.md) | Production image, Azure, CD |
+| [docs/deployment.md](docs/deployment.md) | Production image, Azure, CD, releases |
+| [Wiki](https://github.com/ahmershahdev/holidayops/wiki) | Short guides: using the app, API, webhooks, setup, FAQ |
+| [Releases](https://github.com/ahmershahdev/holidayops/releases) | Tagged versions; `v1.0.0` is the hosted launch |
 | [docs/roadmap.md](docs/roadmap.md) | Milestones and what comes next |
 | [docs/design/](docs/design/) | Design notes per milestone |
 | [AGENTS.md](AGENTS.md) | Conventions for contributors and coding agents |
