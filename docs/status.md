@@ -31,7 +31,7 @@ Recent work:
 
 Tagged `v0.1.0` (pre-release, 2026-10-25) on `c09eadc`; `v1.0.0` is for the hosted launch. The
 GitHub wiki (12 pages) is a short guide that links back to `docs/`; edit it by cloning
-`holidayops.wiki.git`. Release steps: wiki page "Releases and Versioning".
+`holidayops.wiki.git`. Release steps and wiki rules: [deployment.md](deployment.md#releases).
 
 Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
 project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article

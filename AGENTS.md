@@ -15,7 +15,7 @@ library. Owner: Syed Ahmer Shah, <https://ahmershah.dev>, support@ahmershah.dev.
 | Endpoints, domain, data model, caching | [docs/architecture.md](docs/architecture.md) |
 | Auth, keys, tenancy, webhooks, headers | [docs/security.md](docs/security.md) |
 | Public pages, SEO, sitemaps, llms.txt, PWA | [docs/seo.md](docs/seo.md) |
-| Production image, hosting, environment variables | [docs/deployment.md](docs/deployment.md) |
+| Production image, hosting, environment variables, releases, wiki | [docs/deployment.md](docs/deployment.md) |
 | Setting up keys (Resend, reCAPTCHA, Google), setup errors | README "Configuration and API keys", "Troubleshooting" |
 | What to build next | [docs/roadmap.md](docs/roadmap.md) |
 | API contracts and limits | [docs/design/m1-api.md](docs/design/m1-api.md) |
@@ -122,6 +122,8 @@ signature doesn't.
 - Before pushing, run what CI runs: ruff, ruff format, mypy, pytest; frontend lint (ESLint and
   Prettier), typecheck, tests. Template or `gettext` changes: `npm run messages`, then fix fuzzy
   entries.
+- Changes to setup, env vars, API parameters, webhooks or roles: update the matching wiki page
+  too (see deployment.md "Wiki"). Releases are tagged `vX.Y.Z` on `main` (deployment.md "Releases").
 - UI changes: check phone (390), tablet (820), desktop (1440), light and dark, en and one RTL
   language.
 
