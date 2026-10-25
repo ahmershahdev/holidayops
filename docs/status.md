@@ -29,6 +29,10 @@ Recent work:
 | #48 | Authenticator and webhook secrets encrypted at rest (`FIELD_ENCRYPTION_KEYS`, `manage.py reencrypt`); signed-in devices screen with sign-out; `scripts/attack_simulation.py` against the production image (all checks pass); `.env` values stripped, quoted sender address |
 | #50 | Status page heartbeat works in development (`shared` cache alias on Redis); unused screenshots removed; AGENTS.md lists the account, crypto and session helpers and the new rules |
 
+Tagged `v0.1.0` (pre-release, 2026-10-25) on `c09eadc`; `v1.0.0` is for the hosted launch. The
+GitHub wiki (12 pages) is a short guide that links back to `docs/`; edit it by cloning
+`holidayops.wiki.git`. Release steps: wiki page "Releases and Versioning".
+
 Outside this repo: the portfolio (`D:\syedahmershah`, ahmershah.dev) has HolidayOps as its first
 project card plus a case study (`/blogs/holidayops-case-study-working-days-api`) and an article
 (`/blogs/the-weekend-is-not-a-constant`), pushed 2026-10-18.

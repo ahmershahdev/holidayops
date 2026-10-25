@@ -89,8 +89,8 @@ response_body, duration_ms, error, created_at, next_attempt_at)`.
   `custom_day.deleted`, plus `ping` on request. Payload: `{"id", "event", "created_at", "org",
   "data"}`; `data` has `calendar {id, name, slug}` and, for custom days, `custom_day {id, date,
   name, kind}`. The calendar views emit them after saving; deliveries are queued on commit.
-- Secret: `whsec_` + 32 random bytes in hex, shown once on create and on rotate. It is stored as is, because
-  signing needs it; the database is the trust boundary, as with any webhook provider.
+- Secret: `whsec_` + 32 random bytes in hex, shown once on create and on rotate. Signing needs it back, so
+  it is encrypted (`EncryptedCharField`, `FIELD_ENCRYPTION_KEYS`), not hashed.
 - Headers: `X-HolidayOps-Event`, `X-HolidayOps-Delivery`, and
   `X-HolidayOps-Signature: t=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>.<body>">`.
   Receivers should reject timestamps older than 5 minutes.
