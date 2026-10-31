@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 2026-10-24 (through #50). Update at the end of every work session.
+Last updated: 2026-10-31 (through #54). Update at the end of every work session.
 
 ## Run it
 
@@ -28,6 +28,9 @@ Recent work:
 | #46 | Email verification by code at sign-up (no account enumeration, squatting-proof, unconfirmed accounts pruned after 7 days); security notice emails via Resend; honeypot + reCAPTCHA v3 with v2 fallback on sign-up/reset; nonce CSP with `'strict-dynamic'` for the web app; 413 on bodies over 512 KB, Gunicorn limits; themed searchable dropdowns (CSS-only `base-select` on public pages); `/guide/` for beginners; Pro priced at US$19 (`PLAN_PRO_PRICE`); signed-out `auth/me` is 204, not 403 |
 | #48 | Authenticator and webhook secrets encrypted at rest (`FIELD_ENCRYPTION_KEYS`, `manage.py reencrypt`); signed-in devices screen with sign-out; `scripts/attack_simulation.py` against the production image (all checks pass); `.env` values stripped, quoted sender address |
 | #50 | Status page heartbeat works in development (`shared` cache alias on Redis); unused screenshots removed; AGENTS.md lists the account, crypto and session helpers and the new rules |
+| #51, #52 | Docs: encrypted webhook secrets, `v0.1.0`, release steps and wiki rules |
+| #53 | `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), linked from README and CONTRIBUTING |
+| #54 | README, CONTRIBUTING and SECURITY brought up to date: supported versions, the public GHCR image, CI checks |
 
 Tagged `v0.1.0` (pre-release, 2026-10-25) on `c09eadc`; `v1.0.0` is for the hosted launch. The
 GitHub wiki (12 pages) is a short guide that links back to `docs/`; edit it by cloning
@@ -43,7 +46,8 @@ The code is feature-complete. Stop adding features; finish these, then host and 
 
 Done: email verification, signup without enumeration, bot check (#46); encrypted secrets, sessions screen, attack simulation (#48). Only hosting is left.
 
-1. **Hosting** (free; owner plans February): Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
+1. **Hosting** (owner plans February; host not final). Built and documented: Azure Container Apps
+   via `deploy.yml` ([deployment.md](deployment.md)). Free alternative: an Oracle Cloud Always Free ARM VM running `docker-compose.prod.yml` (Django,
    worker, beat, MySQL, Redis), Cloudflare for DNS and TLS on `holidayops.ahmershah.dev`, Resend
    free tier for email, UptimeRobot and Sentry free plans, nightly MySQL backups. Then the 5.4
    docs: live URL in the README and the portfolio card.
