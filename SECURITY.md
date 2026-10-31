@@ -5,13 +5,15 @@ reports seriously and fix confirmed issues quickly.
 
 ## Supported versions
 
-HolidayOps has no versioned releases yet. Security fixes go to the `main` branch and are deployed
-from there.
+HolidayOps is pre-launch: releases are `v0.x` pre-releases until the hosted `v1.0.0`. Security
+fixes go to `main` and ship in the next release and the next `ghcr.io/ahmershahdev/holidayops`
+image.
 
 | Version | Supported |
 |---|---|
-| `main` | Yes |
-| Anything else | No |
+| `main` and the `latest` image | Yes |
+| The newest `v0.x` release | Yes |
+| Older releases | No |
 
 ## Reporting a vulnerability
 
@@ -74,6 +76,8 @@ We won't take action against good-faith research that follows this policy. While
 ## How HolidayOps is protected
 
 The design is documented in [docs/security.md](docs/security.md): Argon2 passwords, hashed API keys
-and tokens, tenant isolation tested on every endpoint, per-IP, per-key and per-organization rate
-limits, an SSRF guard for webhooks, a strict Content Security Policy, and exact-pinned dependencies
-checked by Dependabot, pip-audit and CodeQL.
+and tokens, authenticator and webhook secrets encrypted at rest, two-factor sign-in, sign-up and
+reset that never reveal whether an address is registered, tenant isolation tested on every
+endpoint, per-IP, per-key and per-organization rate limits, an SSRF guard for webhooks, a strict
+Content Security Policy, and exact-pinned dependencies checked by Dependabot, pip-audit and CodeQL.
+Before each release, `scripts/attack_simulation.py` runs against the production image.
