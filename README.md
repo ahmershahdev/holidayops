@@ -43,8 +43,9 @@ Holiday data comes from the open-source [holidays](https://github.com/vacanza/ho
 HolidayOps adds the business-day maths, company calendars, delivery channels and the product
 around it.
 
-> **Status:** feature-complete across six milestones; hosting is planned for launch. Progress is
-> tracked in [docs/status.md](docs/status.md).
+> **Status:** feature-complete across six milestones, released as
+> [v0.1.0](https://github.com/ahmershahdev/holidayops/releases) (pre-release); hosting is planned
+> for launch. Progress is tracked in [docs/status.md](docs/status.md).
 
 ## Features
 
@@ -309,6 +310,14 @@ and the web app from Vite. API docs: <http://localhost:5173/api/v1/docs/>.
 To run everything in containers instead: `docker compose up -d`. To try the production image:
 `docker compose -f docker-compose.prod.yml up --build` (serves on port 8080).
 
+Every push to `main` publishes the production image to GitHub Container Registry as
+`ghcr.io/ahmershahdev/holidayops:latest` and `:<commit sha>`. It needs MySQL, Redis and the
+environment variables in [docs/deployment.md](docs/deployment.md):
+
+```bash
+docker pull ghcr.io/ahmershahdev/holidayops:latest
+```
+
 ### Configuration and API keys
 
 Everything is read from `.env` (never committed; `.env.example` lists every variable). Only the
@@ -402,7 +411,8 @@ npm run lint && npm run typecheck
 cd .. && npm run messages                 # after changing a template or gettext string
 ```
 
-CI runs all of the above on every pull request, plus CodeQL and `pip-audit`.
+CI runs all of the above on every pull request, plus translation checks, CodeQL, `pip-audit` and a
+production image build.
 
 ## Project structure
 

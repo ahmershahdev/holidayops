@@ -45,7 +45,7 @@ Requirements:
 ```bash
 git clone https://github.com/<your-username>/holidayops.git
 cd holidayops
-cp .env.example .env    # fill in DJANGO_SECRET_KEY, the MySQL passwords and DEMO_PASSWORD
+cp .env.example .env    # fill in DJANGO_SECRET_KEY, FIELD_ENCRYPTION_KEYS, the MySQL passwords and DEMO_PASSWORD
 npm install
 npm run setup
 npm run dev             # Django :8000, Vite :5173, Celery worker and Beat
@@ -69,10 +69,14 @@ Open <http://localhost:5173>. The tests use MySQL too (never SQLite), so keep Do
 4. If you change a template or a `gettext` string, run `npm run messages` from the root and fill
    in the Urdu and Arabic entries (see [Translations](#translations)).
 5. If a decision changes, update the matching file in `docs/` in the same pull request.
+6. If the change is security-relevant and can be tested over HTTP, add a check to
+   `scripts/attack_simulation.py` and run it against the production image (commands in
+   [AGENTS.md](AGENTS.md#commands)).
 
 ## Checks to run
 
-CI runs these on every pull request; run them locally first.
+CI runs these on every pull request, plus the OpenAPI schema and translation checks, pip-audit and
+a production image build; run them locally first.
 
 ```bash
 # Backend
