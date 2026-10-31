@@ -480,7 +480,7 @@ Details: [docs/seo.md](docs/seo.md).
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, conventions and the
 pull request checklist. Wrong holiday dates usually come from the upstream
 [holidays](https://github.com/vacanza/holidays) library; reporting them there fixes them for
-everyone.
+everyone. Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Author
 

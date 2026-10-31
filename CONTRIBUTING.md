@@ -4,6 +4,8 @@ Thank you for helping. This guide covers how to report problems, set up the proj
 request merged. The conventions that code must follow are in [AGENTS.md](AGENTS.md); read it before
 your first change.
 
+Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
 ## Contents
 
 - [Ways to contribute](#ways-to-contribute)
