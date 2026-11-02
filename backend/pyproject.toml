@@ -12,7 +12,7 @@ dependencies = [
     "djangorestframework==3.18.3",
     "drf-spectacular==0.30.0",
     "gunicorn==26.2.0",
-    "holidays==0.106",
+    "holidays==0.107",
     "mysqlclient==2.3.0",
     "segno==1.6.6",
     "whitenoise==6.12.0",
@@ -24,11 +24,11 @@ dev = [
     "django-stubs==6.1.2",
     "djangorestframework-stubs==3.18.1",
     "factory-boy==3.3.3",
-    "mypy==2.4.0",
-    "pytest==9.1.1",
+    "mypy==2.4.1",
+    "pytest==9.2.0",
     "pytest-cov==7.1.0",
     "pytest-django==4.14.0",
-    "ruff==0.17.1",
+    "ruff==0.17.3",
 ]
 
 [tool.uv]
