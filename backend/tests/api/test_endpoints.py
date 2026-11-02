@@ -34,7 +34,8 @@ def test_holidays_list(client: APIClient) -> None:
     } in body["holidays"]
     dates = [h["date"] for h in body["holidays"]]
     assert dates == sorted(dates)
-    assert dates.count("2027-08-14") == 2
+    shared = get(client, "holidays/", country="pk", year=2026, language="en_US").json()
+    assert [h["date"] for h in shared["holidays"]].count("2026-05-28") == 2
 
 
 def test_holidays_language_changes_names(client: APIClient) -> None:
